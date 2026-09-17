@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
-import { useCallback, useRef   } from 'react'
-import type {PointerEvent, ReactNode} from 'react';
+import { useCallback, useRef } from 'react'
+import type { PointerEvent, ReactNode } from 'react'
 
 type Props = {
   title: string

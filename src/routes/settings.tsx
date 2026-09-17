@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { Window } from '#/components/Window'
-import { THEMES, applyTheme  } from '#/lib/theme'
-import type {Theme} from '#/lib/theme';
+import { THEMES, applyTheme } from '#/lib/theme'
+import type { Theme } from '#/lib/theme'
 import { site } from '#/lib/site'
 
 export const Route = createFileRoute('/settings')({
