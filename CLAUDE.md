@@ -23,6 +23,7 @@ Conventional Commits with a **required scope**: `type(scope): subject`.
 - Scopes: `app` (shell, routing, root), `desktop` (windows, dock, menu bar, drag), `theme` (tokens, fonts, styles.css), `content` (site.ts, copy, projects), `deps`, `config`, `docs`.
 - Subject: imperative, lowercase, no trailing period, under 72 characters.
 - Breaking change: `type(scope)!: subject`.
+- No `Co-Authored-By: Claude`, "Generated with Claude Code", or similar trailers, badges, or footers in commits or PRs. `Co-Authored-By` is a human-collaborator convention; AI tooling is a tool like a linter or IDE, not an author. This is not about hiding AI use (this file is public and says how the project is built); it is about not turning commit history into vendor marketing.
 - Examples: `feat(desktop): add window focus stacking`, `fix(theme): keep dither visible in mono theme`, `chore(deps): bump vite`.
 
 ## Layout
