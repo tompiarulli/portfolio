@@ -1,14 +1,164 @@
 @import 'tailwindcss';
 
+/* ---------- Fonts ----------
+   Drop self-hosted WOFF2 pixel fonts in /public/fonts and uncomment.
+   Reference fonts: Pixolde (UI) + ChiKareGo2 (buttons).
+   Free stand-ins: "Silkscreen", "VT323".
+@font-face { font-family: 'UI'; src: url('/fonts/ui.woff2') format('woff2'); font-display: block; }
+@font-face { font-family: 'Title'; src: url('/fonts/title.woff2') format('woff2'); font-display: block; }
+*/
+
+@theme {
+  --font-ui:
+    'UI', 'Verdana', ui-sans-serif, system-ui, sans-serif;
+  --font-title:
+    ui-sans-serif, sans-serif;
+  --font-mono: 'Perfect DOS VGA 437', 'VT323', ui-monospace, monospace;
+}
+
+/* ---------- Theme tokens (swap with data-theme on <html>) ---------- */
+:root,
+[data-theme='pink'] {
+  --bg: #f6d5d5;
+  --surface: #f9f0e9;
+  --surface-light: #fdf8f4;
+  --surface-dark: #c8c1ba;
+  --tertiary: #faf4c6;
+  --accent: #afe2e5;
+  --accent-shadow: #587373;
+  --button: #f6d5d5;
+  --button-shadow: #7b6b6b;
+  --ink: #000;
+}
+[data-theme='mint'] {
+  --bg: #cfe8dc;
+  --surface: #f2f7ef;
+  --surface-light: #fbfdf9;
+  --surface-dark: #b6c4b9;
+  --tertiary: #fff7c2;
+  --accent: #ffd6a5;
+  --accent-shadow: #7a6a55;
+  --button: #cfe8dc;
+  --button-shadow: #5f7367;
+  --ink: #000;
+}
+[data-theme='sky'] {
+  --bg: #cfe3f5;
+  --surface: #f3f6fa;
+  --surface-light: #fbfcfe;
+  --surface-dark: #b8c4d0;
+  --tertiary: #fff4c6;
+  --accent: #ffc9d6;
+  --accent-shadow: #7a5a63;
+  --button: #cfe3f5;
+  --button-shadow: #5c6b7a;
+  --ink: #000;
+}
+[data-theme='mono'] {
+  --bg: #d9d9d9;
+  --surface: #f2f2f2;
+  --surface-light: #fff;
+  --surface-dark: #b4b4b4;
+  --tertiary: #e8e8e8;
+  --accent: #fff;
+  --accent-shadow: #555;
+  --button: #e8e8e8;
+  --button-shadow: #666;
+  --ink: #000;
+}
+
 * {
   box-sizing: border-box;
 }
 
 html,
 body {
-  min-height: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.35;
+  -webkit-font-smoothing: none;
+  image-rendering: pixelated;
+  user-select: none;
 }
 
+/* The desktop is a fine dither over the flat colour */
 body {
-  margin: 0;
+  background-image: radial-gradient(rgb(0 0 0 / 0.08) 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+}
+
+img,
+canvas,
+svg {
+  image-rendering: pixelated;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--surface);
+}
+
+/* ---------- Retro desktop chrome utilities ---------- */
+@utility bevel {
+  background: var(--button);
+  box-shadow:
+    inset 1px 1px 0 0 #fff,
+    inset -1px -1px 0 0 var(--button-shadow),
+    0 0 0 1px var(--ink);
+}
+@utility bevel-accent {
+  background: var(--accent);
+  box-shadow:
+    inset 1px 1px 0 0 #fff,
+    inset -1px -1px 0 0 var(--accent-shadow),
+    0 0 0 1px var(--ink);
+}
+@utility bevel-pressed {
+  box-shadow:
+    inset -1px -1px 0 0 #fff,
+    inset 1px 1px 0 0 var(--button-shadow),
+    0 0 0 1px var(--ink);
+  transform: translateY(1px);
+}
+@utility inset-well {
+  background: #fff;
+  border: 1px solid var(--ink);
+  box-shadow: inset 1px 1px 0 0 var(--surface-dark);
+}
+@utility stripes {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--ink) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+/* Scrollbars, black-bordered like the original */
+.os-scroll {
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--tertiary) var(--surface);
+}
+.os-scroll::-webkit-scrollbar {
+  width: 14px;
+}
+.os-scroll::-webkit-scrollbar-track {
+  background: var(--surface);
+  border-left: 1px solid var(--ink);
+}
+.os-scroll::-webkit-scrollbar-thumb {
+  background: var(--tertiary);
+  border: 1px solid var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
