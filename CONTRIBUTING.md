@@ -30,8 +30,8 @@ Run `pnpm typecheck && pnpm lint && pnpm build` before committing. The build run
 - `src/components/` desktop chrome: `Desktop`, `MenuBar`, `Dock`, `Window`, `Button`, `Clock`.
 - `src/components/bits/` components vendored from [React Bits](https://reactbits.dev). Add one with `pnpm dlx shadcn@latest add @react-bits/<Name>-TS-TW`, then `pnpm format`.
 - `src/lib/site.ts` all copy and project data.
-- `src/lib/theme.ts` theme list and the inline script that applies the saved theme before first paint.
-- `src/styles.css` design tokens per theme and the retro desktop bevel utilities.
+- `src/lib/theme.ts` light/dark/system mode and the inline script that applies it before first paint.
+- `src/styles.css` design tokens for light and dark, and the retro desktop chrome utilities.
 - `public/fonts/` self-hosted pixel fonts.
 
 ## Commits
