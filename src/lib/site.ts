@@ -4,6 +4,7 @@ export const site = {
   tagline: 'Software engineer',
   email: 'tompiarulli@gmail.com',
   os: 'TomOS 9.2',
+  builtWith: 'React 19, TanStack Start, Tailwind 4',
 }
 
 export type Project = {
