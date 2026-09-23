@@ -22,7 +22,7 @@ function About() {
           </p>
         </div>
       </div>
-      <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 border-t border-dotted border-black pt-3">
+      <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 border-t border-dotted border-(--ink) pt-3">
         <dt className="font-title">System</dt>
         <dd>{site.os}</dd>
         <dt className="font-title">Built with</dt>

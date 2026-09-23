@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { Window } from '#/components/Window'
-import { THEMES, applyTheme } from '#/lib/theme'
-import type { Theme } from '#/lib/theme'
+import { MODES, applyMode, savedMode } from '#/lib/theme'
+import type { Mode } from '#/lib/theme'
 import { site } from '#/lib/site'
 
 export const Route = createFileRoute('/settings')({
@@ -11,34 +11,31 @@ export const Route = createFileRoute('/settings')({
 })
 
 function Settings() {
-  const [theme, setTheme] = useState<Theme>('pink')
-  useEffect(() => {
-    const t = document.documentElement.dataset.theme as Theme | undefined
-    if (t && THEMES.includes(t)) setTheme(t)
-  }, [])
+  const [mode, setMode] = useState<Mode>('system')
+  useEffect(() => setMode(savedMode()), [])
 
   return (
     <Window title="Settings" x={220} y={80} width={360}>
-      <fieldset className="border border-black p-3">
-        <legend className="px-1 font-title">Appearance</legend>
-        <div className="grid grid-cols-2 gap-2">
-          {THEMES.map((t) => (
+      <fieldset className="border border-(--ink) p-3">
+        <legend className="px-1 font-title">Theme</legend>
+        <div className="flex gap-4">
+          {MODES.map((m) => (
             <label
-              key={t}
+              key={m}
               className="flex cursor-pointer items-center gap-2 capitalize"
             >
               <input
                 type="radio"
-                name="theme"
-                value={t}
-                checked={theme === t}
+                name="mode"
+                value={m}
+                checked={mode === m}
                 onChange={() => {
-                  setTheme(t)
-                  applyTheme(t)
+                  setMode(m)
+                  applyMode(m)
                 }}
-                className="accent-black"
+                className="accent-(--ink)"
               />
-              {t}
+              {m}
             </label>
           ))}
         </div>

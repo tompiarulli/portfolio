@@ -4,7 +4,7 @@ import { site } from '#/lib/site'
 
 export function MenuBar() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex h-7 items-center justify-between border-b border-black bg-(--surface) px-2 text-[12px]">
+    <header className="fixed inset-x-0 top-0 z-50 flex h-7 items-center justify-between border-b border-(--ink) bg-(--surface) px-2 text-[12px]">
       <nav className="flex items-center gap-2">
         <Link
           to="/"

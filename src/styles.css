@@ -16,55 +16,43 @@
   --font-mono: 'Perfect DOS VGA 437', 'VT323', ui-monospace, monospace;
 }
 
-/* ---------- Theme tokens (swap with data-theme on <html>) ---------- */
-:root,
-[data-theme='pink'] {
-  --bg: #f6d5d5;
-  --surface: #f9f0e9;
-  --surface-light: #fdf8f4;
-  --surface-dark: #c8c1ba;
-  --tertiary: #faf4c6;
-  --accent: #afe2e5;
-  --accent-shadow: #587373;
-  --button: #f6d5d5;
-  --button-shadow: #7b6b6b;
-  --ink: #000;
+/* ---------- Tokens: two inks over a Bayer-dithered desktop ----------
+   Light by default; data-mode='dark' on <html> swaps the inks. The boot
+   script in theme.ts resolves "system" to light or dark before first paint.
+   The desktop pattern ramps from --bg to --warp. */
+:root {
+  --bg: #efebe2;
+  --surface: #efebe2;
+  --surface-light: #efebe2;
+  --surface-dark: #111;
+  --tertiary: #111;
+  --accent: #111;
+  --accent-shadow: #efebe2;
+  --button: #efebe2;
+  --button-shadow: #efebe2;
+  --ink: #111;
+  --highlight: #efebe2;
+  --well: #efebe2;
+  --on-accent: #efebe2;
+  --on-tertiary: #efebe2;
+  --warp: var(--ink);
 }
-[data-theme='mint'] {
-  --bg: #cfe8dc;
-  --surface: #f2f7ef;
-  --surface-light: #fbfdf9;
-  --surface-dark: #b6c4b9;
-  --tertiary: #fff7c2;
-  --accent: #ffd6a5;
-  --accent-shadow: #7a6a55;
-  --button: #cfe8dc;
-  --button-shadow: #5f7367;
-  --ink: #000;
-}
-[data-theme='sky'] {
-  --bg: #cfe3f5;
-  --surface: #f3f6fa;
-  --surface-light: #fbfcfe;
-  --surface-dark: #b8c4d0;
-  --tertiary: #fff4c6;
-  --accent: #ffc9d6;
-  --accent-shadow: #7a5a63;
-  --button: #cfe3f5;
-  --button-shadow: #5c6b7a;
-  --ink: #000;
-}
-[data-theme='mono'] {
-  --bg: #d9d9d9;
-  --surface: #f2f2f2;
-  --surface-light: #fff;
-  --surface-dark: #b4b4b4;
-  --tertiary: #e8e8e8;
-  --accent: #fff;
-  --accent-shadow: #555;
-  --button: #e8e8e8;
-  --button-shadow: #666;
-  --ink: #000;
+:root[data-mode='dark'] {
+  --bg: #111;
+  --surface: #111;
+  --surface-light: #111;
+  --surface-dark: #efebe2;
+  --tertiary: #efebe2;
+  --accent: #efebe2;
+  --accent-shadow: #111;
+  --button: #111;
+  --button-shadow: #111;
+  --ink: #efebe2;
+  --highlight: #111;
+  --well: #111;
+  --on-accent: #111;
+  --on-tertiary: #111;
+  color-scheme: dark;
 }
 
 * {
@@ -86,12 +74,6 @@ body {
   user-select: none;
 }
 
-/* The desktop is a fine dither over the flat colour */
-body {
-  background-image: radial-gradient(rgb(0 0 0 / 0.08) 0.5px, transparent 0.5px);
-  background-size: 3px 3px;
-}
-
 img,
 canvas,
 svg {
@@ -104,29 +86,32 @@ svg {
 }
 
 /* ---------- Retro desktop chrome utilities ---------- */
+/* Engraved double rule instead of a raised bevel; accent inverts. */
 @utility bevel {
   background: var(--button);
   box-shadow:
-    inset 1px 1px 0 0 #fff,
-    inset -1px -1px 0 0 var(--button-shadow),
+    inset 0 0 0 2px var(--bg),
+    inset 0 0 0 3px var(--ink),
     0 0 0 1px var(--ink);
 }
 @utility bevel-accent {
   background: var(--accent);
+  color: var(--on-accent);
   box-shadow:
-    inset 1px 1px 0 0 #fff,
-    inset -1px -1px 0 0 var(--accent-shadow),
+    inset 0 0 0 2px var(--accent),
+    inset 0 0 0 3px var(--on-accent),
     0 0 0 1px var(--ink);
 }
 @utility bevel-pressed {
   box-shadow:
-    inset -1px -1px 0 0 #fff,
+    inset -1px -1px 0 0 var(--highlight),
     inset 1px 1px 0 0 var(--button-shadow),
     0 0 0 1px var(--ink);
   transform: translateY(1px);
 }
 @utility inset-well {
-  background: #fff;
+  background: var(--well);
+  color: var(--ink);
   border: 1px solid var(--ink);
   box-shadow: inset 1px 1px 0 0 var(--surface-dark);
 }

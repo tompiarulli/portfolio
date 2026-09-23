@@ -10,7 +10,7 @@ function Home() {
     <Window title={`Welcome to ${site.os}`} x={48} y={40} width={480}>
       <h1 className="font-title text-2xl leading-tight">{site.name}</h1>
       <p className="mt-1 text-base">{site.tagline}</p>
-      <hr className="my-4 border-0 border-t border-dotted border-black" />
+      <hr className="my-4 border-0 border-t border-dotted border-(--ink)" />
       <p>
         This desktop is a portfolio. Open an app from the dock, or drag this
         window around. Every page is prerendered HTML, so it should feel

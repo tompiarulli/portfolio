@@ -12,15 +12,15 @@ export function Dock() {
   return (
     <nav
       aria-label="Applications"
-      className="fixed bottom-0 left-1/2 z-50 flex -translate-x-1/2 border border-b-0 border-black bg-(--surface)"
+      className="fixed bottom-0 left-1/2 z-50 flex -translate-x-1/2 border border-b-0 border-(--ink) bg-(--surface)"
     >
       {APPS.map((app) => (
         <Link
           key={app.to}
           to={app.to}
           preload="intent"
-          className="group flex w-[72px] flex-col items-center gap-1 border-r border-black px-2 pt-2 pb-1 last:border-r-0 hover:bg-(--tertiary) active:bg-(--accent)"
-          activeProps={{ className: 'bg-(--accent)' }}
+          className="group flex w-[72px] flex-col items-center gap-1 border-r border-(--ink) px-2 pt-2 pb-1 last:border-r-0 hover:bg-(--tertiary) hover:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
+          activeProps={{ className: 'bg-(--accent) text-(--on-accent)' }}
           activeOptions={{ exact: true }}
         >
           <span

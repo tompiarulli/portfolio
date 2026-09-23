@@ -57,7 +57,7 @@ export function Window({
       role="dialog"
       aria-label={title}
       style={{ transform: `translate3d(${x}px, ${y}px, 0)`, width, height }}
-      className={`absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col border border-black bg-(--surface) shadow-[0_50px_80px_-50px_rgb(0_0_0/0.3)] ${className}`}
+      className={`absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col border border-(--ink) bg-(--surface) shadow-[0_50px_80px_-50px_rgb(0_0_0/0.3)] ${className}`}
     >
       <div
         onPointerDown={onPointerDown}
@@ -65,14 +65,14 @@ export function Window({
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         onDoubleClick={close}
-        className="flex h-6 shrink-0 cursor-grab touch-none items-center gap-2 border-b border-black bg-(--surface) px-1.5 active:cursor-grabbing"
+        className="flex h-6 shrink-0 cursor-grab touch-none items-center gap-2 border-b border-(--ink) bg-(--surface) px-1.5 active:cursor-grabbing"
       >
         <button
           type="button"
           onClick={close}
           onPointerDown={(e) => e.stopPropagation()}
           aria-label="Close"
-          className="size-3 border border-black bg-(--surface-light) shadow-[inset_-1px_-1px_0_var(--surface-dark)] active:bg-(--ink)"
+          className="size-3 border border-(--ink) bg-(--surface-light) shadow-[inset_-1px_-1px_0_var(--surface-dark)] active:bg-(--ink)"
         />
         <span aria-hidden className="stripes h-3 flex-1 opacity-70" />
         <span className="bg-(--surface) px-2 font-title text-[12px] tracking-tight">
