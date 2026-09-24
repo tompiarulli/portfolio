@@ -1,14 +1,16 @@
 import { Link } from '@tanstack/react-router'
+import { useWindows } from './WindowManager'
 
 const APPS = [
-  { to: '/', label: 'Home', glyph: '⌂' },
-  { to: '/projects', label: 'Projects', glyph: '▤' },
-  { to: '/about', label: 'About', glyph: '☺' },
-  { to: '/contact', label: 'Contact', glyph: '✉' },
-  { to: '/settings', label: 'Settings', glyph: '⚙' },
+  { id: 'home', to: '/', label: 'Home', glyph: '⌂' },
+  { id: 'projects', to: '/projects', label: 'Projects', glyph: '▤' },
+  { id: 'about', to: '/about', label: 'About', glyph: '☺' },
+  { id: 'contact', to: '/contact', label: 'Contact', glyph: '✉' },
+  { id: 'settings', to: '/settings', label: 'Settings', glyph: '⚙' },
 ] as const
 
 export function Dock() {
+  const { raise } = useWindows()
   return (
     <nav
       aria-label="Applications"
@@ -19,9 +21,9 @@ export function Dock() {
           key={app.to}
           to={app.to}
           preload="intent"
+          // Also raise here: the URL may already point at a closed window.
+          onClick={() => raise(app.id)}
           className="group flex w-[72px] flex-col items-center gap-1 border-r border-(--ink) px-2 pt-2 pb-1 last:border-r-0 hover:bg-(--tertiary) hover:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
-          activeProps={{ className: 'bg-(--accent) text-(--on-accent)' }}
-          activeOptions={{ exact: true }}
         >
           <span
             aria-hidden

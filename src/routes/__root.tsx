@@ -1,9 +1,4 @@
-import {
-  HeadContent,
-  Outlet,
-  Scripts,
-  createRootRoute,
-} from '@tanstack/react-router'
+import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { Suspense, lazy } from 'react'
 import { Desktop } from '#/components/Desktop'
 import { site } from '#/lib/site'
@@ -55,11 +50,7 @@ export const Route = createRootRoute({
     scripts: [{ children: modeBootScript }],
   }),
   shellComponent: RootDocument,
-  component: () => (
-    <Desktop>
-      <Outlet />
-    </Desktop>
-  ),
+  component: Desktop,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {

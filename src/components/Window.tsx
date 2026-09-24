@@ -1,6 +1,6 @@
-import { useNavigate } from '@tanstack/react-router'
 import { useCallback, useRef } from 'react'
 import type { PointerEvent, ReactNode } from 'react'
+import { useWindowId, useWindows } from './WindowManager'
 
 type Props = {
   title: string
@@ -10,8 +10,6 @@ type Props = {
   y?: number
   width?: number
   height?: number
-  /** Where the close box navigates. Defaults to "/". */
-  closeTo?: string
   className?: string
 }
 
@@ -22,13 +20,14 @@ export function Window({
   y = 60,
   width = 560,
   height,
-  closeTo = '/',
   className = '',
 }: Props) {
   const ref = useRef<HTMLElement>(null)
   const drag = useRef<{ dx: number; dy: number } | null>(null)
-  const navigate = useNavigate()
-  const close = () => navigate({ to: closeTo })
+  const id = useWindowId()
+  const { stack, focus, close: closeWindow } = useWindows()
+  const active = stack.at(-1) === id
+  const close = () => closeWindow(id)
 
   const onPointerDown = useCallback((e: PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0 || !ref.current) return
@@ -56,7 +55,13 @@ export function Window({
       ref={ref}
       role="dialog"
       aria-label={title}
-      style={{ transform: `translate3d(${x}px, ${y}px, 0)`, width, height }}
+      onPointerDown={() => focus(id)}
+      style={{
+        transform: `translate3d(${x}px, ${y}px, 0)`,
+        width,
+        height,
+        zIndex: stack.indexOf(id) + 1,
+      }}
       className={`absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col border border-(--ink) bg-(--surface) shadow-[0_50px_80px_-50px_rgb(0_0_0/0.3)] ${className}`}
     >
       <div
@@ -74,11 +79,17 @@ export function Window({
           aria-label="Close"
           className="size-3 border border-(--ink) bg-(--surface-light) shadow-[inset_-1px_-1px_0_var(--surface-dark)] active:bg-(--ink)"
         />
-        <span aria-hidden className="stripes h-3 flex-1 opacity-70" />
+        <span
+          aria-hidden
+          className={`stripes h-3 flex-1 ${active ? 'opacity-70' : 'opacity-0'}`}
+        />
         <span className="bg-(--surface) px-2 font-title text-[12px] tracking-tight">
           {title}
         </span>
-        <span aria-hidden className="stripes h-3 flex-1 opacity-70" />
+        <span
+          aria-hidden
+          className={`stripes h-3 flex-1 ${active ? 'opacity-70' : 'opacity-0'}`}
+        />
       </div>
       <div className="os-scroll min-h-0 flex-1 p-4 select-text">{children}</div>
     </section>
