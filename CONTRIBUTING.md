@@ -26,8 +26,10 @@ Run `pnpm typecheck && pnpm lint && pnpm build` before committing. The build run
 
 ## Layout
 
-- `src/routes/` file-based routes. Each route renders one `<Window>`; the root route wraps everything in `<Desktop>` (menu bar and dock).
-- `src/components/` desktop chrome: `Desktop`, `MenuBar`, `Dock`, `Window`, `Button`, `Clock`.
+- `src/routes/` file-based routes. They set the URL, `head()`, and loaders only; the root route renders `<Desktop>` (menu bar, dock, open windows).
+- `src/components/` desktop chrome: `Desktop`, `MenuBar`, `Dock`, `Window`, `WindowManager`, `Button`, `Clock`.
+- `src/components/apps/` window contents, one component per app, registered in `apps/index.tsx`.
+- `src/lib/windows.ts` window ids and their URLs. The URL follows the focused window, so each route prerenders with its window open.
 - `src/components/bits/` components vendored from [React Bits](https://reactbits.dev). Add one with `pnpm dlx shadcn@latest add @react-bits/<Name>-TS-TW`, then `pnpm format`.
 - `src/lib/site.ts` all copy and project data.
 - `src/lib/theme.ts` light/dark/system mode and the inline script that applies it before first paint.
