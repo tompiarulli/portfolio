@@ -19,3 +19,4 @@ Setup, scripts, file layout, commit format, and deploy live in CONTRIBUTING.md a
 - Devtools are dev-only, lazy-loaded in `__root.tsx`; keep them out of the production bundle.
 - Edit copy and project data in `src/lib/site.ts`, not in routes.
 - Split unrelated changes into separate commits (e.g. config vs content).
+- Solo personal project: commit directly to `main`. No feature branches or PRs needed.
