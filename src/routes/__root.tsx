@@ -2,7 +2,7 @@ import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { Suspense, lazy } from 'react'
 import { Desktop } from '#/components/Desktop'
 import { site } from '#/lib/site'
-import { modeBootScript } from '#/lib/theme'
+import { themeBootScript } from '#/lib/theme'
 import appCss from '../styles.css?url'
 
 const Devtools = import.meta.env.DEV
@@ -47,7 +47,7 @@ export const Route = createRootRoute({
       { rel: 'stylesheet', href: appCss },
       { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
     ],
-    scripts: [{ children: modeBootScript }],
+    scripts: [{ children: themeBootScript }],
   }),
   shellComponent: RootDocument,
   component: Desktop,

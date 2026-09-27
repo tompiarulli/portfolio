@@ -34,8 +34,8 @@ export function Clock() {
   if (!now) return <span className="inline-block w-40" />
   const { date, time } = fmt(now)
   return (
-    <span className="flex items-center gap-3 font-title tracking-tight">
-      <span className="bevel px-2 py-0.5">{date}</span>
+    <span className="flex items-center gap-3 font-title tracking-tight [text-transform:var(--label-case)]">
+      <span className="bevel px-2 py-1">{date}</span>
       <span className="tabular-nums">☼ {time}</span>
     </span>
   )

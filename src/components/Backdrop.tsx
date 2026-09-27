@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
-import { THEMES } from '#/lib/theme'
+import { RAIN_CHARACTERS, THEMES } from '#/lib/theme'
 import type { Backdrop } from '#/lib/theme'
 
 // Backgrounds load after hydration, so the shell stays small. Only the
@@ -36,8 +36,7 @@ const DITHER = {
 
 /** Code rain knobs, for themes with `backdrop: 'rain'`. */
 const RAIN = {
-  /** Half-width katakana and digits, as in the film. */
-  characters: 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789Z:.=*+<>',
+  characters: RAIN_CHARACTERS,
   /** Glyph cell in pixels; the glyph fills most of it. */
   cellWidth: 14,
   cellHeight: 18,
@@ -59,7 +58,7 @@ type State = {
   still: boolean
 }
 
-/** Reads the pattern colours from tokens, following mode and theme changes. */
+/** Reads the pattern colours from tokens, following theme changes. */
 function useBackdrop() {
   const [state, setState] = useState<State | null>(null)
   useEffect(() => {
@@ -79,7 +78,7 @@ function useBackdrop() {
     const observer = new MutationObserver(update)
     observer.observe(root, {
       attributes: true,
-      attributeFilter: ['data-mode', 'data-theme'],
+      attributeFilter: ['data-theme'],
     })
     return () => observer.disconnect()
   }, [])
@@ -90,7 +89,7 @@ export function Backdrop() {
   const b = useBackdrop()
   if (!b) return null
   return (
-    <div aria-hidden className="fixed inset-0">
+    <div aria-hidden className="fixed inset-0 opacity-(--backdrop-opacity)">
       <Suspense>
         {b.backdrop === 'rain' ? (
           <CodeRain

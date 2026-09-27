@@ -8,18 +8,55 @@
 @font-face { font-family: 'Title'; src: url('/fonts/title.woff2') format('woff2'); font-display: block; }
 */
 
-@theme {
-  --font-ui:
-    'UI', 'Verdana', ui-sans-serif, system-ui, sans-serif;
-  --font-title:
-    ui-sans-serif, sans-serif;
-  --font-mono: 'Perfect DOS VGA 437', 'VT323', ui-monospace, monospace;
+/* Departure Mono (SIL OFL, see public/fonts/DepartureMono-OFL.txt): the
+   TomOS pixel font. It is drawn on an 11px grid, so size-adjust maps the
+   site's 13px text onto exactly 11px and the pixels stay crisp. */
+@font-face {
+  font-family: 'Departure Mono';
+  src: url('/fonts/departure-mono.woff2') format('woff2');
+  font-display: block;
+  size-adjust: 84.615%;
+}
+/* Iosevka Extended (SIL OFL, see public/fonts/Iosevka-OFL.txt): a Unix
+   terminal monospace for White Rabbit, in its wider Extended cut to match
+   the film's screens, subset to Latin and a few symbols.
+   Medium for text, SemiBold for dock labels, Bold for window titles.
+   Browsers only fetch it once text uses it. */
+@font-face {
+  font-family: 'Iosevka';
+  src: url('/fonts/iosevka-500.woff2') format('woff2');
+  font-display: block;
+  font-weight: 400 500;
+}
+@font-face {
+  font-family: 'Iosevka';
+  src: url('/fonts/iosevka-600.woff2') format('woff2');
+  font-display: block;
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Iosevka';
+  src: url('/fonts/iosevka-700.woff2') format('woff2');
+  font-display: block;
+  font-weight: 700 900;
 }
 
-/* ---------- Tokens: two inks over a Bayer-dithered desktop ----------
-   Light by default; data-mode='dark' on <html> swaps the inks. The boot
-   script in theme.ts resolves "system" to light or dark before first paint. */
-:root {
+@theme {
+  --font-ui:
+    'Departure Mono', 'Verdana', ui-sans-serif, system-ui, sans-serif;
+  --font-title:
+    'Departure Mono', ui-sans-serif, sans-serif;
+  --font-mono: 'Iosevka', ui-monospace, monospace;
+}
+
+/* ---------- Tokens: the theme drives everything ----------
+   This block is TomOS, the clean default: cream and ink over a dithered
+   desktop that ramps from --desk to --warp. Every other theme is an homage
+   and overrides whatever tokens it needs under its own [data-theme]. The
+   selector also matches a nested [data-theme] so Settings can preview each
+   theme in place. */
+:root,
+[data-theme] {
   --bg: #efebe2;
   --surface: #efebe2;
   --surface-light: #efebe2;
@@ -34,95 +71,93 @@
   --well: #efebe2;
   --on-accent: #efebe2;
   --on-tertiary: #efebe2;
-}
-:root[data-mode='dark'] {
-  --bg: #111;
-  --surface: #111;
-  --surface-light: #111;
-  --surface-dark: #efebe2;
-  --tertiary: #efebe2;
-  --accent: #efebe2;
-  --accent-shadow: #111;
-  --button: #111;
-  --button-shadow: #111;
-  --ink: #efebe2;
-  --highlight: #111;
-  --well: #111;
-  --on-accent: #111;
-  --on-tertiary: #111;
-  color-scheme: dark;
-}
-
-/* ---------- Desktop themes ----------
-   A theme only recolours the backdrop: the dither ramps from --desk to
-   --warp. The chrome above stays the same in every theme. Selectors also
-   match a nested [data-theme] so Settings can preview each theme in place. */
-:root,
-[data-theme='ink'] {
+  /* Active title bar and its stripes. */
+  --title: var(--surface);
+  --on-title: var(--ink);
+  --stripe: var(--ink);
+  /* text-transform for dock labels and for window titles. */
+  --label-case: none;
+  --label-weight: normal;
+  /* 13px lands Departure Mono on its crisp 11px grid. */
+  --label-size: 13px;
+  /* Base text size; 13px is Departure Mono's crisp 11px grid. */
+  --text-size: 13px;
+  --title-case: none;
+  --title-weight: normal;
+  /* 13px lands Departure Mono on its crisp 11px grid. */
+  --title-size: 13px;
+  /* Window chrome: shadow, title bar height, brackets around the title,
+     and the close box's fill and bevel. */
+  --window-shadow: 0 50px 80px -50px rgb(0 0 0 / 0.3);
+  --title-height: 29px;
+  --title-open: '';
+  --title-close: '';
+  --close-bg: var(--surface-light);
+  --close-shadow: inset -1px -1px 0 var(--surface-dark);
+  /* Close box size and the size of its X. */
+  --box-size: 16px;
+  --glyph-size: 8px;
+  /* Open-window marks under dock icons. */
+  --indicator: currentColor;
+  /* Lines between dock slots; transparent leaves one outer border. */
+  --dock-divider: var(--ink);
+  /* Strength of the desktop background under the windows. */
+  --backdrop-opacity: 1;
   --desk: #efebe2;
   --warp: #111;
 }
-[data-theme='rose'] {
-  --desk: #f4dcd8;
-  --warp: #bb5566;
-}
-[data-theme='mint'] {
-  --desk: #dcefdf;
-  --warp: #3f8a5a;
-}
-[data-theme='pool'] {
-  --desk: #d9e8f4;
-  --warp: #3474b8;
-}
-[data-theme='sand'] {
-  --desk: #f4e8cc;
-  --warp: #b67d1f;
-}
-[data-theme='lilac'] {
-  --desk: #e6ddf2;
-  --warp: #7456b3;
-}
-/* Code rain: --warp trails, each led by a --rain-head glyph. */
+/* ---------- White Rabbit ----------
+   A green phosphor terminal matched to the rain,
+   with solid title bars and a monospace font.
+   Code rain on the desktop: --warp trails, each led by a --rain-head glyph. */
+:root[data-theme='rabbit'],
 [data-theme='rabbit'] {
-  --desk: #e4ede3;
-  --warp: #2f9a55;
-  --rain-head: #0b3d1d;
-}
-:root[data-mode='dark'],
-[data-mode='dark'] [data-theme='ink'] {
-  --desk: #111;
-  --warp: #efebe2;
-}
-[data-mode='dark'][data-theme='rose'],
-[data-mode='dark'] [data-theme='rose'] {
-  --desk: #1f1214;
-  --warp: #a3525f;
-}
-[data-mode='dark'][data-theme='mint'],
-[data-mode='dark'] [data-theme='mint'] {
-  --desk: #0f1c14;
-  --warp: #4f8a63;
-}
-[data-mode='dark'][data-theme='pool'],
-[data-mode='dark'] [data-theme='pool'] {
-  --desk: #0e1822;
-  --warp: #3f6f9e;
-}
-[data-mode='dark'][data-theme='sand'],
-[data-mode='dark'] [data-theme='sand'] {
-  --desk: #1e170b;
-  --warp: #9c7433;
-}
-[data-mode='dark'][data-theme='lilac'],
-[data-mode='dark'] [data-theme='lilac'] {
-  --desk: #17121f;
-  --warp: #6f5a9e;
-}
-[data-mode='dark'][data-theme='rabbit'],
-[data-mode='dark'] [data-theme='rabbit'] {
-  --desk: #050a06;
+  --desk: #020806;
   --warp: #22b455;
   --rain-head: #d8ffe0;
+  --bg: #03120a;
+  --surface: #03120a;
+  --surface-light: #072a15;
+  --surface-dark: #41e07a;
+  --tertiary: #41e07a;
+  --accent: #41e07a;
+  --accent-shadow: #03120a;
+  --button: #03120a;
+  --button-shadow: #03120a;
+  --ink: #41e07a;
+  --highlight: #03120a;
+  --well: #020c06;
+  --on-accent: #03120a;
+  --on-tertiary: #03120a;
+  /* Solid phosphor title bars, as in the film's terminal windows. */
+  --title: #41e07a;
+  --on-title: #03120a;
+  --stripe: transparent;
+  --label-case: uppercase;
+  --label-weight: 600;
+  --label-size: 13px;
+  --text-size: 12px;
+  --title-case: uppercase;
+  --title-weight: 700;
+  --title-size: 13px;
+  /* Flat terminal windows: thin bar, title in brackets like "[mobile]",
+     and a close box at the left. */
+  --window-shadow: none;
+  --title-height: 23px;
+  --title-open: '[';
+  --title-close: ']';
+  --close-bg: transparent;
+  --close-shadow: none;
+  /* A small hollow close box like the film's. */
+  --box-size: 15px;
+  --glyph-size: 9px;
+  --dock-divider: transparent;
+  /* Open-window marks glow like the head of a falling rain drop. */
+  --indicator: var(--rain-head);
+  --backdrop-opacity: 0.8;
+  --font-ui: var(--font-mono);
+  --font-title: var(--font-mono);
+  color-scheme: dark;
 }
 
 * {
@@ -137,7 +172,7 @@ body {
   background: var(--desk);
   color: var(--ink);
   font-family: var(--font-ui);
-  font-size: 13px;
+  font-size: var(--text-size);
   line-height: 1.35;
   -webkit-font-smoothing: none;
   image-rendering: pixelated;
@@ -188,9 +223,14 @@ svg {
 @utility stripes {
   background-image: repeating-linear-gradient(
     to bottom,
-    var(--ink) 0 1px,
-    transparent 1px 3px
+    var(--stripe) 0 1px,
+    transparent 1px 4px
   );
+  /* Four lines span 13px; inset 2px so they sit centered in a 17px band.
+     Clip to the content box so the repeat doesn't wrap into the padding. */
+  padding-block: 2px;
+  background-origin: content-box;
+  background-clip: content-box;
 }
 
 /* Scrollbars, black-bordered like the original */
