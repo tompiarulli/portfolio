@@ -10,7 +10,7 @@ Setup, scripts, file layout, commit format, and deploy live in CONTRIBUTING.md a
 
 - Performance is the point. No state libraries, no icon packs. Animation libraries only arrive via vendored React Bits components, imported lazily in the route that uses them so the shell stays small. CSS transitions of 150 to 200 ms, `transform`-driven motion, pointer events. Keep client JS small; check gzipped size of `.output/public/assets` after adding a dependency.
 - Prerender-safe components: anything reading `Date`, `localStorage`, or `window` must render a stable placeholder on the server and fill in inside `useEffect` (see `Clock.tsx`).
-- Colors come from CSS variables only (`var(--surface)`, Tailwind `bg-(--surface)`), never hard-coded hex in components. Add new tokens to both the light (`:root`) and dark (`[data-mode='dark']`) blocks.
+- Colors come from CSS variables only (`var(--surface)`, Tailwind `bg-(--surface)`), never hard-coded hex in components. Add new tokens to the default `:root, [data-theme]` block (the TomOS theme) and override them in any theme that needs a different value. There is no light/dark mode; the theme drives everything.
 - Aesthetic rules: 1 px black borders, zero border radius, bevels via inset box-shadow, `image-rendering: pixelated`, pixel fonts, `font-smoothing: none`. No drop shadows except the soft window shadow already defined.
 - Links between routes use `<Link>` with `preload="intent"` so hover preloads the route chunk.
 - Route `head()` sets a page title as `Page - {site.title}`.
