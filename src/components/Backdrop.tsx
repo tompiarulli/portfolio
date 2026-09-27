@@ -32,7 +32,7 @@ const DITHER = {
 
 type State = { low: string; high: string; still: boolean }
 
-/** Reads the pattern colours from tokens, following light/dark changes. */
+/** Reads the pattern colours from tokens, following mode and theme changes. */
 function useBackdrop() {
   const [state, setState] = useState<State | null>(null)
   useEffect(() => {
@@ -40,14 +40,17 @@ function useBackdrop() {
     const update = () => {
       const s = getComputedStyle(root)
       setState({
-        low: s.getPropertyValue('--bg'),
-        high: s.getPropertyValue('--warp'),
+        low: s.getPropertyValue('--desk').trim(),
+        high: s.getPropertyValue('--warp').trim(),
         still: matchMedia('(prefers-reduced-motion: reduce)').matches,
       })
     }
     update()
     const observer = new MutationObserver(update)
-    observer.observe(root, { attributes: true, attributeFilter: ['data-mode'] })
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ['data-mode', 'data-theme'],
+    })
     return () => observer.disconnect()
   }, [])
   return state
@@ -61,7 +64,7 @@ export function Backdrop() {
       <Suspense>
         <Dither
           {...DITHER}
-          // The pattern is computed in grey, then recoloured from --bg (low)
+          // The pattern is computed in grey, then recoloured from --desk (low)
           // to --warp (high).
           backgroundColor="#000000"
           paletteLow={b.low}

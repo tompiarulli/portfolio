@@ -18,8 +18,7 @@
 
 /* ---------- Tokens: two inks over a Bayer-dithered desktop ----------
    Light by default; data-mode='dark' on <html> swaps the inks. The boot
-   script in theme.ts resolves "system" to light or dark before first paint.
-   The desktop pattern ramps from --bg to --warp. */
+   script in theme.ts resolves "system" to light or dark before first paint. */
 :root {
   --bg: #efebe2;
   --surface: #efebe2;
@@ -35,7 +34,6 @@
   --well: #efebe2;
   --on-accent: #efebe2;
   --on-tertiary: #efebe2;
-  --warp: var(--ink);
 }
 :root[data-mode='dark'] {
   --bg: #111;
@@ -55,6 +53,66 @@
   color-scheme: dark;
 }
 
+/* ---------- Desktop themes ----------
+   A theme only recolours the backdrop: the dither ramps from --desk to
+   --warp. The chrome above stays the same in every theme. Selectors also
+   match a nested [data-theme] so Settings can preview each theme in place. */
+:root,
+[data-theme='ink'] {
+  --desk: #efebe2;
+  --warp: #111;
+}
+[data-theme='rose'] {
+  --desk: #f4dcd8;
+  --warp: #bb5566;
+}
+[data-theme='mint'] {
+  --desk: #dcefdf;
+  --warp: #3f8a5a;
+}
+[data-theme='pool'] {
+  --desk: #d9e8f4;
+  --warp: #3474b8;
+}
+[data-theme='sand'] {
+  --desk: #f4e8cc;
+  --warp: #b67d1f;
+}
+[data-theme='lilac'] {
+  --desk: #e6ddf2;
+  --warp: #7456b3;
+}
+:root[data-mode='dark'],
+[data-mode='dark'] [data-theme='ink'] {
+  --desk: #111;
+  --warp: #efebe2;
+}
+[data-mode='dark'][data-theme='rose'],
+[data-mode='dark'] [data-theme='rose'] {
+  --desk: #1f1214;
+  --warp: #a3525f;
+}
+[data-mode='dark'][data-theme='mint'],
+[data-mode='dark'] [data-theme='mint'] {
+  --desk: #0f1c14;
+  --warp: #4f8a63;
+}
+[data-mode='dark'][data-theme='pool'],
+[data-mode='dark'] [data-theme='pool'] {
+  --desk: #0e1822;
+  --warp: #3f6f9e;
+}
+[data-mode='dark'][data-theme='sand'],
+[data-mode='dark'] [data-theme='sand'] {
+  --desk: #1e170b;
+  --warp: #9c7433;
+}
+[data-mode='dark'][data-theme='lilac'],
+[data-mode='dark'] [data-theme='lilac'] {
+  --desk: #17121f;
+  --warp: #6f5a9e;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -64,7 +122,7 @@ body {
   height: 100%;
   margin: 0;
   overflow: hidden;
-  background: var(--bg);
+  background: var(--desk);
   color: var(--ink);
   font-family: var(--font-ui);
   font-size: 13px;
