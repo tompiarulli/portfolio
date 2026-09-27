@@ -2,9 +2,17 @@ export const site = {
   name: 'Tom Piarulli',
   title: 'Tom Piarulli ☼',
   tagline: 'Software engineer',
+  bio: 'Write a short bio here. Keep it to a few lines; the window scrolls if it must.',
   email: 'tompiarulli@gmail.com',
   os: 'TomOS 9.2',
   builtWith: 'React 19, TanStack Start, Tailwind 4',
+  iconCredit: {
+    name: 'Icons8 Flat Color Icons',
+    url: 'https://github.com/icons8/flat-color-icons',
+  },
+  player: 'No videos yet.',
+  blog: 'No posts yet.',
+  albums: 'No albums yet.',
 }
 
 export type Project = {

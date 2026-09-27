@@ -1,19 +1,25 @@
 import type { ComponentType } from 'react'
 import { WindowIdContext, useWindows } from '#/components/WindowManager'
 import type { WindowId } from '#/lib/windows'
-import { Home } from './Home'
-import { Projects } from './Projects'
-import { Project } from './Project'
 import { About } from './About'
+import { Work } from './Work'
+import { Player } from './Player'
+import { Blog } from './Blog'
+import { Albums } from './Albums'
+import { Project } from './Project'
 import { Contact } from './Contact'
 import { Settings } from './Settings'
+import { SystemInfo } from './SystemInfo'
 
 const APPS: Record<Exclude<WindowId, `project:${string}`>, ComponentType> = {
-  home: Home,
-  projects: Projects,
   about: About,
+  work: Work,
+  player: Player,
+  blog: Blog,
+  albums: Albums,
   contact: Contact,
   settings: Settings,
+  system: SystemInfo,
 }
 
 function WindowContent({ id }: { id: WindowId }) {

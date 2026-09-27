@@ -6,12 +6,12 @@ export function Project({ slug }: { slug: string }) {
   const p = projects.find((project) => project.slug === slug)
   if (!p)
     return (
-      <Window title="Not found" x={200} y={140} width={320}>
+      <Window title="Not found" x={0} y={40} width={320}>
         <p>No such project.</p>
       </Window>
     )
   return (
-    <Window title={p.name} x={180} y={120} width={480}>
+    <Window title={p.name} x={30} y={30} width={480}>
       <p className="font-title text-xs uppercase tracking-wide">{p.year}</p>
       <h1 className="font-title text-xl">{p.name}</h1>
       <p className="mt-3">{p.blurb}</p>

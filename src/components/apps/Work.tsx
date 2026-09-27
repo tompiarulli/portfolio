@@ -2,9 +2,9 @@ import { Link } from '@tanstack/react-router'
 import { Window } from '#/components/Window'
 import { projects } from '#/lib/site'
 
-export function Projects() {
+export function Work() {
   return (
-    <Window title="Projects" x={64} y={48} width={640} height={420}>
+    <Window title="Work" x={0} y={-30} width={640} height={420}>
       <table className="w-full border-collapse text-left">
         <thead className="font-title">
           <tr className="border-b border-(--ink)">
@@ -21,7 +21,7 @@ export function Projects() {
             >
               <td className="py-1.5 pr-4">
                 <Link
-                  to="/projects/$slug"
+                  to="/work/$slug"
                   params={{ slug: p.slug }}
                   preload="intent"
                   className="underline"

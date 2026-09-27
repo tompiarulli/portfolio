@@ -2,15 +2,16 @@ import { Link } from '@tanstack/react-router'
 import { useWindows } from './WindowManager'
 
 const APPS = [
-  { id: 'home', to: '/', label: 'Home', glyph: '⌂' },
-  { id: 'projects', to: '/projects', label: 'Projects', glyph: '▤' },
-  { id: 'about', to: '/about', label: 'About', glyph: '☺' },
-  { id: 'contact', to: '/contact', label: 'Contact', glyph: '✉' },
-  { id: 'settings', to: '/settings', label: 'Settings', glyph: '⚙' },
+  { id: 'about', to: '/', label: 'About' },
+  { id: 'work', to: '/work', label: 'Work' },
+  { id: 'player', to: '/player', label: 'Player' },
+  { id: 'blog', to: '/blog', label: 'Blog' },
+  { id: 'contact', to: '/contact', label: 'Contact' },
+  { id: 'settings', to: '/settings', label: 'Settings' },
 ] as const
 
 export function Dock() {
-  const { raise } = useWindows()
+  const { stack, raise, minimized, minimize } = useWindows()
   return (
     <nav
       aria-label="Applications"
@@ -21,19 +22,38 @@ export function Dock() {
           key={app.to}
           to={app.to}
           preload="intent"
-          // Also raise here: the URL may already point at a closed window.
-          onClick={() => raise(app.id)}
-          className="group flex w-[72px] flex-col items-center gap-1 border-r border-(--ink) px-2 pt-2 pb-1 last:border-r-0 hover:bg-(--tertiary) hover:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
+          onClick={(e) => {
+            // Clicking the focused window's icon minimizes it into the dock.
+            if (stack.at(-1) === app.id && !minimized.includes(app.id)) {
+              e.preventDefault()
+              minimize(app.id)
+              return
+            }
+            // Also raise here: the URL may already point at a closed or
+            // minimized window.
+            raise(app.id)
+          }}
+          className="group relative flex w-[83px] flex-col items-center gap-[6px] border-r border-(--dock-divider) px-2 pt-[11px] pb-[8px] last:border-r-0 hover:bg-(--tertiary) hover:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
         >
+          {/* Placeholder until each theme gets custom icons. */}
           <span
             aria-hidden
-            className="inset-well flex size-9 items-center justify-center text-xl leading-none group-active:translate-y-px"
-          >
-            {app.glyph}
-          </span>
-          <span className="font-title text-[11px] tracking-tight">
+            data-dock-icon={app.id}
+            className="size-[32px] border border-current group-active:translate-y-px"
+          />
+          <span className="font-title text-(length:--label-size) tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">
             {app.label}
           </span>
+          <span
+            aria-hidden
+            className={`absolute bottom-[4px] left-1/2 h-[2px] w-[20px] -translate-x-1/2 bg-(--indicator) transition-[scale,opacity] group-hover:bg-current group-active:bg-current duration-150 ${
+              stack.at(-1) === app.id
+                ? ''
+                : stack.includes(app.id)
+                  ? 'scale-x-40 opacity-45'
+                  : 'scale-x-0'
+            }`}
+          />
         </Link>
       ))}
     </nav>

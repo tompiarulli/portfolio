@@ -4,7 +4,7 @@ import { site } from '#/lib/site'
 
 export function Contact() {
   return (
-    <Window title="Contact" x={200} y={100} width={400}>
+    <Window title="Contact" x={40} y={40} width={400}>
       <p>Best way to reach me is email.</p>
       <a href={`mailto:${site.email}`} className="mt-3 inline-block">
         <Button accent>{site.email}</Button>
