@@ -1,0 +1,155 @@
+import { useEffect, useRef } from 'react'
+
+type Props = {
+  /** Base colour behind the rain. */
+  background: string
+  /** Colour of the falling trails. */
+  trail: string
+  /** Colour of the leading glyph in each drop. */
+  head: string
+  /** Glyphs to draw from. */
+  characters: string
+  /** Size of one glyph cell in CSS pixels. */
+  cellWidth?: number
+  cellHeight?: number
+  /** Drop speed range, in cells per second. */
+  minSpeed?: number
+  maxSpeed?: number
+  /** Trail length range, in cells. */
+  minTrail?: number
+  maxTrail?: number
+  /** Drops falling in each column at once. */
+  dropsPerColumn?: number
+  /** Share of glyphs that change each second. */
+  mutation?: number
+  /** Draw one frame and stop, for reduced motion. */
+  still?: boolean
+}
+
+type Drop = { y: number; speed: number; trail: number }
+
+const random = (min: number, max: number) => min + Math.random() * (max - min)
+
+/**
+ * Green-phosphor code rain. Every column has its own drop falling at its own
+ * speed; glyphs sit on a fixed grid and light up as a drop passes, fading
+ * along its trail. Glyphs also change at random, so the code keeps shifting.
+ */
+export default function CodeRain({
+  background,
+  trail,
+  head,
+  characters,
+  cellWidth = 14,
+  cellHeight = 18,
+  minSpeed = 6,
+  maxSpeed = 18,
+  minTrail = 15,
+  maxTrail = 50,
+  dropsPerColumn = 2,
+  mutation = 0.04,
+  still = false,
+}: Props) {
+  const ref = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = ref.current
+    const ctx = canvas?.getContext('2d')
+    const parent = canvas?.parentElement
+    if (!canvas || !ctx || !parent) return
+
+    const glyphs = Array.from(characters)
+    const pick = () => Math.floor(Math.random() * glyphs.length)
+    let columns = 0
+    let rows = 0
+    let cells = new Uint16Array(0)
+    let drops: Drop[] = []
+
+    // Starts a drop above the screen, so columns enter at staggered times.
+    const spawn = (anywhere = false): Drop => ({
+      y: anywhere ? random(0, rows + maxTrail) : random(-rows, 0),
+      speed: random(minSpeed, maxSpeed),
+      trail: Math.round(random(minTrail, maxTrail)),
+    })
+
+    const resize = () => {
+      const { width, height } = parent.getBoundingClientRect()
+      const dpr = window.devicePixelRatio || 1
+      canvas.width = Math.round(width * dpr)
+      canvas.height = Math.round(height * dpr)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      columns = Math.ceil(width / cellWidth)
+      rows = Math.ceil(height / cellHeight)
+      cells = Uint16Array.from({ length: columns * rows }, pick)
+      drops = Array.from({ length: columns * dropsPerColumn }, () =>
+        spawn(true),
+      )
+      draw()
+    }
+
+    const draw = () => {
+      ctx.globalAlpha = 1
+      ctx.fillStyle = background
+      ctx.fillRect(0, 0, columns * cellWidth, rows * cellHeight)
+      ctx.font = `${cellHeight - 2}px monospace`
+      ctx.textBaseline = 'top'
+      ctx.textAlign = 'center'
+      for (let i = 0; i < drops.length; i++) {
+        const d = drops[i]
+        const c = i % columns
+        const top = Math.floor(d.y)
+        const x = c * cellWidth + cellWidth / 2
+        for (let r = Math.max(0, top - d.trail); r <= top && r < rows; r++) {
+          // Square-root falloff keeps most of the trail bright, fading late.
+          ctx.globalAlpha = Math.sqrt(1 - (top - r) / d.trail)
+          ctx.fillStyle = r === top ? head : trail
+          ctx.fillText(glyphs[cells[r * columns + c]], x, r * cellHeight + 1)
+        }
+      }
+    }
+
+    let frame = 0
+    let last = performance.now()
+    let pending = 0
+    const tick = (now: number) => {
+      // Cap the step so a background tab doesn't lurch when it returns.
+      const dt = Math.min(now - last, 100) / 1000
+      last = now
+      for (let i = 0; i < drops.length; i++) {
+        const d = drops[i]
+        d.y += d.speed * dt
+        if (d.y - d.trail > rows) drops[i] = spawn()
+      }
+      pending += cells.length * mutation * dt
+      for (; pending >= 1; pending--)
+        cells[Math.floor(Math.random() * cells.length)] = pick()
+      draw()
+      frame = requestAnimationFrame(tick)
+    }
+
+    const observer = new ResizeObserver(resize)
+    observer.observe(parent)
+    resize()
+    if (!still) frame = requestAnimationFrame(tick)
+    return () => {
+      cancelAnimationFrame(frame)
+      observer.disconnect()
+    }
+  }, [
+    background,
+    trail,
+    head,
+    characters,
+    cellWidth,
+    cellHeight,
+    minSpeed,
+    maxSpeed,
+    minTrail,
+    maxTrail,
+    dropsPerColumn,
+    mutation,
+    still,
+  ])
+
+  return <canvas ref={ref} className="block size-full" />
+}

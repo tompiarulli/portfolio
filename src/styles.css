@@ -82,6 +82,12 @@
   --desk: #e6ddf2;
   --warp: #7456b3;
 }
+/* Code rain: --warp trails, each led by a --rain-head glyph. */
+[data-theme='rabbit'] {
+  --desk: #e4ede3;
+  --warp: #2f9a55;
+  --rain-head: #0b3d1d;
+}
 :root[data-mode='dark'],
 [data-mode='dark'] [data-theme='ink'] {
   --desk: #111;
@@ -111,6 +117,12 @@
 [data-mode='dark'] [data-theme='lilac'] {
   --desk: #17121f;
   --warp: #6f5a9e;
+}
+[data-mode='dark'][data-theme='rabbit'],
+[data-mode='dark'] [data-theme='rabbit'] {
+  --desk: #050a06;
+  --warp: #22b455;
+  --rain-head: #d8ffe0;
 }
 
 * {

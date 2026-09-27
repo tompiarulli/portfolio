@@ -2,16 +2,24 @@ export const MODES = ['system', 'light', 'dark'] as const
 export type Mode = (typeof MODES)[number]
 const KEY = 'mode'
 
-/** Desktop themes. They only change the backdrop colours (--desk, --warp in
- *  styles.css); the window chrome stays the same ink in every theme. */
+export type Backdrop = 'dither' | 'rain'
+
+/** Desktop themes. They only change the backdrop: its colours (--desk, --warp
+ *  in styles.css) and which background draws them. The window
+ *  chrome stays the same ink in every theme. */
 export const THEMES = [
-  { id: 'ink', label: 'Ink' },
-  { id: 'rose', label: 'Rose' },
-  { id: 'mint', label: 'Mint' },
-  { id: 'pool', label: 'Pool' },
-  { id: 'sand', label: 'Sand' },
-  { id: 'lilac', label: 'Lilac' },
-] as const
+  { id: 'ink', label: 'Ink', backdrop: 'dither' },
+  { id: 'rose', label: 'Rose', backdrop: 'dither' },
+  { id: 'mint', label: 'Mint', backdrop: 'dither' },
+  { id: 'pool', label: 'Pool', backdrop: 'dither' },
+  { id: 'sand', label: 'Sand', backdrop: 'dither' },
+  { id: 'lilac', label: 'Lilac', backdrop: 'dither' },
+  { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain' },
+] as const satisfies readonly {
+  id: string
+  label: string
+  backdrop: Backdrop
+}[]
 export type Theme = (typeof THEMES)[number]['id']
 const THEME_KEY = 'theme'
 

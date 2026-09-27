@@ -1,7 +1,11 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
+import { THEMES } from '#/lib/theme'
+import type { Backdrop } from '#/lib/theme'
 
-// The WebGL background loads after hydration, so the shell stays small.
+// Backgrounds load after hydration, so the shell stays small. Only the
+// current theme's one is fetched.
 const Dither = lazy(() => import('./bits/Dither'))
+const CodeRain = lazy(() => import('./CodeRain'))
 
 /**
  * Dither background knobs. Edit and save: the dev server applies changes
@@ -30,7 +34,30 @@ const DITHER = {
   waveColor: '#808080',
 } as const
 
-type State = { low: string; high: string; still: boolean }
+/** Code rain knobs, for themes with `backdrop: 'rain'`. */
+const RAIN = {
+  /** Half-width katakana and digits, as in the film. */
+  characters: 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789Z:.=*+<>',
+  /** Glyph cell in pixels; the glyph fills most of it. */
+  cellWidth: 14,
+  cellHeight: 18,
+  /** Drop speed range, in cells per second. */
+  minSpeed: 6,
+  maxSpeed: 18,
+  /** Trail length range, in cells. */
+  minTrail: 15,
+  maxTrail: 50,
+  /** Drops falling in each column at once; more is denser. */
+  dropsPerColumn: 2,
+} as const
+
+type State = {
+  backdrop: Backdrop
+  low: string
+  high: string
+  head: string
+  still: boolean
+}
 
 /** Reads the pattern colours from tokens, following mode and theme changes. */
 function useBackdrop() {
@@ -39,7 +66,10 @@ function useBackdrop() {
     const root = document.documentElement
     const update = () => {
       const s = getComputedStyle(root)
+      const theme = THEMES.find((t) => t.id === root.dataset.theme)
       setState({
+        backdrop: theme?.backdrop ?? 'dither',
+        head: s.getPropertyValue('--rain-head').trim(),
         low: s.getPropertyValue('--desk').trim(),
         high: s.getPropertyValue('--warp').trim(),
         still: matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -62,16 +92,27 @@ export function Backdrop() {
   return (
     <div aria-hidden className="fixed inset-0">
       <Suspense>
-        <Dither
-          {...DITHER}
-          // The pattern is computed in grey, then recoloured from --desk (low)
-          // to --warp (high).
-          backgroundColor="#000000"
-          paletteLow={b.low}
-          paletteHigh={b.high}
-          disableAnimation={b.still}
-          enableMouseInteraction={false}
-        />
+        {b.backdrop === 'rain' ? (
+          <CodeRain
+            {...RAIN}
+            // --warp trails led by a --rain-head glyph over the --desk base.
+            background={b.low}
+            trail={b.high}
+            head={b.head}
+            still={b.still}
+          />
+        ) : (
+          <Dither
+            {...DITHER}
+            // The pattern is computed in grey, then recoloured from --desk (low)
+            // to --warp (high).
+            backgroundColor="#000000"
+            paletteLow={b.low}
+            paletteHigh={b.high}
+            disableAnimation={b.still}
+            enableMouseInteraction={false}
+          />
+        )}
       </Suspense>
     </div>
   )
