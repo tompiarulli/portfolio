@@ -9,7 +9,9 @@ export function Desktop() {
     <WindowManager>
       <Backdrop />
       <MenuBar />
-      <main className="absolute inset-x-0 top-7 bottom-16">
+      {/* Above the menu bar and dock so windows can be dragged over them;
+          click-through except on the windows themselves. */}
+      <main className="pointer-events-none absolute inset-x-0 top-0 bottom-[88px] z-60">
         <OpenWindows />
       </main>
       <Dock />
