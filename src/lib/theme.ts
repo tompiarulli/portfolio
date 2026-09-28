@@ -1,11 +1,12 @@
-export type Backdrop = 'rain'
+export type Backdrop = 'rain' | 'sky'
 
 /** Themes drive every colour (tokens in styles.css), the fonts and which
- *  background draws the desktop. Each is an homage to something I like;
- *  White Rabbit is the only one for now. */
+ *  background draws the desktop. Each is an homage to something I like. */
 export const THEMES = [
   // The film's US release day.
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
+  // The pilot's first broadcast.
+  { id: 'believe', label: 'I Believe', backdrop: 'sky', date: '1993-09-10' },
 ] as const satisfies readonly {
   id: string
   label: string

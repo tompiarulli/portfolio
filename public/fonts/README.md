@@ -11,3 +11,4 @@ pyftsubset font.ttf --flavor=woff2 --unicodes="U+0020-007E,U+2600-26FF" --output
 ## In use
 
 - `iosevka-500.woff2`, `iosevka-600.woff2`, `iosevka-700.woff2`: Iosevka Extended Medium, SemiBold and Bold by Renzhi Li, SIL Open Font License 1.1 (`Iosevka-OFL.txt`). The site's terminal font, from the official `PkgWebFont-Iosevka` release, subset with the `pyftsubset` command above using `--unicodes="U+0020-007E,U+00A0-00FF,U+2010-2027,U+2030-203A,U+2190-2195,U+2600-26FF"`.
+- `dm-mono-400.woff2`, `dm-mono-500.woff2`: DM Mono Regular and Medium by the DM Mono Project Authors, SIL Open Font License 1.1 (`DMMono-OFL.txt`). I Believe's font, the Latin subset served by Google Fonts.

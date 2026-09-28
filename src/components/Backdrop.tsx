@@ -5,6 +5,7 @@ import type { Backdrop } from '#/lib/theme'
 // Backgrounds load after hydration, so the shell stays small. Only the
 // current theme's one is fetched.
 const CodeRain = lazy(() => import('./CodeRain'))
+const NightSky = lazy(() => import('./NightSky'))
 
 /** Code rain knobs, for themes with `backdrop: 'rain'`. */
 const RAIN = {
@@ -27,6 +28,11 @@ type State = {
   low: string
   high: string
   head: string
+  hull: string
+  beam: string
+  pine: string
+  pineLit: string
+  moon: string
   still: boolean
 }
 
@@ -43,6 +49,11 @@ function useBackdrop() {
         head: s.getPropertyValue('--rain-head').trim(),
         low: s.getPropertyValue('--desk').trim(),
         high: s.getPropertyValue('--warp').trim(),
+        hull: s.getPropertyValue('--hull').trim(),
+        beam: s.getPropertyValue('--beam').trim(),
+        pine: s.getPropertyValue('--pine').trim(),
+        pineLit: s.getPropertyValue('--pine-lit').trim(),
+        moon: s.getPropertyValue('--moon').trim(),
         still: matchMedia('(prefers-reduced-motion: reduce)').matches,
       })
     }
@@ -63,14 +74,30 @@ export function Backdrop() {
   return (
     <div aria-hidden className="fixed inset-0 opacity-(--backdrop-opacity)">
       <Suspense>
-        <CodeRain
-          {...RAIN}
-          // --warp trails led by a --rain-head glyph over the --desk base.
-          background={b.low}
-          trail={b.high}
-          head={b.head}
-          still={b.still}
-        />
+        {b.backdrop === 'sky' ? (
+          <NightSky
+            // --warp stars over a --desk sky, above --pine trees lit in
+            // --pine-lit, under a --moon; the saucer is a --hull outline shaded, lit and
+            // beamed in --beam, and the trees are outlined in --hull too.
+            background={b.low}
+            stars={b.high}
+            hull={b.hull}
+            beam={b.beam}
+            pine={b.pine}
+            pineLit={b.pineLit}
+            moon={b.moon}
+            still={b.still}
+          />
+        ) : (
+          <CodeRain
+            {...RAIN}
+            // --warp trails led by a --rain-head glyph over the --desk base.
+            background={b.low}
+            trail={b.high}
+            head={b.head}
+            still={b.still}
+          />
+        )}
       </Suspense>
     </div>
   )
