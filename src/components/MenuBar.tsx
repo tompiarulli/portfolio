@@ -1,7 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import { play, setSoundEnabled, useSoundEnabled } from '#/lib/sound'
 import { Clock } from './Clock'
 import { useWindows } from './WindowManager'
 
@@ -119,27 +118,6 @@ function SystemMenu() {
   )
 }
 
-/** Speaker and label that turn sound effects on and off; a rule sets it
- *  apart from the clock. */
-function SoundToggle() {
-  const on = useSoundEnabled()
-  return (
-    <button
-      type="button"
-      aria-label="Sound effects"
-      aria-pressed={on}
-      onClick={() => {
-        setSoundEnabled(!on)
-        play('motif')
-      }}
-      className="flex h-full items-center gap-2 border-r border-(--ink) pr-3 font-title tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]"
-    >
-      <span aria-hidden className="sound-icon" />
-      <span aria-hidden>{on ? 'SOUND ON' : 'SOUND OFF'}</span>
-    </button>
-  )
-}
-
 export function MenuBar() {
   return (
     <>
@@ -147,7 +125,6 @@ export function MenuBar() {
         <SystemMenu />
       </nav>
       <header className={`${BAR} right-0 gap-3 border-l px-3`}>
-        <SoundToggle />
         <Clock />
       </header>
     </>
