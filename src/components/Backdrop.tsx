@@ -6,6 +6,7 @@ import type { Backdrop } from '#/lib/theme'
 // current theme's one is fetched.
 const CodeRain = lazy(() => import('./CodeRain'))
 const NightSky = lazy(() => import('./NightSky'))
+const FireTrails = lazy(() => import('./FireTrails'))
 
 /** Code rain knobs, for themes with `backdrop: 'rain'`. */
 const RAIN = {
@@ -33,6 +34,11 @@ type State = {
   pine: string
   pineLit: string
   moon: string
+  asphalt: string
+  lane: string
+  flame: string
+  flameCore: string
+  spark: string
   still: boolean
 }
 
@@ -54,6 +60,11 @@ function useBackdrop() {
         pine: s.getPropertyValue('--pine').trim(),
         pineLit: s.getPropertyValue('--pine-lit').trim(),
         moon: s.getPropertyValue('--moon').trim(),
+        asphalt: s.getPropertyValue('--asphalt').trim(),
+        lane: s.getPropertyValue('--lane').trim(),
+        flame: s.getPropertyValue('--flame').trim(),
+        flameCore: s.getPropertyValue('--flame-core').trim(),
+        spark: s.getPropertyValue('--spark').trim(),
         still: matchMedia('(prefers-reduced-motion: reduce)').matches,
       })
     }
@@ -75,7 +86,21 @@ export function Backdrop() {
   return (
     <div aria-hidden className="fixed inset-0 opacity-(--backdrop-opacity)">
       <Suspense>
-        {b.backdrop === 'sky' ? (
+        {b.backdrop === 'road' ? (
+          <FireTrails
+            // --warp stars over a --desk sky, above an --asphalt road
+            // marked in --lane, where fire trails burn in --flame round a
+            // --flame-core behind a car crackling with --spark.
+            background={b.low}
+            stars={b.high}
+            asphalt={b.asphalt}
+            lane={b.lane}
+            flame={b.flame}
+            core={b.flameCore}
+            spark={b.spark}
+            still={b.still}
+          />
+        ) : b.backdrop === 'sky' ? (
           <NightSky
             // --warp stars over a --desk sky, above --pine trees lit in
             // --pine-lit, under a --moon; the saucer is a --hull outline shaded, lit and

@@ -135,6 +135,41 @@ const [TREELINE, TREELINE_LIT] = (() => {
   )
 })()
 
+/** A still of the fire trails, 160x64, centred on the road's vanishing
+ *  point: masks for the --asphalt ground, its --lane markings, and two
+ *  trails of --flame with --flame-core bases burning down it. */
+const [ROAD_GROUND, ROAD_LANE, ROAD_FLAME, ROAD_CORE] = (() => {
+  const box = (x: number, y: number, w = 1, h = 1) =>
+    `M${x} ${y}h${w}v${h}h-${w}z`
+  const horizon = 36
+  let lane = ''
+  let flame = ''
+  let core = ''
+  for (let y = horizon + 1; y < 64; y++) {
+    const t = (y - horizon) / (64 - horizon)
+    const half = Math.round(70 * t)
+    lane += box(80 - half, y) + box(80 + half - 1, y)
+    if (Math.floor(6 / t) % 2 === 0) lane += box(80, y)
+    const width = Math.max(1, Math.round(t * 2))
+    for (const side of [-1, 1]) {
+      const x = Math.round(80 + side * 18 * t - width / 2)
+      const tall = Math.max(
+        1,
+        Math.round(12 * t * (0.7 + 0.3 * Math.sin(y * 1.7 + side))),
+      )
+      const base = Math.max(1, Math.round(tall * 0.35))
+      flame += box(x, y - tall + 1, width, tall - base)
+      core += box(x, y - base + 1, width, base)
+    }
+  }
+  return [box(0, horizon, 160, 64 - horizon), lane, flame, core].map(
+    (path) =>
+      `url("data:image/svg+xml,${encodeURIComponent(
+        `<svg xmlns='http://www.w3.org/2000/svg' width='160' height='64' shape-rendering='crispEdges'><path d='${path}'/></svg>`,
+      )}")`,
+  )
+})()
+
 /** A tiny desktop: just the theme's backdrop. */
 function ThemePreview({
   theme,
@@ -159,6 +194,20 @@ function ThemePreview({
             height: 'calc(2 * var(--logo-size))',
           }}
         />
+      ) : backdrop === 'road' ? (
+        [
+          ['bg-(--warp)', SKY_PREVIEW],
+          ['bg-(--asphalt)', ROAD_GROUND],
+          ['bg-(--lane)', ROAD_LANE],
+          ['bg-(--flame)', ROAD_FLAME],
+          ['bg-(--flame-core)', ROAD_CORE],
+        ].map(([colour, mask]) => (
+          <span
+            key={mask}
+            className={`absolute inset-0 mask-no-repeat ${colour}`}
+            style={{ maskImage: mask, maskPosition: 'center' }}
+          />
+        ))
       ) : backdrop === 'sky' ? (
         <>
           <span

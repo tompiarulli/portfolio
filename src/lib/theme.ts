@@ -1,4 +1,4 @@
-export type Backdrop = 'rain' | 'sky' | 'plain'
+export type Backdrop = 'rain' | 'sky' | 'plain' | 'road'
 
 /** Themes drive every colour (tokens in styles.css), the fonts and which
  *  background draws the desktop. Each is an homage to something I like. */
@@ -13,6 +13,14 @@ export const THEMES = [
     label: 'TomSpace',
     backdrop: 'plain',
     date: '2003-08-01',
+  },
+  // The night the time traveller is trying to get back to: 26 October 1985, when he
+  // left Twin Pines Mall at 88 miles per hour.
+  {
+    id: 'traveler',
+    label: 'Time Traveler',
+    backdrop: 'road',
+    date: '1985-10-26',
   },
 ] as const satisfies readonly {
   id: string

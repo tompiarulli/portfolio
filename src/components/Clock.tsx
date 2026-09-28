@@ -92,9 +92,11 @@ export function Clock() {
   const shown = useFlip(date)
   if (!now) return <span className="inline-block w-40" />
   return (
-    <span className="flex items-center gap-3 font-title tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">
-      <span className="whitespace-pre tabular-nums">{shown}</span>
-      <span className="tabular-nums">{fmtTime(now)}</span>
+    <span className="flex items-center gap-3 bg-(--clock-bg) px-(--clock-pad) py-[3px] font-title tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">
+      <span className="whitespace-pre text-(--clock-date) tabular-nums">
+        {shown}
+      </span>
+      <span className="text-(--clock-time) tabular-nums">{fmtTime(now)}</span>
     </span>
   )
 }

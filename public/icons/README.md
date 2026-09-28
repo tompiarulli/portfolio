@@ -13,3 +13,4 @@ The dock icons are inlined as `--icon-*` mask tokens in `src/styles.css`, so not
   - Contact: `kappfinder/pics/email.xpm`
   - Settings: `kcontrol/kcontrol/pics/kcontrol.xpm`
 - TomSpace menu mark and dock icons: original pixel art after an early social network's logo and the icons in its contact box (the founder's photo, a favourites folder, the profile song, a blog pad, a message sealed with a heart and a palette for editing the profile), drawn in `scripts/tomspace_icons.py`.
+- Time Traveler menu mark and dock icons: original pixel art after props from the film (the flux capacitor, the family photo with the siblings fading out, the time machine, his guitar from the dance, the clock tower flyer, the letter from 1885 and the time circuits), drawn in `scripts/traveler_icons.py`.
