@@ -70,7 +70,8 @@ function useBackdrop() {
 
 export function Backdrop() {
   const b = useBackdrop()
-  if (!b) return null
+  // A plain desktop is just the page's --desk background.
+  if (!b || b.backdrop === 'plain') return null
   return (
     <div aria-hidden className="fixed inset-0 opacity-(--backdrop-opacity)">
       <Suspense>

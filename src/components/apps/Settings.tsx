@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Window } from '#/components/Window'
 import { DEFAULT_THEME, THEMES, applyTheme, currentTheme } from '#/lib/theme'
-import type { Theme } from '#/lib/theme'
+import type { Backdrop, Theme } from '#/lib/theme'
 
 export function Settings() {
   const [theme, setTheme] = useState<Theme>(DEFAULT_THEME)
@@ -44,7 +44,7 @@ function ThemeTile({
         onChange={() => pick(t.id)}
         className="sr-only"
       />
-      <ThemePreview theme={t.id} sky={t.backdrop === 'sky'} />
+      <ThemePreview theme={t.id} backdrop={t.backdrop} />
       <span
         className={`block border-t border-(--ink) py-1 text-center transition-colors duration-150 ${
           on ? 'bg-(--accent) text-(--on-accent)' : ''
@@ -136,14 +136,30 @@ const [TREELINE, TREELINE_LIT] = (() => {
 })()
 
 /** A tiny desktop: just the theme's backdrop. */
-function ThemePreview({ theme, sky }: { theme: Theme; sky: boolean }) {
+function ThemePreview({
+  theme,
+  backdrop,
+}: {
+  theme: Theme
+  backdrop: Backdrop
+}) {
   return (
     <span
       data-theme={theme}
       aria-hidden
       className="relative block h-16 overflow-hidden bg-(--desk)"
     >
-      {sky ? (
+      {backdrop === 'plain' ? (
+        // Nothing to show of a plain desktop, so the theme's menu mark, at
+        // twice its grid.
+        <span
+          className="logo absolute inset-0 m-auto text-(--on-title)"
+          style={{
+            width: 'calc(2 * var(--logo-size))',
+            height: 'calc(2 * var(--logo-size))',
+          }}
+        />
+      ) : backdrop === 'sky' ? (
         <>
           <span
             className="absolute inset-0 bg-(--warp) mask-no-repeat"

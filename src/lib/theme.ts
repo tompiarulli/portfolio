@@ -1,4 +1,4 @@
-export type Backdrop = 'rain' | 'sky'
+export type Backdrop = 'rain' | 'sky' | 'plain'
 
 /** Themes drive every colour (tokens in styles.css), the fonts and which
  *  background draws the desktop. Each is an homage to something I like. */
@@ -7,6 +7,13 @@ export const THEMES = [
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
   // The pilot's first broadcast.
   { id: 'believe', label: 'I Believe', backdrop: 'sky', date: '1993-09-10' },
+  // The site's launch.
+  {
+    id: 'tomspace',
+    label: 'TomSpace',
+    backdrop: 'plain',
+    date: '2003-08-01',
+  },
 ] as const satisfies readonly {
   id: string
   label: string
