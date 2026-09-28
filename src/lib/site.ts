@@ -4,7 +4,7 @@ export const site = {
   tagline: 'Software engineer',
   letter: [
     'Welcome to my small corner of the internet.',
-    "I'm a software developer with 15+ years experience across engineering, product, and design. Currently I run technology for Nerd Street, a national network of esports venues and camps.",
+    "I'm a software developer with 15+ years of experience across engineering, product, and design. I run technology for Nerd Street, a national network of esports venues and events.",
     "I'm also a former digital nomad and 90s kid with a deep love of travel, movies, and pop culture.",
   ],
   signoff: '- Tom',
