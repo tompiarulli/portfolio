@@ -3,7 +3,7 @@ import { WindowIdContext, useWindows } from '#/components/WindowManager'
 import type { WindowId } from '#/lib/windows'
 import { About } from './About'
 import { Work } from './Work'
-import { Player } from './Player'
+import { Media } from './Media'
 import { Blog } from './Blog'
 import { Project } from './Project'
 import { Contact } from './Contact'
@@ -13,7 +13,7 @@ import { SystemInfo } from './SystemInfo'
 const APPS: Record<Exclude<WindowId, `project:${string}`>, ComponentType> = {
   about: About,
   work: Work,
-  player: Player,
+  media: Media,
   blog: Blog,
   contact: Contact,
   settings: Settings,

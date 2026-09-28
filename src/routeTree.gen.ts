@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as PlayerRouteImport } from './routes/player'
+import { Route as MediaRouteImport } from './routes/media'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SystemRouteImport } from './routes/system'
 import { Route as WorkRouteImport } from './routes/work'
@@ -33,9 +33,9 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PlayerRoute = PlayerRouteImport.update({
-  id: '/player',
-  path: '/player',
+const MediaRoute = MediaRouteImport.update({
+  id: '/media',
+  path: '/media',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -63,7 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
-  '/player': typeof PlayerRoute
+  '/media': typeof MediaRoute
   '/settings': typeof SettingsRoute
   '/system': typeof SystemRoute
   '/work': typeof WorkRouteWithChildren
@@ -73,7 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
-  '/player': typeof PlayerRoute
+  '/media': typeof MediaRoute
   '/settings': typeof SettingsRoute
   '/system': typeof SystemRoute
   '/work': typeof WorkRouteWithChildren
@@ -84,7 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
-  '/player': typeof PlayerRoute
+  '/media': typeof MediaRoute
   '/settings': typeof SettingsRoute
   '/system': typeof SystemRoute
   '/work': typeof WorkRouteWithChildren
@@ -96,7 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blog'
     | '/contact'
-    | '/player'
+    | '/media'
     | '/settings'
     | '/system'
     | '/work'
@@ -106,7 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blog'
     | '/contact'
-    | '/player'
+    | '/media'
     | '/settings'
     | '/system'
     | '/work'
@@ -116,7 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blog'
     | '/contact'
-    | '/player'
+    | '/media'
     | '/settings'
     | '/system'
     | '/work'
@@ -127,7 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
-  PlayerRoute: typeof PlayerRoute
+  MediaRoute: typeof MediaRoute
   SettingsRoute: typeof SettingsRoute
   SystemRoute: typeof SystemRoute
   WorkRoute: typeof WorkRouteWithChildren
@@ -156,11 +156,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/player': {
-      id: '/player'
-      path: '/player'
-      fullPath: '/player'
-      preLoaderRoute: typeof PlayerRouteImport
+    '/media': {
+      id: '/media'
+      path: '/media'
+      fullPath: '/media'
+      preLoaderRoute: typeof MediaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -208,7 +208,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
-  PlayerRoute: PlayerRoute,
+  MediaRoute: MediaRoute,
   SettingsRoute: SettingsRoute,
   SystemRoute: SystemRoute,
   WorkRoute: WorkRouteWithChildren,

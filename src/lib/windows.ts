@@ -2,7 +2,7 @@
 export type WindowId =
   | 'about'
   | 'work'
-  | 'player'
+  | 'media'
   | 'blog'
   | 'contact'
   | 'settings'
@@ -12,7 +12,7 @@ export type WindowId =
 const PATHS = {
   about: '/',
   work: '/work',
-  player: '/player',
+  media: '/media',
   blog: '/blog',
   contact: '/contact',
   settings: '/settings',
@@ -34,12 +34,12 @@ export function idForPath(pathname: string): WindowId | null {
   return (Object.keys(PATHS) as AppId[]).find((k) => PATHS[k] === path) ?? null
 }
 
-/** Windows open on first paint for a URL, back to front. About and Player are
+/** Windows open on first paint for a URL, back to front. About and Media are
  *  always open. */
 export function initialStack(pathname: string): WindowId[] {
   const id = idForPath(pathname)
-  const base: WindowId[] = ['player', 'about']
+  const base: WindowId[] = ['media', 'about']
   if (!id || id === 'about') return base
-  if (id === 'player') return ['about', 'player']
+  if (id === 'media') return ['about', 'media']
   return id.startsWith('project:') ? [...base, 'work', id] : [...base, id]
 }

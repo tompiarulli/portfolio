@@ -11,7 +11,7 @@ export const site = {
   email: 'tompiarulli@gmail.com',
   os: 'TomOS 9.2',
   builtWith: 'React 19, TanStack Start, Tailwind 4',
-  player: 'No videos yet.',
+  media: 'No videos yet.',
   blog: 'No posts yet.',
 }
 
