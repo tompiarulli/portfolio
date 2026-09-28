@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
+import { setSoundEnabled, useSoundEnabled } from '#/lib/sound'
 import { Clock } from './Clock'
 import { useWindows } from './WindowManager'
 
@@ -118,13 +119,50 @@ function SystemMenu() {
   )
 }
 
+/** Speaker and label that turn sound effects on and off; a rule sets it
+ *  apart from the clock. */
+function SoundToggle() {
+  const on = useSoundEnabled()
+  return (
+    <button
+      type="button"
+      aria-label="Sound effects"
+      aria-pressed={on}
+      onClick={() => setSoundEnabled(!on)}
+      className="flex h-full items-center gap-2 border-r border-(--ink) pr-3 font-title tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]"
+    >
+      <svg
+        aria-hidden
+        viewBox="0 0 16 16"
+        className="size-(--menu-size)"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      >
+        <path
+          fill="currentColor"
+          stroke="none"
+          d="M1 5.5h3.5L9 2v12L4.5 10.5H1z"
+        />
+        {on ? (
+          <path d="M11 5.5a3.5 3.5 0 0 1 0 5M12.5 3a6.5 6.5 0 0 1 0 10" />
+        ) : (
+          <path d="M11 6l4 4M15 6l-4 4" />
+        )}
+      </svg>
+      <span aria-hidden>{on ? 'SOUND ON' : 'SOUND OFF'}</span>
+    </button>
+  )
+}
+
 export function MenuBar() {
   return (
     <>
       <nav className={`${BAR} left-0 border-r has-aria-expanded:z-70`}>
         <SystemMenu />
       </nav>
-      <header className={`${BAR} right-0 border-l px-3`}>
+      <header className={`${BAR} right-0 gap-3 border-l px-3`}>
+        <SoundToggle />
         <Clock />
       </header>
     </>
