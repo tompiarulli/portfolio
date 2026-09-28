@@ -32,7 +32,7 @@ Run `pnpm typecheck && pnpm lint && pnpm build` before committing. The build run
 - `src/lib/windows.ts` window ids and their URLs. The URL follows the focused window, so each route prerenders with its window open.
 - `src/components/bits/` components vendored from [React Bits](https://reactbits.dev). Add one with `pnpm dlx shadcn@latest add @react-bits/<Name>-TS-TW`, then `pnpm format`.
 - `src/lib/site.ts` all copy and project data.
-- `src/lib/theme.ts` the theme list (White Rabbit, the only theme for now) and the inline script that applies the saved theme before first paint.
+- `src/lib/theme.ts` the theme list (White Rabbit and I Believe) and the inline script that applies the saved theme before first paint.
 - `src/styles.css` design tokens per theme, and the retro desktop chrome utilities.
 - `public/fonts/` self-hosted fonts.
 
