@@ -5,11 +5,14 @@ export type Backdrop = 'dither' | 'rain'
  *  homages to things I like. */
 export const THEMES = [
   { id: 'tomos', label: 'TomOS', backdrop: 'dither' },
-  { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain' },
+  // The film's US release day.
+  { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
 ] as const satisfies readonly {
   id: string
   label: string
   backdrop: Backdrop
+  /** Day the menu bar clock shows, as YYYY-MM-DD; today when unset. */
+  date?: string
 }[]
 export type Theme = (typeof THEMES)[number]['id']
 export const DEFAULT_THEME: Theme = 'tomos'
