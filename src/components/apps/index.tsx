@@ -5,7 +5,6 @@ import { About } from './About'
 import { Work } from './Work'
 import { Player } from './Player'
 import { Blog } from './Blog'
-import { Albums } from './Albums'
 import { Project } from './Project'
 import { Contact } from './Contact'
 import { Settings } from './Settings'
@@ -16,7 +15,6 @@ const APPS: Record<Exclude<WindowId, `project:${string}`>, ComponentType> = {
   work: Work,
   player: Player,
   blog: Blog,
-  albums: Albums,
   contact: Contact,
   settings: Settings,
   system: SystemInfo,

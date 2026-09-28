@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AlbumsRouteImport } from './routes/albums'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as PlayerRouteImport } from './routes/player'
@@ -22,11 +21,6 @@ import { Route as WorkSlugRouteImport } from './routes/work.$slug'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AlbumsRoute = AlbumsRouteImport.update({
-  id: '/albums',
-  path: '/albums',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogRoute = BlogRouteImport.update({
@@ -67,7 +61,6 @@ const WorkSlugRoute = WorkSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/albums': typeof AlbumsRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/player': typeof PlayerRoute
@@ -78,7 +71,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/albums': typeof AlbumsRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/player': typeof PlayerRoute
@@ -90,7 +82,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/albums': typeof AlbumsRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/player': typeof PlayerRoute
@@ -103,7 +94,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/albums'
     | '/blog'
     | '/contact'
     | '/player'
@@ -114,7 +104,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/albums'
     | '/blog'
     | '/contact'
     | '/player'
@@ -125,7 +114,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/albums'
     | '/blog'
     | '/contact'
     | '/player'
@@ -137,7 +125,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AlbumsRoute: typeof AlbumsRoute
   BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
   PlayerRoute: typeof PlayerRoute
@@ -153,13 +140,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/albums': {
-      id: '/albums'
-      path: '/albums'
-      fullPath: '/albums'
-      preLoaderRoute: typeof AlbumsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog': {
@@ -226,7 +206,6 @@ const WorkRouteWithChildren = WorkRoute._addFileChildren(WorkRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AlbumsRoute: AlbumsRoute,
   BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
   PlayerRoute: PlayerRoute,

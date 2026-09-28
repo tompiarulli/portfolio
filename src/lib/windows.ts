@@ -4,7 +4,6 @@ export type WindowId =
   | 'work'
   | 'player'
   | 'blog'
-  | 'albums'
   | 'contact'
   | 'settings'
   | 'system'
@@ -15,7 +14,6 @@ const PATHS = {
   work: '/work',
   player: '/player',
   blog: '/blog',
-  albums: '/albums',
   contact: '/contact',
   settings: '/settings',
   system: '/system',

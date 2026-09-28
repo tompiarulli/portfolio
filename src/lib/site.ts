@@ -13,7 +13,6 @@ export const site = {
   builtWith: 'React 19, TanStack Start, Tailwind 4',
   player: 'No videos yet.',
   blog: 'No posts yet.',
-  albums: 'No albums yet.',
 }
 
 export type Project = {

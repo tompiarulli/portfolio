@@ -32,9 +32,9 @@ export default defineConfig({
     tanstackStart({
       // Every route is static HTML on Vercel's CDN. No function on the hot path.
       prerender: { enabled: true, crawlLinks: true, autoSubfolderIndex: true },
-      // Routes no prerendered page links to: System sits in a closed menu and
-      // Albums has no dock icon, so the crawl alone never finds them.
-      pages: [{ path: '/system' }, { path: '/albums' }],
+      // System sits in a closed menu, so no prerendered page links to it and
+      // the crawl alone never finds it.
+      pages: [{ path: '/system' }],
     }),
     viteReact(),
   ],
