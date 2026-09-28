@@ -1,10 +1,9 @@
-export type Backdrop = 'dither' | 'rain'
+export type Backdrop = 'rain'
 
 /** Themes drive every colour (tokens in styles.css), the fonts and which
- *  background draws the desktop. TomOS is the clean default; the rest are
- *  homages to things I like. */
+ *  background draws the desktop. Each is an homage to something I like;
+ *  White Rabbit is the only one for now. */
 export const THEMES = [
-  { id: 'tomos', label: 'TomOS', backdrop: 'dither' },
   // The film's US release day.
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
 ] as const satisfies readonly {
@@ -15,7 +14,7 @@ export const THEMES = [
   date?: string
 }[]
 export type Theme = (typeof THEMES)[number]['id']
-export const DEFAULT_THEME: Theme = 'tomos'
+export const DEFAULT_THEME: Theme = 'rabbit'
 /** Glyphs of White Rabbit's code rain: half-width katakana and digits, as
  *  in the film. Shared with the Settings preview. */
 export const RAIN_CHARACTERS =
@@ -37,5 +36,6 @@ export function currentTheme(): Theme {
   return THEMES.find((x) => x.id === t)?.id ?? DEFAULT_THEME
 }
 
-/** Inline in <head> so the first paint already has the saved theme. */
-export const themeBootScript = `(function(){var t;try{t=localStorage.getItem('${THEME_KEY}')}catch(e){}document.documentElement.dataset.theme=t||'${DEFAULT_THEME}'})()`
+/** Inline in <head> so the first paint already has the saved theme. A saved
+ *  theme that no longer exists falls back to the default. */
+export const themeBootScript = `(function(){var t;try{t=localStorage.getItem('${THEME_KEY}')}catch(e){}document.documentElement.dataset.theme=${JSON.stringify(THEMES.map((x) => x.id))}.indexOf(t)<0?'${DEFAULT_THEME}':t})()`

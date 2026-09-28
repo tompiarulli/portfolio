@@ -4,7 +4,8 @@ import { DEFAULT_THEME, THEMES, applyTheme, currentTheme } from '#/lib/theme'
 import type { Theme } from '#/lib/theme'
 
 export function Settings() {
-  const [theme, setTheme] = useState<Theme>(DEFAULT_THEME)
+  // A plain string, so the tiles still compare with a single theme.
+  const [theme, setTheme] = useState<string>(DEFAULT_THEME)
   useEffect(() => setTheme(currentTheme()), [])
   const pick = (t: Theme) => {
     setTheme(t)
@@ -44,7 +45,7 @@ function ThemeTile({
         onChange={() => pick(t.id)}
         className="sr-only"
       />
-      <ThemePreview theme={t.id} rain={t.backdrop === 'rain'} />
+      <ThemePreview theme={t.id} />
       <span
         className={`block border-t border-(--ink) py-1 text-center transition-colors duration-150 ${
           on ? 'bg-(--accent) text-(--on-accent)' : ''
@@ -60,21 +61,17 @@ function ThemeTile({
 const RAIN_PREVIEW =
   'K7@Q2#VZ8X&M4R+PJ9$L0N=T3<W6YH>A5*FD1;S/G8B:C#E2U@QX7M4&RZ9KV$P0L+JN3T=W6<YH5>AF*D1S;G/B8:CE#U2'
 
-/** A tiny desktop: the theme's backdrop fading in behind a blank window. */
-function ThemePreview({ theme, rain }: { theme: Theme; rain: boolean }) {
+/** A tiny desktop: the theme's code rain behind a blank window. */
+function ThemePreview({ theme }: { theme: Theme }) {
   return (
     <span
       data-theme={theme}
       aria-hidden
       className="relative block h-16 overflow-hidden bg-(--desk)"
     >
-      {rain ? (
-        <span className="absolute inset-0 font-mono text-[10px] leading-[10px] tracking-[1px] break-all text-(--warp)">
-          {RAIN_PREVIEW.repeat(2)}
-        </span>
-      ) : (
-        <span className="absolute inset-0 bg-[conic-gradient(var(--warp)_25%,transparent_0_50%,var(--warp)_0_75%,transparent_0)] bg-size-[4px_4px] mask-linear-315 mask-linear-from-20% mask-linear-to-70%" />
-      )}
+      <span className="absolute inset-0 font-mono text-[10px] leading-[10px] tracking-[1px] break-all text-(--warp)">
+        {RAIN_PREVIEW.repeat(2)}
+      </span>
       <span className="absolute top-2 left-2 h-9 w-3/5 border border-(--ink) bg-(--surface)">
         <span className="block h-2 border-b border-(--ink)" />
       </span>

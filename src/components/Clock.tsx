@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { THEMES, currentTheme } from '#/lib/theme'
+import { THEMES } from '#/lib/theme'
 
 const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 const MONTHS = 'JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC'.split(' ')
@@ -12,7 +12,8 @@ function fmtTime(d: Date) {
 
 /** "WED 31 MAR 1999": the theme's fixed day if it has one, else today. */
 function fmtDate(now: Date) {
-  const fixed = THEMES.find((t) => t.id === currentTheme())
+  const id = document.documentElement.dataset.theme
+  const fixed = THEMES.find((t) => t.id === id)
   const iso = fixed && 'date' in fixed ? fixed.date : undefined
   const d = iso ? new Date(`${iso}T12:00:00`) : now
   const day = String(d.getDate()).padStart(2, '0')

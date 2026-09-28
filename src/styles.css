@@ -8,17 +8,8 @@
 @font-face { font-family: 'Title'; src: url('/fonts/title.woff2') format('woff2'); font-display: block; }
 */
 
-/* Departure Mono (SIL OFL, see public/fonts/DepartureMono-OFL.txt): the
-   TomOS pixel font. It is drawn on an 11px grid, so size-adjust maps the
-   site's 13px text onto exactly 11px and the pixels stay crisp. */
-@font-face {
-  font-family: 'Departure Mono';
-  src: url('/fonts/departure-mono.woff2') format('woff2');
-  font-display: block;
-  size-adjust: 84.615%;
-}
-/* Iosevka Extended (SIL OFL, see public/fonts/Iosevka-OFL.txt): a Unix
-   terminal monospace for White Rabbit, in its wider Extended cut to match
+/* Iosevka Extended (SIL OFL, see public/fonts/Iosevka-OFL.txt): the site
+   font, a Unix terminal monospace in its wider Extended cut to match
    the film's screens, subset to Latin and a few symbols.
    Medium for text, SemiBold for dock labels, Bold for window titles.
    Browsers only fetch it once text uses it. */
@@ -42,98 +33,19 @@
 }
 
 @theme {
-  --font-ui:
-    'Departure Mono', 'Verdana', ui-sans-serif, system-ui, sans-serif;
-  --font-title:
-    'Departure Mono', ui-sans-serif, sans-serif;
+  --font-ui: 'Iosevka', ui-monospace, monospace;
+  --font-title: 'Iosevka', ui-monospace, monospace;
   --font-mono: 'Iosevka', ui-monospace, monospace;
 }
 
 /* ---------- Tokens: the theme drives everything ----------
-   This block is TomOS, the clean default: cream and ink over a dithered
-   desktop that ramps from --desk to --warp. Every other theme is an homage
-   and overrides whatever tokens it needs under its own [data-theme]. The
-   selector also matches a nested [data-theme] so Settings can preview each
-   theme in place. */
+   White Rabbit: a green phosphor terminal over a
+   desktop of code rain, with solid title bars and a monospace font. It is
+   the only theme for now; another theme overrides whatever tokens it needs
+   under its own [data-theme]. The selector also matches a nested
+   [data-theme] so Settings can preview each theme in place. */
 :root,
 [data-theme] {
-  --bg: #efebe2;
-  --surface: #efebe2;
-  --surface-light: #efebe2;
-  --surface-dark: #111;
-  --tertiary: #111;
-  --accent: #111;
-  --accent-shadow: #efebe2;
-  --button: #efebe2;
-  --button-shadow: #efebe2;
-  --ink: #111;
-  --highlight: #efebe2;
-  --well: #efebe2;
-  --on-accent: #efebe2;
-  --on-tertiary: #efebe2;
-  /* Active title bar and its stripes. */
-  --title: var(--surface);
-  --on-title: var(--ink);
-  --stripe: var(--ink);
-  /* text-transform for dock labels and for window titles. */
-  --label-case: none;
-  --label-weight: 600;
-  --menu-size: 13px;
-  --dock-label-size: 13px;
-  /* Base text size; 13px is Departure Mono's crisp 11px grid. */
-  --text-size: 13px;
-  --title-case: none;
-  --title-weight: normal;
-  /* 13px lands Departure Mono on its crisp 11px grid. */
-  --title-size: 13px;
-  /* Window chrome: shadow, title bar height, brackets around the title,
-     and the close box's fill and bevel. */
-  --window-shadow: 0 50px 80px -50px rgb(0 0 0 / 0.3);
-  --title-height: 29px;
-  --title-open: '';
-  --title-close: '';
-  --close-bg: var(--surface-light);
-  --close-shadow: inset -1px -1px 0 var(--surface-dark);
-  /* Close box size and the size of its X. */
-  --box-size: 16px;
-  --glyph-size: 8px;
-  /* Open-window marks under dock icons. */
-  --indicator: currentColor;
-  /* Lines between dock slots; transparent leaves one outer border. */
-  --dock-divider: var(--ink);
-  /* Strength of the desktop background under the windows. */
-  --backdrop-opacity: 1;
-  --desk: #efebe2;
-  --warp: #111;
-  /* 12x12 pixel mark in the top-left menu, like an old OS's system logo */
-  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' shape-rendering='crispEdges'%3E%3Cpath d='M5 0h2v2H5zM1 1h1v1H1zM10 1h1v1H10zM2 2h1v1H2zM9 2h1v1H9zM4 3h4v1H4zM3 4h6v4H3zM0 5h2v2H0zM10 5h2v2H10zM4 8h4v1H4zM2 9h1v1H2zM9 9h1v1H9zM1 10h1v1H1zM10 10h1v1H10zM5 10h2v2H5z'/%3E%3C/svg%3E");
-  /* 16x16 pixel dock icons, drawn at 2x */
-  --icon-about: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M6 1h4v1H6zM5 2h6v1H5zM4 3h8v1H4zM4 4h8v1H4zM4 5h8v1H4zM4 6h8v1H4zM5 7h6v1H5zM6 8h4v1H6zM3 10h10v1H3zM2 11h12v1H2zM1 12h14v1H1zM1 13h14v1H1zM1 14h14v1H1z'/%3E%3C/svg%3E");
-  --icon-work: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M6 2h4v1H6zM5 3h1v1H5zM10 3h1v1H10zM1 4h14v1H1zM1 5h14v1H1zM1 6h14v1H1zM1 7h14v1H1zM1 8h6v1H1zM9 8h6v1H9zM1 9h14v1H1zM1 10h14v1H1zM1 11h14v1H1zM1 12h14v1H1zM1 13h14v1H1z'/%3E%3C/svg%3E");
-  --icon-player: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M4 0h1v1H4zM11 0h1v1H11zM5 1h1v1H5zM10 1h1v1H10zM6 2h1v1H6zM9 2h1v1H9zM1 3h14v1H1zM1 4h14v1H1zM1 5h2v1H1zM11 5h4v1H11zM1 6h2v1H1zM4 6h1v1H4zM11 6h4v1H11zM1 7h2v1H1zM4 7h2v1H4zM11 7h1v1H11zM14 7h1v1H14zM1 8h2v1H1zM4 8h3v1H4zM11 8h4v1H11zM1 9h2v1H1zM4 9h2v1H4zM11 9h1v1H11zM14 9h1v1H14zM1 10h2v1H1zM4 10h1v1H4zM11 10h4v1H11zM1 11h2v1H1zM11 11h4v1H11zM1 12h14v1H1zM1 13h14v1H1zM2 14h2v1H2zM12 14h2v1H12z'/%3E%3C/svg%3E");
-  --icon-blog: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M2 1h12v1H2zM2 2h12v1H2zM2 3h12v1H2zM2 4h2v1H2zM12 4h2v1H12zM2 5h12v1H2zM2 6h2v1H2zM12 6h2v1H12zM2 7h12v1H2zM2 8h2v1H2zM12 8h2v1H12zM2 9h12v1H2zM2 10h2v1H2zM9 10h5v1H9zM2 11h12v1H2zM2 12h12v1H2zM2 13h12v1H2z'/%3E%3C/svg%3E");
-  --icon-contact: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M1 3h14v1H1zM1 4h1v1H1zM3 4h10v1H3zM14 4h1v1H14zM1 5h2v1H1zM4 5h8v1H4zM13 5h2v1H13zM1 6h3v1H1zM5 6h6v1H5zM12 6h3v1H12zM1 7h4v1H1zM6 7h4v1H6zM11 7h4v1H11zM1 8h5v1H1zM7 8h2v1H7zM10 8h5v1H10zM1 9h6v1H1zM9 9h6v1H9zM1 10h14v1H1zM1 11h14v1H1zM1 12h14v1H1z'/%3E%3C/svg%3E");
-  --icon-settings: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M6 0h4v1H6zM6 1h4v1H6zM2 2h2v1H2zM5 2h6v1H5zM12 2h2v1H12zM2 3h12v1H2zM3 4h10v1H3zM3 5h10v1H3zM0 6h6v1H0zM10 6h6v1H10zM0 7h6v1H0zM10 7h6v1H10zM0 8h6v1H0zM10 8h6v1H10zM0 9h6v1H0zM10 9h6v1H10zM3 10h10v1H3zM3 11h10v1H3zM2 12h12v1H2zM2 13h2v1H2zM5 13h6v1H5zM12 13h2v1H12zM6 14h4v1H6zM6 15h4v1H6z'/%3E%3C/svg%3E");
-
-  /* Codec-style portrait screen in About */
-  --codec-screen: #0b1a10;
-  --codec-ink: #7ee29a;
-  --codec-scanline: rgb(0 0 0 / 0.4);
-  --codec-sweep: rgb(126 226 154 / 0.14);
-}
-/* ---------- White Rabbit ----------
-   A green phosphor terminal matched to the rain,
-   with solid title bars and a monospace font.
-   Code rain on the desktop: --warp trails, each led by a --rain-head glyph. */
-:root[data-theme='rabbit'],
-[data-theme='rabbit'] {
-  --desk: #020806;
-  --warp: #22b455;
-  --rain-head: #d8ffe0;
-  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 5H9A3 3 0 0 1 12 8V9A3 3 0 0 1 9 12H3A3 3 0 0 1 0 9V8A3 3 0 0 1 3 5ZM2 5.5V1A1 1 0 0 1 4 1V5.5ZM8 5.5V1A1 1 0 0 1 10 1V5.5ZM.9 6.5V7.3H1.5V7.5A2 1.6 0 0 0 5.5 7.5H6.5A2 1.6 0 0 0 10.5 7.5V7.3H11.1V6.5ZM5.1 10.3A.9 .5 0 0 0 6.9 10.3A.9 .5 0 0 0 5.1 10.3Z'/%3E%3C/svg%3E");
-  --codec-screen: #020c06;
-  --codec-ink: #41e07a;
-  --codec-sweep: rgb(65 224 122 / 0.14);
   --bg: #03120a;
   --surface: #03120a;
   --surface-light: #072a15;
@@ -152,7 +64,12 @@
   --title: #41e07a;
   --on-title: #03120a;
   --stripe: transparent;
+  /* text-transform for dock labels and for window titles. */
   --label-case: uppercase;
+  --label-weight: 600;
+  --menu-size: 13px;
+  --dock-label-size: 13px;
+  /* Base text size. */
   --text-size: 12px;
   --title-case: uppercase;
   --title-weight: 700;
@@ -168,12 +85,32 @@
   /* A small hollow close box like the film's. */
   --box-size: 15px;
   --glyph-size: 9px;
-  --dock-divider: transparent;
   /* Open-window marks: a pale phosphor green, between rain head and ink. */
   --indicator: #aef5c0;
+  /* Lines between dock slots; transparent leaves one outer border. */
+  --dock-divider: transparent;
+  /* Strength of the desktop background under the windows. */
   --backdrop-opacity: 0.9;
-  --font-ui: var(--font-mono);
-  --font-title: var(--font-mono);
+  /* Code rain on the desktop: --warp trails, each led by a --rain-head
+     glyph, over --desk. */
+  --desk: #020806;
+  --warp: #22b455;
+  --rain-head: #d8ffe0;
+  /* Mark in the top-left menu, like an old OS's system logo: the white rabbit. */
+  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 5H9A3 3 0 0 1 12 8V9A3 3 0 0 1 9 12H3A3 3 0 0 1 0 9V8A3 3 0 0 1 3 5ZM2 5.5V1A1 1 0 0 1 4 1V5.5ZM8 5.5V1A1 1 0 0 1 10 1V5.5ZM.9 6.5V7.3H1.5V7.5A2 1.6 0 0 0 5.5 7.5H6.5A2 1.6 0 0 0 10.5 7.5V7.3H11.1V6.5ZM5.1 10.3A.9 .5 0 0 0 6.9 10.3A.9 .5 0 0 0 5.1 10.3Z'/%3E%3C/svg%3E");
+  /* 16x16 pixel dock icons, drawn at 2x */
+  --icon-about: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M6 1h4v1H6zM5 2h6v1H5zM4 3h8v1H4zM4 4h8v1H4zM4 5h8v1H4zM4 6h8v1H4zM5 7h6v1H5zM6 8h4v1H6zM3 10h10v1H3zM2 11h12v1H2zM1 12h14v1H1zM1 13h14v1H1zM1 14h14v1H1z'/%3E%3C/svg%3E");
+  --icon-work: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M6 2h4v1H6zM5 3h1v1H5zM10 3h1v1H10zM1 4h14v1H1zM1 5h14v1H1zM1 6h14v1H1zM1 7h14v1H1zM1 8h6v1H1zM9 8h6v1H9zM1 9h14v1H1zM1 10h14v1H1zM1 11h14v1H1zM1 12h14v1H1zM1 13h14v1H1z'/%3E%3C/svg%3E");
+  --icon-player: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M4 0h1v1H4zM11 0h1v1H11zM5 1h1v1H5zM10 1h1v1H10zM6 2h1v1H6zM9 2h1v1H9zM1 3h14v1H1zM1 4h14v1H1zM1 5h2v1H1zM11 5h4v1H11zM1 6h2v1H1zM4 6h1v1H4zM11 6h4v1H11zM1 7h2v1H1zM4 7h2v1H4zM11 7h1v1H11zM14 7h1v1H14zM1 8h2v1H1zM4 8h3v1H4zM11 8h4v1H11zM1 9h2v1H1zM4 9h2v1H4zM11 9h1v1H11zM14 9h1v1H14zM1 10h2v1H1zM4 10h1v1H4zM11 10h4v1H11zM1 11h2v1H1zM11 11h4v1H11zM1 12h14v1H1zM1 13h14v1H1zM2 14h2v1H2zM12 14h2v1H12z'/%3E%3C/svg%3E");
+  --icon-blog: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M2 1h12v1H2zM2 2h12v1H2zM2 3h12v1H2zM2 4h2v1H2zM12 4h2v1H12zM2 5h12v1H2zM2 6h2v1H2zM12 6h2v1H12zM2 7h12v1H2zM2 8h2v1H2zM12 8h2v1H12zM2 9h12v1H2zM2 10h2v1H2zM9 10h5v1H9zM2 11h12v1H2zM2 12h12v1H2zM2 13h12v1H2z'/%3E%3C/svg%3E");
+  --icon-contact: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M1 3h14v1H1zM1 4h1v1H1zM3 4h10v1H3zM14 4h1v1H14zM1 5h2v1H1zM4 5h8v1H4zM13 5h2v1H13zM1 6h3v1H1zM5 6h6v1H5zM12 6h3v1H12zM1 7h4v1H1zM6 7h4v1H6zM11 7h4v1H11zM1 8h5v1H1zM7 8h2v1H7zM10 8h5v1H10zM1 9h6v1H1zM9 9h6v1H9zM1 10h14v1H1zM1 11h14v1H1zM1 12h14v1H1z'/%3E%3C/svg%3E");
+  --icon-settings: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M6 0h4v1H6zM6 1h4v1H6zM2 2h2v1H2zM5 2h6v1H5zM12 2h2v1H12zM2 3h12v1H2zM3 4h10v1H3zM3 5h10v1H3zM0 6h6v1H0zM10 6h6v1H10zM0 7h6v1H0zM10 7h6v1H10zM0 8h6v1H0zM10 8h6v1H10zM0 9h6v1H0zM10 9h6v1H10zM3 10h10v1H3zM3 11h10v1H3zM2 12h12v1H2zM2 13h2v1H2zM5 13h6v1H5zM12 13h2v1H12zM6 14h4v1H6zM6 15h4v1H6z'/%3E%3C/svg%3E");
+
+  /* Codec-style portrait screen in About */
+  --codec-screen: #020c06;
+  --codec-ink: #41e07a;
+  --codec-scanline: rgb(0 0 0 / 0.4);
+  --codec-sweep: rgb(65 224 122 / 0.14);
   color-scheme: dark;
 }
 
