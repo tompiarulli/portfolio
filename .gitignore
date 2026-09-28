@@ -14,3 +14,4 @@ todos.json
 
 # Source photos keep their camera metadata (GPS); only processed copies ship.
 assets/
+__pycache__/
