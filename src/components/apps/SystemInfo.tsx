@@ -14,12 +14,6 @@ export function SystemInfo() {
         </dd>
         <dt className="font-title">Built with</dt>
         <dd>{site.builtWith}</dd>
-        <dt className="font-title">Icons</dt>
-        <dd>
-          <a href={site.iconCredit.url} className="underline">
-            {site.iconCredit.name}
-          </a>
-        </dd>
       </dl>
     </Window>
   )
