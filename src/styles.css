@@ -169,9 +169,9 @@
   --box-size: 15px;
   --glyph-size: 9px;
   --dock-divider: transparent;
-  /* Open-window marks glow like the head of a falling rain drop. */
-  --indicator: var(--rain-head);
-  --backdrop-opacity: 0.8;
+  /* Open-window marks: a pale phosphor green, between rain head and ink. */
+  --indicator: #aef5c0;
+  --backdrop-opacity: 0.9;
   --font-ui: var(--font-mono);
   --font-title: var(--font-mono);
   color-scheme: dark;
