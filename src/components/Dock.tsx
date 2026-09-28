@@ -38,6 +38,7 @@ export function Dock() {
           {/* Themes can swap any icon by overriding its --icon-* token. */}
           <span
             aria-hidden
+            data-dock-icon={app.id}
             className="dock-icon group-active:translate-y-px"
             style={{ maskImage: `var(--icon-${app.id})` }}
           />
