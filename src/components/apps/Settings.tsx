@@ -84,6 +84,57 @@ const MOON_MARIA = `url("data:image/svg+xml,${encodeURIComponent(
   "<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' shape-rendering='crispEdges'><path d='M7 9h1v1H7zM8 8h1v1H8zM9 13h1v1H9zM11 11h1v1H11zM11 12h1v1H11zM11 15h1v1H11zM12 11h1v1H12zM12 14h1v1H12zM12 15h1v1H12zM13 13h1v1H13zM13 14h1v1H13zM13 15h1v1H13zM14 12h1v1H14zM14 13h1v1H14zM14 14h1v1H14zM15 11h1v1H15zM15 12h1v1H15zM15 13h1v1H15z'/></svg>",
 )}")`
 
+/** A row of pines along the sky's foot, like the desktop's treeline:
+ *  stepped triangles of varied heights on a strip of ground, 160x20, as
+ *  two masks: the whole silhouette, and its moonlit side (the moon is to
+ *  the right), solid along the right edges and checker-dithered toward the
+ *  trunk. Each tree is [centre x, height]. */
+const [TREELINE, TREELINE_LIT] = (() => {
+  const trees = [
+    [3, 11],
+    [10, 16],
+    [17, 9],
+    [24, 14],
+    [32, 18],
+    [40, 12],
+    [47, 15],
+    [55, 10],
+    [62, 17],
+    [70, 13],
+    [78, 19],
+    [86, 11],
+    [93, 15],
+    [101, 12],
+    [109, 17],
+    [117, 10],
+    [124, 14],
+    [132, 18],
+    [140, 12],
+    [148, 16],
+    [156, 11],
+  ]
+  let d = 'M0 18h160v2H0z'
+  let lit = ''
+  const dot = (x: number, y: number) => (lit += `M${x} ${y}h1v1h-1z`)
+  for (const [x, h] of trees)
+    for (let y = 0; y < h; y++) {
+      // Widen by one every other row, stepping back in at each tier.
+      const half = Math.max(0, Math.floor(y / 2) - (y % 5 === 4 ? 1 : 0))
+      const row = 20 - h + y
+      d += `M${x - half} ${row}h${2 * half + 1}v1h-${2 * half + 1}z`
+      for (let px = x + 1; px <= x + half; px++)
+        if (px === x + half || (px + row) % 2 === 0) dot(px, row)
+    }
+  // A sparse dither along the ground's top row.
+  for (let px = 0; px < 160; px += 4) dot(px, 18)
+  return [d, lit].map(
+    (path) =>
+      `url("data:image/svg+xml,${encodeURIComponent(
+        `<svg xmlns='http://www.w3.org/2000/svg' width='160' height='20' shape-rendering='crispEdges'><path d='${path}'/></svg>`,
+      )}")`,
+  )
+})()
+
 /** A tiny desktop: just the theme's backdrop. */
 function ThemePreview({ theme, sky }: { theme: Theme; sky: boolean }) {
   return (
@@ -112,6 +163,17 @@ function ThemePreview({ theme, sky }: { theme: Theme; sky: boolean }) {
               />
             ))}
           </span>
+          {/* The treeline, and its moonlit side. */}
+          {[
+            ['bg-(--pine)', TREELINE],
+            ['bg-(--pine-lit)', TREELINE_LIT],
+          ].map(([colour, mask]) => (
+            <span
+              key={mask}
+              className={`absolute inset-x-0 bottom-0 h-[20px] mask-no-repeat ${colour}`}
+              style={{ maskImage: mask }}
+            />
+          ))}
         </>
       ) : (
         <span className="absolute inset-0 font-mono text-[10px] leading-[10px] tracking-[1px] break-all text-(--warp)">
