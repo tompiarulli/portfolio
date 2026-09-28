@@ -11,3 +11,6 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
+
+# Source photos keep their camera metadata (GPS); only processed copies ship.
+assets/
