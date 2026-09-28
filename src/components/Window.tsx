@@ -186,7 +186,7 @@ export function Window({
           className={`stripes h-[17px] ${active ? 'opacity-70' : 'opacity-0'}`}
         />
       </div>
-      <div className="os-scroll min-h-0 flex-1 p-4 select-text">{children}</div>
+      <div className="os-scroll min-h-0 flex-1 p-5 select-text">{children}</div>
     </section>
   )
 }
