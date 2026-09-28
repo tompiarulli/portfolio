@@ -33,20 +33,20 @@ export function Dock() {
             // minimized window.
             raise(app.id)
           }}
-          className="group relative flex w-[83px] flex-col items-center gap-[6px] border-r border-(--dock-divider) px-2 pt-[11px] pb-[8px] last:border-r-0 hover:bg-(--tertiary) hover:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
+          className="group relative flex w-[83px] flex-col items-center gap-[6px] border-r border-(--dock-divider) px-2 pt-[12px] pb-[7px] last:border-r-0 hover:bg-(--tertiary) hover:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
         >
-          {/* Placeholder until each theme gets custom icons. */}
+          {/* Themes can swap any icon by overriding its --icon-* token. */}
           <span
             aria-hidden
-            data-dock-icon={app.id}
-            className="size-[32px] border border-current group-active:translate-y-px"
+            className="dock-icon group-active:translate-y-px"
+            style={{ maskImage: `var(--icon-${app.id})` }}
           />
-          <span className="font-title text-(length:--label-size) tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">
+          <span className="font-title text-(length:--dock-label-size) tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">
             {app.label}
           </span>
           <span
             aria-hidden
-            className={`absolute bottom-[4px] left-1/2 h-[2px] w-[20px] -translate-x-1/2 bg-(--indicator) transition-[scale,opacity] group-hover:bg-current group-active:bg-current duration-150 ${
+            className={`absolute bottom-[3px] left-1/2 h-[2px] w-[20px] -translate-x-1/2 bg-(--indicator) transition-[scale,opacity] group-hover:bg-current group-active:bg-current duration-150 ${
               stack.at(-1) === app.id
                 ? ''
                 : stack.includes(app.id)
