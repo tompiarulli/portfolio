@@ -7,6 +7,7 @@ import type { Backdrop } from '#/lib/theme'
 const CodeRain = lazy(() => import('./CodeRain'))
 const NightSky = lazy(() => import('./NightSky'))
 const FireTrails = lazy(() => import('./FireTrails'))
+const Blizzard = lazy(() => import('./Blizzard'))
 
 /** Code rain knobs, for themes with `backdrop: 'rain'`. */
 const RAIN = {
@@ -39,6 +40,12 @@ type State = {
   flame: string
   flameCore: string
   spark: string
+  haze: string
+  drift: string
+  snow: string
+  station: string
+  lamp: string
+  flare: string
   still: boolean
 }
 
@@ -65,6 +72,12 @@ function useBackdrop() {
         flame: s.getPropertyValue('--flame').trim(),
         flameCore: s.getPropertyValue('--flame-core').trim(),
         spark: s.getPropertyValue('--spark').trim(),
+        haze: s.getPropertyValue('--haze').trim(),
+        drift: s.getPropertyValue('--drift').trim(),
+        snow: s.getPropertyValue('--snow').trim(),
+        station: s.getPropertyValue('--station').trim(),
+        lamp: s.getPropertyValue('--lamp').trim(),
+        flare: s.getPropertyValue('--flare').trim(),
         still: matchMedia('(prefers-reduced-motion: reduce)').matches,
       })
     }
@@ -112,6 +125,21 @@ export function Backdrop() {
             pine={b.pine}
             pineLit={b.pineLit}
             moon={b.moon}
+            still={b.still}
+          />
+        ) : b.backdrop === 'snow' ? (
+          <Blizzard
+            // --snow blowing over a --desk sky that glows --haze at the
+            // horizon, above a --drift snowfield; the --station has --lamp
+            // windows and a --flare beacon, and the helicopter is --flare
+            // too.
+            background={b.low}
+            haze={b.haze}
+            drift={b.drift}
+            snow={b.snow}
+            station={b.station}
+            lamp={b.lamp}
+            flare={b.flare}
             still={b.still}
           />
         ) : (

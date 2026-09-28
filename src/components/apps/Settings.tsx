@@ -135,6 +135,121 @@ const [TREELINE, TREELINE_LIT] = (() => {
   )
 })()
 
+/** A still patch of the blizzard, 128x48 like the tile: a sky glowing
+ *  --haze toward the horizon in dithered bands, a --drift snowfield with
+ *  --haze wind ripples, the --station with --lamp windows and a --flare
+ *  beacon, --haze fog banks rolling over it, and --snow as dots at four
+ *  depths, like the desktop's. */
+const [
+  SNOW_HAZE,
+  SNOW_GROUND,
+  SNOW_RIPPLES,
+  SNOW_STATION,
+  SNOW_WINDOWS,
+  SNOW_BEACON,
+  SNOW_FOG,
+  SNOW_FLAKES,
+] = (() => {
+  const W = 128
+  const H = 48
+  const box = (x: number, y: number, w = 1, h = 1) =>
+    `M${x} ${y}h${w}v${h}h-${w}z`
+  let seed = 31
+  const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647
+  const ground = 32
+  // The glow: sparse checks high up, thickening to solid at the horizon.
+  let haze = box(0, ground - 5, W, 5)
+  for (let y = 12; y < ground - 5; y++)
+    for (let x = 0; x < W; x++) {
+      const t = (y - 12) / (ground - 17)
+      const bayer = [0, 0.5, 0.75, 0.25][(y % 2) * 2 + (x % 2)]
+      if (bayer < t * 0.9) haze += box(x, y)
+    }
+  let ripples = ''
+  for (let i = 0; i < 26; i++)
+    ripples += box(
+      Math.floor(rand() * W),
+      ground + 2 + Math.floor(rand() * (H - ground - 2)),
+      2 + Math.floor(rand() * 6),
+    )
+  let station = ''
+  let windows = ''
+  let drift = box(0, ground, W, H - ground)
+  // [left, width, wall height, pitched roof], like the desktop's.
+  const buildings = [
+    [36, 6, 3, 0],
+    [44, 11, 5, 1],
+    [57, 15, 6, 0],
+    [76, 9, 4, 1],
+    [87, 11, 5, 0],
+  ]
+  for (const [x, w, h, pitched] of buildings) {
+    const rise = pitched ? Math.floor(w / 5) : 0
+    station += box(x, ground - h, w, h)
+    for (let r = 1; r <= rise; r++)
+      station += box(x + r * 2, ground - h - r, w - r * 4)
+    drift += box(x, ground - h - rise, w)
+    for (let wx = x + 2; wx < x + w - 2; wx += 3)
+      if ((wx * 7 + h) % 3) windows += box(wx, ground - h + 2)
+  }
+  // The mast, a two-pixel lattice.
+  station += box(73, ground - 20, 1, 20) + box(75, ground - 20, 1, 20)
+  for (let y = ground - 20; y < ground; y += 3) station += box(74, y)
+  const beacon = box(74, ground - 21)
+  // Fog banks drifting across the station, as the desktop draws them:
+  // long streaks from summed sines, heaviest just above the horizon,
+  // their opacity stepped into levels.
+  const fog = ['', '', '']
+  const tau = (Math.PI * 2) / W
+  for (let y = 0; y < H; y++) {
+    const near = 1 - Math.min(1, Math.abs(y - ground + 3) / (ground * 0.55))
+    const weight = 0.25 + 0.75 * near * near
+    for (let x = 0; x < W; x++) {
+      const n =
+        0.5 +
+        0.25 * Math.sin(2 * tau * x + 1.3 * Math.sin(y * 0.09) + 1) +
+        0.15 * Math.sin(5 * tau * x + y * 0.18 + 4) +
+        0.1 * Math.sin(11 * tau * x - y * 0.34 + 2)
+      const level = Math.min(3, Math.floor(Math.max(0, n * weight) * 5))
+      if (level) fog[level - 1] += box(x, y)
+    }
+  }
+  // Snow as square dots: single pixels far off, 2x2 up close, brighter
+  // the nearer they are.
+  const flakes = ['', '', '', '']
+  for (let i = 0; i < 64; i++) {
+    const k = i < 24 ? 0 : i < 46 ? 1 : i < 56 ? 2 : 3
+    const size = k < 2 ? 1 : 2
+    flakes[k] += box(Math.floor(rand() * W), Math.floor(rand() * H), size, size)
+  }
+  const mask = (paths: string) =>
+    `url("data:image/svg+xml,${encodeURIComponent(
+      `<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}' shape-rendering='crispEdges'>${paths}</svg>`,
+    )}")`
+  return [
+    mask(`<path d='${haze}'/>`),
+    mask(`<path d='${drift}'/>`),
+    mask(`<path fill-opacity='.5' d='${ripples}'/>`),
+    mask(`<path d='${station}'/>`),
+    mask(`<path d='${windows}'/>`),
+    mask(`<path d='${beacon}'/>`),
+    mask(
+      fog
+        .map(
+          (d, k) => `<path fill-opacity='${[0.12, 0.24, 0.36][k]}' d='${d}'/>`,
+        )
+        .join(''),
+    ),
+    mask(
+      flakes
+        .map(
+          (d, k) => `<path fill-opacity='${[0.3, 0.5, 0.75, 1][k]}' d='${d}'/>`,
+        )
+        .join(''),
+    ),
+  ]
+})()
+
 /** A still of the fire trails, 160x64, centred on the road's vanishing
  *  point: masks for the --asphalt ground, its --lane markings, and two
  *  trails of --flame with --flame-core bases burning down it. */
@@ -206,6 +321,23 @@ function ThemePreview({
             key={mask}
             className={`absolute inset-0 mask-no-repeat ${colour}`}
             style={{ maskImage: mask, maskPosition: 'center' }}
+          />
+        ))
+      ) : backdrop === 'snow' ? (
+        [
+          ['bg-(--haze)', SNOW_HAZE],
+          ['bg-(--drift)', SNOW_GROUND],
+          ['bg-(--haze)', SNOW_RIPPLES],
+          ['bg-(--station)', SNOW_STATION],
+          ['bg-(--lamp)', SNOW_WINDOWS],
+          ['bg-(--flare)', SNOW_BEACON],
+          ['bg-(--haze)', SNOW_FOG],
+          ['bg-(--snow)', SNOW_FLAKES],
+        ].map(([colour, mask]) => (
+          <span
+            key={mask}
+            className={`absolute inset-0 mask-no-repeat ${colour}`}
+            style={{ maskImage: mask }}
           />
         ))
       ) : backdrop === 'sky' ? (

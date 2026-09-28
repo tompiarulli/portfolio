@@ -1,4 +1,4 @@
-export type Backdrop = 'rain' | 'sky' | 'plain' | 'road'
+export type Backdrop = 'rain' | 'sky' | 'plain' | 'road' | 'snow'
 
 /** Themes drive every colour (tokens in styles.css), the fonts and which
  *  background draws the desktop. Each is an homage to something I like. */
@@ -21,6 +21,13 @@ export const THEMES = [
     label: 'Time Traveler',
     backdrop: 'road',
     date: '1985-10-26',
+  },
+  // The film's US release.
+  {
+    id: 'outpost',
+    label: 'Outpost 31',
+    backdrop: 'snow',
+    date: '1982-06-25',
   },
 ] as const satisfies readonly {
   id: string
