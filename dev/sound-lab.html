@@ -1,0 +1,266 @@
+<!doctype html>
+<!-- Dev-only page for tuning sound recipes by ear. Not part of the build.
+     With `pnpm dev` running, open:
+     http://localhost:3000/@fs/D:/Code/Personal/portfolio/dev/sound-lab.html -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sound lab</title>
+    <style>
+      body {
+        background: #020806;
+        color: #41e07a;
+        font:
+          13px/1.4 ui-monospace,
+          monospace;
+        margin: 24px;
+        max-width: 720px;
+      }
+      h1 {
+        font-size: 16px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 110px 1fr 70px;
+        gap: 12px;
+        align-items: center;
+        margin: 6px 0;
+      }
+      input[type='range'] {
+        width: 100%;
+        accent-color: #41e07a;
+      }
+      button,
+      select {
+        background: #03120a;
+        color: #41e07a;
+        border: 1px solid #41e07a;
+        font: inherit;
+        padding: 6px 14px;
+        margin: 12px 8px 12px 0;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #41e07a;
+        color: #03120a;
+      }
+      textarea {
+        width: 100%;
+        height: 180px;
+        background: #03120a;
+        color: #41e07a;
+        border: 1px solid #41e07a;
+        font: inherit;
+      }
+      .hint {
+        opacity: 0.6;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>SOUND LAB / MOTIF</h1>
+    <p class="hint">
+      Space plays. Tweak, play, repeat. Copy the settings when it sounds right.
+    </p>
+    <div>
+      <select id="recipe" aria-label="Recipe"></select>
+      <button id="play">Play (space)</button>
+      <button id="random">Randomize</button>
+      <button id="reset">Reset</button>
+      <button id="copy">Copy settings</button>
+    </div>
+    <div id="controls"></div>
+    <textarea id="out" readonly></textarea>
+
+    <script type="module">
+      import {
+        MOTIF,
+        motif,
+        SWELL,
+        swell,
+        TITLE,
+        title,
+        WARBLE,
+        warble,
+      } from '/src/lib/sfx.ts'
+
+      // Each recipe with its defaults and [min, max, step] per setting.
+      const RECIPES = {
+        motif: {
+          fn: motif,
+          defaults: MOTIF,
+          ranges: {
+            first: [100, 1500, 0.1],
+            second: [100, 1500, 0.1],
+            firstLength: [0.05, 1.5, 0.01],
+            secondLength: [0.05, 1.5, 0.01],
+            repeats: [1, 6, 1],
+            glide: [0, 0.3, 0.005],
+            attack: [0.01, 1, 0.01],
+            accent: [0, 1, 0.01],
+            voices: [1, 8, 1],
+            rate: [0, 12, 0.1],
+            depth: [0, 100, 1],
+            bright: [300, 10000, 50],
+            level: [0, 1.5, 0.01],
+            bed: [0, 2, 0.01],
+            release: [0.05, 3, 0.05],
+            space: [0, 1.5, 0.01],
+            tail: [0.1, 6, 0.1],
+          },
+        },
+        title: {
+          fn: title,
+          defaults: TITLE,
+          ranges: {
+            root: [80, 400, 0.1],
+            gap: [0.1, 1.5, 0.01],
+            hit: [0, 2, 0.01],
+            hitPitch: [30, 300, 0.5],
+            second: [0.5, 1.5, 0.01],
+            secondLevel: [0, 1.5, 0.01],
+            hitDecay: [0.05, 2, 0.05],
+            click: [0, 1, 0.01],
+            pad: [0, 2, 0.01],
+            glass: [0, 0.5, 0.005],
+            air: [0, 0.5, 0.005],
+            swellRise: [0.05, 2, 0.05],
+            fall: [0.05, 3, 0.05],
+            space: [0, 1.5, 0.01],
+            tail: [0.1, 6, 0.1],
+          },
+        },
+        warble: {
+          fn: warble,
+          defaults: WARBLE,
+          ranges: {
+            root: [80, 400, 0.1],
+            voices: [1, 8, 1],
+            rateMin: [0.5, 20, 0.5],
+            rateMax: [0.5, 20, 0.5],
+            depth: [0, 150, 1],
+            bright: [300, 12000, 50],
+            attack: [0.01, 2, 0.01],
+            hold: [0, 3, 0.05],
+            release: [0.05, 4, 0.05],
+            level: [0, 3, 0.01],
+            air: [0, 0.5, 0.005],
+            space: [0, 1.5, 0.01],
+            tail: [0.1, 6, 0.1],
+          },
+        },
+        swell: {
+          fn: swell,
+          defaults: SWELL,
+          ranges: {
+            root: [80, 400, 0.5],
+            rise: [0.1, 6, 0.05],
+            cutoffStart: [60, 3000, 10],
+            cutoffEnd: [500, 16000, 50],
+            detune: [0, 40, 0.5],
+            drift: [0, 40, 0.5],
+            swell: [0, 1.5, 0.01],
+            boom: [0, 1.5, 0.01],
+            boomDecay: [0.05, 2, 0.05],
+            pings: [0, 12, 1],
+            pingDelay: [0, 1, 0.01],
+            pingGap: [0.05, 2, 0.05],
+            ring: [0.05, 2, 0.05],
+            ping: [0, 0.5, 0.005],
+            space: [0, 1.5, 0.01],
+            tail: [0.1, 6, 0.1],
+          },
+        },
+      }
+
+      let current = 'motif'
+      let RANGES = RECIPES[current].ranges
+      let params = { ...RECIPES[current].defaults }
+      let ctx
+
+      const picker = document.getElementById('recipe')
+      for (const name of Object.keys(RECIPES))
+        picker.append(new Option(name, name))
+      picker.onchange = () => {
+        current = picker.value
+        RANGES = RECIPES[current].ranges
+        params = { ...RECIPES[current].defaults }
+        document.querySelector('h1').textContent =
+          `SOUND LAB / ${current.toUpperCase()}`
+        render()
+        play()
+      }
+
+      const controls = document.getElementById('controls')
+      const out = document.getElementById('out')
+
+      function render() {
+        controls.replaceChildren()
+        for (const [key, [min, max, step]] of Object.entries(RANGES)) {
+          const row = document.createElement('label')
+          row.className = 'row'
+          const input = Object.assign(document.createElement('input'), {
+            type: 'range',
+            min,
+            max,
+            step,
+            value: params[key],
+          })
+          const value = document.createElement('span')
+          value.textContent = params[key]
+          input.oninput = () => {
+            params[key] = Number(input.value)
+            value.textContent = input.value
+            dump()
+          }
+          input.onchange = play
+          row.append(key, input, value)
+          controls.append(row)
+        }
+        dump()
+      }
+
+      function dump() {
+        out.value = JSON.stringify(params, null, 2)
+      }
+
+      function play() {
+        ctx ??= new AudioContext()
+        if (ctx.state === 'suspended') ctx.resume()
+        const master = ctx.createGain()
+        master.gain.value = 0.6
+        master.connect(ctx.destination)
+        RECIPES[current].fn(ctx, master, params)
+      }
+
+      function randomize() {
+        for (const [key, [min, max, step]] of Object.entries(RANGES)) {
+          // Log scale for frequencies, linear for the rest.
+          const log = /root|cutoff|bright|rate|Pitch|^first$|^second$/.test(key)
+          const r = Math.random()
+          const v = log ? min * Math.pow(max / min, r) : min + r * (max - min)
+          params[key] = +(Math.round(v / step) * step).toFixed(3)
+        }
+        render()
+        play()
+      }
+
+      document.getElementById('play').onclick = play
+      document.getElementById('random').onclick = randomize
+      document.getElementById('reset').onclick = () => {
+        params = { ...RECIPES[current].defaults }
+        render()
+      }
+      document.getElementById('copy').onclick = () =>
+        navigator.clipboard.writeText(out.value)
+      addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+          e.preventDefault()
+          play()
+        }
+      })
+
+      render()
+    </script>
+  </body>
+</html>

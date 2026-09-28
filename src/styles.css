@@ -209,6 +209,18 @@ svg {
   mask: center / contain no-repeat;
 }
 
+/* The menu bar sound toggle's speaker, masked like a dock icon */
+.sound-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  background: currentColor;
+  mask: var(--icon-sound-on) center / contain no-repeat;
+}
+[aria-pressed='false'] > .sound-icon {
+  mask-image: var(--icon-sound-off);
+}
+
 /* Scrollbars, black-bordered like the original */
 .os-scroll {
   overflow: auto;
