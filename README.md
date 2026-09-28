@@ -1,6 +1,6 @@
 # Tom Piarulli
 
-My personal portfolio, styled as a late-90s desktop OS and inspired by [Poolsuite](https://poolsuite.net). Draggable windows, a dock, pixel fonts, homage themes (starting with a green-phosphor White Rabbit), and a clock whose date follows the theme (White Rabbit is stuck on its premiere day). Every page is prerendered so it loads instantly.
+My personal portfolio, styled as a late-90s desktop OS and inspired by [Poolsuite](https://poolsuite.net). Draggable windows, a dock, and a green-phosphor White Rabbit theme with code rain and a clock stuck on its premiere day. Every page is prerendered so it loads instantly.
 
 Built with React 19, TanStack Start, Tailwind 4, React Bits, Vercel, and Claude Code.
 
