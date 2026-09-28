@@ -36,9 +36,12 @@ export function idForPath(pathname: string): WindowId | null {
   return (Object.keys(PATHS) as AppId[]).find((k) => PATHS[k] === path) ?? null
 }
 
-/** Windows open on first paint for a URL, back to front. About is always open. */
+/** Windows open on first paint for a URL, back to front. About and Player are
+ *  always open. */
 export function initialStack(pathname: string): WindowId[] {
   const id = idForPath(pathname)
-  if (!id || id === 'about') return ['about']
-  return id.startsWith('project:') ? ['about', 'work', id] : ['about', id]
+  const base: WindowId[] = ['player', 'about']
+  if (!id || id === 'about') return base
+  if (id === 'player') return ['about', 'player']
+  return id.startsWith('project:') ? [...base, 'work', id] : [...base, id]
 }

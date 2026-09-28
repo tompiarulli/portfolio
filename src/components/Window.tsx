@@ -46,6 +46,8 @@ type Props = {
    *  never re-renders mid-drag. */
   x?: number
   y?: number
+  /** Measure `x` from the right edge of the desktop instead of the centre. */
+  right?: boolean
   width?: number
   height?: number
   className?: string
@@ -56,6 +58,7 @@ export function Window({
   children,
   x = 0,
   y = 0,
+  right = false,
   width = 560,
   height,
   className = '',
@@ -131,7 +134,7 @@ export function Window({
       style={{
         // Centred in CSS, so the prerendered HTML is already in place. The
         // window's top sits a little above middle since heights vary.
-        transform: `translate3d(max(8px, calc(50vw - ${width / 2}px + ${x}px)), max(8px, calc(40vh - 180px + ${y}px)), 0)`,
+        transform: `translate3d(max(8px, calc(${right ? `100vw - ${width + 16}px` : `50vw - ${width / 2}px`} + ${x}px)), max(8px, calc(40vh - 180px + ${y}px)), 0)`,
         width,
         height,
         zIndex: stack.indexOf(id) + 1,
