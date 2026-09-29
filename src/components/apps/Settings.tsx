@@ -60,230 +60,46 @@ function ThemeTile({
 const RAIN_PREVIEW =
   'K7@Q2#VZ8X&M4R+PJ9$L0N=T3<W6YH>A5*FD1;S/G8B:C#E2U@QX7M4&RZ9KV$P0L+JN3T=W6<YH5>AF*D1S;G/B8:CE#U2'
 
-/** A still patch of the night sky, as an opacity mask painted in --warp:
- *  single-pixel stars at three brightnesses and a few
- *  crosses, like the desktop's caught mid-twinkle. One unit per CSS
- *  pixel. */
-const SKY_PREVIEW = `url("data:image/svg+xml,${encodeURIComponent(
-  "<svg xmlns='http://www.w3.org/2000/svg' width='160' height='64' shape-rendering='crispEdges'>" +
-    "<path fill-opacity='.3' d='M59 39h1v1h-1zM47 17h1v1h-1zM17 11h1v1h-1zM110 43h1v1h-1zM0 21h1v1h-1zM64 29h1v1h-1zM114 38h1v1h-1zM10 21h1v1h-1zM70 39h1v1h-1zM89 2h1v1h-1zM93 24h1v1h-1zM21 45h1v1h-1zM57 46h1v1h-1zM54 10h1v1h-1zM21 15h1v1h-1zM6 7h1v1h-1zM16 32h1v1h-1zM111 37h1v1h-1zM8 44h1v1h-1zM49 47h1v1h-1zM113 6h1v1h-1zM37 13h1v1h-1zM86 14h1v1h-1zM92 26h1v1h-1zM113 5h1v1h-1zM98 17h1v1h-1zM26 25h1v1h-1zM35 21h1v1h-1zM103 2h1v1h-1zM25 45h1v1h-1zM113 0h1v1h-1zM112 26h1v1h-1zM7 24h1v1h-1zM108 31h1v1h-1zM17 1h1v1h-1zM30 27h1v1h-1zM94 7h1v1h-1zM76 0h1v1h-1zM15 37h1v1h-1zM25 12h1v1h-1zM42 0h1v1h-1zM114 5h1v1h-1zM17 34h1v1h-1zM2 32h1v1h-1zM10 36h1v1h-1zM63 34h1v1h-1zM25 26h1v1h-1zM8 25h1v1h-1z'/>" +
-    "<path fill-opacity='.6' d='M24 40h1v1h-1zM97 5h1v1h-1zM89 37h1v1h-1zM18 11h1v1h-1zM77 46h1v1h-1zM5 3h1v1h-1zM34 35h1v1h-1zM87 38h1v1h-1zM109 9h1v1h-1zM95 17h1v1h-1zM94 36h1v1h-1zM4 7h1v1h-1zM111 45h1v1h-1zM51 15h1v1h-1zM20 39h1v1h-1zM64 2h1v1h-1zM94 23h1v1h-1zM108 43h1v1h-1zM66 37h1v1h-1zM72 44h1v1h-1zM11 22h1v1h-1zM14 37h1v1h-1zM46 28h1v1h-1zM26 25h1v1h-1z'/>" +
-    "<path d='M25 36h1v1h-1zM95 1h1v1h-1zM48 38h1v1h-1zM42 0h1v1h-1zM55 7h1v1h-1zM27 14h1v1h-1zM56 17h1v1h-1zM41 5h1v1h-1zM39 40h1v1h-1zM36 6h1v1h-1zM67 5h3v1h-3zM68 4h1v3h-1zM4 26h3v1h-3zM5 25h1v3h-1zM100 37h3v1h-3zM101 36h1v3h-1z'/>" +
-    '</svg>',
-)}")`
-
-/** The moon as masks on a 22px grid, like the desktop's: its disc, the
- *  darker maria and lower right limb, and a dithered halo. */
-const MOON_HALO = `url("data:image/svg+xml,${encodeURIComponent(
-  "<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' shape-rendering='crispEdges'><path d='M0 8h1v1H0zM0 10h1v1H0zM0 12h1v1H0zM2 4h1v1H2zM2 6h1v1H2zM2 8h1v1H2zM2 10h1v1H2zM2 12h1v1H2zM2 14h1v1H2zM2 16h1v1H2zM3 9h1v1H3zM3 11h1v1H3zM3 13h1v1H3zM4 2h1v1H4zM4 4h1v1H4zM4 6h1v1H4zM4 8h1v1H4zM4 10h1v1H4zM4 12h1v1H4zM4 14h1v1H4zM4 16h1v1H4zM4 18h1v1H4zM5 5h1v1H5zM5 7h1v1H5zM5 8h1v1H5zM5 9h1v1H5zM5 10h1v1H5zM5 11h1v1H5zM5 12h1v1H5zM5 13h1v1H5zM5 14h1v1H5zM5 15h1v1H5zM6 2h1v1H6zM6 4h1v1H6zM6 6h1v1H6zM6 7h1v1H6zM6 14h1v1H6zM6 16h1v1H6zM6 18h1v1H6zM6 20h1v1H6zM7 5h1v1H7zM7 6h1v1H7zM7 15h1v1H7zM7 16h1v1H7zM7 17h1v1H7zM8 0h1v1H8zM8 2h1v1H8zM8 4h1v1H8zM8 5h1v1H8zM8 16h1v1H8zM8 18h1v1H8zM8 20h1v1H8zM9 3h1v1H9zM9 4h1v1H9zM9 5h1v1H9zM9 16h1v1H9zM9 17h1v1H9zM10 0h1v1H10zM10 2h1v1H10zM10 4h1v1H10zM10 5h1v1H10zM10 16h1v1H10zM10 18h1v1H10zM10 20h1v1H10zM11 3h1v1H11zM11 4h1v1H11zM11 5h1v1H11zM11 16h1v1H11zM11 17h1v1H11zM12 0h1v1H12zM12 2h1v1H12zM12 4h1v1H12zM12 5h1v1H12zM12 16h1v1H12zM12 18h1v1H12zM12 20h1v1H12zM13 3h1v1H13zM13 4h1v1H13zM13 5h1v1H13zM13 16h1v1H13zM13 17h1v1H13zM14 2h1v1H14zM14 4h1v1H14zM14 6h1v1H14zM14 15h1v1H14zM14 16h1v1H14zM14 18h1v1H14zM14 20h1v1H14zM15 5h1v1H15zM15 6h1v1H15zM15 7h1v1H15zM15 14h1v1H15zM15 15h1v1H15zM15 17h1v1H15zM16 2h1v1H16zM16 4h1v1H16zM16 6h1v1H16zM16 8h1v1H16zM16 9h1v1H16zM16 10h1v1H16zM16 11h1v1H16zM16 12h1v1H16zM16 13h1v1H16zM16 14h1v1H16zM16 16h1v1H16zM16 18h1v1H16zM17 7h1v1H17zM17 8h1v1H17zM17 9h1v1H17zM17 10h1v1H17zM17 11h1v1H17zM17 12h1v1H17zM17 13h1v1H17zM17 15h1v1H17zM18 4h1v1H18zM18 6h1v1H18zM18 8h1v1H18zM18 10h1v1H18zM18 12h1v1H18zM18 14h1v1H18zM18 16h1v1H18zM18 18h1v1H18zM20 6h1v1H20zM20 8h1v1H20zM20 10h1v1H20zM20 12h1v1H20zM20 14h1v1H20z'/></svg>",
-)}")`
-const MOON_DISC = `url("data:image/svg+xml,${encodeURIComponent(
-  "<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' shape-rendering='crispEdges'><path d='M6 8h1v1H6zM6 9h1v1H6zM6 10h1v1H6zM6 11h1v1H6zM6 12h1v1H6zM6 13h1v1H6zM7 7h1v1H7zM7 8h1v1H7zM7 9h1v1H7zM7 10h1v1H7zM7 11h1v1H7zM7 12h1v1H7zM7 13h1v1H7zM7 14h1v1H7zM8 6h1v1H8zM8 7h1v1H8zM8 8h1v1H8zM8 9h1v1H8zM8 10h1v1H8zM8 11h1v1H8zM8 12h1v1H8zM8 13h1v1H8zM8 14h1v1H8zM8 15h1v1H8zM9 6h1v1H9zM9 7h1v1H9zM9 8h1v1H9zM9 9h1v1H9zM9 10h1v1H9zM9 11h1v1H9zM9 12h1v1H9zM9 13h1v1H9zM9 14h1v1H9zM9 15h1v1H9zM10 6h1v1H10zM10 7h1v1H10zM10 8h1v1H10zM10 9h1v1H10zM10 10h1v1H10zM10 11h1v1H10zM10 12h1v1H10zM10 13h1v1H10zM10 14h1v1H10zM10 15h1v1H10zM11 6h1v1H11zM11 7h1v1H11zM11 8h1v1H11zM11 9h1v1H11zM11 10h1v1H11zM11 11h1v1H11zM11 12h1v1H11zM11 13h1v1H11zM11 14h1v1H11zM11 15h1v1H11zM12 6h1v1H12zM12 7h1v1H12zM12 8h1v1H12zM12 9h1v1H12zM12 10h1v1H12zM12 11h1v1H12zM12 12h1v1H12zM12 13h1v1H12zM12 14h1v1H12zM12 15h1v1H12zM13 6h1v1H13zM13 7h1v1H13zM13 8h1v1H13zM13 9h1v1H13zM13 10h1v1H13zM13 11h1v1H13zM13 12h1v1H13zM13 13h1v1H13zM13 14h1v1H13zM13 15h1v1H13zM14 7h1v1H14zM14 8h1v1H14zM14 9h1v1H14zM14 10h1v1H14zM14 11h1v1H14zM14 12h1v1H14zM14 13h1v1H14zM14 14h1v1H14zM15 8h1v1H15zM15 9h1v1H15zM15 10h1v1H15zM15 11h1v1H15zM15 12h1v1H15zM15 13h1v1H15z'/></svg>",
-)}")`
-const MOON_MARIA = `url("data:image/svg+xml,${encodeURIComponent(
-  "<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' shape-rendering='crispEdges'><path d='M7 9h1v1H7zM8 8h1v1H8zM9 13h1v1H9zM11 11h1v1H11zM11 12h1v1H11zM11 15h1v1H11zM12 11h1v1H12zM12 14h1v1H12zM12 15h1v1H12zM13 13h1v1H13zM13 14h1v1H13zM13 15h1v1H13zM14 12h1v1H14zM14 13h1v1H14zM14 14h1v1H14zM15 11h1v1H15zM15 12h1v1H15zM15 13h1v1H15z'/></svg>",
-)}")`
-
-/** A row of pines along the sky's foot, like the desktop's treeline:
- *  stepped triangles of varied heights on a strip of ground, 160x20, as
- *  two masks: the whole silhouette, and its moonlit side (the moon is to
- *  the right), solid along the right edges and checker-dithered toward the
- *  trunk. Each tree is [centre x, height]. */
-const [TREELINE, TREELINE_LIT] = (() => {
-  const trees = [
-    [3, 11],
-    [10, 16],
-    [17, 9],
-    [24, 14],
-    [32, 18],
-    [40, 12],
-    [47, 15],
-    [55, 10],
-    [62, 17],
-    [70, 13],
-    [78, 19],
-    [86, 11],
-    [93, 15],
-    [101, 12],
-    [109, 17],
-    [117, 10],
-    [124, 14],
-    [132, 18],
-    [140, 12],
-    [148, 16],
-    [156, 11],
-  ]
-  let d = 'M0 18h160v2H0z'
-  let lit = ''
-  const dot = (x: number, y: number) => (lit += `M${x} ${y}h1v1h-1z`)
-  for (const [x, h] of trees)
-    for (let y = 0; y < h; y++) {
-      // Widen by one every other row, stepping back in at each tier.
-      const half = Math.max(0, Math.floor(y / 2) - (y % 5 === 4 ? 1 : 0))
-      const row = 20 - h + y
-      d += `M${x - half} ${row}h${2 * half + 1}v1h-${2 * half + 1}z`
-      for (let px = x + 1; px <= x + half; px++)
-        if (px === x + half || (px + row) % 2 === 0) dot(px, row)
-    }
-  // A sparse dither along the ground's top row.
-  for (let px = 0; px < 160; px += 4) dot(px, 18)
-  return [d, lit].map(
-    (path) =>
-      `url("data:image/svg+xml,${encodeURIComponent(
-        `<svg xmlns='http://www.w3.org/2000/svg' width='160' height='20' shape-rendering='crispEdges'><path d='${path}'/></svg>`,
-      )}")`,
-  )
-})()
-
-/** A still patch of the blizzard, 128x48 like the tile: a sky glowing
- *  --haze toward the horizon in dithered bands, a --drift snowfield with
- *  --haze wind ripples, the --station with --lamp windows and a --flare
- *  beacon, --haze fog banks rolling over it, and --snow as dots at four
- *  depths, like the desktop's. */
-const [
-  SNOW_HAZE,
-  SNOW_GROUND,
-  SNOW_RIPPLES,
-  SNOW_STATION,
-  SNOW_WINDOWS,
-  SNOW_BEACON,
-  SNOW_FOG,
-  SNOW_FLAKES,
-] = (() => {
-  const W = 128
-  const H = 48
-  const box = (x: number, y: number, w = 1, h = 1) =>
-    `M${x} ${y}h${w}v${h}h-${w}z`
-  let seed = 31
-  const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647
-  const ground = 32
-  // The glow: sparse checks high up, thickening to solid at the horizon.
-  let haze = box(0, ground - 5, W, 5)
-  for (let y = 12; y < ground - 5; y++)
-    for (let x = 0; x < W; x++) {
-      const t = (y - 12) / (ground - 17)
-      const bayer = [0, 0.5, 0.75, 0.25][(y % 2) * 2 + (x % 2)]
-      if (bayer < t * 0.9) haze += box(x, y)
-    }
-  let ripples = ''
-  for (let i = 0; i < 26; i++)
-    ripples += box(
-      Math.floor(rand() * W),
-      ground + 2 + Math.floor(rand() * (H - ground - 2)),
-      2 + Math.floor(rand() * 6),
-    )
-  let station = ''
-  let windows = ''
-  let drift = box(0, ground, W, H - ground)
-  // [left, width, wall height, pitched roof], like the desktop's.
-  const buildings = [
-    [36, 6, 3, 0],
-    [44, 11, 5, 1],
-    [57, 15, 6, 0],
-    [76, 9, 4, 1],
-    [87, 11, 5, 0],
-  ]
-  for (const [x, w, h, pitched] of buildings) {
-    const rise = pitched ? Math.floor(w / 5) : 0
-    station += box(x, ground - h, w, h)
-    for (let r = 1; r <= rise; r++)
-      station += box(x + r * 2, ground - h - r, w - r * 4)
-    drift += box(x, ground - h - rise, w)
-    for (let wx = x + 2; wx < x + w - 2; wx += 3)
-      if ((wx * 7 + h) % 3) windows += box(wx, ground - h + 2)
+/** Fixed pseudo-random numbers in [0, 1), so previews match on server and
+ *  client. */
+function seeded(seed: number) {
+  return () => {
+    seed = (seed * 16807) % 2147483647
+    return seed / 2147483647
   }
-  // The mast, a two-pixel lattice.
-  station += box(73, ground - 20, 1, 20) + box(75, ground - 20, 1, 20)
-  for (let y = ground - 20; y < ground; y += 3) station += box(74, y)
-  const beacon = box(74, ground - 21)
-  // Fog banks drifting across the station, as the desktop draws them:
-  // long streaks from summed sines, heaviest just above the horizon,
-  // their opacity stepped into levels.
-  const fog = ['', '', '']
-  const tau = (Math.PI * 2) / W
-  for (let y = 0; y < H; y++) {
-    const near = 1 - Math.min(1, Math.abs(y - ground + 3) / (ground * 0.55))
-    const weight = 0.25 + 0.75 * near * near
-    for (let x = 0; x < W; x++) {
-      const n =
-        0.5 +
-        0.25 * Math.sin(2 * tau * x + 1.3 * Math.sin(y * 0.09) + 1) +
-        0.15 * Math.sin(5 * tau * x + y * 0.18 + 4) +
-        0.1 * Math.sin(11 * tau * x - y * 0.34 + 2)
-      const level = Math.min(3, Math.floor(Math.max(0, n * weight) * 5))
-      if (level) fog[level - 1] += box(x, y)
-    }
-  }
-  // Snow as square dots: single pixels far off, 2x2 up close, brighter
-  // the nearer they are.
-  const flakes = ['', '', '', '']
-  for (let i = 0; i < 64; i++) {
-    const k = i < 24 ? 0 : i < 46 ? 1 : i < 56 ? 2 : 3
-    const size = k < 2 ? 1 : 2
-    flakes[k] += box(Math.floor(rand() * W), Math.floor(rand() * H), size, size)
-  }
-  const mask = (paths: string) =>
-    `url("data:image/svg+xml,${encodeURIComponent(
-      `<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}' shape-rendering='crispEdges'>${paths}</svg>`,
-    )}")`
-  return [
-    mask(`<path d='${haze}'/>`),
-    mask(`<path d='${drift}'/>`),
-    mask(`<path fill-opacity='.5' d='${ripples}'/>`),
-    mask(`<path d='${station}'/>`),
-    mask(`<path d='${windows}'/>`),
-    mask(`<path d='${beacon}'/>`),
-    mask(
-      fog
-        .map(
-          (d, k) => `<path fill-opacity='${[0.12, 0.24, 0.36][k]}' d='${d}'/>`,
-        )
-        .join(''),
-    ),
-    mask(
-      flakes
-        .map(
-          (d, k) => `<path fill-opacity='${[0.3, 0.5, 0.75, 1][k]}' d='${d}'/>`,
-        )
-        .join(''),
-    ),
-  ]
-})()
+}
 
-/** A still of the fire trails, 160x64, centred on the road's vanishing
- *  point: masks for the --asphalt ground, its --lane markings, and two
- *  trails of --flame with --flame-core bases burning down it. */
-const [ROAD_GROUND, ROAD_LANE, ROAD_FLAME, ROAD_CORE] = (() => {
-  const box = (x: number, y: number, w = 1, h = 1) =>
-    `M${x} ${y}h${w}v${h}h-${w}z`
-  const horizon = 36
-  let lane = ''
-  let flame = ''
-  let core = ''
-  for (let y = horizon + 1; y < 64; y++) {
-    const t = (y - horizon) / (64 - horizon)
-    const half = Math.round(70 * t)
-    lane += box(80 - half, y) + box(80 + half - 1, y)
-    if (Math.floor(6 / t) % 2 === 0) lane += box(80, y)
-    const width = Math.max(1, Math.round(t * 2))
-    for (const side of [-1, 1]) {
-      const x = Math.round(80 + side * 18 * t - width / 2)
-      const tall = Math.max(
-        1,
-        Math.round(12 * t * (0.7 + 0.3 * Math.sin(y * 1.7 + side))),
-      )
-      const base = Math.max(1, Math.round(tall * 0.35))
-      flame += box(x, y - tall + 1, width, tall - base)
-      core += box(x, y - base + 1, width, base)
-    }
-  }
-  return [box(0, horizon, 160, 64 - horizon), lane, flame, core].map(
-    (path) =>
-      `url("data:image/svg+xml,${encodeURIComponent(
-        `<svg xmlns='http://www.w3.org/2000/svg' width='160' height='64' shape-rendering='crispEdges'><path d='${path}'/></svg>`,
-      )}")`,
-  )
-})()
+const PREVIEW_ROWS = 7
+const PREVIEW_COLUMNS = 32
+
+/** A still of a drifting backdrop: `chars` scattered over a share of the
+ *  cells. */
+function scatter(chars: string, share: number, seed: number) {
+  const next = seeded(seed)
+  return Array.from({ length: PREVIEW_ROWS }, () =>
+    Array.from({ length: PREVIEW_COLUMNS }, () =>
+      next() < share ? chars[Math.floor(next() * chars.length)] : ' ',
+    ).join(''),
+  ).join('\n')
+}
+
+/** A still of the streaks: a run of trail glyphs in some rows. */
+function streaks(seed: number) {
+  const next = seeded(seed)
+  return Array.from({ length: PREVIEW_ROWS }, () => {
+    if (next() < 0.4) return ''
+    const length = 5 + Math.floor(next() * 12)
+    const start = Math.floor(next() * (PREVIEW_COLUMNS - length))
+    return ' '.repeat(start) + '=-=~'.repeat(length).slice(0, length)
+  }).join('\n')
+}
+
+const PREVIEWS: Record<Exclude<Backdrop, 'plain'>, string> = {
+  rain: RAIN_PREVIEW.repeat(2),
+  stars: scatter('..··+*', 0.08, 7),
+  streaks: streaks(88),
+  snow: scatter('*·.+*', 0.2, 31),
+}
 
 /** A tiny desktop: just the theme's backdrop. */
 function ThemePreview({
@@ -309,72 +125,13 @@ function ThemePreview({
             height: 'calc(2 * var(--logo-size))',
           }}
         />
-      ) : backdrop === 'road' ? (
-        [
-          ['bg-(--warp)', SKY_PREVIEW],
-          ['bg-(--asphalt)', ROAD_GROUND],
-          ['bg-(--lane)', ROAD_LANE],
-          ['bg-(--flame)', ROAD_FLAME],
-          ['bg-(--flame-core)', ROAD_CORE],
-        ].map(([colour, mask]) => (
-          <span
-            key={mask}
-            className={`absolute inset-0 mask-no-repeat ${colour}`}
-            style={{ maskImage: mask, maskPosition: 'center' }}
-          />
-        ))
-      ) : backdrop === 'snow' ? (
-        [
-          ['bg-(--haze)', SNOW_HAZE],
-          ['bg-(--drift)', SNOW_GROUND],
-          ['bg-(--haze)', SNOW_RIPPLES],
-          ['bg-(--station)', SNOW_STATION],
-          ['bg-(--lamp)', SNOW_WINDOWS],
-          ['bg-(--flare)', SNOW_BEACON],
-          ['bg-(--haze)', SNOW_FOG],
-          ['bg-(--snow)', SNOW_FLAKES],
-        ].map(([colour, mask]) => (
-          <span
-            key={mask}
-            className={`absolute inset-0 mask-no-repeat ${colour}`}
-            style={{ maskImage: mask }}
-          />
-        ))
-      ) : backdrop === 'sky' ? (
-        <>
-          <span
-            className="absolute inset-0 bg-(--warp) mask-no-repeat"
-            style={{ maskImage: SKY_PREVIEW }}
-          />
-          {/* The moon, in its glow. */}
-          <span className="absolute top-[4px] right-[14px] size-[22px]">
-            {[
-              ['bg-(--moon) opacity-40', MOON_HALO],
-              ['bg-(--moon)', MOON_DISC],
-              ['bg-(--desk) opacity-20', MOON_MARIA],
-            ].map(([colour, mask]) => (
-              <span
-                key={mask}
-                className={`absolute inset-0 mask-no-repeat ${colour}`}
-                style={{ maskImage: mask }}
-              />
-            ))}
-          </span>
-          {/* The treeline, and its moonlit side. */}
-          {[
-            ['bg-(--pine)', TREELINE],
-            ['bg-(--pine-lit)', TREELINE_LIT],
-          ].map(([colour, mask]) => (
-            <span
-              key={mask}
-              className={`absolute inset-x-0 bottom-0 h-[20px] mask-no-repeat ${colour}`}
-              style={{ maskImage: mask }}
-            />
-          ))}
-        </>
       ) : (
-        <span className="absolute inset-0 font-mono text-[10px] leading-[10px] tracking-[1px] break-all text-(--warp)">
-          {RAIN_PREVIEW.repeat(2)}
+        <span
+          className={`absolute inset-0 font-mono text-[10px] leading-[10px] tracking-[1px] text-(--warp) ${
+            backdrop === 'rain' ? 'break-all' : 'whitespace-pre'
+          }`}
+        >
+          {PREVIEWS[backdrop]}
         </span>
       )}
     </span>

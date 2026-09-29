@@ -5,9 +5,7 @@ import type { Backdrop } from '#/lib/theme'
 // Backgrounds load after hydration, so the shell stays small. Only the
 // current theme's one is fetched.
 const CodeRain = lazy(() => import('./CodeRain'))
-const NightSky = lazy(() => import('./NightSky'))
-const FireTrails = lazy(() => import('./FireTrails'))
-const Blizzard = lazy(() => import('./Blizzard'))
+const Drift = lazy(() => import('./Drift'))
 
 /** Code rain knobs, for themes with `backdrop: 'rain'`. */
 const RAIN = {
@@ -25,31 +23,47 @@ const RAIN = {
   dropsPerColumn: 2,
 } as const
 
+/** Fire trails at 88 miles per hour, for `backdrop: 'streaks'`: the code
+ *  rain turned sideways, fast, sparse and long. */
+const STREAKS = {
+  characters: '=-=~',
+  direction: 'right',
+  cellWidth: 10,
+  cellHeight: 18,
+  minSpeed: 40,
+  maxSpeed: 90,
+  minTrail: 12,
+  maxTrail: 40,
+  dropsPerColumn: 1,
+  wait: 4,
+} as const
+
+/** A night sky of twinkling glyphs, for `backdrop: 'stars'`. */
+const STARS = {
+  characters: '..··+*',
+  density: 1.4,
+  wind: 3,
+  twinkle: 0.25,
+} as const
+
+/** Snow blowing past, for `backdrop: 'snow'`. */
+const SNOW = {
+  characters: '*·.+*',
+  density: 3,
+  wind: 90,
+  fall: 50,
+  gust: 0.8,
+} as const
+
 type State = {
   backdrop: Backdrop
-  low: string
-  high: string
-  head: string
-  hull: string
-  beam: string
-  pine: string
-  pineLit: string
-  moon: string
-  asphalt: string
-  lane: string
-  flame: string
-  flameCore: string
-  spark: string
-  haze: string
-  drift: string
-  snow: string
-  station: string
-  lamp: string
-  flare: string
+  desk: string
+  warp: string
+  glint: string
   still: boolean
 }
 
-/** Reads the pattern colours from tokens, following theme changes. */
+/** Reads the backdrop's colours from tokens, following theme changes. */
 function useBackdrop() {
   const [state, setState] = useState<State | null>(null)
   useEffect(() => {
@@ -59,25 +73,9 @@ function useBackdrop() {
       const theme = THEMES.find((t) => t.id === root.dataset.theme)
       setState({
         backdrop: theme?.backdrop ?? 'rain',
-        head: s.getPropertyValue('--rain-head').trim(),
-        low: s.getPropertyValue('--desk').trim(),
-        high: s.getPropertyValue('--warp').trim(),
-        hull: s.getPropertyValue('--hull').trim(),
-        beam: s.getPropertyValue('--beam').trim(),
-        pine: s.getPropertyValue('--pine').trim(),
-        pineLit: s.getPropertyValue('--pine-lit').trim(),
-        moon: s.getPropertyValue('--moon').trim(),
-        asphalt: s.getPropertyValue('--asphalt').trim(),
-        lane: s.getPropertyValue('--lane').trim(),
-        flame: s.getPropertyValue('--flame').trim(),
-        flameCore: s.getPropertyValue('--flame-core').trim(),
-        spark: s.getPropertyValue('--spark').trim(),
-        haze: s.getPropertyValue('--haze').trim(),
-        drift: s.getPropertyValue('--drift').trim(),
-        snow: s.getPropertyValue('--snow').trim(),
-        station: s.getPropertyValue('--station').trim(),
-        lamp: s.getPropertyValue('--lamp').trim(),
-        flare: s.getPropertyValue('--flare').trim(),
+        desk: s.getPropertyValue('--desk').trim(),
+        warp: s.getPropertyValue('--warp').trim(),
+        glint: s.getPropertyValue('--glint').trim(),
         still: matchMedia('(prefers-reduced-motion: reduce)').matches,
       })
     }
@@ -96,60 +94,24 @@ export function Backdrop() {
   const b = useBackdrop()
   // A plain desktop is just the page's --desk background.
   if (!b || b.backdrop === 'plain') return null
+  // Every backdrop draws --warp glyphs, lit in --glint, over --desk.
+  const shared = { background: b.desk, still: b.still }
   return (
     <div aria-hidden className="fixed inset-0 opacity-(--backdrop-opacity)">
       <Suspense>
-        {b.backdrop === 'road' ? (
-          <FireTrails
-            // --warp stars over a --desk sky, above an --asphalt road
-            // marked in --lane, where fire trails burn in --flame round a
-            // --flame-core behind a car crackling with --spark.
-            background={b.low}
-            stars={b.high}
-            asphalt={b.asphalt}
-            lane={b.lane}
-            flame={b.flame}
-            core={b.flameCore}
-            spark={b.spark}
-            still={b.still}
-          />
-        ) : b.backdrop === 'sky' ? (
-          <NightSky
-            // --warp stars over a --desk sky, above --pine trees lit in
-            // --pine-lit, under a --moon; the saucer is a --hull outline shaded, lit and
-            // beamed in --beam, and the trees are outlined in --hull too.
-            background={b.low}
-            stars={b.high}
-            hull={b.hull}
-            beam={b.beam}
-            pine={b.pine}
-            pineLit={b.pineLit}
-            moon={b.moon}
-            still={b.still}
-          />
-        ) : b.backdrop === 'snow' ? (
-          <Blizzard
-            // --snow blowing over a --desk sky that glows --haze at the
-            // horizon, above a --drift snowfield; the --station has --lamp
-            // windows and a --flare beacon, and the helicopter is --flare
-            // too.
-            background={b.low}
-            haze={b.haze}
-            drift={b.drift}
-            snow={b.snow}
-            station={b.station}
-            lamp={b.lamp}
-            flare={b.flare}
-            still={b.still}
+        {b.backdrop === 'stars' || b.backdrop === 'snow' ? (
+          <Drift
+            {...(b.backdrop === 'stars' ? STARS : SNOW)}
+            {...shared}
+            glyph={b.warp}
+            glint={b.glint}
           />
         ) : (
           <CodeRain
-            {...RAIN}
-            // --warp trails led by a --rain-head glyph over the --desk base.
-            background={b.low}
-            trail={b.high}
-            head={b.head}
-            still={b.still}
+            {...(b.backdrop === 'streaks' ? STREAKS : RAIN)}
+            {...shared}
+            trail={b.warp}
+            head={b.glint}
           />
         )}
       </Suspense>

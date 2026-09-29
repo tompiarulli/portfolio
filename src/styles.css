@@ -145,37 +145,11 @@
   --dock-divider: transparent;
   /* Strength of the desktop background under the windows. */
   --backdrop-opacity: 0.9;
-  /* Code rain on the desktop: --warp trails, each led by a --rain-head
-     glyph, over --desk. */
+  /* The desktop's backdrop, all glyphs: --warp ones, the leading or
+     nearest lit in --glint, over --desk. */
   --desk: #020806;
   --warp: #22b455;
-  --rain-head: #d8ffe0;
-  /* Night sky desktop (backdrop 'sky'): --warp stars over --desk, a
-     saucer outlined in --hull and shaded, lit and beamed in --beam, and a
-     treeline of --pine trees, lit in --pine-lit and outlined in --hull,
-     under a --moon. */
-  --hull: #010403;
-  --beam: #d8ffe0;
-  --pine: #0b2a16;
-  --pine-lit: #17502b;
-  --moon: #e4ffe8;
-  /* Road desktop (backdrop 'road'): --warp stars over --desk, a road of
-     --asphalt with --lane markings, and fire trails burning --flame with a
-     --flame-core, led by a car crackling with --spark. */
-  --asphalt: #0b1a10;
-  --lane: #22b455;
-  --flame: #41e07a;
-  --flame-core: #d8ffe0;
-  --spark: #d8ffe0;
-  /* Blizzard desktop (backdrop 'snow'): --snow blowing over a --desk sky
-     that glows --haze at the horizon, above a --drift snowfield, and a
-     --station with --lamp windows and a --flare beacon. */
-  --haze: #0b2a16;
-  --drift: #17502b;
-  --snow: #aef5c0;
-  --station: #010403;
-  --lamp: #d8ffe0;
-  --flare: #41e07a;
+  --glint: #d8ffe0;
   /* Mark in the top-left menu, like an old OS's system logo: the white rabbit's head
      in slim sunglasses, on a 16x16 grid.
      Bright all over with a dimmer edge on the right.
@@ -211,8 +185,8 @@
 }
 
 /* I Believe: the show's black, white and grey
-   with the red of the logo's X, over a misty teal night sky where
-   something is watching. */
+   with the red of the logo's X, over a misty teal sky of twinkling
+   stars. */
 [data-theme='believe'] {
   --font-ui: 'DM Mono', ui-monospace, monospace;
   --font-title: 'DM Mono', ui-monospace, monospace;
@@ -239,17 +213,10 @@
   --on-title: #f1f4f7;
   --indicator: #d8362b;
   --backdrop-opacity: 1;
-  /* A near-black teal sky like the posters' mist, a black-outlined saucer
-     and cold white searchlight beams. */
+  /* Cold starlight over a near-black teal sky, like the posters' mist. */
   --desk: #0a1417;
   --warp: #b9c9cd;
-  --hull: #020507;
-  --beam: #e4f2f5;
-  /* Deep pine green, like the Pacific Northwest woods the show filmed in. */
-  --pine: #11301f;
-  --pine-lit: #245a3a;
-  /* A pale, faintly green full moon. */
-  --moon: #eef3d2;
+  --glint: #e4f2f5;
   /* The menu mark: a grey alien's head on a 16x16 grid, shaded in three
      levels and lit from the upper left, with a glint in each eye. */
   --logo-size: 16px;
@@ -296,7 +263,7 @@
 
 /* Outpost 31: the station's cold steel greys and
    the red of its road flares, title bars black with the title card's
-   burning blue, over a blizzard at night. */
+   burning blue, over snow blowing through the night. */
 [data-theme='outpost'] {
   --font-ui: 'IBM Plex Mono', ui-monospace, monospace;
   --font-title: 'IBM Plex Mono', ui-monospace, monospace;
@@ -323,15 +290,10 @@
   --on-title: #7fd3ff;
   --indicator: #d42a1c;
   --backdrop-opacity: 1;
-  /* An Antarctic night: a blue-black sky glowing slate at the horizon,
-     moonlit snow, sodium-lit windows and a red beacon. */
+  /* Moonlit snow blowing through an Antarctic night. */
   --desk: #070b12;
-  --haze: #3b4a5c;
-  --drift: #a9b8c6;
-  --snow: #eef4f8;
-  --station: #05070a;
-  --lamp: #ffc45e;
-  --flare: #e23a24;
+  --warp: #a9b8c6;
+  --glint: #eef4f8;
   /* The menu mark: the husky chased into camp, on a 16x16
      grid. Drawn in scripts/outpost_logo.py. */
   --logo-size: 16px;
@@ -341,7 +303,7 @@
 
 /* Time Traveler: the time machine's brushed
    stainless steel, black title bars lit like the time circuits, and a
-   night road where fire trails burn out at 88 miles per hour. */
+   night where fire trails streak past at 88 miles per hour. */
 [data-theme='traveler'] {
   --bg: #c3c7cb;
   --surface: #c3c7cb;
@@ -363,16 +325,11 @@
   --on-title: #ff4a2a;
   --indicator: #e0301e;
   --backdrop-opacity: 1;
-  /* Night over Twin Pines Mall: a violet-black sky, a dark road, and
-     fire trails in orange with white-hot cores, the car ahead of them
-     crackling with the flux capacitor's blue. */
+  /* Fire trails burning orange with white-hot cores across a violet-black
+     night. */
   --desk: #07060d;
-  --warp: #cfd6ff;
-  --asphalt: #16141c;
-  --lane: #b9a86a;
-  --flame: #ff6a1a;
-  --flame-core: #ffe7a0;
-  --spark: #a8dcff;
+  --warp: #ff6a1a;
+  --glint: #ffe7a0;
   /* The menu mark: the flux capacitor. Drawn in
      scripts/traveler_logo.py. */
   --logo-size: 16px;

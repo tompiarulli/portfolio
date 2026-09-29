@@ -20,6 +20,10 @@ type Props = {
   maxTrail?: number
   /** Drops falling in each column at once. */
   dropsPerColumn?: number
+  /** Screens a drop may wait off screen before entering; more is sparser. */
+  wait?: number
+  /** Which way the drops fall; 'right' runs them along rows instead. */
+  direction?: 'down' | 'right'
   /** Share of glyphs that change each second. */
   mutation?: number
   /** Draw one frame and stop, for reduced motion. */
@@ -34,6 +38,7 @@ const random = (min: number, max: number) => min + Math.random() * (max - min)
  * Green-phosphor code rain. Every column has its own drop falling at its own
  * speed; glyphs sit on a fixed grid and light up as a drop passes, fading
  * along its trail. Glyphs also change at random, so the code keeps shifting.
+ * Turned sideways, the drops become streaks racing along the rows.
  */
 export default function CodeRain({
   background,
@@ -47,6 +52,8 @@ export default function CodeRain({
   minTrail = 15,
   maxTrail = 50,
   dropsPerColumn = 2,
+  wait = 1,
+  direction = 'down',
   mutation = 0.04,
   still = false,
 }: Props) {
@@ -60,14 +67,20 @@ export default function CodeRain({
 
     const glyphs = Array.from(characters)
     const pick = () => Math.floor(Math.random() * glyphs.length)
+    const across = direction === 'right'
     let columns = 0
     let rows = 0
+    // Lanes the drops run in, and how many cells long each lane is.
+    let lanes = 0
+    let length = 0
     let cells = new Uint16Array(0)
     let drops: Drop[] = []
 
-    // Starts a drop above the screen, so columns enter at staggered times.
+    // Starts a drop before the screen, so lanes enter at staggered times.
     const spawn = (anywhere = false): Drop => ({
-      y: anywhere ? random(0, rows + maxTrail) : random(-rows, 0),
+      y: anywhere
+        ? random(-length * (wait - 1), length + maxTrail)
+        : random(-length * wait, 0),
       speed: random(minSpeed, maxSpeed),
       trail: Math.round(random(minTrail, maxTrail)),
     })
@@ -80,10 +93,10 @@ export default function CodeRain({
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       columns = Math.ceil(width / cellWidth)
       rows = Math.ceil(height / cellHeight)
+      lanes = across ? rows : columns
+      length = across ? columns : rows
       cells = Uint16Array.from({ length: columns * rows }, pick)
-      drops = Array.from({ length: columns * dropsPerColumn }, () =>
-        spawn(true),
-      )
+      drops = Array.from({ length: lanes * dropsPerColumn }, () => spawn(true))
       draw()
     }
 
@@ -96,14 +109,18 @@ export default function CodeRain({
       ctx.textAlign = 'center'
       for (let i = 0; i < drops.length; i++) {
         const d = drops[i]
-        const c = i % columns
+        const lane = i % lanes
         const top = Math.floor(d.y)
-        const x = c * cellWidth + cellWidth / 2
-        for (let r = Math.max(0, top - d.trail); r <= top && r < rows; r++) {
+        for (let p = Math.max(0, top - d.trail); p <= top && p < length; p++) {
+          const [c, r] = across ? [p, lane] : [lane, p]
           // Square-root falloff keeps most of the trail bright, fading late.
-          ctx.globalAlpha = Math.sqrt(1 - (top - r) / d.trail)
-          ctx.fillStyle = r === top ? head : trail
-          ctx.fillText(glyphs[cells[r * columns + c]], x, r * cellHeight + 1)
+          ctx.globalAlpha = Math.sqrt(1 - (top - p) / d.trail)
+          ctx.fillStyle = p === top ? head : trail
+          ctx.fillText(
+            glyphs[cells[r * columns + c]],
+            c * cellWidth + cellWidth / 2,
+            r * cellHeight + 1,
+          )
         }
       }
     }
@@ -118,7 +135,7 @@ export default function CodeRain({
       for (let i = 0; i < drops.length; i++) {
         const d = drops[i]
         d.y += d.speed * dt
-        if (d.y - d.trail > rows) drops[i] = spawn()
+        if (d.y - d.trail > length) drops[i] = spawn()
       }
       pending += cells.length * mutation * dt
       for (; pending >= 1; pending--)
@@ -147,6 +164,8 @@ export default function CodeRain({
     minTrail,
     maxTrail,
     dropsPerColumn,
+    wait,
+    direction,
     mutation,
     still,
   ])

@@ -1,4 +1,4 @@
-export type Backdrop = 'rain' | 'sky' | 'plain' | 'road' | 'snow'
+export type Backdrop = 'rain' | 'stars' | 'streaks' | 'snow' | 'plain'
 
 /** Themes set the colours (tokens in styles.css), the font, the menu mark
  *  and which background draws the desktop; the rest of the chrome is
@@ -7,25 +7,13 @@ export const THEMES = [
   // Its release day.
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain' },
   // Its release day.
-  { id: 'believe', label: 'I Believe', backdrop: 'sky' },
+  { id: 'believe', label: 'I Believe', backdrop: 'stars' },
   // Its release day.
-  {
-    id: 'tomspace',
-    label: 'TomSpace',
-    backdrop: 'plain',
-  },
+  { id: 'tomspace', label: 'TomSpace', backdrop: 'plain' },
   // Its release day.
-  {
-    id: 'traveler',
-    label: 'Time Traveler',
-    backdrop: 'road',
-  },
+  { id: 'traveler', label: 'Time Traveler', backdrop: 'streaks' },
   // Its release day.
-  {
-    id: 'outpost',
-    label: 'Outpost 31',
-    backdrop: 'snow',
-  },
+  { id: 'outpost', label: 'Outpost 31', backdrop: 'snow' },
 ] as const satisfies readonly {
   id: string
   label: string
