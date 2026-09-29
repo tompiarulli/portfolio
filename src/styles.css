@@ -118,7 +118,7 @@
   --title: #41e07a;
   --on-title: #03120a;
   --stripe: transparent;
-  /* text-transform for dock labels and for window titles. */
+  /* Case and weight of dock labels, the clock and window titles. */
   --label-case: uppercase;
   --label-weight: 600;
   --menu-size: 12px;
@@ -167,12 +167,6 @@
   --flame: #41e07a;
   --flame-core: #d8ffe0;
   --spark: #d8ffe0;
-  /* The menu bar clock: a panel behind it, its padding, and the colours of
-     the date and the time. */
-  --clock-bg: transparent;
-  --clock-pad: 0px;
-  --clock-date: currentColor;
-  --clock-time: currentColor;
   /* Blizzard desktop (backdrop 'snow'): --snow blowing over a --desk sky
      that glows --haze at the horizon, above a --drift snowfield, and a
      --station with --lamp windows and a --flare beacon. */
@@ -243,8 +237,6 @@
   /* The focused window's title bar in the logo's red. */
   --title: #d8362b;
   --on-title: #f1f4f7;
-  --title-open: '';
-  --title-close: '';
   --indicator: #d8362b;
   --backdrop-opacity: 1;
   /* A near-black teal sky like the posters' mist, a black-outlined saucer
@@ -291,11 +283,6 @@
   /* The focused window's title bar in the header's royal blue. */
   --title: #003399;
   --on-title: #ffffff;
-  --label-case: none;
-  --label-weight: 400;
-  --title-case: none;
-  --title-open: '';
-  --title-close: '';
   --indicator: #ff6600;
   --backdrop-opacity: 1;
   /* A plain desktop in the header's blue. */
@@ -334,8 +321,6 @@
      that burns through the title card. */
   --title: #0a0e12;
   --on-title: #7fd3ff;
-  --title-open: '';
-  --title-close: '';
   --indicator: #d42a1c;
   --backdrop-opacity: 1;
   /* An Antarctic night: a blue-black sky glowing slate at the horizon,
@@ -376,16 +361,8 @@
   /* The focused window's title bar is a time circuit display. */
   --title: #101214;
   --on-title: #ff4a2a;
-  --title-open: '';
-  --title-close: '';
   --indicator: #e0301e;
   --backdrop-opacity: 1;
-  /* The clock is the present time row: a black panel, the date in red
-     like the destination above it, the time in the present's green. */
-  --clock-bg: #101214;
-  --clock-pad: 8px;
-  --clock-date: #ff4a2a;
-  --clock-time: #3dff6e;
   /* Night over Twin Pines Mall: a violet-black sky, a dark road, and
      fire trails in orange with white-hot cores, the car ahead of them
      crackling with the flux capacitor's blue. */

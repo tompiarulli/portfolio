@@ -1,40 +1,35 @@
 export type Backdrop = 'rain' | 'sky' | 'plain' | 'road' | 'snow'
 
-/** Themes drive every colour (tokens in styles.css), the fonts and which
- *  background draws the desktop. Each is an homage to something I like. */
+/** Themes set the colours (tokens in styles.css), the font, the menu mark
+ *  and which background draws the desktop; the rest of the chrome is
+ *  shared. Each is an homage to something I like. */
 export const THEMES = [
-  // The film's US release day.
-  { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
-  // The pilot's first broadcast.
-  { id: 'believe', label: 'I Believe', backdrop: 'sky', date: '1993-09-10' },
-  // The site's launch.
+  // Its release day.
+  { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain' },
+  // Its release day.
+  { id: 'believe', label: 'I Believe', backdrop: 'sky' },
+  // Its release day.
   {
     id: 'tomspace',
     label: 'TomSpace',
     backdrop: 'plain',
-    date: '2003-08-01',
   },
-  // The night the time traveller is trying to get back to: 26 October 1985, when he
-  // left Twin Pines Mall at 88 miles per hour.
+  // Its release day.
   {
     id: 'traveler',
     label: 'Time Traveler',
     backdrop: 'road',
-    date: '1985-10-26',
   },
-  // The film's US release.
+  // Its release day.
   {
     id: 'outpost',
     label: 'Outpost 31',
     backdrop: 'snow',
-    date: '1982-06-25',
   },
 ] as const satisfies readonly {
   id: string
   label: string
   backdrop: Backdrop
-  /** Day the menu bar clock shows, as YYYY-MM-DD; today when unset. */
-  date?: string
 }[]
 export type Theme = (typeof THEMES)[number]['id']
 export const DEFAULT_THEME: Theme = 'rabbit'
