@@ -63,5 +63,8 @@ export function currentTheme(): Theme {
 }
 
 /** Inline in <head> so the first paint already has the saved theme. A saved
- *  theme that no longer exists falls back to the default. */
-export const themeBootScript = `(function(){var t;try{t=localStorage.getItem('${THEME_KEY}')}catch(e){}document.documentElement.dataset.theme=${JSON.stringify(THEMES.map((x) => x.id))}.indexOf(t)<0?'${DEFAULT_THEME}':t})()`
+ *  theme that no longer exists falls back to the default. The router runs it
+ *  again on every navigation, so it only writes when the theme differs:
+ *  rewriting the same value would still restart everything watching
+ *  data-theme, like the backdrop. */
+export const themeBootScript = `(function(){var t;try{t=localStorage.getItem('${THEME_KEY}')}catch(e){}t=${JSON.stringify(THEMES.map((x) => x.id))}.indexOf(t)<0?'${DEFAULT_THEME}':t;var d=document.documentElement.dataset;if(d.theme!==t)d.theme=t})()`
