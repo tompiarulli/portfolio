@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { SILK } from '#/components/Backdrop'
 import { Window } from '#/components/Window'
 import { DEFAULT_THEME, THEMES, applyTheme, currentTheme } from '#/lib/theme'
@@ -194,6 +194,72 @@ const PREVIEWS: Record<Exclude<Backdrop, 'plain' | 'silk' | 'film'>, string> = {
 
 const FILM_PREVIEW = scatter('··.│', 0.04, 19)
 
+const SKY_WIDTH = 64
+const SKY_HEIGHT = 32
+
+/** Treetops as overlapping crowns, tallest at the left edge and thinning
+ *  out to the right, as in the corner of an old photo. */
+function treetops(seed: number) {
+  const next = seeded(seed)
+  // Run past both edges so the blur has dark to pull in, not the sky.
+  return Array.from({ length: 32 }, (_, i) => {
+    const x = (i / 31) * (SKY_WIDTH + 12) - 6
+    const rise = Math.min(1, 1 - x / SKY_WIDTH)
+    return {
+      x,
+      y: SKY_HEIGHT - 2 - rise * 8 - next() * 3,
+      r: 2.2 + rise * 2.2 + next() * 1.8,
+    }
+  })
+}
+
+const TREETOPS = treetops(1993)
+
+/** Believe's still: a tight crop of a grainy, out of focus snapshot,
+ *  dark treetops under a washed-out sky. */
+function TreelinePreview() {
+  const id = useId()
+  return (
+    <svg
+      viewBox={`0 0 ${SKY_WIDTH} ${SKY_HEIGHT}`}
+      preserveAspectRatio="xMidYMid slice"
+      className="absolute inset-0 size-full"
+    >
+      <defs>
+        <linearGradient id={`${id}sky`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="var(--highlight)" />
+          <stop offset="1" stopColor="var(--surface)" />
+        </linearGradient>
+        <filter id={`${id}softer`} x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="1.2" />
+        </filter>
+        <filter id={`${id}grain`}>
+          <feTurbulence type="fractalNoise" baseFrequency="1.4" seed="9" />
+          <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.4 1" />
+        </filter>
+      </defs>
+      <rect width={SKY_WIDTH} height={SKY_HEIGHT} fill={`url(#${id}sky)`} />
+      <g filter={`url(#${id}softer)`} fill="var(--ink)">
+        {/* Each crown with a trunk of dark down to the ground, so no sky
+            shows through under it. */}
+        {TREETOPS.map(({ x, y, r }) => (
+          <path
+            key={x}
+            d={`M${x - r} ${SKY_HEIGHT + 6}V${y}a${r} ${r} 0 0 1 ${2 * r} 0V${SKY_HEIGHT + 6}z`}
+          />
+        ))}
+        <rect x={-6} y={SKY_HEIGHT - 5} width={SKY_WIDTH + 12} height="11" />
+      </g>
+      <rect
+        width={SKY_WIDTH}
+        height={SKY_HEIGHT}
+        filter={`url(#${id}grain)`}
+        opacity="0.18"
+      />
+    </svg>
+  )
+}
+
 /** A tiny desktop: just the theme's backdrop. */
 function ThemePreview({
   theme,
@@ -208,7 +274,9 @@ function ThemePreview({
       aria-hidden
       className="relative block h-16 overflow-hidden bg-(--desk)"
     >
-      {backdrop === 'plain' ? (
+      {theme === 'believe' ? (
+        <TreelinePreview />
+      ) : backdrop === 'plain' ? (
         // Nothing to show of a plain desktop, so the theme's menu mark, at
         // twice its grid.
         <span
@@ -227,7 +295,7 @@ function ThemePreview({
           {FILM_PREVIEW}
         </span>
       ) : backdrop === 'rain' ? (
-        <span className="absolute inset-0 flex items-center justify-center font-mono text-[11px] leading-[11px] tracking-[1px] [text-shadow:0_0_4px_var(--warp)] whitespace-pre text-(--warp)">
+        <span className="absolute inset-0 flex items-center justify-center font-mono text-[11px] leading-[11px] tracking-[1px] [text-shadow:0_0_6px_var(--warp)] whitespace-pre text-(--warp)">
           {PREVIEWS.rain}
         </span>
       ) : (
