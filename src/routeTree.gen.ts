@@ -10,12 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as MediaRouteImport } from './routes/media'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SystemRouteImport } from './routes/system'
+import { Route as WorkRouteImport } from './routes/work'
+import { Route as WorkSlugRouteImport } from './routes/work.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -23,40 +33,104 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MediaRoute = MediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SystemRoute = SystemRouteImport.update({
+  id: '/system',
+  path: '/system',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkRoute = WorkRouteImport.update({
+  id: '/work',
+  path: '/work',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkSlugRoute = WorkSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => WorkRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
+  '/media': typeof MediaRoute
   '/settings': typeof SettingsRoute
+  '/system': typeof SystemRoute
+  '/work': typeof WorkRouteWithChildren
+  '/work/$slug': typeof WorkSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
+  '/media': typeof MediaRoute
   '/settings': typeof SettingsRoute
+  '/system': typeof SystemRoute
+  '/work': typeof WorkRouteWithChildren
+  '/work/$slug': typeof WorkSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
+  '/media': typeof MediaRoute
   '/settings': typeof SettingsRoute
+  '/system': typeof SystemRoute
+  '/work': typeof WorkRouteWithChildren
+  '/work/$slug': typeof WorkSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contact' | '/settings'
+  fullPaths:
+    | '/'
+    | '/blog'
+    | '/contact'
+    | '/media'
+    | '/settings'
+    | '/system'
+    | '/work'
+    | '/work/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact' | '/settings'
-  id: '__root__' | '/' | '/contact' | '/settings'
+  to:
+    | '/'
+    | '/blog'
+    | '/contact'
+    | '/media'
+    | '/settings'
+    | '/system'
+    | '/work'
+    | '/work/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/blog'
+    | '/contact'
+    | '/media'
+    | '/settings'
+    | '/system'
+    | '/work'
+    | '/work/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
+  MediaRoute: typeof MediaRoute
   SettingsRoute: typeof SettingsRoute
+  SystemRoute: typeof SystemRoute
+  WorkRoute: typeof WorkRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -68,11 +142,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media': {
+      id: '/media'
+      path: '/media'
+      fullPath: '/media'
+      preLoaderRoute: typeof MediaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -82,13 +170,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/system': {
+      id: '/system'
+      path: '/system'
+      fullPath: '/system'
+      preLoaderRoute: typeof SystemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/work': {
+      id: '/work'
+      path: '/work'
+      fullPath: '/work'
+      preLoaderRoute: typeof WorkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/work/$slug': {
+      id: '/work/$slug'
+      path: '/$slug'
+      fullPath: '/work/$slug'
+      preLoaderRoute: typeof WorkSlugRouteImport
+      parentRoute: typeof WorkRoute
+    }
   }
 }
 
+interface WorkRouteChildren {
+  WorkSlugRoute: typeof WorkSlugRoute
+}
+
+const WorkRouteChildren: WorkRouteChildren = {
+  WorkSlugRoute: WorkSlugRoute,
+}
+
+const WorkRouteWithChildren = WorkRoute._addFileChildren(WorkRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
+  MediaRoute: MediaRoute,
   SettingsRoute: SettingsRoute,
+  SystemRoute: SystemRoute,
+  WorkRoute: WorkRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

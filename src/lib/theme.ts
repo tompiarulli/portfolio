@@ -1,41 +1,23 @@
 export type Backdrop = 'rain' | 'stars' | 'streaks' | 'snow' | 'plain'
 
-/** Themes set the colours (tokens in styles.css), the font, the mark,
- *  which background draws the desktop and the day the clock shows; the
- *  rest of the chrome is shared. Each is an homage to something I like. */
+/** Themes set the colours (tokens in styles.css), the font, the menu mark
+ *  and which background draws the desktop; the rest of the chrome is
+ *  shared. Each is an homage to something I like. */
 export const THEMES = [
-  // On the film's US release day.
-  { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
-  // On the pilot's first broadcast.
-  { id: 'believe', label: 'I Believe', backdrop: 'stars', date: '1993-09-10' },
-  // On the site's launch.
-  {
-    id: 'tomspace',
-    label: 'TomSpace',
-    backdrop: 'plain',
-    date: '2003-08-01',
-  },
-  // On the night the time traveller is trying to get back to: 26
-  // October 1985, when he left Twin Pines Mall at 88 miles per hour.
-  {
-    id: 'traveler',
-    label: 'Time Traveler',
-    backdrop: 'streaks',
-    date: '1985-10-26',
-  },
-  // On the film's US release.
-  {
-    id: 'outpost',
-    label: 'Outpost 31',
-    backdrop: 'snow',
-    date: '1982-06-25',
-  },
+  // Its release day.
+  { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain' },
+  // Its release day.
+  { id: 'believe', label: 'I Believe', backdrop: 'stars' },
+  // Its release day.
+  { id: 'tomspace', label: 'TomSpace', backdrop: 'plain' },
+  // Its release day.
+  { id: 'traveler', label: 'Time Traveler', backdrop: 'streaks' },
+  // Its release day.
+  { id: 'outpost', label: 'Outpost 31', backdrop: 'snow' },
 ] as const satisfies readonly {
   id: string
   label: string
   backdrop: Backdrop
-  /** Day the clock shows, as YYYY-MM-DD. */
-  date: string
 }[]
 export type Theme = (typeof THEMES)[number]['id']
 export const DEFAULT_THEME: Theme = 'rabbit'

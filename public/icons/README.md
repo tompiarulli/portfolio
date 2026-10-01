@@ -1,10 +1,21 @@
 # Icons
 
-The theme marks are inlined as mask tokens in `src/styles.css`, so nothing in this folder is served.
+The dock icons and menu marks are inlined as mask tokens in `src/styles.css`, so nothing in this folder is served. This file records where they come from.
 
-## Theme marks
+## Dock icons
 
-Each theme has its own 16x16 mark, shown in the Settings window, original pixel art:
+Every theme shares one set: 32x32 icons from KDE 1.1 (1999), by the KDE artists, GNU General Public License v2 (`COPYING` in [KDE/kde1-kdebase](https://github.com/KDE/kde1-kdebase)). Quantized to three opacity levels and inlined as SVG masks, painted in the theme's text colour. Dark docks (White Rabbit) use them as drawn; light docks use an inverted copy, so outlines and holes are painted in ink.
+
+- About: `pics/info.xpm`
+- Work: `pics/kfm.xpm`
+- Media: `kscreensaver/kscreensaver.xpm`, with the "zZZ" bubble replaced by a play button
+- Blog: `pics/txt.xpm`
+- Contact: `kappfinder/pics/email.xpm`
+- Settings: `kcontrol/kcontrol/pics/kcontrol.xpm`
+
+## Menu marks
+
+Each theme has its own 16x16 mark in the top-left menu, original pixel art:
 
 - White Rabbit: the white rabbit's head in slim sunglasses.
 - I Believe: a grey alien's head.

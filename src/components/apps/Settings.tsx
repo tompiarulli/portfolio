@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Window } from '#/components/Window'
-import { build } from '#/lib/build'
-import { site } from '#/lib/site'
 import { DEFAULT_THEME, THEMES, applyTheme, currentTheme } from '#/lib/theme'
 import type { Backdrop, Theme } from '#/lib/theme'
 
@@ -22,24 +20,6 @@ export function Settings() {
             <ThemeTile key={t.id} theme={t} on={theme === t.id} pick={pick} />
           ))}
         </div>
-      </fieldset>
-      <fieldset className="mt-4 border border-(--ink) p-3">
-        <legend className="px-1 font-title">System</legend>
-        <p className="flex items-center gap-2 font-title text-base">
-          {/* The current theme's mark, like the system logo in an old OS's
-              About box. */}
-          <span aria-hidden className="logo" />
-          {site.os}
-        </p>
-        <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 border-t border-dotted border-(--ink) pt-3">
-          <dt className="font-title">Version</dt>
-          <dd>
-            {build.commit}
-            {build.date && ` (${build.date})`}
-          </dd>
-          <dt className="font-title">Built with</dt>
-          <dd>{site.builtWith}</dd>
-        </dl>
       </fieldset>
     </Window>
   )
@@ -136,7 +116,7 @@ function ThemePreview({
       className="relative block h-16 overflow-hidden bg-(--desk)"
     >
       {backdrop === 'plain' ? (
-        // Nothing to show of a plain desktop, so the theme's mark, at
+        // Nothing to show of a plain desktop, so the theme's menu mark, at
         // twice its grid.
         <span
           className="logo absolute inset-0 m-auto text-(--on-title)"

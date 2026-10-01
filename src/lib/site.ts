@@ -8,28 +8,29 @@ export const site = {
     "I'm also a former digital nomad and 90s kid with a deep love of travel, movies, and pop culture.",
   ],
   signoff: '- Tom',
+  email: 'tompiarulli@gmail.com',
   os: 'TomOS 9.2',
   builtWith: 'React 19, TanStack Start, Tailwind 4',
+  media: 'No videos yet.',
+  blog: 'No posts yet.',
 }
 
-export type Profile = {
-  label: string
-  /** What the link shows, like a username or address. */
-  handle: string
-  url: string
+export type Project = {
+  slug: string
+  name: string
+  year: string
+  blurb: string
+  stack: string[]
+  url?: string
 }
 
-/** Where to find me, in the order they show. */
-export const profiles: Profile[] = [
+export const projects: Project[] = [
   {
-    label: 'Email',
-    handle: 'tom@tompiarulli.com',
-    url: 'mailto:tom@tompiarulli.com',
+    slug: 'example-one',
+    name: 'Example Project',
+    year: '2026',
+    blurb: 'Replace me in src/lib/site.ts.',
+    stack: ['React', 'TanStack Start', 'Vercel'],
+    url: 'https://example.com',
   },
-  {
-    label: 'LinkedIn',
-    handle: 'tompiarulli',
-    url: 'https://www.linkedin.com/in/tompiarulli/',
-  },
-  { label: 'GitHub', handle: 'tomparkp', url: 'https://github.com/tomparkp' },
 ]

@@ -32,9 +32,9 @@ export default defineConfig({
     tanstackStart({
       // Every route is static HTML on Vercel's CDN. No function on the hot path.
       prerender: { enabled: true, crawlLinks: true, autoSubfolderIndex: true },
-      // Windows open from a closed menu, so no prerendered page links to
-      // them and the crawl alone never finds them.
-      pages: [{ path: '/contact' }, { path: '/settings' }],
+      // System sits in a closed menu, so no prerendered page links to it and
+      // the crawl alone never finds it.
+      pages: [{ path: '/system' }],
     }),
     viteReact(),
   ],
