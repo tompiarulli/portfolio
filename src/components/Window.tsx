@@ -50,6 +50,8 @@ type Props = {
   right?: boolean
   width?: number
   height?: number
+  /** Let the content run to the edges, without the usual padding. */
+  flush?: boolean
   className?: string
 }
 
@@ -61,6 +63,7 @@ export function Window({
   right = false,
   width = 560,
   height,
+  flush = false,
   className = '',
 }: Props) {
   const ref = useRef<HTMLElement>(null)
@@ -184,7 +187,11 @@ export function Window({
           className={`stripes h-[17px] ${active ? 'opacity-70' : 'opacity-0'}`}
         />
       </div>
-      <div className="os-scroll min-h-0 flex-1 p-5 select-text">{children}</div>
+      <div
+        className={`os-scroll min-h-0 flex-1 select-text ${flush ? '' : 'p-5'}`}
+      >
+        {children}
+      </div>
     </section>
   )
 }

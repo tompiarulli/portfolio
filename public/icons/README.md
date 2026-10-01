@@ -8,6 +8,7 @@ Every theme shares one set: 32x32 icons from KDE 1.1 (1999), by the KDE artists,
 
 - About: `pics/info.xpm`
 - Contact: `kappfinder/pics/email.xpm`
+- Terminal: not from KDE; a CRT with a prompt in the same style, drawn in `scripts/terminal_icon.py`
 - Settings: `kcontrol/kcontrol/pics/kcontrol.xpm`
 
 ## Menu marks

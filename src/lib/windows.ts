@@ -1,9 +1,10 @@
 /** Every window the desktop can open. */
-export type WindowId = 'about' | 'contact' | 'settings' | 'system'
+export type WindowId = 'about' | 'contact' | 'terminal' | 'settings' | 'system'
 
 const PATHS = {
   about: '/',
   contact: '/contact',
+  terminal: '/terminal',
   settings: '/settings',
   system: '/system',
 } as const satisfies Record<WindowId, string>

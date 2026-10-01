@@ -4,6 +4,7 @@ import { useWindows } from './WindowManager'
 const APPS = [
   { id: 'about', to: '/', label: 'About' },
   { id: 'contact', to: '/contact', label: 'Contact' },
+  { id: 'terminal', to: '/terminal', label: 'Terminal' },
   { id: 'settings', to: '/settings', label: 'Settings' },
 ] as const
 
