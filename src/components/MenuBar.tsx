@@ -3,8 +3,6 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { Clock } from './Clock'
 import { useWindows } from './WindowManager'
-import { pathFor } from '#/lib/windows'
-import type { WindowId } from '#/lib/windows'
 
 const BAR =
   'fixed top-0 z-50 flex h-[32px] items-center border-b border-(--ink) bg-(--surface) text-(length:--menu-size)'
@@ -12,20 +10,8 @@ const BAR =
 const ITEM =
   'block w-full px-4 py-[3px] text-left whitespace-nowrap outline-none hover:bg-(--accent) hover:text-(--on-accent) focus-visible:bg-(--accent) focus-visible:text-(--on-accent)'
 
-/** Windows the menu opens, a rule between groups. Closed ones reopen here. */
-const WINDOWS: { id: WindowId; label: string }[][] = [
-  [
-    { id: 'about', label: 'About' },
-    { id: 'socials', label: 'Socials' },
-  ],
-  [
-    { id: 'settings', label: 'Settings' },
-    { id: 'system', label: 'System' },
-  ],
-]
-
-/** Menu groups after the windows, a rule before each. Put the easter eggs
- *  in onSelect. */
+/** Menu groups after About, the first joining it and a rule before each
+ *  later one. Put the easter eggs in onSelect. */
 const ACTIONS: { label: string; onSelect: () => void }[][] = [
   [{ label: 'Terminal', onSelect: () => {} }],
   [
@@ -95,27 +81,18 @@ function SystemMenu() {
           aria-label="System"
           className="absolute top-full left-0 min-w-44 border border-(--ink) bg-(--surface) py-1 font-title tracking-tight shadow-(--window-shadow)"
         >
-          {WINDOWS.map((group, i) => (
-            <Fragment key={group[0].id}>
-              {i > 0 && <hr className="my-1 border-t border-(--ink)" />}
-              {group.map((w) => (
-                <Link
-                  key={w.id}
-                  to={pathFor(w.id)}
-                  preload="intent"
-                  role="menuitem"
-                  onClick={() => {
-                    raise(w.id)
-                    close()
-                  }}
-                  className={ITEM}
-                >
-                  {w.label}
-                </Link>
-              ))}
-            </Fragment>
-          ))}
-          <hr className="my-1 border-t border-(--ink)" />
+          <Link
+            to="/system"
+            preload="intent"
+            role="menuitem"
+            onClick={() => {
+              raise('system')
+              close()
+            }}
+            className={ITEM}
+          >
+            System
+          </Link>
           {ACTIONS.map((group, i) => (
             <Fragment key={group[0].label}>
               {i > 0 && <hr className="my-1 border-t border-(--ink)" />}
