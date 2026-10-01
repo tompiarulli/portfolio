@@ -14,6 +14,7 @@ export function Dock() {
   return (
     <nav
       aria-label="Applications"
+      data-shutdown="dock"
       className="fixed bottom-0 left-1/2 z-50 flex -translate-x-1/2 border border-b-0 border-(--ink) bg-(--surface)"
     >
       {APPS.map((app) => (

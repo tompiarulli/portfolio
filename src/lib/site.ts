@@ -10,6 +10,28 @@ export const site = {
   signoff: '- Tom',
   os: 'TomOS 9.2',
   builtWith: 'React 19, TanStack Start, Tailwind 4',
+  /** Status lines the splash card walks through at shut down and start up. */
+  shutdown: {
+    down: [
+      'Saving the desktop',
+      'Closing windows',
+      'Flushing the cache',
+      'Parking the heads',
+      'Powering off',
+    ],
+    up: [
+      'Checking memory',
+      'Loading extensions',
+      'Mounting the desktop',
+      'Setting the clock',
+      'Welcome back',
+    ],
+  },
+  /** The Shut Down photo, credited on the photo itself. */
+  grassPhoto: {
+    by: 'Bruno Aguirre',
+    url: 'https://unsplash.com/photos/green-field-YRfaG3JVwkU',
+  },
 }
 
 export type Profile = {

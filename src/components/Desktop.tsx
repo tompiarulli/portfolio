@@ -11,7 +11,10 @@ export function Desktop() {
       <MenuBar />
       {/* Above the menu bar and dock so windows can be dragged over them;
           click-through except on the windows themselves. */}
-      <main className="pointer-events-none absolute inset-x-0 top-0 bottom-[88px] z-60">
+      <main
+        data-shutdown="windows"
+        className="pointer-events-none absolute inset-x-0 top-0 bottom-[88px] z-60"
+      >
         <OpenWindows />
       </main>
       <Dock />

@@ -149,6 +149,9 @@
   --desk: #020806;
   --warp: #22b455;
   --glint: #d8ffe0;
+  /* The screen with the power off; the same on every theme. */
+  --off: #000;
+  --off-text: #fff;
   /* Mark in the top-left menu, like an old OS's system logo: the white rabbit's head
      in slim black sunglasses, on a 16x16 grid.
      Bright all over with a dimmer edge on the right.
@@ -429,6 +432,68 @@ svg {
 .os-scroll::-webkit-scrollbar-thumb {
   background: var(--tertiary);
   border: 1px solid var(--ink);
+}
+
+/* ---------- Shut Down ---------- */
+/* With data-off on <html>, the chrome folds shut top to bottom: windows
+   first, then the dock, then the menu bar. Booting folds it back open. */
+[data-shutdown] {
+  transition:
+    scale 200ms ease-in,
+    opacity 200ms ease-in;
+}
+[data-off] [data-shutdown] {
+  scale: 1 0;
+  opacity: 0;
+  pointer-events: none;
+}
+[data-shutdown='windows'],
+[data-shutdown='bar'] {
+  transform-origin: top;
+}
+[data-shutdown='dock'] {
+  transform-origin: bottom;
+}
+[data-off] [data-shutdown='dock'] {
+  transition-delay: 200ms;
+}
+[data-off] [data-shutdown='bar'] {
+  transition-delay: 400ms;
+}
+
+/* The picture tube collapsing to a line, then a dot. */
+.tube-off {
+  animation: tube-off 500ms ease-in forwards;
+}
+@keyframes tube-off {
+  0% {
+    scale: 1 1;
+  }
+  60% {
+    scale: 1 0.005;
+    opacity: 1;
+  }
+  100% {
+    scale: 0 0.005;
+    opacity: 0;
+  }
+}
+.fade-in {
+  animation: fade-in 200ms ease-out both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+/* A hard cursor blink, no fade. */
+.blink {
+  animation: blink 1.6s steps(1) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

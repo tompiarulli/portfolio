@@ -1,7 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { Clock } from './Clock'
+import { ShutDown } from './ShutDown'
 import { useWindows } from './WindowManager'
 
 const BAR =
@@ -9,25 +10,6 @@ const BAR =
 
 const ITEM =
   'block w-full px-4 py-[3px] text-left whitespace-nowrap outline-none hover:bg-(--accent) hover:text-(--on-accent) focus-visible:bg-(--accent) focus-visible:text-(--on-accent)'
-
-/** The screen after Shut Down, as Windows 95 left it. Any click or key
- *  boots back up. */
-function Off({ onBoot }: { onBoot: () => void }) {
-  useEffect(() => {
-    window.addEventListener('keydown', onBoot)
-    return () => window.removeEventListener('keydown', onBoot)
-  }, [onBoot])
-  return (
-    <div
-      role="dialog"
-      aria-label="Shut down"
-      onClick={onBoot}
-      className="fixed inset-0 z-100 flex cursor-pointer items-center justify-center bg-(--desk) p-6 text-center font-title text-base text-(--glint)"
-    >
-      It is now safe to turn off your computer.
-    </div>
-  )
-}
 
 /** The theme logo menu, opened like the system menu on a 90s desktop. */
 function SystemMenu({ onShutDown }: { onShutDown: () => void }) {
@@ -47,12 +29,8 @@ function SystemMenu({ onShutDown }: { onShutDown: () => void }) {
 
   const close = () => setOpen(false)
 
-  // Menu groups after System Info, a rule before each.
-  const actions: { label: string; onSelect: () => void }[][] = [
-    [
-      { label: 'Restart…', onSelect: () => location.reload() },
-      { label: 'Shut Down…', onSelect: onShutDown },
-    ],
+  const actions: { label: string; onSelect: () => void }[] = [
+    { label: 'Shut Down…', onSelect: onShutDown },
   ]
 
   // Arrow keys walk the items, Escape closes and hands focus back.
@@ -110,24 +88,19 @@ function SystemMenu({ onShutDown }: { onShutDown: () => void }) {
           >
             System Info
           </Link>
-          {actions.map((group) => (
-            <Fragment key={group[0].label}>
-              <hr className="my-1 border-t border-(--ink)" />
-              {group.map((a) => (
-                <button
-                  key={a.label}
-                  type="button"
-                  role="menuitem"
-                  onClick={() => {
-                    close()
-                    a.onSelect()
-                  }}
-                  className={ITEM}
-                >
-                  {a.label}
-                </button>
-              ))}
-            </Fragment>
+          {actions.map((a) => (
+            <button
+              key={a.label}
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                close()
+                a.onSelect()
+              }}
+              className={ITEM}
+            >
+              {a.label}
+            </button>
           ))}
         </div>
       )}
@@ -140,11 +113,17 @@ export function MenuBar() {
   const boot = useCallback(() => setOff(false), [])
   return (
     <>
-      {off && <Off onBoot={boot} />}
-      <nav className={`${BAR} left-0 border-r has-aria-expanded:z-70`}>
+      {off && <ShutDown onBoot={boot} />}
+      <nav
+        data-shutdown="bar"
+        className={`${BAR} left-0 border-r has-aria-expanded:z-70`}
+      >
         <SystemMenu onShutDown={() => setOff(true)} />
       </nav>
-      <header className={`${BAR} right-0 gap-3 border-l px-3`}>
+      <header
+        data-shutdown="bar"
+        className={`${BAR} right-0 gap-3 border-l px-3`}
+      >
         <Clock />
       </header>
     </>
