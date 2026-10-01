@@ -26,5 +26,10 @@ export const profiles: Profile[] = [
     handle: 'tompiarulli@gmail.com',
     url: 'mailto:tompiarulli@gmail.com',
   },
+  {
+    label: 'LinkedIn',
+    handle: 'tompiarulli',
+    url: 'https://www.linkedin.com/in/tompiarulli/',
+  },
   { label: 'GitHub', handle: 'tomparkp', url: 'https://github.com/tomparkp' },
 ]
