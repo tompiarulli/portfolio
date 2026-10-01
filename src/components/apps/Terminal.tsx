@@ -81,7 +81,7 @@ export function Terminal() {
         onClick={() => {
           if (!getSelection()?.toString()) field.current?.focus()
         }}
-        className="min-h-full bg-(--desk) p-3 font-mono leading-[1.45] text-(--warp)"
+        className="min-h-full bg-(--terminal) p-3 font-mono leading-[1.45] text-(--warp)"
       >
         {lines.map((line, i) => (
           <p key={i} className="break-words whitespace-pre-wrap">

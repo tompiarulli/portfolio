@@ -149,6 +149,9 @@
   --desk: #020806;
   --warp: #22b455;
   --glint: #d8ffe0;
+  /* The terminal's screen: a dark grey, so it reads as its own thing
+     against the desktop in every theme. */
+  --terminal: #1c1f1e;
   /* The screen with the power off; the same on every theme. */
   --off: #000;
   --off-text: #fff;
