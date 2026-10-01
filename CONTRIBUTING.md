@@ -26,14 +26,12 @@ Run `pnpm typecheck && pnpm lint && pnpm build` before committing. The build run
 
 ## Layout
 
-- `src/routes/` file-based routes. They set the URL, `head()`, and loaders only; the root route renders `<Desktop>` (menu bar, dock, open windows).
-- `src/components/` desktop chrome: `Desktop`, `MenuBar`, `Dock`, `Window`, `WindowManager`, `Button`, `Clock`.
-- `src/components/apps/` window contents, one component per app, registered in `apps/index.tsx`.
-- `src/lib/windows.ts` window ids and their URLs. The URL follows the focused window, so each route prerenders with its window open.
+- `src/routes/` file-based routes. `index.tsx` renders `<Home>`, the whole site.
+- `src/components/` `Home` (the page), `ThemePicker`, and `Backdrop`, which lazy-loads the theme's animated background (`CodeRain` or `Drift`).
 - `src/components/bits/` components vendored from [React Bits](https://reactbits.dev). Add one with `pnpm dlx shadcn@latest add @react-bits/<Name>-TS-TW`, then `pnpm format`.
 - `src/lib/site.ts` all copy and project data.
 - `src/lib/theme.ts` the theme list (White Rabbit, I Believe, TomSpace, Time Traveler and Outpost 31) and the inline script that applies the saved theme before first paint.
-- `src/styles.css` design tokens per theme, and the retro desktop chrome utilities.
+- `src/styles.css` design tokens per theme, and base styles.
 - `public/fonts/` self-hosted fonts.
 
 ## Commits

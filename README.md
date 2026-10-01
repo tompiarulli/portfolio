@@ -1,6 +1,6 @@
 # Tom Piarulli
 
-My personal portfolio, styled as a late-90s desktop OS and inspired by [Poolsuite](https://poolsuite.net). Draggable windows, a dock, and homage themes that each change the colours, font and backdrop, like a green-phosphor White Rabbit with code rain. Every page is prerendered so it loads instantly.
+My personal site: a short bio and links to where else I am, in one terminal window. Homage themes each change the colours, font and animated backdrop, like a green-phosphor White Rabbit with code rain. The page is prerendered so it loads instantly.
 
 Built with React 19, TanStack Start, Tailwind 4, React Bits, Vercel, and Claude Code.
 
