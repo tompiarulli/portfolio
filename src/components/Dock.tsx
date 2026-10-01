@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { DockIcon } from './DockIcon'
 import { useWindows } from './WindowManager'
 
 const APPS = [
@@ -33,13 +34,7 @@ export function Dock() {
           }}
           className="group relative flex w-[83px] flex-col items-center gap-[6px] border-r border-(--dock-divider) px-2 pt-[12px] pb-[7px] last:border-r-0 hover:bg-(--tertiary) hover:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
         >
-          {/* Themes can swap any icon by overriding its --icon-* token. */}
-          <span
-            aria-hidden
-            data-dock-icon={app.id}
-            className="dock-icon group-active:translate-y-px"
-            style={{ maskImage: `var(--icon-${app.id})` }}
-          />
+          <DockIcon id={app.id} />
           <span className="font-title text-(length:--dock-label-size) tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">
             {app.label}
           </span>
