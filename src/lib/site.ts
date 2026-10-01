@@ -27,12 +27,125 @@ export const site = {
       'Welcome back',
     ],
   },
-  /** The Shut Down photo, credited in System Info. */
-  grassPhoto: {
-    by: 'Bruno Aguirre',
-    url: 'https://unsplash.com/photos/green-field-YRfaG3JVwkU',
-  },
 }
+
+export type Credit = {
+  /** What it is, like a font or a library. */
+  name: string
+  by?: string
+  url: string
+  license?: string
+}
+
+/** Everything the site borrows, grouped and listed in System Info. */
+export const credits: { group: string; items: Credit[] }[] = [
+  {
+    group: 'Inspired by',
+    items: [{ name: 'Poolsuite', url: 'https://poolsuite.net' }],
+  },
+  {
+    group: 'Fonts',
+    items: [
+      {
+        name: 'Iosevka',
+        by: 'Renzhi Li',
+        url: 'https://github.com/be5invis/Iosevka',
+        license: 'OFL 1.1',
+      },
+      {
+        name: 'Geist Mono',
+        by: 'the Geist Project Authors',
+        url: 'https://github.com/vercel/geist-font',
+        license: 'OFL 1.1',
+      },
+      {
+        name: 'DM Mono',
+        by: 'the DM Mono Project Authors',
+        url: 'https://github.com/googlefonts/dm-mono',
+        license: 'OFL 1.1',
+      },
+      {
+        name: 'IBM Plex Mono',
+        by: 'IBM Corp.',
+        url: 'https://github.com/IBM/plex',
+        license: 'OFL 1.1',
+      },
+      {
+        name: 'Recursive',
+        by: 'the Recursive Project Authors',
+        url: 'https://github.com/arrowtype/recursive',
+        license: 'OFL 1.1',
+      },
+    ],
+  },
+  {
+    group: 'Icons',
+    items: [
+      {
+        name: 'KDE 1.1',
+        by: 'the KDE artists',
+        url: 'https://github.com/KDE/kde1-kdebase',
+        license: 'GPL v2',
+      },
+      {
+        name: 'CDE',
+        by: 'the User Interaction Design Group at Hewlett-Packard',
+        url: 'https://sourceforge.net/p/cdesktopenv/code/',
+        license: 'LGPL v2+',
+      },
+      {
+        name: 'Tango',
+        by: 'the Tango Desktop Project',
+        url: 'http://tango.freedesktop.org',
+        license: 'Public domain',
+      },
+      {
+        name: 'Retro icons',
+        by: 'Magnific',
+        url: 'https://www.flaticon.com/free-icons/retro',
+        license: 'Flaticon',
+      },
+      {
+        name: 'Postcard icons',
+        by: 'Magnific',
+        url: 'https://www.flaticon.com/free-icons/postcard',
+        license: 'Flaticon',
+      },
+      {
+        name: 'Computer icons',
+        by: 'Magnific',
+        url: 'https://www.flaticon.com/free-icons/computer',
+        license: 'Flaticon',
+      },
+      {
+        name: 'Gear icons',
+        by: 'Vectors Tank',
+        url: 'https://www.flaticon.com/free-icons/gear',
+        license: 'Flaticon',
+      },
+    ],
+  },
+  {
+    group: 'Photo',
+    items: [
+      {
+        name: 'Grass',
+        by: 'Bruno Aguirre',
+        url: 'https://unsplash.com/photos/green-field-YRfaG3JVwkU',
+      },
+    ],
+  },
+  {
+    group: 'Built with',
+    items: [
+      { name: 'React', url: 'https://react.dev' },
+      { name: 'TanStack Start', url: 'https://tanstack.com/start' },
+      { name: 'Tailwind CSS', url: 'https://tailwindcss.com' },
+      { name: 'Vercel', url: 'https://vercel.com' },
+      { name: 'Claude Code', url: 'https://claude.com/claude-code' },
+    ],
+  },
+]
 
 export type Profile = {
   label: string
