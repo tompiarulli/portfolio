@@ -2,7 +2,7 @@
 export type WindowId = 'about' | 'socials' | 'settings' | 'system'
 
 /** Windows with a taskbar button even when closed, so they can always be
- *  reopened. On phones they move into the logo menu instead. */
+ *  reopened, and a tab in the phone menu. */
 export const PINNED: { id: WindowId; label: string }[] = [
   { id: 'about', label: 'About' },
   { id: 'socials', label: 'Socials' },

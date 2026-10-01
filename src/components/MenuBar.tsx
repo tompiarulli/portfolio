@@ -1,8 +1,11 @@
 import { Link } from '@tanstack/react-router'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
+import { Clock } from './Clock'
 import { useWindows } from './WindowManager'
-import { PINNED, pathFor } from '#/lib/windows'
+
+const BAR =
+  'fixed top-0 z-50 flex h-[32px] items-center border-b border-(--ink) bg-(--surface) text-(length:--menu-size)'
 
 const ITEM =
   'block w-full px-4 py-[3px] text-left whitespace-nowrap outline-none hover:bg-(--accent) hover:text-(--on-accent) focus-visible:bg-(--accent) focus-visible:text-(--on-accent)'
@@ -17,9 +20,15 @@ const ACTIONS: { label: string; onSelect: () => void }[][] = [
   ],
 ]
 
-/** The theme logo menu at the left of the taskbar, opening upwards like
- *  the Start menu. */
-export function SystemMenu() {
+/** The theme logo menu, opened like the system menu on a 90s desktop. Phones
+ *  open it `up` from the bottom bar, with their own trigger style. */
+export function SystemMenu({
+  up = false,
+  className = 'px-3',
+}: {
+  up?: boolean
+  className?: string
+}) {
   const { raise } = useWindows()
   const [open, setOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
@@ -45,18 +54,16 @@ export function SystemMenu() {
     }
     if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return
     e.preventDefault()
-    // Only the items showing; the window links hide on wider screens.
-    const visible = () =>
-      [
-        ...(root.current?.querySelectorAll<HTMLElement>('[role=menuitem]') ??
-          []),
-      ].filter((el) => el.offsetParent)
+    const items = [
+      ...(root.current?.querySelectorAll<HTMLElement>('[role=menuitem]') ?? []),
+    ]
     if (!open) {
       setOpen(true)
-      requestAnimationFrame(() => visible()[0]?.focus())
+      requestAnimationFrame(() =>
+        root.current?.querySelector<HTMLElement>('[role=menuitem]')?.focus(),
+      )
       return
     }
-    const items = visible()
     const i = items.indexOf(document.activeElement as HTMLElement)
     const step = e.key === 'ArrowDown' ? 1 : -1
     items[(i + step + items.length) % items.length]?.focus()
@@ -71,7 +78,7 @@ export function SystemMenu() {
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className={`flex h-[26px] items-center border border-(--ink) px-2.5 outline-offset-2 focus-visible:outline-2 focus-visible:outline-(--ink) ${open ? 'bg-(--accent) text-(--on-accent)' : 'hover:bg-(--tertiary) hover:text-(--on-tertiary)'}`}
+        className={`flex h-full items-center ${className} ${open ? 'bg-(--accent) text-(--on-accent)' : ''}`}
       >
         <span aria-hidden className="logo" />
       </button>
@@ -79,25 +86,8 @@ export function SystemMenu() {
         <div
           role="menu"
           aria-label="System"
-          className="absolute bottom-full left-0 mb-[5px] min-w-44 border border-(--ink) bg-(--surface) py-1 font-title tracking-tight shadow-(--window-shadow)"
+          className={`absolute left-0 min-w-44 border border-(--ink) bg-(--surface) py-1 font-title tracking-tight shadow-(--window-shadow) ${up ? 'bottom-full' : 'top-full'}`}
         >
-          {/* Phones have no taskbar buttons, so the windows open from here. */}
-          {PINNED.map((w) => (
-            <Link
-              key={w.id}
-              to={pathFor(w.id)}
-              preload="intent"
-              role="menuitem"
-              onClick={() => {
-                raise(w.id)
-                close()
-              }}
-              className={`${ITEM} sm:hidden`}
-            >
-              {w.label}
-            </Link>
-          ))}
-          <hr className="my-1 border-t border-(--ink) sm:hidden" />
           <Link
             to="/system"
             preload="intent"
@@ -132,5 +122,20 @@ export function SystemMenu() {
         </div>
       )}
     </div>
+  )
+}
+
+export function MenuBar() {
+  return (
+    <>
+      <nav
+        className={`${BAR} left-0 border-r has-aria-expanded:z-70 max-sm:hidden`}
+      >
+        <SystemMenu />
+      </nav>
+      <header className={`${BAR} right-0 gap-3 border-l px-3 max-sm:hidden`}>
+        <Clock />
+      </header>
+    </>
   )
 }

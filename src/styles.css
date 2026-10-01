@@ -121,6 +121,7 @@
   /* Case and weight of the clock and window titles. */
   --label-case: uppercase;
   --label-weight: 600;
+  --menu-size: 12px;
   /* Base text size. */
   --text-size: 12px;
   --title-case: uppercase;
@@ -144,7 +145,7 @@
   --desk: #020806;
   --warp: #22b455;
   --glint: #d8ffe0;
-  /* Mark on the taskbar's menu button, like the Start logo: the white rabbit's head
+  /* Mark in the top-left menu, like an old OS's system logo: the white rabbit's head
      in slim sunglasses, on a 16x16 grid.
      Bright all over with a dimmer edge on the right.
      --logo-size is its grid, so the pixels stay crisp. */

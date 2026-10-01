@@ -2,6 +2,14 @@ import { useCallback, useRef } from 'react'
 import type { PointerEvent, ReactNode } from 'react'
 import { useWindowId, useWindows } from './WindowManager'
 
+/** Tailwind's sm breakpoint, below which windows stop floating. */
+const PHONE = '(width < 40rem)'
+
+/** On phones only the focused window shows, across the screen at its own
+ *  height. Overrides the inline position and size. */
+const PHONE_LAYOUT =
+  'max-sm:inset-x-2 max-sm:top-2 max-sm:h-auto! max-sm:max-h-[calc(100%-1rem)] max-sm:w-auto! max-sm:max-w-none max-sm:transform-none!'
+
 type Props = {
   title: string
   children: ReactNode
@@ -35,7 +43,8 @@ export function Window({
   const close = () => closeWindow(id)
 
   const onPointerDown = useCallback((e: PointerEvent<HTMLDivElement>) => {
-    if (e.button !== 0 || !ref.current) return
+    // Phones show one window filling the screen, so nothing to drag.
+    if (e.button !== 0 || !ref.current || matchMedia(PHONE).matches) return
     const r = ref.current.getBoundingClientRect()
     drag.current = { dx: e.clientX - r.left, dy: e.clientY - r.top }
     e.currentTarget.setPointerCapture(e.pointerId)
@@ -48,7 +57,7 @@ export function Window({
     const el = ref.current
     const { left = 0, top = 0 } = el.offsetParent?.getBoundingClientRect() ?? {}
     // Keep the whole window inside the browser viewport on every side; it
-    // may cover the taskbar.
+    // may cover the menu bar and taskbar.
     const vx = Math.max(
       0,
       Math.min(innerWidth - el.offsetWidth, e.clientX - d.dx),
@@ -81,7 +90,7 @@ export function Window({
         height,
         zIndex: stack.indexOf(id) + 1,
       }}
-      className={`pointer-events-auto absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col border border-(--ink) bg-(--surface) shadow-(--window-shadow) ${className}`}
+      className={`pointer-events-auto absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col border border-(--ink) bg-(--surface) shadow-(--window-shadow) ${PHONE_LAYOUT} ${active ? '' : 'max-sm:hidden'} ${className}`}
     >
       <div
         onPointerDown={onPointerDown}
