@@ -20,10 +20,10 @@ export function idForPath(pathname: string): WindowId | null {
   )
 }
 
-/** Windows open on first paint for a URL, back to front. About, Contact and
- *  Settings are always open; the URL's window comes to the front. */
+/** Windows open on first paint for a URL, back to front. About and Contact
+ *  are always open; the URL's window comes to the front. */
 export function initialStack(pathname: string): WindowId[] {
   const id = idForPath(pathname) ?? 'about'
-  const base: WindowId[] = ['settings', 'contact', 'about']
+  const base: WindowId[] = ['contact', 'about']
   return [...base.filter((w) => w !== id), id]
 }
