@@ -8,10 +8,10 @@ import { PINNED, pathFor } from '#/lib/windows'
 const SYSTEM = { id: 'system', label: 'System Info' } as const
 
 /** The bar along the bottom, like the Windows taskbar: the logo menu, a
- *  button per window (the focused one filled in, click it to minimize; the
- *  rest faded) and the clock. Phones use MobileNav. */
+ *  button per window (the focused one filled in, the rest faded) and the
+ *  clock. Phones use MobileNav. */
 export function Taskbar() {
-  const { stack, raise, minimized, minimize } = useWindows()
+  const { stack, raise } = useWindows()
   const buttons = stack.includes('system') ? [...PINNED, SYSTEM] : PINNED
   return (
     <nav
@@ -20,24 +20,14 @@ export function Taskbar() {
     >
       <SystemMenu className="h-[26px] border border-(--ink) px-2.5 hover:bg-(--tertiary) hover:text-(--on-tertiary)" />
       {buttons.map((w) => {
-        const focused = stack.at(-1) === w.id && !minimized.includes(w.id)
+        const focused = stack.at(-1) === w.id
         return (
           <Link
             key={w.id}
             to={pathFor(w.id)}
             preload="intent"
-            data-taskbar={w.id}
-            onClick={(e) => {
-              // Clicking the focused window's button minimizes it.
-              if (focused) {
-                e.preventDefault()
-                minimize(w.id)
-                return
-              }
-              // Also raise here: the URL may already point at a closed or
-              // minimized window.
-              raise(w.id)
-            }}
+            // Also raise here: the URL may already point at a closed window.
+            onClick={() => raise(w.id)}
             aria-current={focused ? 'page' : undefined}
             className={`flex h-[26px] min-w-0 flex-1 basis-0 items-center border border-(--ink) px-2.5 outline-offset-2 focus-visible:outline-2 focus-visible:outline-(--ink) sm:max-w-[160px] ${
               focused

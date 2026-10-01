@@ -1,46 +1,6 @@
-import { useCallback, useLayoutEffect, useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import type { PointerEvent, ReactNode } from 'react'
 import { useWindowId, useWindows } from './WindowManager'
-
-/**
- * Shrinks a window into its taskbar button (or grows it back out when
- * `restore`). Uses the individual translate/scale properties, which apply on
- * top of the window's position transform, so dragging and minimizing never
- * fight. No animation when the taskbar is hidden, as on phones.
- */
-function flyToTaskbar(el: HTMLElement, id: string, restore: boolean) {
-  const button = document.querySelector<HTMLElement>(`[data-taskbar="${id}"]`)
-  if (
-    !button?.offsetParent ||
-    matchMedia('(prefers-reduced-motion: reduce)').matches
-  )
-    return null
-  const r = el.getBoundingClientRect()
-  const b = button.getBoundingClientRect()
-  const o = el.offsetParent?.getBoundingClientRect() ?? { left: 0, top: 0 }
-  const sx = b.width / r.width
-  const sy = b.height / r.height
-  // With the origin at the layout box's corner, a point lands at
-  // origin + translate + scale * (position), so solve for the translate.
-  const tx = b.left - o.left - sx * (r.left - o.left)
-  const ty = b.top - o.top - sy * (r.top - o.top)
-  return el.animate(
-    [
-      { transformOrigin: '0 0', translate: '0 0', scale: '1', opacity: 1 },
-      {
-        transformOrigin: '0 0',
-        translate: `${tx}px ${ty}px`,
-        scale: `${sx} ${sy}`,
-        opacity: 0.3,
-      },
-    ],
-    {
-      duration: 200,
-      easing: restore ? 'ease-out' : 'ease-in',
-      direction: restore ? 'reverse' : 'normal',
-    },
-  )
-}
 
 /** Tailwind's sm breakpoint, below which windows stop floating. */
 const PHONE = '(width < 40rem)'
@@ -78,29 +38,9 @@ export function Window({
   const ref = useRef<HTMLElement>(null)
   const drag = useRef<{ dx: number; dy: number } | null>(null)
   const id = useWindowId()
-  const { stack, focus, close: closeWindow, minimized } = useWindows()
+  const { stack, focus, close: closeWindow } = useWindows()
   const active = stack.at(-1) === id
-  const hidden = minimized.includes(id)
   const close = () => closeWindow(id)
-
-  // Animate into the taskbar and hide, or show and animate back out. Hidden
-  // windows stay mounted, keeping their place and state.
-  const wasHidden = useRef(hidden)
-  useLayoutEffect(() => {
-    const el = ref.current
-    if (!el || wasHidden.current === hidden) return
-    wasHidden.current = hidden
-    for (const a of el.getAnimations()) a.cancel()
-    if (hidden) {
-      const anim = flyToTaskbar(el, id, false)
-      const hide = () => (el.style.visibility = 'hidden')
-      if (!anim) return void hide()
-      anim.finished.then(hide, () => {})
-    } else {
-      el.style.visibility = ''
-      flyToTaskbar(el, id, true)
-    }
-  }, [hidden, id])
 
   const onPointerDown = useCallback((e: PointerEvent<HTMLDivElement>) => {
     // Phones show one window filling the screen, so nothing to drag.

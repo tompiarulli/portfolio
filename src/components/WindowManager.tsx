@@ -20,11 +20,6 @@ type Windows = {
   /** Raise a window and point the URL at it. */
   focus: (id: WindowId) => void
   close: (id: WindowId) => void
-  /** Open windows hidden in the taskbar. They stay mounted, keeping their
-   *  place. */
-  minimized: WindowId[]
-  /** Hide a window into its taskbar button; the next window takes focus. */
-  minimize: (id: WindowId) => void
 }
 
 const WindowsContext = createContext<Windows | null>(null)
@@ -51,12 +46,8 @@ export function WindowManager({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const navigate = useNavigate()
   const [stack, setStack] = useState(() => initialStack(pathname))
-  const [minimized, setMinimized] = useState<WindowId[]>([])
-  const unminimize = useCallback((id: WindowId) => {
-    setMinimized((m) => (m.includes(id) ? m.filter((w) => w !== id) : m))
-  }, [])
-  // Set when closing or minimizing the last window sends the URL to /, so
-  // About isn't reopened.
+  // Set when closing the last window sends the URL to /, so About isn't
+  // reopened.
   const skipSync = useRef(false)
 
   useEffect(() => {
@@ -65,36 +56,28 @@ export function WindowManager({ children }: { children: ReactNode }) {
       return
     }
     const id = idForPath(pathname)
-    if (!id) return
-    setStack((s) => toFront(s, id))
-    unminimize(id)
-  }, [pathname, unminimize])
+    if (id) setStack((s) => toFront(s, id))
+  }, [pathname])
 
-  const raise = useCallback(
-    (id: WindowId) => {
-      setStack((s) => toFront(s, id))
-      unminimize(id)
-    },
-    [unminimize],
-  )
+  const raise = useCallback((id: WindowId) => {
+    setStack((s) => toFront(s, id))
+  }, [])
 
   const focus = useCallback(
     (id: WindowId) => {
       setStack((s) => toFront(s, id))
-      unminimize(id)
       if (idForPath(pathname) !== id)
         navigate({ href: pathFor(id), replace: true })
     },
-    [pathname, navigate, unminimize],
+    [pathname, navigate],
   )
 
   const close = useCallback(
     (id: WindowId) => {
       const next = stack.filter((w) => w !== id)
       setStack(next)
-      unminimize(id)
       if (idForPath(pathname) !== id) return
-      const top = next.filter((w) => !minimized.includes(w)).at(-1)
+      const top = next.at(-1)
       if (top) {
         navigate({ href: pathFor(top), replace: true })
       } else if (id !== 'about') {
@@ -102,29 +85,12 @@ export function WindowManager({ children }: { children: ReactNode }) {
         navigate({ href: '/', replace: true })
       }
     },
-    [stack, minimized, pathname, navigate, unminimize],
-  )
-
-  const minimize = useCallback(
-    (id: WindowId) => {
-      const hidden = [...minimized.filter((w) => w !== id), id]
-      setMinimized(hidden)
-      // Send it to the back so the next visible window becomes the top.
-      const next = [id, ...stack.filter((w) => w !== id)]
-      setStack(next)
-      if (idForPath(pathname) !== id) return
-      const top = next.filter((w) => !hidden.includes(w)).at(-1)
-      const href = top ? pathFor(top) : '/'
-      if (href === pathname) return
-      skipSync.current = !top
-      navigate({ href, replace: true })
-    },
-    [stack, minimized, pathname, navigate],
+    [stack, pathname, navigate],
   )
 
   const value = useMemo(
-    () => ({ stack, raise, focus, close, minimized, minimize }),
-    [stack, raise, focus, close, minimized, minimize],
+    () => ({ stack, raise, focus, close }),
+    [stack, raise, focus, close],
   )
 
   return (

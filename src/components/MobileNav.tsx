@@ -9,10 +9,8 @@ const TAB =
 /** The phone's bottom bar in place of the taskbar: the logo menu, then a
  *  tab per window. */
 export function MobileNav() {
-  const { stack, raise, minimized } = useWindows()
-  // A window minimized on a wider screen isn't showing.
-  const top = stack.at(-1)
-  const focused = top && !minimized.includes(top) ? top : null
+  const { stack, raise } = useWindows()
+  const focused = stack.at(-1)
   return (
     <nav
       aria-label="Windows"
