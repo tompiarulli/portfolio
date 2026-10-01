@@ -12,7 +12,7 @@ export function Settings() {
   }
 
   return (
-    <Window title="Settings" x={50} y={10} width={420}>
+    <Window title="Settings" right x={-104} y={156} width={420}>
       <fieldset className="border border-(--ink) p-3">
         <legend className="px-1 font-title">Theme</legend>
         <div className="grid grid-cols-3 gap-3">
