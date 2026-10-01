@@ -78,8 +78,7 @@ function digits(seed: number) {
   const next = seeded(seed)
   return Array.from({ length: 7 }, () =>
     Array.from({ length: 24 }, () => Math.floor(next() * 10)).join(''),
-  ).join('
-')
+  ).join('\n')
 }
 
 const PREVIEW_ROWS = 7
