@@ -22,7 +22,7 @@ export const THEMES = [
   { id: 'steamboat', label: 'Steamboat', backdrop: 'film', date: '1908-08-17' },
   {
     id: 'traveler',
-    label: 'Time Traveler',
+    label: 'OUTATIME',
     backdrop: 'streaks',
     date: '1985-10-26',
   },

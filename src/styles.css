@@ -155,6 +155,11 @@
   --desk: #020806;
   --warp: #22b455;
   --glint: #d8ffe0;
+  /* Colours of the streaks backdrop, picked at random per streak. */
+  --streak-1: var(--warp);
+  --streak-2: var(--warp);
+  --streak-3: var(--warp);
+  --streak-4: var(--warp);
   /* The terminal's screen: a dark grey, so it reads as its own thing
      against the desktop in every theme. */
   --terminal: #1c1f1e;
@@ -194,8 +199,7 @@
 /* The light docks take the inverted copies. */
 [data-theme='believe'],
 [data-theme='steamboat'],
-[data-theme='outpost'],
-[data-theme='traveler'] {
+[data-theme='outpost'] {
   --icon-about-mask: url('/icons/haiku/App_StyledEdit-light.png');
   --icon-contact-mask: url('/icons/haiku/App_Mail-light.png');
   --icon-terminal-mask: url('/icons/haiku/App_Terminal-light.png');
@@ -397,40 +401,47 @@
   color-scheme: light;
 }
 
-/* Time Traveler: brushed stainless steel, black title bars lit like a
-   dashboard display, and a night where fire trails streak past at 88 miles
-   per hour. */
+/* OUTATIME: deep violet panes in ice-white ink, magenta title bars, and
+   the four streak colours as the accents, over a night where streaks of
+   light race past. */
 [data-theme='traveler'] {
-  --bg: #c3c7cb;
-  --surface: #c3c7cb;
-  --surface-light: #dde0e3;
-  --surface-dark: #7d838a;
-  --tertiary: #7d838a;
-  /* The destination row's red. */
-  --accent: #e0301e;
-  --accent-shadow: #7a150c;
-  --button: #c3c7cb;
-  --button-shadow: #6b7178;
-  --ink: #101214;
-  --highlight: #f2f4f5;
-  --well: #e9ebed;
-  --on-accent: #fff4ec;
-  --on-tertiary: #101214;
-  /* The focused window's title bar is a glowing dashboard display. */
-  --title: #101214;
-  --on-title: #ff4a2a;
-  --indicator: #e0301e;
-  --backdrop-opacity: 1;
-  /* Fire trails burning orange with white-hot cores across a violet-black
-     night. */
+  --bg: #16122a;
+  --surface: #16122a;
+  --surface-light: #2c2550;
+  --surface-dark: #07060d;
+  /* Dock hover in the streaks' violet. */
+  --tertiary: #a24bff;
+  --on-tertiary: #ffffff;
+  /* Selections and the pressed dock in the streaks' magenta. */
+  --accent: #ff3d9a;
+  --accent-shadow: #8a1450;
+  --on-accent: #ffffff;
+  --button: #16122a;
+  --button-shadow: #07060d;
+  --ink: #ece8ff;
+  --highlight: #2c2550;
+  --well: #0d0b1a;
+  /* The focused window's title bar lit solid in the streaks' magenta. */
+  --title: #ff3d9a;
+  --on-title: #ffffff;
+  /* Open-window marks in the streaks' blue. */
+  --indicator: #2f9bff;
+  /* Softened, so the dense stripes don't run at full contrast. */
+  --backdrop-opacity: 0.7;
+  /* Light streaks in candy pink, electric blue, violet and magenta,
+     racing across a violet-black night. */
   --desk: #07060d;
-  --warp: #ff6a1a;
-  --glint: #ffe7a0;
+  --warp: #ff3d9a;
+  --glint: #ffd6ee;
+  --streak-1: #ff8fd0;
+  --streak-2: #2f9bff;
+  --streak-3: #a24bff;
+  --streak-4: #ff3d9a;
   /* The menu mark: the flux capacitor. Drawn in
      scripts/traveler_logo.py. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.7' d='M2 2h2v1H2zM12 2h2v1H12zM2 3h3v1H2zM11 3h3v1H11zM3 4h1v1H3zM5 4h1v1H5zM10 4h1v1H10zM12 4h1v1H12zM4 5h3v1H4zM9 5h3v1H9zM5 6h1v1H5zM7 6h2v1H7zM10 6h1v1H10zM6 7h1v1H6zM9 7h1v1H9zM7 9h2v1H7zM8 10h1v1H8zM7 11h2v1H7zM8 12h1v1H8zM7 13h2v1H7zM7 14h2v1H7z'/%3E%3Cpath d='M0 0h16v1H0zM0 1h1v1H0zM15 1h1v1H15zM0 2h1v1H0zM15 2h1v1H15zM0 3h1v1H0zM15 3h1v1H15zM0 4h1v1H0zM4 4h1v1H4zM11 4h1v1H11zM15 4h1v1H15zM0 5h1v1H0zM15 5h1v1H15zM0 6h1v1H0zM6 6h1v1H6zM9 6h1v1H9zM15 6h1v1H15zM0 7h1v1H0zM7 7h2v1H7zM15 7h1v1H15zM0 8h1v1H0zM7 8h2v1H7zM15 8h1v1H15zM0 9h1v1H0zM15 9h1v1H15zM0 10h1v1H0zM7 10h1v1H7zM15 10h1v1H15zM0 11h1v1H0zM15 11h1v1H15zM0 12h1v1H0zM7 12h1v1H7zM15 12h1v1H15zM0 13h1v1H0zM15 13h1v1H15zM0 14h1v1H0zM15 14h1v1H15zM0 15h16v1H0z'/%3E%3C/svg%3E");
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 * {

@@ -9,6 +9,7 @@ const Drift = lazy(() => import('./Drift'))
 const Dither = lazy(() => import('./bits/Dither'))
 const Silk = lazy(() => import('./bits/Silk'))
 const Film = lazy(() => import('./Film'))
+const Streaks = lazy(() => import('./Streaks'))
 
 /** Code rain knobs, for themes with `backdrop: 'rain'`. */
 const RAIN = {
@@ -26,19 +27,21 @@ const RAIN = {
   dropsPerColumn: 2,
 } as const
 
-/** Fire trails at 88 miles per hour, for `backdrop: 'streaks'`: the code
- *  rain turned sideways, fast, sparse and long. */
+/** Light trails racing past in perspective, for `backdrop: 'streaks'`:
+ *  straight lines in the --streak-1 to --streak-4 colours over --desk. */
 const STREAKS = {
-  characters: '=-=~',
-  direction: 'right',
-  cellWidth: 10,
-  cellHeight: 18,
-  minSpeed: 40,
-  maxSpeed: 90,
-  minTrail: 12,
-  maxTrail: 40,
-  dropsPerColumn: 1,
-  wait: 4,
+  /** Streaks on screen at once, per 100 rows of pixels. */
+  density: 80,
+  /** Speed range of the nearest streaks, in screen widths per second. */
+  minSpeed: 0.4,
+  maxSpeed: 0.9,
+  /** Tail length range of the nearest streaks, in screen widths. */
+  minLength: 1,
+  maxLength: 2.5,
+  /** Thickness of the nearest streaks, in drawn pixels. */
+  thickness: 2,
+  /** Drawn pixel size in CSS pixels. */
+  pixelSize: 1,
 } as const
 
 /** A night sky of twinkling glyphs, for `backdrop: 'stars'`. */
@@ -131,6 +134,7 @@ type State = {
   desk: string
   warp: string
   glint: string
+  streaks: string[]
   still: boolean
 }
 
@@ -147,6 +151,9 @@ function useBackdrop() {
         desk: s.getPropertyValue('--desk').trim(),
         warp: s.getPropertyValue('--warp').trim(),
         glint: s.getPropertyValue('--glint').trim(),
+        streaks: [1, 2, 3, 4].map((n) =>
+          s.getPropertyValue(`--streak-${n}`).trim(),
+        ),
         still: matchMedia('(prefers-reduced-motion: reduce)').matches,
       })
     }
@@ -177,6 +184,8 @@ export function Backdrop() {
             paletteHigh={b.warp}
             disableAnimation={b.still}
           />
+        ) : b.backdrop === 'streaks' ? (
+          <Streaks {...STREAKS} {...shared} colors={b.streaks} />
         ) : b.backdrop === 'silk' ? (
           <Silk
             {...SILK}
@@ -209,12 +218,7 @@ export function Backdrop() {
             glint={b.glint}
           />
         ) : (
-          <CodeRain
-            {...(b.backdrop === 'streaks' ? STREAKS : RAIN)}
-            {...shared}
-            trail={b.warp}
-            head={b.glint}
-          />
+          <CodeRain {...RAIN} {...shared} trail={b.warp} head={b.glint} />
         )}
       </Suspense>
     </div>

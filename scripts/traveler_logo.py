@@ -1,4 +1,4 @@
-"""Builds Time Traveler's menu mark: a flux capacitor.
+"""Builds OUTATIME's menu mark: a flux capacitor.
 
 The mark is drawn in code on a 16x16 character grid, one character per pixel,
 in up to three levels: '#' full, 'b' 0.7 and 'a' 0.4 opacity, and '.' clear

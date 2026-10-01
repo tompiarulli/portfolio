@@ -95,16 +95,30 @@ function scatter(chars: string, share: number, seed: number) {
   ).join('\n')
 }
 
-/** A still of the streaks: a run of trail glyphs in some rows. */
+/** A still of the streaks, in percent of the tile: far ones short, thin
+ *  and dim, near ones long and thicker, spread evenly from top to
+ *  bottom, each in one of the four --streak colours. */
 function streaks(seed: number) {
   const next = seeded(seed)
-  return Array.from({ length: PREVIEW_ROWS }, () => {
-    if (next() < 0.4) return ''
-    const length = 5 + Math.floor(next() * 12)
-    const start = Math.floor(next() * (PREVIEW_COLUMNS - length))
-    return ' '.repeat(start) + '=-=~'.repeat(length).slice(0, length)
-  }).join('\n')
+  // Rounded, so the server and the browser print the same styles.
+  const at = (n: number) => Math.round(n * 10) / 10
+  return Array.from({ length: 90 }, () => next() ** 1.6)
+    .sort((a, b) => a - b)
+    .map((depth) => {
+      const scale = 0.1 + 0.9 * depth
+      const length = (100 + next() * 150) * scale
+      return {
+        top: at(next() * 100),
+        left: at(next() * (100 + length) - length),
+        length: at(length),
+        opacity: at(0.3 + 0.7 * depth),
+        thickness: Math.max(1, Math.round(2 * depth)),
+        color: `var(--streak-${1 + Math.floor(next() * 4)})`,
+      }
+    })
 }
+
+const STREAKS_PREVIEW = streaks(88)
 
 /** A stand-in for the dither: shade glyphs filling in towards the bottom. */
 function dither() {
@@ -183,10 +197,12 @@ function SilkPreview() {
   return <canvas ref={ref} className="absolute inset-0 size-full" />
 }
 
-const PREVIEWS: Record<Exclude<Backdrop, 'plain' | 'silk' | 'film'>, string> = {
+const PREVIEWS: Record<
+  Exclude<Backdrop, 'plain' | 'silk' | 'film' | 'streaks'>,
+  string
+> = {
   rain: digits(1999),
   stars: scatter('..··+*', 0.08, 7),
-  streaks: streaks(88),
   snow: scatter('*·.+*', 0.2, 31),
   dust: scatter('·.·', 0.05, 11),
   dither: dither(),
@@ -289,6 +305,21 @@ function ThemePreview({
       ) : backdrop === 'film' ? (
         // A still of the film: the frame darkening to the edges.
         <span className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--warp)_30%,var(--desk)_110%)]" />
+      ) : backdrop === 'streaks' ? (
+        STREAKS_PREVIEW.map((l, i) => (
+          <span
+            key={i}
+            className="absolute mix-blend-plus-lighter"
+            style={{
+              background: `linear-gradient(to right, transparent, ${l.color})`,
+              top: `${l.top}%`,
+              left: `${l.left}%`,
+              width: `${l.length}%`,
+              height: l.thickness,
+              opacity: l.opacity,
+            }}
+          />
+        ))
       ) : backdrop === 'rain' ? (
         <span className="absolute inset-0 flex items-center justify-center font-mono text-[11px] leading-[11px] tracking-[1px] [text-shadow:0_0_6px_var(--warp)] whitespace-pre text-(--warp)">
           {PREVIEWS.rain}

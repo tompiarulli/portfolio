@@ -22,8 +22,6 @@ type Props = {
   dropsPerColumn?: number
   /** Screens a drop may wait off screen before entering; more is sparser. */
   wait?: number
-  /** Which way the drops fall; 'right' runs them along rows instead. */
-  direction?: 'down' | 'right'
   /** Share of glyphs that change each second. */
   mutation?: number
   /** Draw one frame and stop, for reduced motion. */
@@ -38,7 +36,6 @@ const random = (min: number, max: number) => min + Math.random() * (max - min)
  * Falling code rain. Every column has its own drop falling at its own
  * speed; glyphs sit on a fixed grid and light up as a drop passes, fading
  * along its trail. Glyphs also change at random, so the code keeps shifting.
- * Turned sideways, the drops become streaks racing along the rows.
  */
 export default function CodeRain({
   background,
@@ -53,7 +50,6 @@ export default function CodeRain({
   maxTrail = 50,
   dropsPerColumn = 2,
   wait = 1,
-  direction = 'down',
   mutation = 0.04,
   still = false,
 }: Props) {
@@ -67,7 +63,6 @@ export default function CodeRain({
 
     const glyphs = Array.from(characters)
     const pick = () => Math.floor(Math.random() * glyphs.length)
-    const across = direction === 'right'
     let columns = 0
     let rows = 0
     // Lanes the drops run in, and how many cells long each lane is.
@@ -93,8 +88,8 @@ export default function CodeRain({
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       columns = Math.ceil(width / cellWidth)
       rows = Math.ceil(height / cellHeight)
-      lanes = across ? rows : columns
-      length = across ? columns : rows
+      lanes = columns
+      length = rows
       cells = Uint16Array.from({ length: columns * rows }, pick)
       drops = Array.from({ length: lanes * dropsPerColumn }, () => spawn(true))
       draw()
@@ -112,14 +107,13 @@ export default function CodeRain({
         const lane = i % lanes
         const top = Math.floor(d.y)
         for (let p = Math.max(0, top - d.trail); p <= top && p < length; p++) {
-          const [c, r] = across ? [p, lane] : [lane, p]
           // Square-root falloff keeps most of the trail bright, fading late.
           ctx.globalAlpha = Math.sqrt(1 - (top - p) / d.trail)
           ctx.fillStyle = p === top ? head : trail
           ctx.fillText(
-            glyphs[cells[r * columns + c]],
-            c * cellWidth + cellWidth / 2,
-            r * cellHeight + 1,
+            glyphs[cells[p * columns + lane]],
+            lane * cellWidth + cellWidth / 2,
+            p * cellHeight + 1,
           )
         }
       }
@@ -165,7 +159,6 @@ export default function CodeRain({
     maxTrail,
     dropsPerColumn,
     wait,
-    direction,
     mutation,
     still,
   ])
