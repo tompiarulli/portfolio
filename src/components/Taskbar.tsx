@@ -9,7 +9,7 @@ const SYSTEM = { id: 'system', label: 'System Info' } as const
 
 /** The bar along the bottom, like the Windows taskbar: the logo menu, a
  *  button per window (the focused one filled in, click it to minimize; the
- *  rest with a faint border) and the clock. Phones use MobileNav. */
+ *  rest faded) and the clock. Phones use MobileNav. */
 export function Taskbar() {
   const { stack, raise, minimized, minimize } = useWindows()
   const buttons = stack.includes('system') ? [...PINNED, SYSTEM] : PINNED
@@ -39,10 +39,10 @@ export function Taskbar() {
               raise(w.id)
             }}
             aria-current={focused ? 'page' : undefined}
-            className={`flex h-[26px] min-w-0 flex-1 basis-0 items-center border px-2.5 outline-offset-2 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-(--ink) sm:max-w-[160px] ${
+            className={`flex h-[26px] min-w-0 flex-1 basis-0 items-center border border-(--ink) px-2.5 outline-offset-2 transition-[color,background-color,opacity] duration-150 focus-visible:outline-2 focus-visible:outline-(--ink) sm:max-w-[160px] ${
               focused
-                ? 'border-(--ink) bg-(--accent) text-(--on-accent)'
-                : 'border-(--ink)/35 hover:border-(--ink) hover:bg-(--tertiary) hover:text-(--on-tertiary)'
+                ? 'bg-(--accent) text-(--on-accent)'
+                : 'opacity-55 hover:bg-(--tertiary) hover:text-(--on-tertiary) hover:opacity-100'
             }`}
           >
             <span className="truncate font-title tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">
