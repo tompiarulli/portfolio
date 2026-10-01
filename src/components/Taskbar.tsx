@@ -1,21 +1,24 @@
 import { Link } from '@tanstack/react-router'
+import { Clock } from './Clock'
+import { SystemMenu } from './SystemMenu'
 import { useWindows } from './WindowManager'
 import { PINNED, pathFor } from '#/lib/windows'
 
 /** System lives in the logo menu and only gets a button while open. */
 const SYSTEM = { id: 'system', label: 'System' } as const
 
-/** A button per window along the bottom, like the Windows taskbar: a light
- *  on open windows, the focused one filled in (click it to minimize).
- *  Phones use MobileNav. */
+/** The bar along the bottom, like the Windows taskbar: the logo menu, a
+ *  button per window (a light on open ones, the focused one filled in;
+ *  click it to minimize) and the clock. Phones use MobileNav. */
 export function Taskbar() {
   const { stack, raise, minimized, minimize } = useWindows()
   const buttons = stack.includes('system') ? [...PINNED, SYSTEM] : PINNED
   return (
     <nav
       aria-label="Windows"
-      className="fixed inset-x-0 bottom-0 z-50 flex h-[36px] max-sm:hidden items-center gap-1.5 border-t border-(--ink) bg-(--surface) px-1.5"
+      className="fixed inset-x-0 bottom-0 z-50 flex h-[36px] items-center gap-1.5 border-t border-(--ink) bg-(--surface) px-1.5 has-aria-expanded:z-70 max-sm:hidden"
     >
+      <SystemMenu className="h-[26px] border border-(--ink) px-2.5 hover:bg-(--tertiary) hover:text-(--on-tertiary)" />
       {buttons.map((w) => {
         const open = stack.includes(w.id)
         const focused = stack.at(-1) === w.id && !minimized.includes(w.id)
@@ -60,6 +63,9 @@ export function Taskbar() {
           </Link>
         )
       })}
+      <div className="ml-auto shrink-0 border-l border-(--ink) pr-1.5 pl-3">
+        <Clock />
+      </div>
     </nav>
   )
 }

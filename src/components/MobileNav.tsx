@@ -1,13 +1,13 @@
 import { Link } from '@tanstack/react-router'
-import { SystemMenu } from './MenuBar'
+import { SystemMenu } from './SystemMenu'
 import { useWindows } from './WindowManager'
 import { PINNED, pathFor } from '#/lib/windows'
 
 const TAB =
   'flex h-full items-center justify-center border-l border-(--ink) font-title tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]'
 
-/** The phone's bottom bar in place of the menu bar and taskbar: the logo
- *  menu, then a tab per window. */
+/** The phone's bottom bar in place of the taskbar: the logo menu, then a
+ *  tab per window. */
 export function MobileNav() {
   const { stack, raise, minimized } = useWindows()
   // A window minimized on a wider screen isn't showing.
@@ -18,7 +18,7 @@ export function MobileNav() {
       aria-label="Windows"
       className="fixed inset-x-0 bottom-0 z-50 grid h-[60px] grid-cols-[60px_1fr_1fr_1fr] border-t border-(--ink) bg-(--surface) has-aria-expanded:z-70 sm:hidden"
     >
-      <SystemMenu up className="w-full justify-center" />
+      <SystemMenu className="h-full w-full justify-center" />
       {PINNED.map((w) => (
         <Link
           key={w.id}

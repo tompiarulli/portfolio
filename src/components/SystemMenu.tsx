@@ -1,11 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import { Clock } from './Clock'
 import { useWindows } from './WindowManager'
-
-const BAR =
-  'fixed top-0 z-50 flex h-[32px] items-center border-b border-(--ink) bg-(--surface) text-(length:--menu-size)'
 
 const ITEM =
   'block w-full px-4 py-[3px] text-left whitespace-nowrap outline-none hover:bg-(--accent) hover:text-(--on-accent) focus-visible:bg-(--accent) focus-visible:text-(--on-accent)'
@@ -20,15 +16,9 @@ const ACTIONS: { label: string; onSelect: () => void }[][] = [
   ],
 ]
 
-/** The theme logo menu, opened like the system menu on a 90s desktop. Phones
- *  open it `up` from the bottom bar, with their own trigger style. */
-export function SystemMenu({
-  up = false,
-  className = 'px-3',
-}: {
-  up?: boolean
-  className?: string
-}) {
+/** The theme logo menu at the left of the taskbar, opening upwards like
+ *  the Start menu. The phone tab bar gives the button its own style. */
+export function SystemMenu({ className }: { className: string }) {
   const { raise } = useWindows()
   const [open, setOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
@@ -70,7 +60,11 @@ export function SystemMenu({
   }
 
   return (
-    <div ref={root} className="relative flex h-full" onKeyDown={onKeyDown}>
+    <div
+      ref={root}
+      className="relative flex h-full items-center"
+      onKeyDown={onKeyDown}
+    >
       <button
         ref={trigger}
         type="button"
@@ -78,7 +72,7 @@ export function SystemMenu({
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className={`flex h-full items-center ${className} ${open ? 'bg-(--accent) text-(--on-accent)' : ''}`}
+        className={`flex items-center outline-offset-2 focus-visible:outline-2 focus-visible:outline-(--ink) ${className} ${open ? 'bg-(--accent) text-(--on-accent)' : ''}`}
       >
         <span aria-hidden className="logo" />
       </button>
@@ -86,7 +80,7 @@ export function SystemMenu({
         <div
           role="menu"
           aria-label="System"
-          className={`absolute left-0 min-w-44 border border-(--ink) bg-(--surface) py-1 font-title tracking-tight shadow-(--window-shadow) ${up ? 'bottom-full' : 'top-full'}`}
+          className={`absolute bottom-full left-0 mb-[5px] min-w-44 border border-(--ink) bg-(--surface) py-1 font-title tracking-tight shadow-(--window-shadow)`}
         >
           <Link
             to="/system"
@@ -122,20 +116,5 @@ export function SystemMenu({
         </div>
       )}
     </div>
-  )
-}
-
-export function MenuBar() {
-  return (
-    <>
-      <nav
-        className={`${BAR} left-0 border-r has-aria-expanded:z-70 max-sm:hidden`}
-      >
-        <SystemMenu />
-      </nav>
-      <header className={`${BAR} right-0 gap-3 border-l px-3 max-sm:hidden`}>
-        <Clock />
-      </header>
-    </>
   )
 }
