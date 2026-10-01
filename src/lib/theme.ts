@@ -1,13 +1,5 @@
 export type Backdrop =
-  | 'rain'
-  | 'stars'
-  | 'streaks'
-  | 'snow'
-  | 'dust'
-  | 'dither'
-  | 'silk'
-  | 'film'
-  | 'plain'
+  'rain' | 'stars' | 'streaks' | 'snow' | 'dust' | 'orbits' | 'film' | 'plain'
 
 /** Themes set the colours (tokens in styles.css), the font, the menu mark,
  *  which background draws the desktop and the day the clock shows; the
@@ -15,7 +7,7 @@ export type Backdrop =
 export const THEMES = [
   // Each theme's clock shows a day that matters to what it nods to; the
   // default shows today.
-  { id: 'silk', label: 'Silk', backdrop: 'silk', date: undefined },
+  { id: 'orbital', label: 'Orbital', backdrop: 'orbits', date: undefined },
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
   { id: 'believe', label: 'Believe', backdrop: 'stars', date: '1993-09-10' },
   // The first fully hand-drawn animated film.
@@ -40,7 +32,7 @@ export const THEMES = [
   date?: string
 }[]
 export type Theme = (typeof THEMES)[number]['id']
-export const DEFAULT_THEME: Theme = 'silk'
+export const DEFAULT_THEME: Theme = 'orbital'
 /** Glyphs of White Rabbit's code rain: half-width katakana and digits, as
  *  in the film. Shared with the Settings preview. */
 export const RAIN_CHARACTERS =

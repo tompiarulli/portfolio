@@ -6,8 +6,7 @@ import type { Backdrop } from '#/lib/theme'
 // current theme's one is fetched.
 const CodeRain = lazy(() => import('./CodeRain'))
 const Drift = lazy(() => import('./Drift'))
-const Dither = lazy(() => import('./bits/Dither'))
-const Silk = lazy(() => import('./bits/Silk'))
+const Orbits = lazy(() => import('./Orbits'))
 const Film = lazy(() => import('./Film'))
 const Streaks = lazy(() => import('./Streaks'))
 
@@ -61,50 +60,27 @@ const DUST = {
   fall: 1,
 } as const
 
-/** A slow dithered wash from --desk to --warp, for `backdrop: 'dither'`.
- *  Edit and save: the dev server applies changes live without restarting
- *  the animation. */
-const DITHER = {
-  /** How fast the warp layer slides; this is what makes the shapes churn. */
-  waveSpeed: 0.008,
-  /** Direction the warp layer slides, [x, y]. [1, 1] is the original diagonal. */
-  warpDirection: [1, 1],
-  /** How strongly the warp bends the shapes; 0 is plain static noise. */
-  warpStrength: 1,
-  /** Slow slide of the whole pattern per second, [x, y]; [0, 0] is off. */
-  drift: [0, 0],
-  /** Detail: frequency step between noise octaves. */
-  waveFrequency: 3,
-  /** Detail: strength of each finer octave; lower = smoother, bigger masses. */
-  waveAmplitude: 0.15,
-  /** Shapes snap to blocks of this many dots; 1 is off. */
-  blockSize: 12,
-  /** Dither dot size in pixels. */
-  pixelSize: 2,
-  /** Shade levels from background ink to pattern ink. */
-  colorNum: 4,
-  /** Pattern contrast: '#808080' is the original, '#ffffff' uses the full ramp. */
-  waveColor: '#808080',
-} as const
-
-/** Slow dithered silk folds from --desk to --warp, for `backdrop: 'silk'`. */
-export const SILK = {
-  /** Fold speed; the original is 5. */
-  speed: 1.5,
-  /** Fold size; bigger is tighter. */
-  scale: 0.8,
-  /** Angle of the folds, in radians. */
-  rotation: 0.3,
-  /** 1 uses the whole ramp; lower keeps the folds near --desk. */
-  contrast: 1,
-  /** Film grain, so the folds read as fabric; the original is 1.5. */
-  noiseIntensity: 0.2,
-  /** Quantise to colorNum levels with an ordered dither; off is smooth. */
-  dither: false,
-  /** Shade levels from --desk to --warp, when dithered. */
-  colorNum: 4,
-  /** Cell size in pixels; 1 is a fine dither with no visible blocks. */
-  pixelSize: 1,
+/** Orbital rings, for `backdrop: 'orbits'`: --warp rings tilted in 3D,
+ *  each with a --glint point riding it, over --desk. */
+export const ORBITS = {
+  /** Rings in the set. */
+  count: 7,
+  /** Centre of the set, as fractions of the width and height. */
+  center: [0.6, 0.55],
+  /** Radius of the innermost and outermost rings, as fractions of the
+   *  shorter screen side. */
+  inner: 0.18,
+  outer: 0.62,
+  /** How fast the set turns, and the rings wobble and the points ride. */
+  speed: 0.05,
+  /** Brightness of the far half of each ring, against the near half. */
+  far: 0.3,
+  /** Line width in pixels. */
+  lineWidth: 1,
+  /** Radius of the riding points in pixels; 0 is none. */
+  point: 2,
+  /** Frames a second. */
+  fps: 30,
 } as const
 
 /** An old film in the projector, for `backdrop: 'film'`: --warp
@@ -186,23 +162,13 @@ export function Backdrop() {
           />
         ) : b.backdrop === 'streaks' ? (
           <Streaks {...STREAKS} {...shared} colors={b.streaks} />
-        ) : b.backdrop === 'silk' ? (
-          <Silk
-            {...SILK}
-            paletteLow={b.desk}
-            paletteHigh={b.warp}
-            disableAnimation={b.still}
-          />
-        ) : b.backdrop === 'dither' ? (
-          <Dither
-            {...DITHER}
-            // The pattern is computed in grey, then recoloured from --desk
-            // (low) to --warp (high).
-            backgroundColor="#000000"
-            paletteLow={b.desk}
-            paletteHigh={b.warp}
-            disableAnimation={b.still}
-            enableMouseInteraction={false}
+        ) : b.backdrop === 'orbits' ? (
+          <Orbits
+            {...ORBITS}
+            background={b.desk}
+            color={b.warp}
+            highlight={b.glint}
+            still={b.still}
           />
         ) : b.backdrop === 'stars' ||
           b.backdrop === 'snow' ||

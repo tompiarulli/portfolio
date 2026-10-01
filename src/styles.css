@@ -32,10 +32,10 @@
   font-weight: 700 900;
 }
 
-/* DM Mono (SIL OFL, see public/fonts/DMMono-OFL.txt): Believe's and
-   Silk's font, a soft, elegant monospace. Latin subset from Google Fonts;
-   Regular for text and Medium for labels and titles. Only fetched while
-   one of those themes is on. */
+/* DM Mono (SIL OFL, see public/fonts/DMMono-OFL.txt): Believe's font, a
+   soft, elegant monospace. Latin subset from Google Fonts; Regular for
+   text and Medium for labels and titles. Only fetched while that theme
+   is on. */
 @font-face {
   font-family: 'DM Mono';
   src: url('/fonts/dm-mono-400.woff2') format('woff2');
@@ -47,6 +47,23 @@
   src: url('/fonts/dm-mono-500.woff2') format('woff2');
   font-display: block;
   font-weight: 500 900;
+}
+
+/* Geist Mono (SIL OFL, see public/fonts/GeistMono-OFL.txt): Orbital's font,
+   a crisp, modern monospace. Latin subset from Fontsource; Regular for
+   text and SemiBold for labels and titles. Only fetched while that theme
+   is on. */
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/geist-mono-400.woff2') format('woff2');
+  font-display: block;
+  font-weight: 300 500;
+}
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/geist-mono-600.woff2') format('woff2');
+  font-display: block;
+  font-weight: 600 900;
 }
 
 /* IBM Plex Mono (SIL OFL, see public/fonts/IBMPlexMono-OFL.txt): Outpost
@@ -180,6 +197,8 @@
   /* Dock icon size. Pixel-art sets stay at the 32px they're drawn at;
      a theme with smooth drawings may go larger. */
   --icon-size: 32px;
+  /* A filter over the drawn icons, e.g. greyscale; none keeps them as is. */
+  --icon-filter: none;
   --icon-about-mask: url('/icons/haiku/App_StyledEdit-dark.png');
   --icon-contact-mask: url('/icons/haiku/App_Mail-dark.png');
   --icon-terminal-mask: url('/icons/haiku/App_Terminal-dark.png');
@@ -209,71 +228,60 @@
   --icon-settings-mask: url('/icons/haiku/Folder_prefs-light.png');
 }
 
-/* Silk: flat blue-white panes over a blue desk of slowly folding silk.
-   Hairline slate outlines, barely-there bevels, light type, and blue only
-   where it means something: the focused title bar, selections and the
-   open-window mark. The icons are shown as drawn, in colour. */
-[data-theme='silk'] {
-  /* A soft monospace, smoothed to match the silk. */
-  --font-ui: 'DM Mono', ui-monospace, monospace;
-  --font-title: 'DM Mono', ui-monospace, monospace;
-  --font-mono: 'DM Mono', ui-monospace, monospace;
+/* Orbital: pure black and white with greys between, hairline grey outlines,
+   no colour at all, over thin grey orbital rings turning slowly on black. */
+[data-theme='orbital'] {
+  --font-ui: 'Geist Mono', ui-monospace, monospace;
+  --font-title: 'Geist Mono', ui-monospace, monospace;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
   --font-smoothing: antialiased;
-  /* A px up from the monospaced themes; the sans runs smaller. */
-  --text-size: 13px;
-  /* A faint blue-white, with bevels only a step off it so windows read
-     as flat panes. */
-  --bg: #eef2f6;
-  --surface: #eef2f6;
-  --surface-light: #ffffff;
-  --surface-dark: #b4c0cc;
-  /* Dock hover in a pale blue-grey. */
-  --tertiary: #d8e0e8;
-  --on-tertiary: #1f2b38;
-  /* The title bars' blue, for selected controls and the pressed dock. */
-  --accent: #3a72a8;
-  --accent-shadow: #24507c;
-  /* Buttons keep a little more bevel, so they still look pressable. */
-  --button: #eef2f6;
-  --button-shadow: #8a98a8;
-  /* Dark slate outlines and text, quieter than black. */
-  --ink: #1f2b38;
-  --highlight: #ffffff;
-  /* White paper for inset wells. */
-  --well: #ffffff;
-  --on-accent: #ffffff;
-  /* The focused window's title bar a touch brighter than the desk, like
-     the silk's crests, white text on it. */
-  --title: #3a72a8;
-  --on-title: #ffffff;
+  /* Near-black panes, bevels only a step either side, so windows read as
+     flat cards. */
+  --bg: #0a0a0a;
+  --surface: #0a0a0a;
+  --surface-light: #1f1f1f;
+  --surface-dark: #000000;
+  /* Dock hover a grey lift. */
+  --tertiary: #1f1f1f;
+  --on-tertiary: #ededed;
+  /* White is the only accent: selections and the pressed dock. */
+  --accent: #ededed;
+  --accent-shadow: #a1a1a1;
+  --on-accent: #000000;
+  --button: #0a0a0a;
+  --button-shadow: #000000;
+  /* Soft white text; outlines in a quiet grey. */
+  --ink: #ededed;
+  --highlight: #2e2e2e;
+  --well: #000000;
+  /* The focused window's title bar white, black text on it. */
+  --title: #ededed;
+  --on-title: #000000;
   --label-case: none;
-  --label-weight: 500;
+  --label-weight: 600;
   --title-case: none;
-  --title-weight: 500;
-  --title-height: 25px;
-  /* The open-window mark in the blue. */
-  --indicator: #3a72a8;
-  --dock-divider: #c4ced8;
+  --title-weight: 600;
+  --indicator: #ededed;
+  --dock-divider: #2e2e2e;
   --backdrop-opacity: 1;
-  /* The silk's folds, from the desktop blue in the creases (a step
-     darker than the title bars) to a paler blue on the crests. */
-  --desk: #2b5a85;
-  --warp: #6f93b8;
-  --glint: #e0f0f0;
-  /* The icons as drawn, in their own colours. */
+  /* Grey rings on black, the points riding them white. */
+  --desk: #000000;
+  --warp: #6e6e6e;
+  --glint: #ededed;
+  /* A 2000s Linux desktop's icons as drawn, with the colour taken out. */
   --icon-fill: transparent;
+  --icon-filter: grayscale(1);
   --icon-about-mask: none;
   --icon-contact-mask: none;
   --icon-terminal-mask: none;
   --icon-settings-mask: none;
-  --icon-about-image: url('/icons/haiku/App_StyledEdit.svg');
-  --icon-contact-image: url('/icons/haiku/App_Mail.svg');
-  --icon-terminal-image: url('/icons/haiku/App_Terminal.svg');
-  --icon-settings-image: url('/icons/haiku/Folder_prefs.svg');
-  /* The menu mark: a window with its tab. Drawn in scripts/silk_logo.py. */
+  --icon-about-image: url('/icons/tango/accessories-text-editor.png');
+  --icon-contact-image: url('/icons/tango/internet-mail.png');
+  --icon-terminal-image: url('/icons/tango/utilities-terminal.png');
+  --icon-settings-image: url('/icons/tango/preferences-system.png');
+  /* The menu mark: a plain, smooth disc. */
   --logo-size: 16px;
-  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.4' d='M2 5h12v1H2zM2 6h12v1H2zM2 7h12v1H2zM2 8h12v1H2zM2 9h12v1H2zM2 10h12v1H2zM2 11h12v1H2zM2 12h12v1H2zM2 13h12v1H2z'/%3E%3Cpath fill-opacity='.7' d='M2 2h5v1H2zM2 3h5v1H2z'/%3E%3Cpath d='M1 1h7v1H1zM1 2h1v1H1zM7 2h1v1H7zM1 3h1v1H1zM7 3h1v1H7zM1 4h14v1H1zM1 5h1v1H1zM14 5h1v1H14zM1 6h1v1H1zM14 6h1v1H14zM1 7h1v1H1zM14 7h1v1H14zM1 8h1v1H1zM14 8h1v1H14zM1 9h1v1H1zM14 9h1v1H14zM1 10h1v1H1zM14 10h1v1H14zM1 11h1v1H1zM14 11h1v1H14zM1 12h1v1H1zM14 12h1v1H14zM1 13h1v1H1zM14 13h1v1H14zM1 14h14v1H1z'/%3E%3C/svg%3E");
-  color-scheme: light;
+  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3C/svg%3E");
 }
 
 /* Believe: cold black, white and grey with a single red, over a
@@ -551,6 +559,7 @@ svg {
   mask-size: contain;
   mask-repeat: no-repeat;
   image-rendering: pixelated;
+  filter: var(--icon-filter);
 }
 
 /* Scrollbars, black-bordered like the original */

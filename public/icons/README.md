@@ -20,6 +20,15 @@ Every theme shares one set: 32x32 icons from KDE 1.1 (1999), by the KDE artists,
 - Terminal: `cde/programs/icons/Fpterm.m.pm`
 - Settings: `cde/programs/icons/Fpstyle.m.pm`
 
+### Orbital
+
+32x32 icons from the Tango Desktop Project's icon theme 0.8.90 (2009), released into the public domain (`tango/COPYING`), as published, shown in greyscale.
+
+- About: `32x32/apps/accessories-text-editor.png`
+- Contact: `32x32/apps/internet-mail.png`
+- Terminal: `32x32/apps/utilities-terminal.png`
+- Settings: `32x32/categories/preferences-system.png`
+
 ### OUTATIME
 
 About is a full-colour icon from Flaticon, "Retro icons created by Magnific - Flaticon" (https://www.flaticon.com/free-icons/retro), under Flaticon's free licence, which requires that credit wherever the icon is shown. Downloaded as a 512px PNG and scaled to 72px, twice its 36px dock size (`flaticon/floppy.png`).
@@ -32,9 +41,9 @@ Settings is a full-colour icon from Flaticon, "Gear icons created by Vectors Tan
 
 ## Menu marks
 
-Each theme has its own 16x16 mark in the top-left menu, original pixel art:
+Each theme has its own 16x16 mark in the top-left menu, original art:
 
-- Silk: a window with its tab, drawn in `scripts/silk_logo.py`.
+- Orbital: a plain, smooth disc, an SVG circle in `src/styles.css`.
 - White Rabbit: a white rabbit's head in slim black sunglasses.
 - Believe: a grey alien's head.
 - Steamboat: a stand-in film leader's countdown circle, drawn in `scripts/steamboat_logo.py`.
