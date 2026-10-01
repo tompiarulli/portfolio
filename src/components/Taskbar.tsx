@@ -5,7 +5,7 @@ import { useWindows } from './WindowManager'
 import { PINNED, pathFor } from '#/lib/windows'
 
 /** System lives in the logo menu and only gets a button while open. */
-const SYSTEM = { id: 'system', label: 'System' } as const
+const SYSTEM = { id: 'system', label: 'System Info' } as const
 
 /** The bar along the bottom, like the Windows taskbar: the logo menu, a
  *  button per window (a light on open ones, the focused one filled in;

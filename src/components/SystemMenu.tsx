@@ -92,7 +92,7 @@ export function SystemMenu({ className }: { className: string }) {
             }}
             className={ITEM}
           >
-            System
+            System Info
           </Link>
           {ACTIONS.map((group, i) => (
             <Fragment key={group[0].label}>
