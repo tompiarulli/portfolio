@@ -46,6 +46,6 @@ Each theme has its own 16x16 mark in the top-left menu, original art:
 - Orbital: a plain, smooth disc, an SVG circle in `src/styles.css`.
 - White Rabbit: a white rabbit's head in slim black sunglasses.
 - Believe: a grey alien's head.
-- Steamboat: a stand-in film leader's countdown circle, drawn in `scripts/steamboat_logo.py`.
-- OUTATIME: the flux capacitor, drawn in `scripts/traveler_logo.py`.
 - Outpost 31: the husky, drawn in `scripts/outpost_logo.py`.
+- OUTATIME: the flux capacitor, drawn in `scripts/traveler_logo.py`.
+- Steamboat: a stand-in film leader's countdown circle, drawn in `scripts/steamboat_logo.py`.
