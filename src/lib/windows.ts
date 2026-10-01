@@ -1,9 +1,9 @@
 /** Every window the desktop can open. */
-export type WindowId = 'about' | 'contact' | 'settings' | 'system'
+export type WindowId = 'about' | 'contact' | 'settings'
 
-/** Windows with a taskbar button even when closed, so they can always be
- *  reopened, and a tab in the phone menu. */
-export const PINNED: { id: WindowId; label: string }[] = [
+/** Every window in taskbar order. Each keeps its taskbar button (or phone
+ *  tab) when closed, so it can always be reopened. */
+export const WINDOWS: { id: WindowId; label: string }[] = [
   { id: 'about', label: 'About' },
   { id: 'contact', label: 'Contact' },
   { id: 'settings', label: 'Settings' },
@@ -13,7 +13,6 @@ const PATHS = {
   about: '/',
   contact: '/contact',
   settings: '/settings',
-  system: '/system',
 } as const satisfies Record<WindowId, string>
 
 export function pathFor(id: WindowId): string {

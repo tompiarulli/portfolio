@@ -1,25 +1,19 @@
 import { Link } from '@tanstack/react-router'
 import { Clock } from './Clock'
-import { SystemMenu } from './SystemMenu'
 import { useWindows } from './WindowManager'
-import { PINNED, pathFor } from '#/lib/windows'
+import { WINDOWS, pathFor } from '#/lib/windows'
 
-/** System lives in the logo menu and only gets a button while open. */
-const SYSTEM = { id: 'system', label: 'System Info' } as const
-
-/** The bar along the bottom, like the Windows taskbar: the logo menu, a
- *  button per window (the focused one filled in, the rest faded) and the
- *  clock. Phones use MobileNav. */
+/** The bar along the bottom, like the Windows taskbar: a button per window
+ *  (the focused one filled in, the rest faded) and the clock. Phones use
+ *  MobileNav. */
 export function Taskbar() {
   const { stack, raise } = useWindows()
-  const buttons = stack.includes('system') ? [...PINNED, SYSTEM] : PINNED
   return (
     <nav
       aria-label="Windows"
       className="fixed inset-x-0 bottom-0 z-50 flex h-[36px] items-center gap-1.5 border-t border-(--ink) bg-(--surface) px-1.5 has-aria-expanded:z-70 max-sm:hidden"
     >
-      <SystemMenu className="h-[26px] border border-(--ink) px-2.5 hover:bg-(--tertiary) hover:text-(--on-tertiary)" />
-      {buttons.map((w) => {
+      {WINDOWS.map((w) => {
         const focused = stack.at(-1) === w.id
         return (
           <Link

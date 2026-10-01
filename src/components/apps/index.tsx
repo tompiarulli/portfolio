@@ -4,13 +4,11 @@ import type { WindowId } from '#/lib/windows'
 import { About } from './About'
 import { Contact } from './Contact'
 import { Settings } from './Settings'
-import { SystemInfo } from './SystemInfo'
 
 const APPS: Record<WindowId, ComponentType> = {
   about: About,
   contact: Contact,
   settings: Settings,
-  system: SystemInfo,
 }
 
 /** Renders every open window. DOM order is stable; z-index follows the stack. */

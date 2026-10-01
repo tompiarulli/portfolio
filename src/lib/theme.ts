@@ -1,6 +1,6 @@
 export type Backdrop = 'rain' | 'stars' | 'streaks' | 'snow' | 'plain'
 
-/** Themes set the colours (tokens in styles.css), the font, the menu mark,
+/** Themes set the colours (tokens in styles.css), the font, the mark,
  *  which background draws the desktop and the day the clock shows; the
  *  rest of the chrome is shared. Each is an homage to something I like. */
 export const THEMES = [
