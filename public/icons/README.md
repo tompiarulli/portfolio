@@ -1,15 +1,15 @@
 # Icons
 
-The dock icons and menu marks are inlined as mask tokens in `src/styles.css`, so nothing in this folder is served. This file records where they come from.
+The dock icons in this folder are served as is and picked per theme by tokens in `src/styles.css`; the menu marks are inlined there. This file records where they come from.
 
 ## Dock icons
 
-Every theme shares one set: 32x32 icons from KDE 1.1 (1999), by the KDE artists, GNU General Public License v2 (`COPYING` in [KDE/kde1-kdebase](https://github.com/KDE/kde1-kdebase)). Quantized to three opacity levels and inlined as SVG masks, painted in the theme's text colour. Dark docks (White Rabbit) use them as drawn; light docks use an inverted copy, so outlines and holes are painted in ink.
+Themes without a set of their own share one: icons from Haiku's icon set, by the Haiku project, MIT License (from `data/artwork/icons/` in [haiku/haiku](https://github.com/haiku/haiku)). The originals are kept as SVG in `haiku/`; the dock uses 32x32 masks painted in the theme's text colour. Dark docks use the `-dark` copies as drawn; light docks (Believe, Steamboat, Outpost 31) use the `-light` copies, inverted so outlines and holes are painted in ink.
 
-- About: `pics/info.xpm`
-- Contact: `kappfinder/pics/email.xpm`
-- Terminal: not from KDE; a CRT with a prompt in the same style, drawn in `scripts/terminal_icon.py`
-- Settings: `kcontrol/kcontrol/pics/kcontrol.xpm`
+- About: `App_StyledEdit`
+- Contact: `App_Mail`
+- Terminal: `App_Terminal`
+- Settings: `Folder_prefs`
 
 ### White Rabbit
 
