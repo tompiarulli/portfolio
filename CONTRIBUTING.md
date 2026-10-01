@@ -26,8 +26,8 @@ Run `pnpm typecheck && pnpm lint && pnpm build` before committing. The build run
 
 ## Layout
 
-- `src/routes/` file-based routes. They set the URL, `head()`, and loaders only; the root route renders `<Desktop>` (menu bar, open windows, taskbar).
-- `src/components/` desktop chrome: `Desktop`, `MenuBar`, `Taskbar`, `Window`, `WindowManager`, `Clock`. Closed windows reopen from the taskbar.
+- `src/routes/` file-based routes. They set the URL, `head()`, and loaders only; the root route renders `<Desktop>` (open windows and the taskbar).
+- `src/components/` desktop chrome: `Desktop`, `Taskbar`, `SystemMenu`, `Window`, `WindowManager`, `Clock`. Closed windows reopen from the taskbar.
 - `src/components/apps/` window contents, one component per app, registered in `apps/index.tsx`.
 - `src/lib/windows.ts` window ids and their URLs. The URL follows the focused window, so each route prerenders with its window open.
 - `src/components/bits/` components vendored from [React Bits](https://reactbits.dev). Add one with `pnpm dlx shadcn@latest add @react-bits/<Name>-TS-TW`, then `pnpm format`.

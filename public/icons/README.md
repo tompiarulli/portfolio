@@ -4,7 +4,7 @@ The menu marks are inlined as mask tokens in `src/styles.css`, so nothing in thi
 
 ## Menu marks
 
-Each theme has its own 16x16 mark in the top-left menu, original pixel art:
+Each theme has its own 16x16 mark on the taskbar's menu button, original pixel art:
 
 - White Rabbit: the white rabbit's head in slim sunglasses.
 - I Believe: a grey alien's head.
