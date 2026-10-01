@@ -1,6 +1,5 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { Suspense, lazy } from 'react'
-import { Desktop } from '#/components/Desktop'
 import { site } from '#/lib/site'
 import { themeBootScript } from '#/lib/theme'
 import appCss from '../styles.css?url'
@@ -50,7 +49,6 @@ export const Route = createRootRoute({
     scripts: [{ children: themeBootScript }],
   }),
   shellComponent: RootDocument,
-  component: Desktop,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {

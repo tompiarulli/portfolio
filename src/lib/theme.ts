@@ -1,8 +1,8 @@
 export type Backdrop = 'rain' | 'stars' | 'streaks' | 'snow' | 'plain'
 
-/** Themes set the colours (tokens in styles.css), the font, the menu mark
- *  and which background draws the desktop; the rest of the chrome is
- *  shared. Each is an homage to something I like. */
+/** Themes set the colours (tokens in styles.css), the font, the mark and
+ *  which backdrop draws behind the page; the layout is shared. Each is an
+ *  homage to something I like. */
 export const THEMES = [
   // Its release day.
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain' },
@@ -21,11 +21,6 @@ export const THEMES = [
 }[]
 export type Theme = (typeof THEMES)[number]['id']
 export const DEFAULT_THEME: Theme = 'rabbit'
-/** Glyphs of White Rabbit's code rain: half-width katakana and digits, as
- *  in the film. Shared with the Settings preview. */
-export const RAIN_CHARACTERS =
-  'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789Z:.=*+<>'
-
 const THEME_KEY = 'theme'
 
 /** Saves the theme and sets data-theme on <html>. */

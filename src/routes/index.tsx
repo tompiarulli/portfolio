@@ -1,4 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { Home } from '#/components/Home'
 
-// Windows render from the desktop's window manager; routes set the URL and head.
-export const Route = createFileRoute('/')({})
+export const Route = createFileRoute('/')({ component: Home })
