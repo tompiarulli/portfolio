@@ -8,20 +8,24 @@ export const site = {
     "I'm also a former digital nomad and 90s kid with a deep love of travel, movies, and pop culture.",
   ],
   signoff: '- Tom',
-  email: 'tom@tompiarulli.com',
   os: 'TomOS 9.2',
   builtWith: 'React 19, TanStack Start, Tailwind 4',
 }
 
 export type Profile = {
   label: string
-  /** What the link shows, like a username. */
+  /** What the link shows, like a username or address. */
   handle: string
   url: string
 }
 
-/** Where else to find me, under the email in Contact. */
+/** Where to find me, in the order Contact lists them. */
 export const profiles: Profile[] = [
+  {
+    label: 'Email',
+    handle: 'tom@tompiarulli.com',
+    url: 'mailto:tom@tompiarulli.com',
+  },
   {
     label: 'LinkedIn',
     handle: 'tompiarulli',
