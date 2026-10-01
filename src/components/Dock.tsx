@@ -33,7 +33,7 @@ export function Dock() {
             // minimized window.
             raise(app.id)
           }}
-          className="group relative flex w-[83px] flex-col items-center gap-[6px] border-r border-(--dock-divider) px-2 pt-[12px] pb-[7px] last:border-r-0 hover:bg-(--tertiary) hover:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
+          className="group relative flex w-[calc(var(--icon-size)+51px)] flex-col items-center gap-[6px] border-r border-(--dock-divider) px-2 pt-[12px] pb-[7px] last:border-r-0 hover:bg-(--tertiary) hover:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
         >
           <DockIcon id={app.id} />
           <span className="font-title text-(length:--dock-label-size) tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">

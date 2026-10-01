@@ -20,6 +20,16 @@ Every theme shares one set: 32x32 icons from KDE 1.1 (1999), by the KDE artists,
 - Terminal: `cde/programs/icons/Fpterm.m.pm`
 - Settings: `cde/programs/icons/Fpstyle.m.pm`
 
+### OUTATIME
+
+About is a full-colour icon from Flaticon, "Retro icons created by Magnific - Flaticon" (https://www.flaticon.com/free-icons/retro), under Flaticon's free licence, which requires that credit wherever the icon is shown. Downloaded as a 512px PNG and scaled to 72px, twice its 36px dock size (`flaticon/floppy.png`).
+
+Contact is a full-colour icon from Flaticon, "Postcard icons created by Magnific - Flaticon" (https://www.flaticon.com/free-icons/postcard), under the same free licence. Downloaded as a 512px PNG and scaled to 72px, twice its 36px dock size (`flaticon/postcard.png`).
+
+Terminal is a full-colour icon from Flaticon, "Computer icons created by Magnific - Flaticon" (https://www.flaticon.com/free-icons/computer), under the same free licence. Downloaded as a 512px PNG and scaled to 72px, twice its 36px dock size (`flaticon/computer.png`).
+
+Settings is a full-colour icon from Flaticon, "Gear icons created by Vectors Tank - Flaticon" (https://www.flaticon.com/free-icons/gear), under the same free licence. Downloaded as a 512px PNG and scaled to 72px, twice its 36px dock size (`flaticon/settings.png`).
+
 ## Menu marks
 
 Each theme has its own 16x16 mark in the top-left menu, original pixel art:
