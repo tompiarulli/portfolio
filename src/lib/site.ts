@@ -8,12 +8,29 @@ export const site = {
     "I'm also a former digital nomad and 90s kid with a deep love of travel, movies, and pop culture.",
   ],
   signoff: '- Tom',
-  email: 'tompiarulli@gmail.com',
+  email: 'tom@tompiarulli.com',
   os: 'TomOS 9.2',
   builtWith: 'React 19, TanStack Start, Tailwind 4',
   media: 'No videos yet.',
   blog: 'No posts yet.',
 }
+
+export type Profile = {
+  label: string
+  /** What the link shows, like a username. */
+  handle: string
+  url: string
+}
+
+/** Where else to find me, under the email in Contact. */
+export const profiles: Profile[] = [
+  {
+    label: 'LinkedIn',
+    handle: 'tompiarulli',
+    url: 'https://www.linkedin.com/in/tompiarulli/',
+  },
+  { label: 'GitHub', handle: 'tomparkp', url: 'https://github.com/tomparkp' },
+]
 
 export type Project = {
   slug: string
