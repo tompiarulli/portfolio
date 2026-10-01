@@ -117,6 +117,9 @@
   /* Solid phosphor title bars, as in the film's terminal windows. */
   --title: #41e07a;
   --on-title: #03120a;
+  /* The light on an open window's taskbar button: a pale phosphor green,
+     between rain head and ink. */
+  --indicator: #aef5c0;
   --stripe: transparent;
   /* Case and weight of the clock and window titles. */
   --label-case: uppercase;
@@ -181,6 +184,7 @@
   /* The focused window's title bar in the logo's red. */
   --title: #d8362b;
   --on-title: #f1f4f7;
+  --indicator: #d8362b;
   --backdrop-opacity: 1;
   /* Cold starlight over a near-black teal sky, like the posters' mist. */
   --desk: #0a1417;
@@ -219,6 +223,7 @@
   /* The focused window's title bar in the header's royal blue. */
   --title: #003399;
   --on-title: #ffffff;
+  --indicator: #ff6600;
   --backdrop-opacity: 1;
   /* A plain desktop in the header's blue. */
   --desk: #003399;
@@ -256,6 +261,7 @@
      that burns through the title card. */
   --title: #0a0e12;
   --on-title: #7fd3ff;
+  --indicator: #d42a1c;
   --backdrop-opacity: 1;
   /* Moonlit snow blowing through an Antarctic night. */
   --desk: #070b12;
@@ -290,6 +296,7 @@
   /* The focused window's title bar is a time circuit display. */
   --title: #101214;
   --on-title: #ff4a2a;
+  --indicator: #e0301e;
   --backdrop-opacity: 1;
   /* Fire trails burning orange with white-hot cores across a violet-black
      night. */
