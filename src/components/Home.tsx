@@ -21,21 +21,12 @@ export function Home() {
           </header>
 
           <div className="space-y-6 p-5">
-            <section className="flex flex-col gap-5 sm:flex-row">
-              <img
-                src="/images/portrait.jpg"
-                alt={site.name}
-                width={120}
-                height={150}
-                className="shrink-0 self-start border border-(--ink)"
-              />
-              <div className="space-y-3">
-                <p className={HEADING}>{site.tagline}</p>
-                {site.letter.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-                <p>{site.signoff}</p>
-              </div>
+            <section className="space-y-3">
+              <p className={HEADING}>{site.tagline}</p>
+              {site.letter.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+              <p>{site.signoff}</p>
             </section>
 
             <section>
