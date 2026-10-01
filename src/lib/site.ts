@@ -23,8 +23,8 @@ export type Profile = {
 export const profiles: Profile[] = [
   {
     label: 'Email',
-    handle: 'tompiarulli@gmail.com',
-    url: 'mailto:tompiarulli@gmail.com',
+    handle: 'tom@tompiarulli.com',
+    url: 'mailto:tom@tompiarulli.com',
   },
   {
     label: 'LinkedIn',
