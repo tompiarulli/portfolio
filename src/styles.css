@@ -84,16 +84,17 @@
   font-weight: 600 900;
 }
 
-/* Recursive (SIL OFL, see public/fonts/Recursive-OFL.txt): Steamboat's font,
-   one variable family with brush-like Casual curves, like a cartoon's hand
-   lettering, in three static cuts from Fontsource's variable Latin file:
-   the Casual sans for text, and the Casual mono in Regular and Medium for
-   the terminal, titles and labels. Only fetched while that theme is on. */
+/* Grandstander (SIL OFL, see public/fonts/Grandstander-OFL.txt): Steamboat's
+   text font, round and bouncy like a cartoon's hand lettering. Only fetched
+   while that theme is on. */
 @font-face {
-  font-family: 'Recursive Casual';
-  src: url('/fonts/recursive-sans-casual-400.woff2') format('woff2');
+  font-family: 'Grandstander';
+  src: url('/fonts/grandstander-400.woff2') format('woff2');
   font-display: block;
 }
+/* Recursive (SIL OFL, see public/fonts/Recursive-OFL.txt): Steamboat's mono,
+   brush-like Casual curves in two static cuts from Fontsource's variable
+   Latin file, Regular and Medium, for the terminal, titles and labels. */
 @font-face {
   font-family: 'Recursive Mono Casual';
   src: url('/fonts/recursive-mono-casual-400.woff2') format('woff2');
@@ -324,10 +325,10 @@
 }
 
 /* Steamboat: an early black and white cartoon. Grey-white paper with
-   heavy black ink and nothing in colour, lettered in a casual brush hand,
+   heavy black ink and nothing in colour, lettered in a round, bouncy hand,
    over a silver film flickering through the projector. */
 [data-theme='steamboat'] {
-  --font-ui: 'Recursive Casual', ui-sans-serif, sans-serif;
+  --font-ui: 'Grandstander', ui-sans-serif, sans-serif;
   --font-title: 'Recursive Mono Casual', ui-monospace, monospace;
   --font-mono: 'Recursive Mono Casual', ui-monospace, monospace;
   --font-smoothing: antialiased;
