@@ -10,20 +10,20 @@ export const THEMES = [
   { id: 'orbital', label: 'Orbital', backdrop: 'orbits', date: undefined },
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
   { id: 'believe', label: 'Believe', backdrop: 'stars', date: '1993-09-10' },
-  {
-    id: 'outpost',
-    label: 'Outpost 31',
-    backdrop: 'snow',
-    date: '1982-06-25',
-  },
+  // The first fully hand-drawn animated film.
+  { id: 'steamboat', label: 'Steamboat', backdrop: 'film', date: '1908-08-17' },
   {
     id: 'traveler',
     label: 'OUTATIME',
     backdrop: 'streaks',
     date: '1985-10-26',
   },
-  // The first fully hand-drawn animated film.
-  { id: 'steamboat', label: 'Steamboat', backdrop: 'film', date: '1908-08-17' },
+  {
+    id: 'outpost',
+    label: 'Outpost 31',
+    backdrop: 'snow',
+    date: '1982-06-25',
+  },
 ] as const satisfies readonly {
   id: string
   label: string
