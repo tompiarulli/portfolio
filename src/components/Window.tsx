@@ -48,7 +48,7 @@ export function Window({
     const el = ref.current
     const { left = 0, top = 0 } = el.offsetParent?.getBoundingClientRect() ?? {}
     // Keep the whole window inside the browser viewport on every side; it
-    // may cover the menu bar and taskbar.
+    // may cover the taskbar.
     const vx = Math.max(
       0,
       Math.min(innerWidth - el.offsetWidth, e.clientX - d.dx),
