@@ -192,8 +192,6 @@ const PREVIEWS: Record<Exclude<Backdrop, 'plain' | 'silk' | 'film'>, string> = {
   dither: dither(),
 }
 
-const FILM_PREVIEW = scatter('··.│', 0.04, 19)
-
 const SKY_WIDTH = 64
 const SKY_HEIGHT = 32
 
@@ -289,11 +287,8 @@ function ThemePreview({
       ) : backdrop === 'silk' ? (
         <SilkPreview />
       ) : backdrop === 'film' ? (
-        // A still of the film: the sepia frame darkening to the edges, with
-        // a scratch and some dust.
-        <span className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--warp)_30%,var(--desk)_110%)] font-mono text-[10px] leading-[10px] tracking-[1px] whitespace-pre text-(--glint)">
-          {FILM_PREVIEW}
-        </span>
+        // A still of the film: the frame darkening to the edges.
+        <span className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--warp)_30%,var(--desk)_110%)]" />
       ) : backdrop === 'rain' ? (
         <span className="absolute inset-0 flex items-center justify-center font-mono text-[11px] leading-[11px] tracking-[1px] [text-shadow:0_0_6px_var(--warp)] whitespace-pre text-(--warp)">
           {PREVIEWS.rain}

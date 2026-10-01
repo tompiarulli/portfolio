@@ -1,6 +1,5 @@
-// An old film running through the projector: a sepia frame that flickers,
-// grain that changes every frame, a dark vignette, dust specks and the odd
-// scratch running down the print. One fragment shader on raw WebGL, drawn
+// An old film running through the projector: a frame that flickers under
+// a dark vignette. One fragment shader on raw WebGL, drawn
 // at a low resolution and scaled up, at the projector's 24 frames a second.
 import { useEffect, useRef } from 'react'
 
@@ -15,14 +14,10 @@ const fragmentShader = `
 precision highp float;
 uniform vec2 resolution;
 uniform float frame;
-uniform float grain;
 uniform float flicker;
 uniform float vignette;
-uniform float dust;
-uniform float scratches;
 uniform vec3 paletteLow;
 uniform vec3 paletteHigh;
-uniform vec3 glint;
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -38,43 +33,19 @@ void main() {
   // Darker towards the edges, like a projector's hot spot.
   vec2 d = (uv - 0.5) * vec2(resolution.x / resolution.y, 1.0);
   t *= 1.0 - vignette * smoothstep(0.3, 1.1, length(d));
-  // Grain, fresh every frame.
-  t += grain * (hash(cell + frame * 17.0) - 0.5);
   vec3 col = mix(paletteLow, paletteHigh, clamp(t, 0.0, 1.0));
-  // Dust: specks of 2x2 cells, a few each frame, dark or light.
-  float speck = hash(floor(cell / 2.0) + frame * 3.1);
-  if (speck > 1.0 - dust * 0.002) {
-    col = hash(vec2(frame, speck)) > 0.5 ? glint : paletteLow;
-  }
-  // Scratches: up to two thin lines down the print, each held for a few
-  // frames before it jumps.
-  for (int i = 0; i < 2; i++) {
-    float hold = floor(frame / 6.0) + float(i) * 31.0;
-    if (hash(vec2(hold, 9.1)) < scratches) {
-      float x = hash(vec2(hold, 3.3)) * resolution.x;
-      x += (hash(vec2(frame, float(i))) - 0.5) * 2.0;
-      if (abs(cell.x - x) < 0.5) col = mix(col, glint, 0.6);
-    }
-  }
   gl_FragColor = vec4(col, 1.0);
 }
 `
 
 interface FilmProps {
-  /** Grain strength; 0 is a clean print. */
-  grain?: number
   /** How much the frame's brightness jumps, frame to frame. */
   flicker?: number
   /** How dark the edges get; 0 is none. */
   vignette?: number
-  /** Dust specks per frame, roughly. */
-  dust?: number
-  /** Chance of each of the two scratches showing, 0..1. */
-  scratches?: number
-  /** Shadows, highlights and the light specks and scratches, as CSS hex. */
+  /** Shadows and highlights, as CSS hex. */
   paletteLow: string
   paletteHigh: string
-  glint: string
   /** Cell size in CSS pixels. */
   pixelSize?: number
   /** Projector speed. */
@@ -101,14 +72,10 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
 }
 
 export default function Film({
-  grain = 0.12,
   flicker = 0.08,
   vignette = 0.7,
-  dust = 1,
-  scratches = 0.5,
   paletteLow,
   paletteHigh,
-  glint,
   pixelSize = 2,
   fps = 24,
   disableAnimation = false,
@@ -117,27 +84,19 @@ export default function Film({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   // The render loop reads props from here, so prop changes never restart WebGL.
   const props = useRef({
-    grain,
     flicker,
     vignette,
-    dust,
-    scratches,
     paletteLow,
     paletteHigh,
-    glint,
     pixelSize,
     fps,
     disableAnimation,
   })
   props.current = {
-    grain,
     flicker,
     vignette,
-    dust,
-    scratches,
     paletteLow,
     paletteHigh,
-    glint,
     pixelSize,
     fps,
     disableAnimation,
@@ -176,14 +135,10 @@ export default function Film({
     const loc = {
       resolution: u('resolution'),
       frame: u('frame'),
-      grain: u('grain'),
       flicker: u('flicker'),
       vignette: u('vignette'),
-      dust: u('dust'),
-      scratches: u('scratches'),
       paletteLow: u('paletteLow'),
       paletteHigh: u('paletteHigh'),
-      glint: u('glint'),
     }
 
     let raf = 0
@@ -216,14 +171,10 @@ export default function Film({
 
       gl.uniform2f(loc.resolution, canvas.width, canvas.height)
       gl.uniform1f(loc.frame, frame)
-      gl.uniform1f(loc.grain, p.grain)
       gl.uniform1f(loc.flicker, p.flicker)
       gl.uniform1f(loc.vignette, p.vignette)
-      gl.uniform1f(loc.dust, p.dust)
-      gl.uniform1f(loc.scratches, p.scratches)
       gl.uniform3fv(loc.paletteLow, hexToRgb(p.paletteLow))
       gl.uniform3fv(loc.paletteHigh, hexToRgb(p.paletteHigh))
-      gl.uniform3fv(loc.glint, hexToRgb(p.glint))
       gl.drawArrays(gl.TRIANGLES, 0, 3)
     }
     raf = requestAnimationFrame(render)

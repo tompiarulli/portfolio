@@ -19,7 +19,7 @@ export const THEMES = [
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
   { id: 'believe', label: 'Believe', backdrop: 'stars', date: '1993-09-10' },
   // The first fully hand-drawn animated film.
-  { id: 'toon', label: 'Toon', backdrop: 'film', date: '1908-08-17' },
+  { id: 'steamboat', label: 'Steamboat', backdrop: 'film', date: '1908-08-17' },
   {
     id: 'traveler',
     label: 'Time Traveler',

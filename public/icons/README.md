@@ -27,6 +27,6 @@ Each theme has its own 16x16 mark in the top-left menu, original pixel art:
 - Silk: a window with its tab, drawn in `scripts/silk_logo.py`.
 - White Rabbit: a white rabbit's head in slim black sunglasses.
 - Believe: a grey alien's head.
-- Toon: a stand-in film leader's countdown circle, drawn in `scripts/toon_logo.py`.
+- Steamboat: a stand-in film leader's countdown circle, drawn in `scripts/steamboat_logo.py`.
 - Time Traveler: the flux capacitor, drawn in `scripts/traveler_logo.py`.
 - Outpost 31: the husky, drawn in `scripts/outpost_logo.py`.

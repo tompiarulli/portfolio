@@ -67,7 +67,7 @@
   font-weight: 600 900;
 }
 
-/* Recursive (SIL OFL, see public/fonts/Recursive-OFL.txt): Toon's font,
+/* Recursive (SIL OFL, see public/fonts/Recursive-OFL.txt): Steamboat's font,
    one variable family with brush-like Casual curves, like a cartoon's hand
    lettering, in three static cuts from Fontsource's variable Latin file:
    the Casual sans for text, and the Casual mono in Regular and Medium for
@@ -193,7 +193,7 @@
 
 /* The light docks take the inverted copies. */
 [data-theme='believe'],
-[data-theme='toon'],
+[data-theme='steamboat'],
 [data-theme='outpost'],
 [data-theme='traveler'] {
   --icon-about-mask: url('/icons/haiku/App_StyledEdit-light.png');
@@ -308,52 +308,50 @@
   color-scheme: light;
 }
 
-/* Toon: hand-drawn cartoon. Cream cel paper with heavy black ink, a
-   bright red title bar and golden yellow highlights, lettered in a casual
-   brush hand, over an old sepia film flickering through the projector. */
-[data-theme='toon'] {
+/* Steamboat: an early black and white cartoon. Grey-white paper with
+   heavy black ink and nothing in colour, lettered in a casual brush hand,
+   over a silver film flickering through the projector. */
+[data-theme='steamboat'] {
   --font-ui: 'Recursive Casual', ui-sans-serif, sans-serif;
   --font-title: 'Recursive Mono Casual', ui-monospace, monospace;
   --font-mono: 'Recursive Mono Casual', ui-monospace, monospace;
   --font-smoothing: antialiased;
   --text-size: 13px;
-  /* Cream cel paper. */
-  --bg: #f6ecd4;
-  --surface: #f6ecd4;
-  --surface-light: #fffaf0;
-  --surface-dark: #a8946c;
-  /* Dock hover in golden yellow. */
-  --tertiary: #ffc72c;
+  /* Paper, a little grey, as it prints on old stock. */
+  --bg: #e8e8e4;
+  --surface: #e8e8e4;
+  --surface-light: #ffffff;
+  --surface-dark: #8c8c88;
+  /* Dock hover in a flat mid grey, like an inked fill. */
+  --tertiary: #a0a09c;
   --on-tertiary: #111111;
-  /* Cartoon red, for selected controls and the pressed dock. */
-  --accent: #d62828;
-  --accent-shadow: #8c1414;
-  --button: #f6ecd4;
-  --button-shadow: #7a6848;
+  /* Solid black ink for selected controls and the pressed dock. */
+  --accent: #111111;
+  --accent-shadow: #000000;
+  --button: #e8e8e4;
+  --button-shadow: #5c5c58;
   /* Heavy black ink outlines. */
   --ink: #111111;
-  --highlight: #fffaf0;
+  --highlight: #ffffff;
   /* White, like the gloves, for inset wells. */
   --well: #ffffff;
   --on-accent: #ffffff;
-  /* The focused window's title bar in the red, white text on it. */
-  --title: #d62828;
+  /* The focused window's title bar inked solid black, white text on it. */
+  --title: #111111;
   --on-title: #ffffff;
   --label-case: none;
   --label-weight: 500;
   --title-case: none;
   --title-weight: 500;
-  --indicator: #d62828;
+  --indicator: #111111;
   /* Inked lines between the dock slots, like panel borders. */
   --dock-divider: #111111;
   --backdrop-opacity: 1;
-  /* The film: deep shadow at the edges, a warm sepia frame, and cream
-     specks and scratches. */
-  --desk: #1c150d;
-  --warp: #c4a574;
-  --glint: #fbf3dc;
+  /* The film: a silver-grey frame, black at the edges. */
+  --desk: #0c0c0c;
+  --warp: #a8a8a4;
   /* The menu mark: a stand-in film leader's countdown circle.
-     Drawn in scripts/toon_logo.py. */
+     Drawn in scripts/steamboat_logo.py. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.7' d='M7 2h1v1H7zM7 3h1v1H7zM7 4h1v1H7zM7 5h1v1H7zM7 6h1v1H7zM1 7h13v1H1zM7 8h1v1H7zM7 9h1v1H7zM7 10h1v1H7zM7 11h1v1H7zM7 12h1v1H7z'/%3E%3Cpath d='M5 1h6v1H5zM3 2h2v1H3zM11 2h2v1H11zM2 3h1v1H2zM12 3h1v1H12zM1 4h1v1H1zM13 4h1v1H13zM1 5h1v1H1zM13 5h1v1H13zM0 6h1v1H0zM14 6h1v1H14zM0 7h1v1H0zM14 7h1v1H14zM0 8h1v1H0zM14 8h1v1H14zM1 9h1v1H1zM13 9h1v1H13zM1 10h1v1H1zM13 10h1v1H13zM2 11h1v1H2zM12 11h1v1H12zM3 12h2v1H3zM11 12h2v1H11zM5 13h6v1H5z'/%3E%3C/svg%3E");
   color-scheme: light;

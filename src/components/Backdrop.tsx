@@ -104,19 +104,13 @@ export const SILK = {
   pixelSize: 1,
 } as const
 
-/** An old sepia film in the projector, for `backdrop: 'film'`: --warp
- *  frame, --desk shadows, --glint specks and scratches. */
+/** An old film in the projector, for `backdrop: 'film'`: --warp
+ *  frame darkening to --desk at the edges. */
 const FILM = {
-  /** Grain strength; 0 is a clean print. */
-  grain: 0.12,
   /** How much the frame's brightness jumps, frame to frame. */
   flicker: 0.08,
   /** How dark the edges get; 0 is none. */
   vignette: 0.7,
-  /** Dust specks per frame, roughly. */
-  dust: 1,
-  /** Chance of each of the two scratches showing, 0..1. */
-  scratches: 0.5,
   /** Cell size in pixels. */
   pixelSize: 2,
   /** Projector speed, in frames a second. */
@@ -181,7 +175,6 @@ export function Backdrop() {
             {...FILM}
             paletteLow={b.desk}
             paletteHigh={b.warp}
-            glint={b.glint}
             disableAnimation={b.still}
           />
         ) : b.backdrop === 'silk' ? (
