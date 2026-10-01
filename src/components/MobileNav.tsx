@@ -9,7 +9,10 @@ const TAB =
 /** The phone's bottom bar in place of the menu bar and taskbar: the logo
  *  menu, then a tab per window. */
 export function MobileNav() {
-  const { stack, raise } = useWindows()
+  const { stack, raise, minimized } = useWindows()
+  // A window minimized on a wider screen isn't showing.
+  const top = stack.at(-1)
+  const focused = top && !minimized.includes(top) ? top : null
   return (
     <nav
       aria-label="Windows"
@@ -22,8 +25,8 @@ export function MobileNav() {
           to={pathFor(w.id)}
           // Also raise here: the URL may already point at a closed window.
           onClick={() => raise(w.id)}
-          aria-current={stack.at(-1) === w.id ? 'page' : undefined}
-          className={`${TAB} ${stack.at(-1) === w.id ? 'bg-(--accent) text-(--on-accent)' : ''}`}
+          aria-current={focused === w.id ? 'page' : undefined}
+          className={`${TAB} ${focused === w.id ? 'bg-(--accent) text-(--on-accent)' : ''}`}
         >
           {w.label}
         </Link>
