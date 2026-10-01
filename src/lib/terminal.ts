@@ -57,6 +57,7 @@ const TRAIN = [
   ' ___|[_][_]|___ ________ ________',
   '|   TomOS 9.2  ||  ____  ||  ____  |',
   "'-(o)--(o)-(o)-''-(o)(o)-''-(o)(o)-'",
+  '   choo choo. you meant ls.',
 ]
 
 function cow(text: string) {
@@ -103,7 +104,7 @@ const SECRETS: { match: RegExp; theme: Theme; out: string[] }[] = [
     out: ['Tom is now your friend.'],
   },
   {
-    match: /^(88 ?mph|great scott!?|1\.21 gigawatts)$/,
+    match: /^(88 ?mph|great scott|121 gigawatts)$/,
     theme: 'traveler',
     out: ["Where we're going, we don't need roads."],
   },
@@ -111,6 +112,55 @@ const SECRETS: { match: RegExp; theme: Theme; out: string[] }[] = [
     match: /^(who goes there|blood test|outpost 31)$/,
     theme: 'outpost',
     out: ['Blood test came back human. Probably.'],
+  },
+]
+
+/** Things people might just say. Matched after lowercasing and dropping
+ *  punctuation. */
+const PHRASES: { match: RegExp; out: string[] }[] = [
+  {
+    match: /^(hello|hi|hey) neo$/,
+    out: ["Neo's not here, man. He's taking the blue pill these days."],
+  },
+  {
+    match: /^(neo|mr anderson)$/,
+    out: ['You hear that? That is the sound of inevitability.'],
+  },
+  {
+    match: /^there is no spoon$/,
+    out: ['Then it is not the spoon that bends.'],
+  },
+  { match: /^i know kung fu$/, out: ['Show me.'] },
+  {
+    match: /^what is the matrix$/,
+    out: ['No one can be told. You have to see it for yourself.'],
+  },
+  {
+    match: /^open the pod bay doors( hal)?$/,
+    out: ["I'm sorry, guest. I'm afraid I can't do that."],
+  },
+  { match: /^i am your father$/, out: ['Nooooooooooooo!'] },
+  { match: /^may the force be with you$/, out: ['And also with you.'] },
+  {
+    match: /^beam me up( scotty)?$/,
+    out: ['Scotty is on break. Try again in 300 years.'],
+  },
+  { match: /^(do a barrel roll|barrel roll)$/, out: ['*rolls*'] },
+  {
+    match: /^up up down down left right left right b a( start)?$/,
+    out: ['+30 lives.'],
+  },
+  { match: /^hello world$/, out: ['Hello, world!'] },
+  { match: /^(how do i exit vim|exit vim)$/, out: ['Nobody knows.'] },
+  {
+    match: /^(who is tom|where is tom|tom)$/,
+    out: ['Probably fixing a CSS bug. Try tom@tompiarulli.com.'],
+  },
+  { match: /^(i love you|ily)$/, out: ['I know.'] },
+  { match: /^(thank you|thanks|ty)$/, out: ["You're welcome."] },
+  {
+    match: /^(are you alive|are you sentient)$/,
+    out: ["I'm a switch statement."],
   },
 ]
 
@@ -140,9 +190,12 @@ export function run(line: string, env: Env): Result {
   const [cmd = '', ...args] = input.split(/\s+/)
   const arg = args.join(' ')
 
-  const secret = SECRETS.find((s) => s.match.test(lower))
+  const said = lower.replace(/[.,!?']/g, '').replace(/\s+/g, ' ')
+  const secret = SECRETS.find((s) => s.match.test(said))
   if (secret)
     return { out: secret.out, effect: { type: 'theme', id: secret.theme } }
+  const phrase = PHRASES.find((p) => p.match.test(said))
+  if (phrase) return { out: phrase.out }
 
   switch (cmd.toLowerCase()) {
     case 'help':
@@ -167,7 +220,7 @@ export function run(line: string, env: Env): Result {
     case 'cd':
       if (!arg || arg === '~' || arg === '.') return { out: [] }
       if (arg === '..' || arg === '/')
-        return { out: [`cd: permission denied: ${arg}`] }
+        return { out: ["cd: you're in a browser. There's no way out."] }
       return { out: [`cd: no such file or directory: ${arg}`] }
     case 'open':
     case 'start': {
@@ -271,8 +324,19 @@ export function run(line: string, env: Env): Result {
       return { out: ["418 I'm a teapot."] }
     case 'rm':
       return {
-        out: [`rm: cannot remove '${args.at(-1) ?? ''}': Permission denied`],
+        out: ['rm: permission denied. Nice try though.'],
       }
+    case 'vim':
+    case 'vi':
+    case 'nano':
+    case 'emacs':
+      return {
+        out: [`${cmd}: not installed. You'd never have got out anyway.`],
+      }
+    case ':q':
+    case ':q!':
+    case ':wq':
+      return { out: ["You weren't in vim. But respect."] }
     case 'ping':
       return {
         out: [
@@ -293,9 +357,7 @@ export function run(line: string, env: Env): Result {
       if (args[0] === 'blame') return { out: ['It was Tom.'] }
       if (args[0] === 'push')
         return {
-          out: [
-            'remote: Permission to tomparkp/portfolio.git denied to guest.',
-          ],
+          out: ['Denied. Tom reviews every push personally.'],
         }
       if (args[0] === 'log')
         return { out: [`commit ${build.commit}`, `Date: ${build.date}`] }
@@ -321,13 +383,13 @@ export function run(line: string, env: Env): Result {
     case 'blue':
       if (lower === 'blue pill')
         return {
-          out: ['The story ends. You wake up in your bed.'],
+          out: ['The story ends. You wake up in your bed. Refresh to forget.'],
         }
       break
     case 'take':
       if (lower === 'take the blue pill')
         return {
-          out: ['The story ends. You wake up in your bed.'],
+          out: ['The story ends. You wake up in your bed. Refresh to forget.'],
         }
       break
   }
