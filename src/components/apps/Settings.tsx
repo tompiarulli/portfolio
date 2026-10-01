@@ -63,10 +63,6 @@ function ThemeTile({
   )
 }
 
-/** A static screen of glyphs standing in for the code rain. */
-const RAIN_PREVIEW =
-  'K7@Q2#VZ8X&M4R+PJ9$L0N=T3<W6YH>A5*FD1;S/G8B:C#E2U@QX7M4&RZ9KV$P0L+JN3T=W6<YH5>AF*D1S;G/B8:CE#U2'
-
 /** Fixed pseudo-random numbers in [0, 1), so previews match on server and
  *  client. */
 function seeded(seed: number) {
@@ -74,6 +70,16 @@ function seeded(seed: number) {
     seed = (seed * 16807) % 2147483647
     return seed / 2147483647
   }
+}
+
+/** A still of the code rain: a wall of digits, wider and taller than the
+ *  preview so it runs off every edge evenly. */
+function digits(seed: number) {
+  const next = seeded(seed)
+  return Array.from({ length: 7 }, () =>
+    Array.from({ length: 24 }, () => Math.floor(next() * 10)).join(''),
+  ).join('
+')
 }
 
 const PREVIEW_ROWS = 7
@@ -179,7 +185,7 @@ function SilkPreview() {
 }
 
 const PREVIEWS: Record<Exclude<Backdrop, 'plain' | 'silk' | 'film'>, string> = {
-  rain: RAIN_PREVIEW.repeat(2),
+  rain: digits(1999),
   stars: scatter('..··+*', 0.08, 7),
   streaks: streaks(88),
   snow: scatter('*·.+*', 0.2, 31),
@@ -221,12 +227,12 @@ function ThemePreview({
         <span className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--warp)_30%,var(--desk)_110%)] font-mono text-[10px] leading-[10px] tracking-[1px] whitespace-pre text-(--glint)">
           {FILM_PREVIEW}
         </span>
+      ) : backdrop === 'rain' ? (
+        <span className="absolute inset-0 flex items-center justify-center font-mono text-[11px] leading-[11px] tracking-[1px] [text-shadow:0_0_4px_var(--warp)] whitespace-pre text-(--warp)">
+          {PREVIEWS.rain}
+        </span>
       ) : (
-        <span
-          className={`absolute inset-0 font-mono text-[10px] leading-[10px] tracking-[1px] text-(--warp) ${
-            backdrop === 'rain' ? 'break-all' : 'whitespace-pre'
-          }`}
-        >
+        <span className="absolute inset-0 font-mono text-[10px] leading-[10px] tracking-[1px] whitespace-pre text-(--warp)">
           {PREVIEWS[backdrop]}
         </span>
       )}
