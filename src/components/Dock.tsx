@@ -41,11 +41,12 @@ export function Dock() {
           </span>
           <span
             aria-hidden
-            className={`absolute bottom-[3px] left-1/2 h-[2px] w-[20px] -translate-x-1/2 bg-(--indicator) transition-[scale,opacity] group-hover:bg-current group-active:bg-current duration-150 ${
+            className={`absolute bottom-[3px] left-1/2 h-[2px] w-[20px] -translate-x-1/2 transition-[scale,opacity] duration-150 ${
               stack.at(-1) === app.id
-                ? ''
+                ? 'bg-(--indicator)'
                 : stack.includes(app.id)
-                  ? 'scale-x-40 opacity-45'
+                  ? // Open but behind: a shorter, fainter mark in ink.
+                    'scale-x-40 bg-(--ink) opacity-15'
                   : 'scale-x-0'
             }`}
           />
