@@ -1,10 +1,10 @@
 # Icons
 
-The menu marks are inlined as mask tokens in `src/styles.css`, so nothing in this folder is served.
+The theme marks are inlined as mask tokens in `src/styles.css`, so nothing in this folder is served.
 
-## Menu marks
+## Theme marks
 
-Each theme has its own 16x16 mark on the taskbar's menu button, original pixel art:
+Each theme has its own 16x16 mark, shown in the Settings window, original pixel art:
 
 - White Rabbit: the white rabbit's head in slim sunglasses.
 - I Believe: a grey alien's head.
