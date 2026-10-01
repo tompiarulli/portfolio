@@ -1,9 +1,17 @@
 @import 'tailwindcss';
 
+/* ---------- Fonts ----------
+   Drop self-hosted WOFF2 pixel fonts in /public/fonts and uncomment.
+   Reference fonts: Pixolde (UI) + ChiKareGo2 (buttons).
+   Free stand-ins: "Silkscreen", "VT323".
+@font-face { font-family: 'UI'; src: url('/fonts/ui.woff2') format('woff2'); font-display: block; }
+@font-face { font-family: 'Title'; src: url('/fonts/title.woff2') format('woff2'); font-display: block; }
+*/
+
 /* Iosevka Extended (SIL OFL, see public/fonts/Iosevka-OFL.txt): the site
    font, a Unix terminal monospace in its wider Extended cut to match
    the film's screens, subset to Latin and a few symbols.
-   Medium for text, SemiBold for headings, Bold for the title bar.
+   Medium for text, SemiBold for the clock, Bold for window titles.
    Browsers only fetch it once text uses it. */
 @font-face {
   font-family: 'Iosevka';
@@ -80,44 +88,64 @@
 
 @theme {
   --font-ui: 'Iosevka', ui-monospace, monospace;
+  --font-title: 'Iosevka', ui-monospace, monospace;
   --font-mono: 'Iosevka', ui-monospace, monospace;
 }
 
 /* ---------- Tokens: the theme drives everything ----------
-   White Rabbit: a green phosphor terminal over
-   code rain, with a solid title bar and a monospace font. It is the
-   default; other themes override whatever tokens they need under their
-   own [data-theme]. The selector also matches a nested [data-theme] so
-   the theme picker can show each theme's colours in place. */
+   White Rabbit: a green phosphor terminal over a
+   desktop of code rain, with solid title bars and a monospace font. It is
+   the default; other themes override whatever tokens they need under
+   their own [data-theme]. The selector also matches a nested
+   [data-theme] so Settings can preview each theme in place. */
 :root,
 [data-theme] {
+  --bg: #03120a;
   --surface: #03120a;
+  --surface-light: #072a15;
+  --surface-dark: #41e07a;
+  --tertiary: #41e07a;
   --accent: #41e07a;
+  --accent-shadow: #03120a;
+  --button: #03120a;
+  --button-shadow: #03120a;
   --ink: #41e07a;
+  --highlight: #03120a;
+  --well: #020c06;
   --on-accent: #03120a;
-  /* A solid phosphor title bar, as in the film's terminal windows. */
+  --on-tertiary: #03120a;
+  /* Solid phosphor title bars, as in the film's terminal windows. */
   --title: #41e07a;
   --on-title: #03120a;
-  /* Case and weight of section headings. */
+  --stripe: transparent;
+  /* Case and weight of the clock and window titles. */
   --label-case: uppercase;
   --label-weight: 600;
+  --menu-size: 12px;
   /* Base text size. */
   --text-size: 12px;
   --title-case: uppercase;
   --title-weight: 700;
   --title-size: 12px;
-  /* A flat terminal window: thin bar, title in brackets like "[mobile]". */
+  /* Flat terminal windows: thin bar, title in brackets like "[mobile]",
+     and a close box at the left. */
+  --window-shadow: none;
   --title-height: 23px;
   --title-open: '[';
   --title-close: ']';
-  /* Strength of the backdrop behind the page. */
+  --close-bg: transparent;
+  --close-shadow: none;
+  /* A small hollow close box like the film's. */
+  --box-size: 15px;
+  --glyph-size: 9px;
+  /* Strength of the desktop background under the windows. */
   --backdrop-opacity: 0.9;
-  /* The backdrop, all glyphs: --warp ones, the leading or
+  /* The desktop's backdrop, all glyphs: --warp ones, the leading or
      nearest lit in --glint, over --desk. */
   --desk: #020806;
   --warp: #22b455;
   --glint: #d8ffe0;
-  /* The theme's mark, in the title bar: the white rabbit's head
+  /* Mark in the top-left menu, like an old OS's system logo: the white rabbit's head
      in slim sunglasses, on a 16x16 grid.
      Bright all over with a dimmer edge on the right.
      --logo-size is its grid, so the pixels stay crisp. */
@@ -131,14 +159,26 @@
    stars. */
 [data-theme='believe'] {
   --font-ui: 'DM Mono', ui-monospace, monospace;
+  --font-title: 'DM Mono', ui-monospace, monospace;
   --font-mono: 'DM Mono', ui-monospace, monospace;
   /* Blue-tinted greys, like the posters' cold night light. */
+  --bg: #bfc6ce;
   --surface: #bfc6ce;
+  --surface-light: #d4dae0;
+  --surface-dark: #7a848f;
+  --tertiary: #7a848f;
   /* The red ring around the logo's X. */
   --accent: #d8362b;
+  --accent-shadow: #86201a;
+  --button: #bfc6ce;
+  --button-shadow: #67717c;
   --ink: #0f1217;
+  --highlight: #f1f4f7;
+  /* Typing paper, for inset wells. */
+  --well: #eef1f5;
   --on-accent: #f1f4f7;
-  /* The title bar in the logo's red. */
+  --on-tertiary: #0f1217;
+  /* The focused window's title bar in the logo's red. */
   --title: #d8362b;
   --on-title: #f1f4f7;
   --backdrop-opacity: 1;
@@ -146,7 +186,7 @@
   --desk: #0a1417;
   --warp: #b9c9cd;
   --glint: #e4f2f5;
-  /* The mark: a grey alien's head on a 16x16 grid, shaded in three
+  /* The menu mark: a grey alien's head on a 16x16 grid, shaded in three
      levels and lit from the upper left, with a glint in each eye. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.4' d='M5 1h6v1H5zM3 2h1v1H3zM6 2h5v1H6zM2 3h1v1H2zM5 3h7v1H5zM2 4h1v1H2zM4 4h8v1H4zM1 5h12v1H1zM1 6h12v1H1zM1 7h2v1H1zM6 7h4v1H6zM1 8h1v1H1zM7 8h2v1H7zM2 9h1v1H2zM7 9h2v1H7zM2 10h2v1H2zM7 10h2v1H7zM3 11h2v1H3zM7 11h2v1H7zM4 12h6v1H4zM5 13h4v1H5zM6 14h2v1H6z'/%3E%3Cpath fill-opacity='.7' d='M11 2h2v1H11zM12 3h2v1H12zM12 4h2v1H12zM13 5h2v1H13zM13 6h2v1H13zM13 7h2v1H13zM14 8h1v1H14zM13 9h1v1H13zM12 10h2v1H12zM11 11h2v1H11zM10 12h2v1H10zM9 13h2v1H9zM8 14h2v1H8z'/%3E%3Cpath d='M5 0h6v1H5zM3 1h2v1H3zM11 1h2v1H11zM2 2h1v1H2zM13 2h1v1H13zM1 3h1v1H1zM14 3h1v1H14zM1 4h1v1H1zM14 4h1v1H14zM0 5h1v1H0zM15 5h1v1H15zM0 6h1v1H0zM15 6h1v1H15zM0 7h1v1H0zM3 7h3v1H3zM10 7h3v1H10zM15 7h1v1H15zM0 8h1v1H0zM2 8h1v1H2zM4 8h3v1H4zM9 8h1v1H9zM11 8h3v1H11zM15 8h1v1H15zM1 9h1v1H1zM3 9h4v1H3zM9 9h4v1H9zM14 9h1v1H14zM1 10h1v1H1zM4 10h3v1H4zM9 10h3v1H9zM14 10h1v1H14zM2 11h1v1H2zM5 11h2v1H5zM9 11h2v1H9zM13 11h1v1H13zM3 12h1v1H3zM12 12h1v1H12zM4 13h1v1H4zM11 13h1v1H11zM5 14h1v1H5zM10 14h1v1H10zM6 15h4v1H6z'/%3E%3C/svg%3E");
@@ -154,22 +194,35 @@
 }
 
 /* TomSpace: the site's white pages, royal blue
-   header and box headings, over the header's blue. */
+   header and pale blue and orange box headings, on a desktop in the
+   header's blue. */
 [data-theme='tomspace'] {
   --font-ui: 'DejaVu Sans Mono', ui-monospace, monospace;
+  --font-title: 'DejaVu Sans Mono', ui-monospace, monospace;
   --font-mono: 'DejaVu Sans Mono', ui-monospace, monospace;
+  --bg: #ffffff;
   --surface: #ffffff;
+  --surface-light: #ffffff;
+  --surface-dark: #6699cc;
+  /* Scrollbar thumbs in the orange of the "Tom's Blurbs" heading. */
+  --tertiary: #ffcc99;
+  --on-tertiary: #ff6600;
   /* The header's royal blue, also the link colour. */
   --accent: #003399;
+  --accent-shadow: #001a66;
+  --button: #ffffff;
+  --button-shadow: #6699cc;
   --ink: #000000;
+  --highlight: #ffffff;
+  --well: #ffffff;
   --on-accent: #ffffff;
-  /* The title bar in the header's royal blue. */
+  /* The focused window's title bar in the header's royal blue. */
   --title: #003399;
   --on-title: #ffffff;
   --backdrop-opacity: 1;
-  /* A plain backdrop in the header's blue. */
+  /* A plain desktop in the header's blue. */
   --desk: #003399;
-  /* The mark: three friends, like the people in an early social network's logo.
+  /* The menu mark: three friends, like the people in an early social network's logo.
      Drawn in scripts/tomspace_logo.py. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.7' d='M1 3h2v1H1zM13 3h2v1H13zM0 4h4v1H0zM12 4h4v1H12zM0 5h4v1H0zM12 5h4v1H12zM1 6h2v1H1zM13 6h2v1H13zM1 8h2v1H1zM13 8h2v1H13zM0 9h3v1H0zM13 9h3v1H13zM0 10h3v1H0zM13 10h3v1H13zM0 11h3v1H0zM13 11h3v1H13zM0 12h3v1H0zM13 12h3v1H13zM0 13h3v1H0zM13 13h3v1H13zM0 14h3v1H0zM13 14h3v1H13z'/%3E%3Cpath d='M6 1h4v1H6zM5 2h6v1H5zM5 3h6v1H5zM5 4h6v1H5zM6 5h4v1H6zM5 7h6v1H5zM4 8h8v1H4zM4 9h8v1H4zM4 10h8v1H4zM4 11h8v1H4zM4 12h8v1H4zM4 13h8v1H4zM4 14h8v1H4z'/%3E%3C/svg%3E");
@@ -177,18 +230,29 @@
 }
 
 /* Outpost 31: the station's cold steel greys and
-   the red of its road flares, a black title bar with the title card's
+   the red of its road flares, title bars black with the title card's
    burning blue, over snow blowing through the night. */
 [data-theme='outpost'] {
   --font-ui: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-title: 'IBM Plex Mono', ui-monospace, monospace;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
   /* Galvanised steel under fluorescent tubes. */
+  --bg: #c5ccd2;
   --surface: #c5ccd2;
+  --surface-light: #dde2e6;
+  --surface-dark: #7c8791;
+  --tertiary: #7c8791;
   /* A road flare's red. */
   --accent: #d42a1c;
+  --accent-shadow: #7a150d;
+  --button: #c5ccd2;
+  --button-shadow: #66717b;
   --ink: #0a0e12;
+  --highlight: #f3f6f8;
+  --well: #eef2f5;
   --on-accent: #f3f6f8;
-  /* The title bar black, lettered in the blue light
+  --on-tertiary: #0a0e12;
+  /* The focused window's title bar black, lettered in the blue light
      that burns through the title card. */
   --title: #0a0e12;
   --on-title: #7fd3ff;
@@ -197,7 +261,7 @@
   --desk: #070b12;
   --warp: #a9b8c6;
   --glint: #eef4f8;
-  /* The mark: the husky chased into camp, on a 16x16
+  /* The menu mark: the husky chased into camp, on a 16x16
      grid. Drawn in scripts/outpost_logo.py. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.4' d='M7 6h2v1H7zM3 7h3v1H3zM7 7h2v1H7zM10 7h3v1H10zM2 8h2v1H2zM6 8h4v1H6zM12 8h2v1H12zM2 9h12v1H2zM3 10h4v1H3zM9 10h4v1H9zM3 11h4v1H3zM9 11h4v1H9zM4 12h8v1H4zM5 13h2v1H5zM9 13h2v1H9zM6 14h4v1H6z'/%3E%3Cpath fill-opacity='.7' d='M2 2h1v1H2zM13 2h1v1H13zM2 3h2v1H2zM12 3h2v1H12zM2 4h3v1H2zM11 4h3v1H11z'/%3E%3Cpath d='M1 1h2v1H1zM13 1h2v1H13zM1 2h1v1H1zM3 2h1v1H3zM12 2h1v1H12zM14 2h1v1H14zM1 3h1v1H1zM4 3h1v1H4zM11 3h1v1H11zM14 3h1v1H14zM1 4h1v1H1zM5 4h6v1H5zM14 4h1v1H14zM1 5h14v1H1zM1 6h6v1H1zM9 6h6v1H9zM1 7h2v1H1zM6 7h1v1H6zM9 7h1v1H9zM13 7h2v1H13zM1 8h1v1H1zM14 8h1v1H14zM1 9h1v1H1zM14 9h1v1H14zM2 10h1v1H2zM7 10h2v1H7zM13 10h1v1H13zM2 11h1v1H2zM7 11h2v1H7zM13 11h1v1H13zM3 12h1v1H3zM12 12h1v1H12zM4 13h1v1H4zM7 13h2v1H7zM11 13h1v1H11zM5 14h1v1H5zM10 14h1v1H10zM6 15h4v1H6z'/%3E%3C/svg%3E");
@@ -205,15 +269,25 @@
 }
 
 /* Time Traveler: the time machine's brushed
-   stainless steel, a black title bar lit like the time circuits, and a
+   stainless steel, black title bars lit like the time circuits, and a
    night where fire trails streak past at 88 miles per hour. */
 [data-theme='traveler'] {
+  --bg: #c3c7cb;
   --surface: #c3c7cb;
+  --surface-light: #dde0e3;
+  --surface-dark: #7d838a;
+  --tertiary: #7d838a;
   /* The destination row's red. */
   --accent: #e0301e;
+  --accent-shadow: #7a150c;
+  --button: #c3c7cb;
+  --button-shadow: #6b7178;
   --ink: #101214;
+  --highlight: #f2f4f5;
+  --well: #e9ebed;
   --on-accent: #fff4ec;
-  /* The title bar is a time circuit display. */
+  --on-tertiary: #101214;
+  /* The focused window's title bar is a time circuit display. */
   --title: #101214;
   --on-title: #ff4a2a;
   --backdrop-opacity: 1;
@@ -222,7 +296,7 @@
   --desk: #07060d;
   --warp: #ff6a1a;
   --glint: #ffe7a0;
-  /* The mark: the flux capacitor. Drawn in
+  /* The menu mark: the flux capacitor. Drawn in
      scripts/traveler_logo.py. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.7' d='M2 2h2v1H2zM12 2h2v1H12zM2 3h3v1H2zM11 3h3v1H11zM3 4h1v1H3zM5 4h1v1H5zM10 4h1v1H10zM12 4h1v1H12zM4 5h3v1H4zM9 5h3v1H9zM5 6h1v1H5zM7 6h2v1H7zM10 6h1v1H10zM6 7h1v1H6zM9 7h1v1H9zM7 9h2v1H7zM8 10h1v1H8zM7 11h2v1H7zM8 12h1v1H8zM7 13h2v1H7zM7 14h2v1H7z'/%3E%3Cpath d='M0 0h16v1H0zM0 1h1v1H0zM15 1h1v1H15zM0 2h1v1H0zM15 2h1v1H15zM0 3h1v1H0zM15 3h1v1H15zM0 4h1v1H0zM4 4h1v1H4zM11 4h1v1H11zM15 4h1v1H15zM0 5h1v1H0zM15 5h1v1H15zM0 6h1v1H0zM6 6h1v1H6zM9 6h1v1H9zM15 6h1v1H15zM0 7h1v1H0zM7 7h2v1H7zM15 7h1v1H15zM0 8h1v1H0zM7 8h2v1H7zM15 8h1v1H15zM0 9h1v1H0zM15 9h1v1H15zM0 10h1v1H0zM7 10h1v1H7zM15 10h1v1H15zM0 11h1v1H0zM15 11h1v1H15zM0 12h1v1H0zM7 12h1v1H7zM15 12h1v1H15zM0 13h1v1H0zM15 13h1v1H15zM0 14h1v1H0zM15 14h1v1H15zM0 15h16v1H0z'/%3E%3C/svg%3E");
@@ -233,18 +307,19 @@
   box-sizing: border-box;
 }
 
-html {
-  background: var(--desk);
-  scrollbar-color: var(--ink) var(--desk);
-}
-
+html,
 body {
+  height: 100%;
   margin: 0;
+  overflow: hidden;
+  background: var(--desk);
   color: var(--ink);
   font-family: var(--font-ui);
   font-size: var(--text-size);
-  line-height: 1.5;
+  line-height: 1.35;
   -webkit-font-smoothing: none;
+  image-rendering: pixelated;
+  user-select: none;
 }
 
 img,
@@ -258,6 +333,49 @@ svg {
   color: var(--surface);
 }
 
+/* ---------- Retro desktop chrome utilities ---------- */
+/* Engraved double rule instead of a raised bevel; accent inverts. */
+@utility bevel {
+  background: var(--button);
+  box-shadow:
+    inset 0 0 0 2px var(--bg),
+    inset 0 0 0 3px var(--ink),
+    0 0 0 1px var(--ink);
+}
+@utility bevel-accent {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow:
+    inset 0 0 0 2px var(--accent),
+    inset 0 0 0 3px var(--on-accent),
+    0 0 0 1px var(--ink);
+}
+@utility bevel-pressed {
+  box-shadow:
+    inset -1px -1px 0 0 var(--highlight),
+    inset 1px 1px 0 0 var(--button-shadow),
+    0 0 0 1px var(--ink);
+  transform: translateY(1px);
+}
+@utility inset-well {
+  background: var(--well);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  box-shadow: inset 1px 1px 0 0 var(--surface-dark);
+}
+@utility stripes {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--stripe) 0 1px,
+    transparent 1px 4px
+  );
+  /* Four lines span 13px; inset 2px so they sit centered in a 17px band.
+     Clip to the content box so the repeat doesn't wrap into the padding. */
+  padding-block: 2px;
+  background-origin: content-box;
+  background-clip: content-box;
+}
+
 /* The theme's --logo, painted in the current text colour at its own
    pixel grid (--logo-size) so the pixels stay crisp. */
 .logo {
@@ -265,6 +383,24 @@ svg {
   height: var(--logo-size);
   background: currentColor;
   mask: var(--logo) center / contain no-repeat;
+}
+
+/* Scrollbars, black-bordered like the original */
+.os-scroll {
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--tertiary) var(--surface);
+}
+.os-scroll::-webkit-scrollbar {
+  width: 14px;
+}
+.os-scroll::-webkit-scrollbar-track {
+  background: var(--surface);
+  border-left: 1px solid var(--ink);
+}
+.os-scroll::-webkit-scrollbar-thumb {
+  background: var(--tertiary);
+  border: 1px solid var(--ink);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -14,7 +14,7 @@ const git = (args: string) => {
   }
 }
 
-// The commit this build came from, shown as the site version in the footer.
+// The commit this build came from, shown as the site version in Settings.
 // Vercel provides the SHA; locally it comes from git.
 const sha = process.env.VERCEL_GIT_COMMIT_SHA || git('rev-parse HEAD')
 const build = {
@@ -32,6 +32,9 @@ export default defineConfig({
     tanstackStart({
       // Every route is static HTML on Vercel's CDN. No function on the hot path.
       prerender: { enabled: true, crawlLinks: true, autoSubfolderIndex: true },
+      // Windows open from a closed menu, so no prerendered page links to
+      // them and the crawl alone never finds them.
+      pages: [{ path: '/socials' }, { path: '/settings' }, { path: '/system' }],
     }),
     viteReact(),
   ],

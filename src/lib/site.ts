@@ -8,7 +8,8 @@ export const site = {
     "I'm also a former digital nomad and 90s kid with a deep love of travel, movies, and pop culture.",
   ],
   signoff: '- Tom',
-  repo: 'https://github.com/tomparkp/portfolio',
+  os: 'TomOS 9.2',
+  builtWith: 'React 19, TanStack Start, Tailwind 4',
 }
 
 export type Profile = {

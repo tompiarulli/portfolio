@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
-import { THEMES } from '#/lib/theme'
+import { RAIN_CHARACTERS, THEMES } from '#/lib/theme'
 import type { Backdrop } from '#/lib/theme'
 
 // Backgrounds load after hydration, so the shell stays small. Only the
@@ -9,8 +9,7 @@ const Drift = lazy(() => import('./Drift'))
 
 /** Code rain knobs, for themes with `backdrop: 'rain'`. */
 const RAIN = {
-  /** Half-width katakana and digits, as in the film. */
-  characters: 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789Z:.=*+<>',
+  characters: RAIN_CHARACTERS,
   /** Glyph cell in pixels; the glyph fills most of it. */
   cellWidth: 14,
   cellHeight: 18,
@@ -93,7 +92,7 @@ function useBackdrop() {
 
 export function Backdrop() {
   const b = useBackdrop()
-  // A plain backdrop is just the page's --desk background.
+  // A plain desktop is just the page's --desk background.
   if (!b || b.backdrop === 'plain') return null
   // Every backdrop draws --warp glyphs, lit in --glint, over --desk.
   const shared = { background: b.desk, still: b.still }
