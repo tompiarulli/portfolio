@@ -24,13 +24,13 @@ export const PROMPT = 'guest@tomos:~$'
 
 export const BANNER = [
   `${site.os} (tty1)`,
-  "Type 'help' to look around. Some things aren't listed.",
+  "Type 'help' for a list of commands.",
 ]
 
 const FILES: Partial<Record<string, string[]>> = {
   'about.txt': [...site.letter, site.signoff],
   'contact.txt': profiles.map((p) => `${p.label.padEnd(10)}${p.handle}`),
-  '.plan': ['Build something small and fast.', 'Hide jokes in it.', 'Ship it.'],
+  '.plan': ['Build something small and fast.', 'Ship it.'],
 }
 
 const OPENABLE: Partial<Record<string, WindowId>> = {
@@ -51,13 +51,12 @@ const FORTUNES = [
   'Real programmers count from 0.',
 ]
 
-/** A little train for anyone who types sl for ls. */
+/** A little train, as sl draws for anyone who mistypes ls. */
 const TRAIN = [
   '     ______',
   ' ___|[_][_]|___ ________ ________',
   '|   TomOS 9.2  ||  ____  ||  ____  |',
   "'-(o)--(o)-(o)-''-(o)(o)-''-(o)(o)-'",
-  '   choo choo. you meant ls.',
 ]
 
 function cow(text: string) {
@@ -96,7 +95,7 @@ const SECRETS: { match: RegExp; theme: Theme; out: string[] }[] = [
   {
     match: /^(the truth is out there|trust no one|i want to believe)$/,
     theme: 'believe',
-    out: ['The truth is out there. So is this theme.'],
+    out: ['The truth is out there.'],
   },
   {
     match: /^(add tom|top ?8|thanks for the add)$/,
@@ -106,7 +105,7 @@ const SECRETS: { match: RegExp; theme: Theme; out: string[] }[] = [
   {
     match: /^(88 ?mph|great scott!?|1\.21 gigawatts)$/,
     theme: 'traveler',
-    out: ['Roads? Where this theme goes, nobody needs roads.'],
+    out: ["Where we're going, we don't need roads."],
   },
   {
     match: /^(who goes there|blood test|outpost 31)$/,
@@ -148,12 +147,7 @@ export function run(line: string, env: Env): Result {
   switch (cmd.toLowerCase()) {
     case 'help':
       return {
-        out: [
-          'Commands:',
-          `  ${COMMANDS.join('  ')}`,
-          "Try 'open contact' or 'theme'. Curious? Try things you'd type",
-          'in a real terminal.',
-        ],
+        out: ['Commands:', `  ${COMMANDS.join('  ')}`],
       }
     case 'ls':
     case 'dir': {
@@ -173,14 +167,14 @@ export function run(line: string, env: Env): Result {
     case 'cd':
       if (!arg || arg === '~' || arg === '.') return { out: [] }
       if (arg === '..' || arg === '/')
-        return { out: ["cd: you're in a browser. There's no way out."] }
+        return { out: [`cd: permission denied: ${arg}`] }
       return { out: [`cd: no such file or directory: ${arg}`] }
     case 'open':
     case 'start': {
       const id = OPENABLE[arg.toLowerCase()]
       if (id) return { out: [], effect: { type: 'open', id } }
       return {
-        out: [`open: no app named '${arg}'. Try about, contact or settings.`],
+        out: [`open: no app named '${arg}'`],
       }
     }
     case 'whoami':
@@ -189,7 +183,7 @@ export function run(line: string, env: Env): Result {
       return { out: ['/home/guest'] }
     case 'date':
       return {
-        out: [`${themeDate(env.theme)} (the clock follows the theme)`],
+        out: [themeDate(env.theme)],
       }
     case 'uname':
       return {
@@ -230,7 +224,7 @@ export function run(line: string, env: Env): Result {
               (t) =>
                 `${t.id === env.theme ? '*' : ' '} ${t.id.padEnd(9)}${t.label}`,
             ),
-            'Usage: theme <name>. Or say the right thing.',
+            'Usage: theme <name>',
           ],
         }
       const t = THEMES.find(
@@ -276,18 +270,9 @@ export function run(line: string, env: Env): Result {
     case 'coffee':
       return { out: ["418 I'm a teapot."] }
     case 'rm':
-      return { out: ['rm: permission denied. Nice try though.'] }
-    case 'vim':
-    case 'vi':
-    case 'nano':
-    case 'emacs':
       return {
-        out: [`${cmd}: not installed. You'd never have got out anyway.`],
+        out: [`rm: cannot remove '${args.at(-1) ?? ''}': Permission denied`],
       }
-    case ':q':
-    case ':q!':
-    case ':wq':
-      return { out: ["You weren't in vim. But respect."] }
     case 'ping':
       return {
         out: [
@@ -295,17 +280,26 @@ export function run(line: string, env: Env): Result {
         ],
       }
     case 'man':
-      return { out: [`No manual entry for ${arg || 'that'}. Try 'help'.`] }
+      return {
+        out: [
+          arg ? `No manual entry for ${arg}` : 'What manual page do you want?',
+        ],
+      }
     case 'git':
       if (args[0] === 'status')
         return {
           out: ['On branch main', 'nothing to commit, working tree clean'],
         }
       if (args[0] === 'blame') return { out: ['It was Tom.'] }
-      if (args[0] === 'push') return { out: ['Denied. Nice try.'] }
+      if (args[0] === 'push')
+        return {
+          out: [
+            'remote: Permission to tomparkp/portfolio.git denied to guest.',
+          ],
+        }
       if (args[0] === 'log')
         return { out: [`commit ${build.commit}`, `Date: ${build.date}`] }
-      return { out: ["git: try 'git status'"] }
+      return { out: [`git: '${args[0] ?? ''}' is not a git command.`] }
     case 'sl':
       return { out: TRAIN }
     case 'cowsay':
@@ -327,13 +321,13 @@ export function run(line: string, env: Env): Result {
     case 'blue':
       if (lower === 'blue pill')
         return {
-          out: ['The story ends. You wake up in your bed. Refresh to forget.'],
+          out: ['The story ends. You wake up in your bed.'],
         }
       break
     case 'take':
       if (lower === 'take the blue pill')
         return {
-          out: ['The story ends. You wake up in your bed. Refresh to forget.'],
+          out: ['The story ends. You wake up in your bed.'],
         }
       break
   }

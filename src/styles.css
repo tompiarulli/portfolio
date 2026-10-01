@@ -405,7 +405,7 @@ svg {
   mask: var(--logo) center / contain no-repeat;
 }
 
-/* A dock icon: its --icon-* mask painted in the current text colour */
+/* A dock icon, sized for the dock */
 .dock-icon {
   width: 32px;
   height: 32px;
