@@ -71,24 +71,22 @@ export function Window({
   const hidden = minimized.includes(id)
   const close = () => closeWindow(id)
 
-  // Animate into the dock and hide, or show and animate back out. Project
-  // windows fly to the Work icon. Hidden windows stay mounted, keeping their
-  // place and state.
+  // Animate into the dock and hide, or show and animate back out. Hidden
+  // windows stay mounted, keeping their place and state.
   const wasHidden = useRef(hidden)
   useLayoutEffect(() => {
     const el = ref.current
     if (!el || wasHidden.current === hidden) return
     wasHidden.current = hidden
     for (const a of el.getAnimations()) a.cancel()
-    const icon = id.startsWith('project:') ? 'work' : id
     if (hidden) {
-      const anim = flyToDock(el, icon, false)
+      const anim = flyToDock(el, id, false)
       const hide = () => (el.style.visibility = 'hidden')
       if (!anim) return void hide()
       anim.finished.then(hide, () => {})
     } else {
       el.style.visibility = ''
-      flyToDock(el, icon, true)
+      flyToDock(el, id, true)
     }
   }, [hidden, id])
 

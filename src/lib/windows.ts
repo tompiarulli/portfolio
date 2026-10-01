@@ -1,45 +1,30 @@
-/** Every window the desktop can open. Project windows carry their slug. */
-export type WindowId =
-  | 'about'
-  | 'work'
-  | 'media'
-  | 'blog'
-  | 'contact'
-  | 'settings'
-  | 'system'
-  | `project:${string}`
+/** Every window the desktop can open. */
+export type WindowId = 'about' | 'contact' | 'settings' | 'system'
 
 const PATHS = {
   about: '/',
-  work: '/work',
-  media: '/media',
-  blog: '/blog',
   contact: '/contact',
   settings: '/settings',
   system: '/system',
-} as const
-
-type AppId = keyof typeof PATHS
+} as const satisfies Record<WindowId, string>
 
 export function pathFor(id: WindowId): string {
-  return id.startsWith('project:')
-    ? `/work/${encodeURIComponent(id.slice('project:'.length))}`
-    : PATHS[id as AppId]
+  return PATHS[id]
 }
 
 export function idForPath(pathname: string): WindowId | null {
   const path = pathname.replace(/\/+$/, '') || '/'
-  const slug = /^\/work\/([^/]+)$/.exec(path)?.[1]
-  if (slug) return `project:${decodeURIComponent(slug)}`
-  return (Object.keys(PATHS) as AppId[]).find((k) => PATHS[k] === path) ?? null
+  return (
+    (Object.keys(PATHS) as WindowId[]).find((k) => PATHS[k] === path) ?? null
+  )
 }
 
-/** Windows open on first paint for a URL, back to front. About and Media are
- *  always open. */
+/** Windows open on first paint for a URL, back to front. About and Contact
+ *  are always open. */
 export function initialStack(pathname: string): WindowId[] {
   const id = idForPath(pathname)
-  const base: WindowId[] = ['media', 'about']
+  const base: WindowId[] = ['contact', 'about']
   if (!id || id === 'about') return base
-  if (id === 'media') return ['about', 'media']
-  return id.startsWith('project:') ? [...base, 'work', id] : [...base, id]
+  if (id === 'contact') return ['about', 'contact']
+  return [...base, id]
 }

@@ -11,8 +11,6 @@ export const site = {
   email: 'tom@tompiarulli.com',
   os: 'TomOS 9.2',
   builtWith: 'React 19, TanStack Start, Tailwind 4',
-  media: 'No videos yet.',
-  blog: 'No posts yet.',
 }
 
 export type Profile = {
@@ -30,24 +28,4 @@ export const profiles: Profile[] = [
     url: 'https://www.linkedin.com/in/tompiarulli/',
   },
   { label: 'GitHub', handle: 'tomparkp', url: 'https://github.com/tomparkp' },
-]
-
-export type Project = {
-  slug: string
-  name: string
-  year: string
-  blurb: string
-  stack: string[]
-  url?: string
-}
-
-export const projects: Project[] = [
-  {
-    slug: 'example-one',
-    name: 'Example Project',
-    year: '2026',
-    blurb: 'Replace me in src/lib/site.ts.',
-    stack: ['React', 'TanStack Start', 'Vercel'],
-    url: 'https://example.com',
-  },
 ]
