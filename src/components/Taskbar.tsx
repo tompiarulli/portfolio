@@ -32,7 +32,7 @@ export function Taskbar() {
             className={`flex h-[26px] min-w-0 flex-1 basis-0 items-center border border-(--ink) px-2.5 outline-offset-2 focus-visible:outline-2 focus-visible:outline-(--ink) sm:max-w-[160px] ${
               focused
                 ? 'bg-(--accent) text-(--on-accent)'
-                : 'opacity-55 hover:bg-(--tertiary) hover:text-(--on-tertiary) hover:opacity-100'
+                : 'opacity-70 hover:bg-(--tertiary) hover:text-(--on-tertiary) hover:opacity-100'
             }`}
           >
             <span className="truncate font-title tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">
