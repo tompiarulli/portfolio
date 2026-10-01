@@ -11,12 +11,22 @@ Every theme shares one set: 32x32 icons from KDE 1.1 (1999), by the KDE artists,
 - Terminal: not from KDE; a CRT with a prompt in the same style, drawn in `scripts/terminal_icon.py`
 - Settings: `kcontrol/kcontrol/pics/kcontrol.xpm`
 
+### White Rabbit
+
+32x32 icons from CDE, the Common Desktop Environment (1993-95), designed by the User Interaction Design Group at Hewlett-Packard; GNU Lesser General Public License v2 or later (`COPYING` in [cdesktopenv](https://sourceforge.net/p/cdesktopenv/code/)). Brightness becomes opacity in three steps, in `cde/`, built by `scripts/cde_icons.py` and painted in the theme's text colour.
+
+- About: `cde/programs/icons/Dtinfo.m.pm`
+- Contact: `cde/programs/icons/DtMnew.m.pm`
+- Terminal: `cde/programs/icons/Fpterm.m.pm`
+- Settings: `cde/programs/icons/Fpstyle.m.pm`
+
 ## Menu marks
 
 Each theme has its own 16x16 mark in the top-left menu, original pixel art:
 
+- Silk: a window with its tab, drawn in `scripts/silk_logo.py`.
 - White Rabbit: a white rabbit's head in slim black sunglasses.
-- I Believe: a grey alien's head.
-- TomSpace: three friends in a row, drawn in `scripts/tomspace_logo.py`.
+- Believe: a grey alien's head.
+- Toon: a stand-in film leader's countdown circle, drawn in `scripts/toon_logo.py`.
 - Time Traveler: the flux capacitor, drawn in `scripts/traveler_logo.py`.
 - Outpost 31: the husky, drawn in `scripts/outpost_logo.py`.

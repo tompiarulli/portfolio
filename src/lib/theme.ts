@@ -1,18 +1,25 @@
-export type Backdrop = 'rain' | 'stars' | 'streaks' | 'snow' | 'plain'
+export type Backdrop =
+  | 'rain'
+  | 'stars'
+  | 'streaks'
+  | 'snow'
+  | 'dust'
+  | 'dither'
+  | 'silk'
+  | 'film'
+  | 'plain'
 
 /** Themes set the colours (tokens in styles.css), the font, the menu mark,
  *  which background draws the desktop and the day the clock shows; the
  *  rest of the chrome is shared. Each is an homage to something I like. */
 export const THEMES = [
-  // Each theme's clock shows a day that matters to what it nods to.
+  // Each theme's clock shows a day that matters to what it nods to; the
+  // default shows today.
+  { id: 'silk', label: 'Silk', backdrop: 'silk', date: undefined },
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
-  { id: 'believe', label: 'I Believe', backdrop: 'stars', date: '1993-09-10' },
-  {
-    id: 'tomspace',
-    label: 'TomSpace',
-    backdrop: 'plain',
-    date: '2003-08-01',
-  },
+  { id: 'believe', label: 'Believe', backdrop: 'stars', date: '1993-09-10' },
+  // The first fully hand-drawn animated film.
+  { id: 'toon', label: 'Toon', backdrop: 'film', date: '1908-08-17' },
   {
     id: 'traveler',
     label: 'Time Traveler',
@@ -29,11 +36,11 @@ export const THEMES = [
   id: string
   label: string
   backdrop: Backdrop
-  /** Day the clock shows, as YYYY-MM-DD. */
-  date: string
+  /** Day the clock shows, as YYYY-MM-DD; none means today. */
+  date?: string
 }[]
 export type Theme = (typeof THEMES)[number]['id']
-export const DEFAULT_THEME: Theme = 'rabbit'
+export const DEFAULT_THEME: Theme = 'silk'
 /** Glyphs of White Rabbit's code rain: half-width katakana and digits, as
  *  in the film. Shared with the Settings preview. */
 export const RAIN_CHARACTERS =

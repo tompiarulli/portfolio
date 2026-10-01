@@ -32,10 +32,10 @@
   font-weight: 700 900;
 }
 
-/* DM Mono (SIL OFL, see public/fonts/DMMono-OFL.txt): I Believe's font,
-   a soft, elegant monospace. Latin subset from Google Fonts; Regular for
-   text and Medium for labels and titles. Only fetched while that theme is
-   on. */
+/* DM Mono (SIL OFL, see public/fonts/DMMono-OFL.txt): Believe's and
+   Silk's font, a soft, elegant monospace. Latin subset from Google Fonts;
+   Regular for text and Medium for labels and titles. Only fetched while
+   one of those themes is on. */
 @font-face {
   font-family: 'DM Mono';
   src: url('/fonts/dm-mono-400.woff2') format('woff2');
@@ -47,25 +47,6 @@
   src: url('/fonts/dm-mono-500.woff2') format('woff2');
   font-display: block;
   font-weight: 500 900;
-}
-
-/* DejaVu Sans Mono (Bitstream Vera license, see
-   public/fonts/DejaVu-LICENSE.txt): TomSpace's font, the monospace cut of
-   Bitstream Vera, which was drawn in Verdana's image, the font of every
-   mid-2000s profile page. Latin subset from Fontsource, cut down with
-   the pyftsubset command in public/fonts/README.md. Only fetched while
-   that theme is on. */
-@font-face {
-  font-family: 'DejaVu Sans Mono';
-  src: url('/fonts/dejavu-mono-400.woff2') format('woff2');
-  font-display: block;
-  font-weight: 300 500;
-}
-@font-face {
-  font-family: 'DejaVu Sans Mono';
-  src: url('/fonts/dejavu-mono-700.woff2') format('woff2');
-  font-display: block;
-  font-weight: 600 900;
 }
 
 /* IBM Plex Mono (SIL OFL, see public/fonts/IBMPlexMono-OFL.txt): Outpost
@@ -84,6 +65,29 @@
   src: url('/fonts/ibm-plex-mono-600.woff2') format('woff2');
   font-display: block;
   font-weight: 600 900;
+}
+
+/* Recursive (SIL OFL, see public/fonts/Recursive-OFL.txt): Toon's font,
+   one variable family with brush-like Casual curves, like a cartoon's hand
+   lettering, in three static cuts from Fontsource's variable Latin file:
+   the Casual sans for text, and the Casual mono in Regular and Medium for
+   the terminal, titles and labels. Only fetched while that theme is on. */
+@font-face {
+  font-family: 'Recursive Casual';
+  src: url('/fonts/recursive-sans-casual-400.woff2') format('woff2');
+  font-display: block;
+}
+@font-face {
+  font-family: 'Recursive Mono Casual';
+  src: url('/fonts/recursive-mono-casual-400.woff2') format('woff2');
+  font-display: block;
+  font-weight: 300 400;
+}
+@font-face {
+  font-family: 'Recursive Mono Casual';
+  src: url('/fonts/recursive-mono-casual-500.woff2') format('woff2');
+  font-display: block;
+  font-weight: 500 900;
 }
 
 @theme {
@@ -124,15 +128,17 @@
   --dock-label-size: 12px;
   /* Base text size. */
   --text-size: 12px;
+  /* Crisp, unsmoothed type; a theme may turn smoothing back on. */
+  --font-smoothing: none;
   --title-case: uppercase;
   --title-weight: 700;
   --title-size: 12px;
-  /* Flat terminal windows: thin bar, title in brackets like "[mobile]",
-     and a close box at the left. */
+  /* Flat terminal windows: thin bar and a close box at the left. The
+     title's brackets, like "[mobile]", are White Rabbit's alone. */
   --window-shadow: none;
   --title-height: 23px;
-  --title-open: '[';
-  --title-close: ']';
+  --title-open: '';
+  --title-close: '';
   --close-bg: transparent;
   --close-shadow: none;
   /* A small hollow close box like the film's. */
@@ -161,21 +167,109 @@
      --logo-size is its grid, so the pixels stay crisp. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.4' d=''/%3E%3Cpath fill-opacity='.7' d='M12 0h1v1H12zM4 1h1v1H4zM11 1h1v1H11zM13 1h1v1H13zM4 2h1v1H4zM11 2h1v1H11zM13 2h1v1H13zM4 3h1v1H4zM11 3h1v1H11zM13 3h1v1H13zM4 4h1v1H4zM11 4h1v1H11zM13 4h1v1H13zM4 5h1v1H4zM11 5h1v1H11zM12 6h1v1H12zM13 7h1v1H13zM14 8h1v1H14zM14 9h1v1H14zM14 10h1v1H14zM13 11h2v1H13zM13 12h2v1H13zM12 13h1v1H12zM12 14h1v1H12zM4 15h8v1H4z'/%3E%3Cpath d='M3 0h2v1H3zM11 0h1v1H11zM2 1h2v1H2zM5 1h1v1H5zM10 1h1v1H10zM12 1h1v1H12zM2 2h2v1H2zM5 2h1v1H5zM10 2h1v1H10zM12 2h1v1H12zM2 3h2v1H2zM5 3h1v1H5zM10 3h1v1H10zM12 3h1v1H12zM2 4h2v1H2zM5 4h1v1H5zM10 4h1v1H10zM12 4h1v1H12zM3 5h1v1H3zM5 5h1v1H5zM10 5h1v1H10zM12 5h1v1H12zM3 6h9v1H3zM2 7h11v1H2zM1 8h1v1H1zM3 8h1v1H3zM10 8h1v1H10zM1 9h1v1H1zM7 9h2v1H7zM1 10h2v1H1zM7 10h2v1H7zM13 10h1v1H13zM1 11h6v1H1zM9 11h4v1H9zM1 12h12v1H1zM2 13h4v1H2zM10 13h2v1H10zM3 14h9v1H3z'/%3E%3C/svg%3E");
-  /* Dock icons: Solar duotone, the detail over a half-strength back. */
-  --icon-front: currentColor;
-  --icon-back: color-mix(in srgb, currentColor 50%, transparent);
+  /* Dock icons: Haiku's drawings (see public/icons/README.md) as masks
+     painted in the text colour. Dark docks use the icon's own light;
+     light docks an inverted copy. A theme may show the drawing itself
+     instead through --icon-<id>-image, with --icon-fill transparent. */
+  --icon-fill: currentColor;
+  --icon-about-mask: url('/icons/haiku/App_StyledEdit-dark.png');
+  --icon-contact-mask: url('/icons/haiku/App_Mail-dark.png');
+  --icon-terminal-mask: url('/icons/haiku/App_Terminal-dark.png');
+  --icon-settings-mask: url('/icons/haiku/Folder_prefs-dark.png');
   color-scheme: dark;
 }
 
-/* The light themes paint the icons' back layer in their accent. */
-[data-theme='believe'],
-[data-theme='tomspace'],
-[data-theme='outpost'],
-[data-theme='traveler'] {
-  --icon-back: var(--accent);
+/* White Rabbit's window titles sit in brackets, like a terminal's. */
+[data-theme='rabbit'] {
+  --title-open: '[';
+  --title-close: ']';
+  /* A 90s Unix workstation's icons, lit in phosphor. Built in
+     scripts/cde_icons.py. */
+  --icon-about-mask: url('/icons/cde/about.png');
+  --icon-contact-mask: url('/icons/cde/contact.png');
+  --icon-terminal-mask: url('/icons/cde/terminal.png');
+  --icon-settings-mask: url('/icons/cde/settings.png');
 }
 
-/* I Believe: cold black, white and grey with a single red, over a
+/* The light docks take the inverted copies. */
+[data-theme='believe'],
+[data-theme='toon'],
+[data-theme='outpost'],
+[data-theme='traveler'] {
+  --icon-about-mask: url('/icons/haiku/App_StyledEdit-light.png');
+  --icon-contact-mask: url('/icons/haiku/App_Mail-light.png');
+  --icon-terminal-mask: url('/icons/haiku/App_Terminal-light.png');
+  --icon-settings-mask: url('/icons/haiku/Folder_prefs-light.png');
+}
+
+/* Silk: flat blue-white panes over a blue desk of slowly folding silk.
+   Hairline slate outlines, barely-there bevels, light type, and blue only
+   where it means something: the focused title bar, selections and the
+   open-window mark. The icons are shown as drawn, in colour. */
+[data-theme='silk'] {
+  /* A soft monospace, smoothed to match the silk. */
+  --font-ui: 'DM Mono', ui-monospace, monospace;
+  --font-title: 'DM Mono', ui-monospace, monospace;
+  --font-mono: 'DM Mono', ui-monospace, monospace;
+  --font-smoothing: antialiased;
+  /* A px up from the monospaced themes; the sans runs smaller. */
+  --text-size: 13px;
+  /* A faint blue-white, with bevels only a step off it so windows read
+     as flat panes. */
+  --bg: #eef2f6;
+  --surface: #eef2f6;
+  --surface-light: #ffffff;
+  --surface-dark: #b4c0cc;
+  /* Dock hover in a pale blue-grey. */
+  --tertiary: #d8e0e8;
+  --on-tertiary: #1f2b38;
+  /* The title bars' blue, for selected controls and the pressed dock. */
+  --accent: #3a72a8;
+  --accent-shadow: #24507c;
+  /* Buttons keep a little more bevel, so they still look pressable. */
+  --button: #eef2f6;
+  --button-shadow: #8a98a8;
+  /* Dark slate outlines and text, quieter than black. */
+  --ink: #1f2b38;
+  --highlight: #ffffff;
+  /* White paper for inset wells. */
+  --well: #ffffff;
+  --on-accent: #ffffff;
+  /* The focused window's title bar a touch brighter than the desk, like
+     the silk's crests, white text on it. */
+  --title: #3a72a8;
+  --on-title: #ffffff;
+  --label-case: none;
+  --label-weight: 500;
+  --title-case: none;
+  --title-weight: 500;
+  --title-height: 25px;
+  /* The open-window mark in the blue. */
+  --indicator: #3a72a8;
+  --dock-divider: #c4ced8;
+  --backdrop-opacity: 1;
+  /* The silk's folds, from the desktop blue in the creases (a step
+     darker than the title bars) to a paler blue on the crests. */
+  --desk: #2b5a85;
+  --warp: #6f93b8;
+  --glint: #e0f0f0;
+  /* The icons as drawn, in their own colours. */
+  --icon-fill: transparent;
+  --icon-about-mask: none;
+  --icon-contact-mask: none;
+  --icon-terminal-mask: none;
+  --icon-settings-mask: none;
+  --icon-about-image: url('/icons/haiku/App_StyledEdit.svg');
+  --icon-contact-image: url('/icons/haiku/App_Mail.svg');
+  --icon-terminal-image: url('/icons/haiku/App_Terminal.svg');
+  --icon-settings-image: url('/icons/haiku/Folder_prefs.svg');
+  /* The menu mark: a window with its tab. Drawn in scripts/silk_logo.py. */
+  --logo-size: 16px;
+  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.4' d='M2 5h12v1H2zM2 6h12v1H2zM2 7h12v1H2zM2 8h12v1H2zM2 9h12v1H2zM2 10h12v1H2zM2 11h12v1H2zM2 12h12v1H2zM2 13h12v1H2z'/%3E%3Cpath fill-opacity='.7' d='M2 2h5v1H2zM2 3h5v1H2z'/%3E%3Cpath d='M1 1h7v1H1zM1 2h1v1H1zM7 2h1v1H7zM1 3h1v1H1zM7 3h1v1H7zM1 4h14v1H1zM1 5h1v1H1zM14 5h1v1H14zM1 6h1v1H1zM14 6h1v1H14zM1 7h1v1H1zM14 7h1v1H14zM1 8h1v1H1zM14 8h1v1H14zM1 9h1v1H1zM14 9h1v1H14zM1 10h1v1H1zM14 10h1v1H14zM1 11h1v1H1zM14 11h1v1H14zM1 12h1v1H1zM14 12h1v1H14zM1 13h1v1H1zM14 13h1v1H14zM1 14h14v1H1z'/%3E%3C/svg%3E");
+  color-scheme: light;
+}
+
+/* Believe: cold black, white and grey with a single red, over a
    misty teal sky of twinkling stars. */
 [data-theme='believe'] {
   --font-ui: 'DM Mono', ui-monospace, monospace;
@@ -214,39 +308,54 @@
   color-scheme: light;
 }
 
-/* TomSpace: white pages, a royal blue header and pale blue and orange
-   box headings, on a desktop in the header's blue. */
-[data-theme='tomspace'] {
-  --font-ui: 'DejaVu Sans Mono', ui-monospace, monospace;
-  --font-title: 'DejaVu Sans Mono', ui-monospace, monospace;
-  --font-mono: 'DejaVu Sans Mono', ui-monospace, monospace;
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --surface-light: #ffffff;
-  --surface-dark: #6699cc;
-  /* Dock hover in the orange of the "Tom's Blurbs" heading. */
-  --tertiary: #ffcc99;
-  --on-tertiary: #ff6600;
-  /* The header's royal blue, also the link colour. */
-  --accent: #003399;
-  --accent-shadow: #001a66;
-  --button: #ffffff;
-  --button-shadow: #6699cc;
-  --ink: #000000;
-  --highlight: #ffffff;
+/* Toon: hand-drawn cartoon. Cream cel paper with heavy black ink, a
+   bright red title bar and golden yellow highlights, lettered in a casual
+   brush hand, over an old sepia film flickering through the projector. */
+[data-theme='toon'] {
+  --font-ui: 'Recursive Casual', ui-sans-serif, sans-serif;
+  --font-title: 'Recursive Mono Casual', ui-monospace, monospace;
+  --font-mono: 'Recursive Mono Casual', ui-monospace, monospace;
+  --font-smoothing: antialiased;
+  --text-size: 13px;
+  /* Cream cel paper. */
+  --bg: #f6ecd4;
+  --surface: #f6ecd4;
+  --surface-light: #fffaf0;
+  --surface-dark: #a8946c;
+  /* Dock hover in golden yellow. */
+  --tertiary: #ffc72c;
+  --on-tertiary: #111111;
+  /* Cartoon red, for selected controls and the pressed dock. */
+  --accent: #d62828;
+  --accent-shadow: #8c1414;
+  --button: #f6ecd4;
+  --button-shadow: #7a6848;
+  /* Heavy black ink outlines. */
+  --ink: #111111;
+  --highlight: #fffaf0;
+  /* White, like the gloves, for inset wells. */
   --well: #ffffff;
   --on-accent: #ffffff;
-  /* The focused window's title bar in the header's royal blue. */
-  --title: #003399;
+  /* The focused window's title bar in the red, white text on it. */
+  --title: #d62828;
   --on-title: #ffffff;
-  --indicator: #ff6600;
+  --label-case: none;
+  --label-weight: 500;
+  --title-case: none;
+  --title-weight: 500;
+  --indicator: #d62828;
+  /* Inked lines between the dock slots, like panel borders. */
+  --dock-divider: #111111;
   --backdrop-opacity: 1;
-  /* A plain desktop in the header's blue. */
-  --desk: #003399;
-  /* The menu mark: three friends, in a row.
-     Drawn in scripts/tomspace_logo.py. */
+  /* The film: deep shadow at the edges, a warm sepia frame, and cream
+     specks and scratches. */
+  --desk: #1c150d;
+  --warp: #c4a574;
+  --glint: #fbf3dc;
+  /* The menu mark: a stand-in film leader's countdown circle.
+     Drawn in scripts/toon_logo.py. */
   --logo-size: 16px;
-  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.7' d='M1 3h2v1H1zM13 3h2v1H13zM0 4h4v1H0zM12 4h4v1H12zM0 5h4v1H0zM12 5h4v1H12zM1 6h2v1H1zM13 6h2v1H13zM1 8h2v1H1zM13 8h2v1H13zM0 9h3v1H0zM13 9h3v1H13zM0 10h3v1H0zM13 10h3v1H13zM0 11h3v1H0zM13 11h3v1H13zM0 12h3v1H0zM13 12h3v1H13zM0 13h3v1H0zM13 13h3v1H13zM0 14h3v1H0zM13 14h3v1H13z'/%3E%3Cpath d='M6 1h4v1H6zM5 2h6v1H5zM5 3h6v1H5zM5 4h6v1H5zM6 5h4v1H6zM5 7h6v1H5zM4 8h8v1H4zM4 9h8v1H4zM4 10h8v1H4zM4 11h8v1H4zM4 12h8v1H4zM4 13h8v1H4zM4 14h8v1H4z'/%3E%3C/svg%3E");
+  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.7' d='M7 2h1v1H7zM7 3h1v1H7zM7 4h1v1H7zM7 5h1v1H7zM7 6h1v1H7zM1 7h13v1H1zM7 8h1v1H7zM7 9h1v1H7zM7 10h1v1H7zM7 11h1v1H7zM7 12h1v1H7z'/%3E%3Cpath d='M5 1h6v1H5zM3 2h2v1H3zM11 2h2v1H11zM2 3h1v1H2zM12 3h1v1H12zM1 4h1v1H1zM13 4h1v1H13zM1 5h1v1H1zM13 5h1v1H13zM0 6h1v1H0zM14 6h1v1H14zM0 7h1v1H0zM14 7h1v1H14zM0 8h1v1H0zM14 8h1v1H14zM1 9h1v1H1zM13 9h1v1H13zM1 10h1v1H1zM13 10h1v1H13zM2 11h1v1H2zM12 11h1v1H12zM3 12h2v1H3zM11 12h2v1H11zM5 13h6v1H5z'/%3E%3C/svg%3E");
   color-scheme: light;
 }
 
@@ -340,7 +449,7 @@ body {
   font-family: var(--font-ui);
   font-size: var(--text-size);
   line-height: 1.35;
-  -webkit-font-smoothing: none;
+  -webkit-font-smoothing: var(--font-smoothing);
   image-rendering: pixelated;
   user-select: none;
 }
@@ -412,11 +521,12 @@ svg {
 .dock-icon {
   width: 32px;
   height: 32px;
-}
-/* Pressed, the dock turns accent, so the icon goes plain. */
-.group:active .dock-icon {
-  --icon-front: currentColor;
-  --icon-back: color-mix(in srgb, currentColor 50%, transparent);
+  background: var(--icon-fill) var(--icon-image) center / contain no-repeat;
+  mask-image: var(--icon-mask);
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  image-rendering: pixelated;
 }
 
 /* Scrollbars, black-bordered like the original */

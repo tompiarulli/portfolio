@@ -76,7 +76,7 @@ function cow(text: string) {
 
 function themeDate(theme: Theme) {
   const t = THEMES.find((x) => x.id === theme) ?? THEMES[0]
-  const d = new Date(`${t.date}T12:00:00`)
+  const d = t.date ? new Date(`${t.date}T12:00:00`) : new Date()
   return d.toDateString()
 }
 
@@ -97,11 +97,6 @@ const SECRETS: { match: RegExp; theme: Theme; out: string[] }[] = [
     match: /^(the truth is out there|trust no one|i want to believe)$/,
     theme: 'believe',
     out: ['The truth is out there.'],
-  },
-  {
-    match: /^(add tom|top ?8|thanks for the add)$/,
-    theme: 'tomspace',
-    out: ['Tom is now your friend.'],
   },
   {
     match: /^(88 ?mph|great scott|121 gigawatts)$/,

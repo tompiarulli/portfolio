@@ -10,11 +10,11 @@ function fmtTime(d: Date) {
   return `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`
 }
 
-/** "WED 31 MAR 1999": the theme's day, the time stays real. */
+/** "WED 31 MAR 1999": the theme's day, or today; the time stays real. */
 function fmtDate() {
   const id = document.documentElement.dataset.theme
   const theme = THEMES.find((t) => t.id === id) ?? THEMES[0]
-  const d = new Date(`${theme.date}T12:00:00`)
+  const d = theme.date ? new Date(`${theme.date}T12:00:00`) : new Date()
   const day = String(d.getDate()).padStart(2, '0')
   return `${DAYS[d.getDay()]} ${day} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`
 }
