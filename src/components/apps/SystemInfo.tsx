@@ -14,6 +14,18 @@ export function SystemInfo() {
         </dd>
         <dt className="font-title">Built with</dt>
         <dd>{site.builtWith}</dd>
+        <dt className="font-title">Grass</dt>
+        <dd>
+          Photo by{' '}
+          <a
+            href={site.grassPhoto.url}
+            target="_blank"
+            rel="noopener"
+            className="underline"
+          >
+            {site.grassPhoto.by}
+          </a>
+        </dd>
       </dl>
     </Window>
   )

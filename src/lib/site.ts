@@ -27,7 +27,7 @@ export const site = {
       'Welcome back',
     ],
   },
-  /** The Shut Down photo, credited on the photo itself. */
+  /** The Shut Down photo, credited in System Info. */
   grassPhoto: {
     by: 'Bruno Aguirre',
     url: 'https://unsplash.com/photos/green-field-YRfaG3JVwkU',

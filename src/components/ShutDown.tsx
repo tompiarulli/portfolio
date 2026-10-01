@@ -159,14 +159,6 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
           <span className="bevel blink pointer-events-none absolute top-1/2 left-1/2 -translate-1/2 px-6 py-2 font-title text-base text-(--ink)">
             Touch grass to start
           </span>
-          <a
-            href={site.grassPhoto.url}
-            target="_blank"
-            rel="noopener"
-            className="absolute right-0 bottom-0 bg-(--off)/80 px-4 py-2 text-(--off-text) hover:underline"
-          >
-            Photo by {site.grassPhoto.by}
-          </a>
         </>
       )}
       {phase === 'up' && (
