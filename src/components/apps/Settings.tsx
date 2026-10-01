@@ -6,11 +6,17 @@ import type { Backdrop, Theme } from '#/lib/theme'
 
 export function Settings() {
   const [theme, setTheme] = useState<Theme>(DEFAULT_THEME)
-  useEffect(() => setTheme(currentTheme()), [])
-  const pick = (t: Theme) => {
-    setTheme(t)
-    applyTheme(t)
-  }
+  useEffect(() => {
+    setTheme(currentTheme())
+    // The terminal can switch theme too, so follow <html>.
+    const observer = new MutationObserver(() => setTheme(currentTheme()))
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    })
+    return () => observer.disconnect()
+  }, [])
+  const pick = (t: Theme) => applyTheme(t)
 
   return (
     <Window title="Settings" right x={-199} y={249} width={420}>
