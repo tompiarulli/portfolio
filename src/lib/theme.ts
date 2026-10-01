@@ -4,26 +4,21 @@ export type Backdrop = 'rain' | 'stars' | 'streaks' | 'snow' | 'plain'
  *  which background draws the desktop and the day the clock shows; the
  *  rest of the chrome is shared. Each is an homage to something I like. */
 export const THEMES = [
-  // On the film's US release day.
+  // Each theme's clock shows a day that matters to what it nods to.
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
-  // On the pilot's first broadcast.
   { id: 'believe', label: 'I Believe', backdrop: 'stars', date: '1993-09-10' },
-  // On the site's launch.
   {
     id: 'tomspace',
     label: 'TomSpace',
     backdrop: 'plain',
     date: '2003-08-01',
   },
-  // On the night the time traveller is trying to get back to: 26
-  // October 1985, when he left Twin Pines Mall at 88 miles per hour.
   {
     id: 'traveler',
     label: 'Time Traveler',
     backdrop: 'streaks',
     date: '1985-10-26',
   },
-  // On the film's US release.
   {
     id: 'outpost',
     label: 'Outpost 31',

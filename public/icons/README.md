@@ -15,7 +15,7 @@ Every theme shares one set: 32x32 icons from KDE 1.1 (1999), by the KDE artists,
 
 Each theme has its own 16x16 mark in the top-left menu, original pixel art:
 
-- White Rabbit: the white rabbit's head in slim sunglasses.
+- White Rabbit: a white rabbit's head in slim black sunglasses.
 - I Believe: a grey alien's head.
 - TomSpace: three friends in a row, drawn in `scripts/tomspace_logo.py`.
 - Time Traveler: the flux capacitor, drawn in `scripts/traveler_logo.py`.

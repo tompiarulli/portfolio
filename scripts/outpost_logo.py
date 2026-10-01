@@ -1,4 +1,4 @@
-"""Builds Outpost 31's menu mark: the husky.
+"""Builds Outpost 31's menu mark: a husky.
 
 The mark is drawn in code on a 16x16 character grid, one character per pixel,
 in three levels: '#' full, 'b' 0.7 and 'a' 0.4 opacity, and '.' clear so the
@@ -30,7 +30,7 @@ def stamp(grid, x0, y0, drawing):
 
 
 def husky():
-    """The menu mark: the husky chased into camp, on a 16x16
+    """The menu mark: a husky running into camp, on a 16x16
     grid, dark cap and ears over a pale mask, with clear ice-blue eyes."""
     g = blank(16)
     stamp(

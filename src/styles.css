@@ -51,8 +51,8 @@
 
 /* DejaVu Sans Mono (Bitstream Vera license, see
    public/fonts/DejaVu-LICENSE.txt): TomSpace's font, the monospace cut of
-   Bitstream Vera, which was drawn in Verdana's image, and Verdana was the
-   font of every early-2000s profile page. Latin subset from Fontsource, cut down with
+   Bitstream Vera, which was drawn in Verdana's image, the font of every
+   mid-2000s profile page. Latin subset from Fontsource, cut down with
    the pyftsubset command in public/fonts/README.md. Only fetched while
    that theme is on. */
 @font-face {
@@ -93,8 +93,7 @@
 }
 
 /* ---------- Tokens: the theme drives everything ----------
-   White Rabbit: a green phosphor terminal over a
-   desktop of code rain, with solid title bars and a monospace font. It is
+   White Rabbit: a green phosphor terminal over a desktop of code rain, with solid title bars and a monospace font. It is
    the default; other themes override whatever tokens they need under
    their own [data-theme]. The selector also matches a nested
    [data-theme] so Settings can preview each theme in place. */
@@ -151,7 +150,7 @@
   --warp: #22b455;
   --glint: #d8ffe0;
   /* Mark in the top-left menu, like an old OS's system logo: the white rabbit's head
-     in slim sunglasses, on a 16x16 grid.
+     in slim black sunglasses, on a 16x16 grid.
      Bright all over with a dimmer edge on the right.
      --logo-size is its grid, so the pixels stay crisp. */
   --logo-size: 16px;
@@ -170,9 +169,8 @@
   --icon-back: var(--accent);
 }
 
-/* I Believe: the show's black, white and grey
-   with the red of the logo's X, over a misty teal sky of twinkling
-   stars. */
+/* I Believe: cold black, white and grey with a single red, over a
+   misty teal sky of twinkling stars. */
 [data-theme='believe'] {
   --font-ui: 'DM Mono', ui-monospace, monospace;
   --font-title: 'DM Mono', ui-monospace, monospace;
@@ -210,9 +208,8 @@
   color-scheme: light;
 }
 
-/* TomSpace: the site's white pages, royal blue
-   header and pale blue and orange box headings, on a desktop in the
-   header's blue. */
+/* TomSpace: white pages, a royal blue header and pale blue and orange
+   box headings, on a desktop in the header's blue. */
 [data-theme='tomspace'] {
   --font-ui: 'DejaVu Sans Mono', ui-monospace, monospace;
   --font-title: 'DejaVu Sans Mono', ui-monospace, monospace;
@@ -240,16 +237,16 @@
   --backdrop-opacity: 1;
   /* A plain desktop in the header's blue. */
   --desk: #003399;
-  /* The menu mark: three friends, like the people in an early social network's logo.
+  /* The menu mark: three friends, in a row.
      Drawn in scripts/tomspace_logo.py. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.7' d='M1 3h2v1H1zM13 3h2v1H13zM0 4h4v1H0zM12 4h4v1H12zM0 5h4v1H0zM12 5h4v1H12zM1 6h2v1H1zM13 6h2v1H13zM1 8h2v1H1zM13 8h2v1H13zM0 9h3v1H0zM13 9h3v1H13zM0 10h3v1H0zM13 10h3v1H13zM0 11h3v1H0zM13 11h3v1H13zM0 12h3v1H0zM13 12h3v1H13zM0 13h3v1H0zM13 13h3v1H13zM0 14h3v1H0zM13 14h3v1H13z'/%3E%3Cpath d='M6 1h4v1H6zM5 2h6v1H5zM5 3h6v1H5zM5 4h6v1H5zM6 5h4v1H6zM5 7h6v1H5zM4 8h8v1H4zM4 9h8v1H4zM4 10h8v1H4zM4 11h8v1H4zM4 12h8v1H4zM4 13h8v1H4zM4 14h8v1H4z'/%3E%3C/svg%3E");
   color-scheme: light;
 }
 
-/* Outpost 31: the station's cold steel greys and
-   the red of its road flares, title bars black with the title card's
-   burning blue, over snow blowing through the night. */
+/* Outpost 31: a research station's cold steel greys and the red of road
+   flares, title bars black with a burning blue, over snow blowing through
+   the night. */
 [data-theme='outpost'] {
   --font-ui: 'IBM Plex Mono', ui-monospace, monospace;
   --font-title: 'IBM Plex Mono', ui-monospace, monospace;
@@ -276,20 +273,20 @@
   --on-title: #7fd3ff;
   --indicator: #d42a1c;
   --backdrop-opacity: 1;
-  /* Moonlit snow blowing through an Antarctic night. */
+  /* Moonlit snow blowing through a polar night. */
   --desk: #070b12;
   --warp: #a9b8c6;
   --glint: #eef4f8;
-  /* The menu mark: the husky chased into camp, on a 16x16
+  /* The menu mark: a husky running into camp, on a 16x16
      grid. Drawn in scripts/outpost_logo.py. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.4' d='M7 6h2v1H7zM3 7h3v1H3zM7 7h2v1H7zM10 7h3v1H10zM2 8h2v1H2zM6 8h4v1H6zM12 8h2v1H12zM2 9h12v1H2zM3 10h4v1H3zM9 10h4v1H9zM3 11h4v1H3zM9 11h4v1H9zM4 12h8v1H4zM5 13h2v1H5zM9 13h2v1H9zM6 14h4v1H6z'/%3E%3Cpath fill-opacity='.7' d='M2 2h1v1H2zM13 2h1v1H13zM2 3h2v1H2zM12 3h2v1H12zM2 4h3v1H2zM11 4h3v1H11z'/%3E%3Cpath d='M1 1h2v1H1zM13 1h2v1H13zM1 2h1v1H1zM3 2h1v1H3zM12 2h1v1H12zM14 2h1v1H14zM1 3h1v1H1zM4 3h1v1H4zM11 3h1v1H11zM14 3h1v1H14zM1 4h1v1H1zM5 4h6v1H5zM14 4h1v1H14zM1 5h14v1H1zM1 6h6v1H1zM9 6h6v1H9zM1 7h2v1H1zM6 7h1v1H6zM9 7h1v1H9zM13 7h2v1H13zM1 8h1v1H1zM14 8h1v1H14zM1 9h1v1H1zM14 9h1v1H14zM2 10h1v1H2zM7 10h2v1H7zM13 10h1v1H13zM2 11h1v1H2zM7 11h2v1H7zM13 11h1v1H13zM3 12h1v1H3zM12 12h1v1H12zM4 13h1v1H4zM7 13h2v1H7zM11 13h1v1H11zM5 14h1v1H5zM10 14h1v1H10zM6 15h4v1H6z'/%3E%3C/svg%3E");
   color-scheme: light;
 }
 
-/* Time Traveler: the time machine's brushed
-   stainless steel, black title bars lit like the time circuits, and a
-   night where fire trails streak past at 88 miles per hour. */
+/* Time Traveler: brushed stainless steel, black title bars lit like a
+   dashboard display, and a night where fire trails streak past at 88 miles
+   per hour. */
 [data-theme='traveler'] {
   --bg: #c3c7cb;
   --surface: #c3c7cb;
@@ -306,7 +303,7 @@
   --well: #e9ebed;
   --on-accent: #fff4ec;
   --on-tertiary: #101214;
-  /* The focused window's title bar is a time circuit display. */
+  /* The focused window's title bar is a glowing dashboard display. */
   --title: #101214;
   --on-title: #ff4a2a;
   --indicator: #e0301e;

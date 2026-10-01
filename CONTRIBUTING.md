@@ -41,8 +41,9 @@ Run `pnpm typecheck && pnpm lint && pnpm build` before committing. The build run
 Conventional Commits with a required scope: `type(scope): subject`.
 
 - Types: `feat`, `fix`, `refactor`, `style`, `perf`, `docs`, `chore`, `build`, `ci`, `test`.
-- Scopes: `app`, `desktop`, `theme`, `content`, `deps`, `config`, `docs`.
+- Scopes: `app`, `desktop`, `theme`, `content`, `deps`, `config`. A `docs` commit takes the scope of what it documents, e.g. `docs(theme)`, never `docs(docs)`.
 - Subject imperative, lowercase, no trailing period, under 72 characters.
+- Themes are homages: describe what a change looks like, never name the film, show or site behind it.
 - No AI attribution trailers (`Co-Authored-By: Claude`, "Generated with"). `Co-Authored-By` is a human-collaborator convention; AI tooling is a tool like a linter, not an author. The README already says the site is built with Claude Code.
 
 ## Deploy

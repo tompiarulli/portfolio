@@ -35,7 +35,7 @@ type Drop = { y: number; speed: number; trail: number }
 const random = (min: number, max: number) => min + Math.random() * (max - min)
 
 /**
- * Green-phosphor code rain. Every column has its own drop falling at its own
+ * Falling code rain. Every column has its own drop falling at its own
  * speed; glyphs sit on a fixed grid and light up as a drop passes, fading
  * along its trail. Glyphs also change at random, so the code keeps shifting.
  * Turned sideways, the drops become streaks racing along the rows.

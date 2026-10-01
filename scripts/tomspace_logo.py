@@ -1,4 +1,4 @@
-"""Builds TomSpace's menu mark: early-2000s social network pixel art.
+"""Builds TomSpace's menu mark: mid-2000s pixel art.
 
 The mark is drawn in code on a 16x16 character grid, one character per pixel,
 in up to three levels: '#' full, 'b' 0.7 and 'a' 0.4 opacity, and '.' clear
@@ -31,7 +31,7 @@ def stamp(grid, x0, y0, drawing):
 
 def people():
     """The menu mark: three friends, the one in front taller, like the
-    people in an early social network's logo, on a 16x16 grid."""
+    people on an old social network's logo, on a 16x16 grid."""
     g = blank(16)
     stamp(
         g,

@@ -18,5 +18,8 @@ Setup, scripts, file layout, commit format, and deploy live in CONTRIBUTING.md a
 - `src/routeTree.gen.ts` is generated; never edit by hand.
 - Devtools are dev-only, lazy-loaded in `__root.tsx`; keep them out of the production bundle.
 - Edit copy and project data in `src/lib/site.ts`, not in routes.
+- Themes are homages, never named. Each theme changes only its colour tokens, font, 16x16 menu mark, a backdrop drawn in text glyphs, and the date on the clock; everything else is shared chrome. No illustrated scenes or per-theme icons. Never name the film, show or site a theme nods to (or its characters) in code, comments, docs or commit messages: describe the look ("green phosphor terminal", "a flux capacitor mark") and let people get the reference.
+- Terminal easter eggs (`src/lib/terminal.ts`) are found by exploring. Funny replies are welcome; hints that they exist are not. Keep `help` a plain command list and the banner neutral. Tom writes the jokes; don't add new ones unasked.
+- Never commit without asking. Make the change, verify it, then propose the commit message and split and wait for a yes. Pushing needs its own yes.
 - Split unrelated changes into separate commits (e.g. config vs content).
-- Solo personal project: commit directly to `main`. No feature branches or PRs needed.
+- Solo personal project: commits go straight to `main`. No feature branches or PRs needed.
