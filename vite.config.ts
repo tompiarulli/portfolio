@@ -34,7 +34,7 @@ export default defineConfig({
       prerender: { enabled: true, crawlLinks: true, autoSubfolderIndex: true },
       // Windows open from a closed menu, so no prerendered page links to
       // them and the crawl alone never finds them.
-      pages: [{ path: '/socials' }, { path: '/settings' }, { path: '/system' }],
+      pages: [{ path: '/contact' }, { path: '/settings' }, { path: '/system' }],
     }),
     viteReact(),
   ],

@@ -10,8 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as SocialsRouteImport } from './routes/socials'
 import { Route as SystemRouteImport } from './routes/system'
 
 const IndexRoute = IndexRouteImport.update({
@@ -19,14 +19,14 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SocialsRoute = SocialsRouteImport.update({
-  id: '/socials',
-  path: '/socials',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SystemRoute = SystemRouteImport.update({
@@ -37,35 +37,35 @@ const SystemRoute = SystemRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/contact': typeof ContactRoute
   '/settings': typeof SettingsRoute
-  '/socials': typeof SocialsRoute
   '/system': typeof SystemRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/contact': typeof ContactRoute
   '/settings': typeof SettingsRoute
-  '/socials': typeof SocialsRoute
   '/system': typeof SystemRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/contact': typeof ContactRoute
   '/settings': typeof SettingsRoute
-  '/socials': typeof SocialsRoute
   '/system': typeof SystemRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/settings' | '/socials' | '/system'
+  fullPaths: '/' | '/contact' | '/settings' | '/system'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/settings' | '/socials' | '/system'
-  id: '__root__' | '/' | '/settings' | '/socials' | '/system'
+  to: '/' | '/contact' | '/settings' | '/system'
+  id: '__root__' | '/' | '/contact' | '/settings' | '/system'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ContactRoute: typeof ContactRoute
   SettingsRoute: typeof SettingsRoute
-  SocialsRoute: typeof SocialsRoute
   SystemRoute: typeof SystemRoute
 }
 
@@ -78,18 +78,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/socials': {
-      id: '/socials'
-      path: '/socials'
-      fullPath: '/socials'
-      preLoaderRoute: typeof SocialsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/system': {
@@ -104,8 +104,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ContactRoute: ContactRoute,
   SettingsRoute: SettingsRoute,
-  SocialsRoute: SocialsRoute,
   SystemRoute: SystemRoute,
 }
 export const routeTree = rootRouteImport

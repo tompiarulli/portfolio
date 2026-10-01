@@ -1,17 +1,17 @@
 /** Every window the desktop can open. */
-export type WindowId = 'about' | 'socials' | 'settings' | 'system'
+export type WindowId = 'about' | 'contact' | 'settings' | 'system'
 
 /** Windows with a taskbar button even when closed, so they can always be
  *  reopened, and a tab in the phone menu. */
 export const PINNED: { id: WindowId; label: string }[] = [
   { id: 'about', label: 'About' },
-  { id: 'socials', label: 'Socials' },
+  { id: 'contact', label: 'Contact' },
   { id: 'settings', label: 'Settings' },
 ]
 
 const PATHS = {
   about: '/',
-  socials: '/socials',
+  contact: '/contact',
   settings: '/settings',
   system: '/system',
 } as const satisfies Record<WindowId, string>
@@ -27,12 +27,12 @@ export function idForPath(pathname: string): WindowId | null {
   )
 }
 
-/** Windows open on first paint for a URL, back to front. About and Socials
+/** Windows open on first paint for a URL, back to front. About and Contact
  *  are always open. */
 export function initialStack(pathname: string): WindowId[] {
   const id = idForPath(pathname)
-  const base: WindowId[] = ['socials', 'about']
+  const base: WindowId[] = ['contact', 'about']
   if (!id || id === 'about') return base
-  if (id === 'socials') return ['about', 'socials']
+  if (id === 'contact') return ['about', 'contact']
   return [...base, id]
 }

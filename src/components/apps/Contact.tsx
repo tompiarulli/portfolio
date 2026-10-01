@@ -1,9 +1,9 @@
 import { Window } from '#/components/Window'
 import { profiles } from '#/lib/site'
 
-export function Socials() {
+export function Contact() {
   return (
-    <Window title="Socials" right x={-104} width={320}>
+    <Window title="Contact" right x={-104} width={320}>
       <ul className="border-t border-(--ink)">
         {profiles.map((p) => (
           <li key={p.url} className="border-b border-dotted border-(--ink)">

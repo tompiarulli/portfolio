@@ -2,13 +2,13 @@ import type { ComponentType } from 'react'
 import { WindowIdContext, useWindows } from '#/components/WindowManager'
 import type { WindowId } from '#/lib/windows'
 import { About } from './About'
-import { Socials } from './Socials'
+import { Contact } from './Contact'
 import { Settings } from './Settings'
 import { SystemInfo } from './SystemInfo'
 
 const APPS: Record<WindowId, ComponentType> = {
   about: About,
-  socials: Socials,
+  contact: Contact,
   settings: Settings,
   system: SystemInfo,
 }
