@@ -118,13 +118,11 @@ export type Profile = {
   url: string
 }
 
+export const email = 'tom@tompiarulli.com'
+
 /** Where to find me, in the order Contact lists them. */
 export const profiles: Profile[] = [
-  {
-    label: 'Email',
-    handle: 'tom@tompiarulli.com',
-    url: 'mailto:tom@tompiarulli.com',
-  },
+  { label: 'Email', handle: email, url: `mailto:${email}` },
   {
     label: 'LinkedIn',
     handle: 'tompiarulli',

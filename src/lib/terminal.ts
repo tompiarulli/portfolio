@@ -1,8 +1,8 @@
-import { build } from './build'
-import { profiles, site } from './site'
-import { THEMES } from './theme'
-import type { Theme } from './theme'
-import type { WindowId } from './windows'
+import { build } from '#/lib/build'
+import { email, profiles, site } from '#/lib/site'
+import { THEMES } from '#/lib/theme'
+import type { Theme } from '#/lib/theme'
+import type { WindowId } from '#/lib/windows'
 
 /** What a command asks the terminal to do besides print. */
 export type Effect =
@@ -51,11 +51,16 @@ const FORTUNES = [
   'Real programmers count from 0.',
 ]
 
+/** Centres text in a field of the given width. */
+function centre(text: string, width: number) {
+  return text.padStart(Math.ceil((width + text.length) / 2)).padEnd(width)
+}
+
 /** A little train, as sl draws for anyone who mistypes ls. */
 const TRAIN = [
   '     ______',
   ' ___|[_][_]|___ ________ ________',
-  '|   TomOS 9.2  ||  ____  ||  ____  |',
+  `|${centre(site.os, 14)}||  ____  ||  ____  |`,
   "'-(o)--(o)-(o)-''-(o)(o)-''-(o)(o)-'",
   '   choo choo. you meant ls.',
 ]
@@ -149,7 +154,7 @@ const PHRASES: { match: RegExp; out: string[] }[] = [
   { match: /^(how do i exit vim|exit vim)$/, out: ['Nobody knows.'] },
   {
     match: /^(who is tom|where is tom|tom)$/,
-    out: ['Probably fixing a CSS bug. Try tom@tompiarulli.com.'],
+    out: [`Probably fixing a CSS bug. Try ${email}.`],
   },
   { match: /^(i love you|ily)$/, out: ['I know.'] },
   { match: /^(thank you|thanks|ty)$/, out: ["You're welcome."] },
@@ -275,10 +280,9 @@ export function run(line: string, env: Env): Result {
             'Usage: theme <name>',
           ],
         }
+      const name = arg.toLowerCase()
       const t = THEMES.find(
-        (x) =>
-          x.id === arg.toLowerCase() ||
-          x.label.toLowerCase() === lower.slice(6),
+        (x) => x.id === name || x.label.toLowerCase() === name,
       )
       if (!t) return { out: [`theme: no theme named '${arg}'`] }
       return {
