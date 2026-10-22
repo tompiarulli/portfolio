@@ -99,30 +99,6 @@ export const credits: { group: string; items: Credit[] }[] = [
         url: 'http://tango.freedesktop.org',
         license: 'Public domain',
       },
-      {
-        name: 'Retro icons',
-        by: 'Magnific',
-        url: 'https://www.flaticon.com/free-icons/retro',
-        license: 'Flaticon',
-      },
-      {
-        name: 'Postcard icons',
-        by: 'Magnific',
-        url: 'https://www.flaticon.com/free-icons/postcard',
-        license: 'Flaticon',
-      },
-      {
-        name: 'Computer icons',
-        by: 'Magnific',
-        url: 'https://www.flaticon.com/free-icons/computer',
-        license: 'Flaticon',
-      },
-      {
-        name: 'Gear icons',
-        by: 'Vectors Tank',
-        url: 'https://www.flaticon.com/free-icons/gear',
-        license: 'Flaticon',
-      },
     ],
   },
   {

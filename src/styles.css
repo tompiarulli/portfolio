@@ -449,18 +449,12 @@
   --streak-2: #2f9bff;
   --streak-3: #a24bff;
   --streak-4: #ff3d9a;
-  /* Dock icons: full-colour Flaticon drawings, shown as drawn. Smooth,
-     so they can go a little larger than the pixel-art sets. */
-  --icon-size: 36px;
-  --icon-fill: transparent;
+  /* Dock icons: placeholder blocks until this theme has a set of its own.
+     With no mask, each icon paints as a solid square in the text colour. */
   --icon-about-mask: none;
   --icon-contact-mask: none;
   --icon-terminal-mask: none;
   --icon-settings-mask: none;
-  --icon-about-image: url('/icons/flaticon/floppy.png');
-  --icon-contact-image: url('/icons/flaticon/postcard.png');
-  --icon-terminal-image: url('/icons/flaticon/computer.png');
-  --icon-settings-image: url('/icons/flaticon/settings.png');
   /* The menu mark: the flux capacitor. Drawn in
      scripts/traveler_logo.py. */
   --logo-size: 16px;
