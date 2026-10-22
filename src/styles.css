@@ -1,5 +1,12 @@
 @import 'tailwindcss';
 
+/* Every face swaps: text shows at once in the fallback and takes the font
+   when it lands. Orbital's is preloaded (see __root.tsx), so a first visit
+   rarely sees the fallback, and the monospace fallback keeps nearly the
+   same advance, so lines barely move when it does. Not `optional`: a font
+   that missed its first 100 ms would stay on the fallback all visit, so a
+   theme picked in Settings could show without its font. */
+
 /* Iosevka Extended (SIL OFL, see public/fonts/Iosevka-OFL.txt): White
    Rabbit's font, a Unix terminal monospace in its wider Extended cut to
    match the screens it nods to, subset to Latin and a few symbols.
@@ -8,19 +15,19 @@
 @font-face {
   font-family: 'Iosevka';
   src: url('/fonts/iosevka-500.woff2') format('woff2');
-  font-display: block;
+  font-display: swap;
   font-weight: 400 500;
 }
 @font-face {
   font-family: 'Iosevka';
   src: url('/fonts/iosevka-600.woff2') format('woff2');
-  font-display: block;
+  font-display: swap;
   font-weight: 600;
 }
 @font-face {
   font-family: 'Iosevka';
   src: url('/fonts/iosevka-700.woff2') format('woff2');
-  font-display: block;
+  font-display: swap;
   font-weight: 700 900;
 }
 
@@ -31,13 +38,13 @@
 @font-face {
   font-family: 'DM Mono';
   src: url('/fonts/dm-mono-400.woff2') format('woff2');
-  font-display: block;
+  font-display: swap;
   font-weight: 300 400;
 }
 @font-face {
   font-family: 'DM Mono';
   src: url('/fonts/dm-mono-500.woff2') format('woff2');
-  font-display: block;
+  font-display: swap;
   font-weight: 500 900;
 }
 
@@ -48,13 +55,13 @@
 @font-face {
   font-family: 'Geist Mono';
   src: url('/fonts/geist-mono-400.woff2') format('woff2');
-  font-display: block;
+  font-display: swap;
   font-weight: 300 500;
 }
 @font-face {
   font-family: 'Geist Mono';
   src: url('/fonts/geist-mono-600.woff2') format('woff2');
-  font-display: block;
+  font-display: swap;
   font-weight: 600 900;
 }
 
@@ -66,13 +73,13 @@
 @font-face {
   font-family: 'IBM Plex Mono';
   src: url('/fonts/ibm-plex-mono-400.woff2') format('woff2');
-  font-display: block;
+  font-display: swap;
   font-weight: 300 500;
 }
 @font-face {
   font-family: 'IBM Plex Mono';
   src: url('/fonts/ibm-plex-mono-600.woff2') format('woff2');
-  font-display: block;
+  font-display: swap;
   font-weight: 600 900;
 }
 
@@ -82,7 +89,7 @@
 @font-face {
   font-family: 'Grandstander';
   src: url('/fonts/grandstander-400.woff2') format('woff2');
-  font-display: block;
+  font-display: swap;
 }
 /* Recursive (SIL OFL, see public/fonts/Recursive-OFL.txt): Steamboat's mono,
    brush-like Casual curves in two static cuts from Fontsource's variable
@@ -90,13 +97,13 @@
 @font-face {
   font-family: 'Recursive Mono Casual';
   src: url('/fonts/recursive-mono-casual-400.woff2') format('woff2');
-  font-display: block;
+  font-display: swap;
   font-weight: 300 400;
 }
 @font-face {
   font-family: 'Recursive Mono Casual';
   src: url('/fonts/recursive-mono-casual-500.woff2') format('woff2');
-  font-display: block;
+  font-display: swap;
   font-weight: 500 900;
 }
 

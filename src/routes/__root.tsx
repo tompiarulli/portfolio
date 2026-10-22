@@ -36,6 +36,15 @@ const Devtools = import.meta.env.DEV
 // and has to move with it. useThemeColor swaps in the live theme's.
 const DEFAULT_THEME_COLOR = '#0a0a0a'
 
+// Orbital's font, both weights on screen at first paint, preloaded so it is
+// fetched alongside the stylesheet rather than after it. Like the colour
+// above, it is the default theme's and has to move with it (see its
+// @font-face rules in styles.css).
+const DEFAULT_FONTS = [
+  '/fonts/geist-mono-400.woff2',
+  '/fonts/geist-mono-600.woff2',
+]
+
 /** Copies the theme's --surface into theme-color, now and whenever the theme
  *  changes. It waits for hydration: React matches the meta tag by its
  *  content, so changing it any earlier makes React add a second one. */
@@ -106,6 +115,13 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: 'stylesheet', href: appCss },
+      ...DEFAULT_FONTS.map((href) => ({
+        rel: 'preload',
+        href,
+        as: 'font',
+        type: 'font/woff2',
+        crossOrigin: 'anonymous' as const,
+      })),
       { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
       { rel: 'icon', href: '/favicon.ico', sizes: '32x32' },
       { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
