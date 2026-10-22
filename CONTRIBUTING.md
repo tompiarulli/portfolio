@@ -24,7 +24,7 @@ pnpm format        # oxfmt
 pnpm format:check  # oxfmt --check
 ```
 
-Run `pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm build` before committing; CI runs the same five checks on every pull request. The build runs the prerender crawl, which catches broken routes and loaders. Tests sit next to the code they cover as `*.test.ts`.
+Run `pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm build` before committing; CI runs the same five checks on every push to `main` and every pull request. The build runs the prerender crawl, which catches broken routes and loaders. Tests sit next to the code they cover as `*.test.ts`.
 
 Renovate opens dependency updates weekly. TanStack packages are pinned exactly and move together.
 
@@ -43,13 +43,13 @@ Renovate opens dependency updates weekly. TanStack packages are pinned exactly a
 - `public/fonts/` self-hosted fonts.
 - `scripts/` Python scripts that build the menu marks, dock icons and Shut Down photo; see `scripts/README.md`.
 
-## Pull requests
+## Workflow
 
-Every change lands on `main` through a pull request, squash merged, so each PR becomes one commit and its title becomes the commit message. The description says what changed and how it was verified. History stays linear: rebase on `main`, never merge it into a branch.
+Until v1.0.0, commits go straight to `main`. From v1.0.0, every change lands on `main` through a pull request, squash merged, so each PR becomes one commit and its title becomes the commit message. The description says what changed and how it was verified. History stays linear: rebase on `main`, never merge it into a branch.
 
 ## Commits
 
-Conventional Commits with a required scope: `type(scope): subject`. With squash merges this applies to PR titles.
+Conventional Commits with a required scope: `type(scope): subject`. From v1.0.0, with squash merges, this applies to PR titles.
 
 - Types: `feat`, `fix`, `refactor`, `style`, `perf`, `docs`, `chore`, `build`, `ci`, `test`.
 - Scopes: `app`, `desktop`, `theme`, `content`, `deps`, `config`. A `docs` commit takes the scope of what it documents, e.g. `docs(theme)`, never `docs(docs)`.
