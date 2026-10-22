@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { site } from '#/lib/site'
 
 /** Shut Down plays out in stages: the desktop chrome collapses (CSS keyed
@@ -55,11 +55,7 @@ function Splash({
       Math.min(Math.floor((filled / CELLS) * steps.length), steps.length - 1)
     ]
   return (
-    <div
-      role="status"
-      aria-label={title}
-      className="absolute top-1/2 left-1/2 w-[min(320px,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 border border-(--ink) bg-(--surface) text-(--ink) shadow-(--window-shadow)"
-    >
+    <div className="absolute top-1/2 left-1/2 w-[min(320px,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 border border-(--ink) bg-(--surface) text-(--ink) shadow-(--window-shadow)">
       <div className="flex items-center gap-4 border-b border-dotted border-(--ink) p-4">
         <span aria-hidden className="logo shrink-0 [--logo-size:48px]" />
         <div className="min-w-0">
@@ -69,8 +65,12 @@ function Splash({
       </div>
       <div className="p-4">
         <div className="mb-2 flex justify-between gap-4 font-mono">
-          <span className="truncate">{step}…</span>
-          <span className="tabular-nums">{pct}%</span>
+          {/* A status line, read out as the steps change; the percentage
+              would be too chatty. */}
+          <output className="truncate">{step}…</output>
+          <span aria-hidden className="tabular-nums">
+            {pct}%
+          </span>
         </div>
         <div
           aria-hidden
@@ -90,6 +90,15 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
   const [phase, setPhase] = useState<Phase>(() =>
     reducedMotion() ? 'outside' : 'closing',
   )
+  const dialog = useRef<HTMLDialogElement>(null)
+  const grass = useRef<HTMLButtonElement>(null)
+
+  // Modal, so it takes focus and leaves the rest of the desktop inert.
+  useEffect(() => {
+    const d = dialog.current
+    d?.showModal()
+    return () => d?.close()
+  }, [])
 
   useEffect(() => {
     document.documentElement.dataset.off = ''
@@ -113,6 +122,9 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
     window.addEventListener('keydown', start)
     return () => window.removeEventListener('keydown', start)
   })
+  useEffect(() => {
+    if (ready) grass.current?.focus()
+  }, [ready])
 
   const bg =
     phase === 'closing' || phase === 'down'
@@ -122,11 +134,15 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
         : 'bg-(--off)'
 
   return (
-    <div
-      role="dialog"
+    <dialog
+      ref={dialog}
       aria-label="Shut down"
       aria-busy={!ready}
-      className={`fixed inset-0 z-100 overflow-hidden ${bg}`}
+      // Escape doesn't dismiss it; any key boots once the grass is up. If
+      // the browser closes it anyway, boot.
+      onCancel={(e) => e.preventDefault()}
+      onClose={(e) => !e.currentTarget.open && onBoot()}
+      className={`fixed inset-0 m-0 size-full max-h-none max-w-none overflow-hidden border-0 p-0 text-(--ink) outline-none backdrop:bg-transparent ${bg}`}
     >
       {phase === 'down' && (
         <Splash
@@ -164,12 +180,15 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
           </picture>
           {/* Any click on the picture boots. */}
           <button
+            ref={grass}
             type="button"
             aria-label="Touch grass to start"
             onClick={start}
-            className="absolute inset-0 cursor-pointer outline-none"
+            className="peer absolute inset-0 cursor-pointer outline-none"
           />
-          <span className="bevel blink pointer-events-none absolute top-1/2 left-1/2 -translate-1/2 px-6 py-2 font-mono text-base text-(--ink)">
+          {/* The button covers the screen, so its focus ring goes on the
+              label, which stops blinking while focused. */}
+          <span className="bevel blink pointer-events-none absolute top-1/2 left-1/2 -translate-1/2 px-6 py-2 font-mono text-base text-(--ink) outline-offset-4 outline-(--ink) peer-focus-visible:animate-none! peer-focus-visible:outline-2">
             Touch grass to start
           </span>
         </>
@@ -177,6 +196,6 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
       {phase === 'up' && (
         <Splash title="Starting up" steps={site.shutdown.up} onDone={onBoot} />
       )}
-    </div>
+    </dialog>
   )
 }

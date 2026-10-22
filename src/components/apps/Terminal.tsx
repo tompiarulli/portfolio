@@ -76,19 +76,24 @@ export function Terminal() {
 
   return (
     <Window title="Terminal" x={-40} y={60} width={560} height={340} flush>
-      {/* Clicking anywhere types at the prompt, like a real terminal. */}
+      {/* Clicking anywhere types at the prompt, like a real terminal. Only a
+          shortcut for the pointer: the prompt is a plain, tabbable field. */}
       <div
+        role="presentation"
         onClick={() => {
           if (!getSelection()?.toString()) field.current?.focus()
         }}
         className="min-h-full bg-(--terminal) p-3 font-mono leading-[1.45] text-(--warp)"
       >
-        {lines.map((line, i) => (
-          <p key={i} className="break-words whitespace-pre-wrap">
-            {line.prompt && <span className="text-(--glint)">{PROMPT} </span>}
-            {line.text}
-          </p>
-        ))}
+        {/* A log, so screen readers read out each command's output. */}
+        <div role="log" aria-label="Terminal output">
+          {lines.map((line, i) => (
+            <p key={i} className="break-words whitespace-pre-wrap">
+              {line.prompt && <span className="text-(--glint)">{PROMPT} </span>}
+              {line.text}
+            </p>
+          ))}
+        </div>
         <label className="flex">
           <span className="shrink-0 text-(--glint)">{PROMPT}&nbsp;</span>
           <input
@@ -97,7 +102,8 @@ export function Terminal() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={onKeyDown}
             aria-label="Terminal input"
-            autoFocus
+            // Focused when the window opens or comes to the front.
+            data-autofocus
             autoComplete="off"
             autoCapitalize="off"
             autoCorrect="off"

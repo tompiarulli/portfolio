@@ -158,9 +158,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
  *  plain alert box in the window chrome's tokens rather than a Window. The
  *  error itself only reaches the console, and in full only in development. */
 function RootError({ error }: ErrorComponentProps) {
+  // Deliberate: the console is the only place a crash is reported.
   if (import.meta.env.DEV) {
+    // oxlint-disable-next-line no-console
     console.error(error)
   } else {
+    // oxlint-disable-next-line no-console
     console.error(
       'Desktop error:',
       error instanceof Error ? error.message : 'Unknown error',

@@ -43,10 +43,11 @@ const APPS: Record<WindowId, ComponentType> = {
   notfound: NotFound,
 }
 
-/** Renders every open window. DOM order is stable; z-index follows the stack. */
+/** Renders every open window, front to back, so reading and tab order
+ *  follow what is on top; z-index follows the stack. */
 export function OpenWindows() {
   const { stack } = useWindows()
-  return [...stack].sort().map((id) => {
+  return [...stack].reverse().map((id) => {
     const App = APPS[id]
     return (
       <WindowIdContext.Provider key={id} value={id}>

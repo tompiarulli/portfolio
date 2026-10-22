@@ -1,6 +1,17 @@
-import { useCallback, useLayoutEffect, useRef } from 'react'
-import type { PointerEvent, ReactNode } from 'react'
-import { useWindowId, useWindows } from '#/components/WindowManager'
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
+import type { KeyboardEvent, PointerEvent, ReactNode } from 'react'
+import {
+  scrollBefore,
+  useWindowId,
+  useWindows,
+} from '#/components/WindowManager'
 
 /**
  * Shrinks a window into its dock icon (or grows it back out when `restore`).
@@ -38,6 +49,25 @@ function flyToDock(el: HTMLElement, iconId: string, restore: boolean) {
   )
 }
 
+/** Puts the window's top-left corner at (`vx`, `vy`) in the viewport, kept
+ *  wholly on screen on every side; it may cover the menu bar and dock. */
+function moveTo(el: HTMLElement, vx: number, vy: number) {
+  const { left = 0, top = 0 } = el.offsetParent?.getBoundingClientRect() ?? {}
+  const x = Math.max(0, Math.min(innerWidth - el.offsetWidth, vx))
+  const y = Math.max(0, Math.min(innerHeight - el.offsetHeight, vy))
+  el.style.transform = `translate3d(${Math.round(x - left)}px, ${Math.round(y - top)}px, 0)`
+}
+
+// Arrow keys on the title move the window this far, or further with Shift.
+const STEP = 10
+const BIG_STEP = 50
+const ARROWS: Record<string, [number, number]> = {
+  ArrowLeft: [-1, 0],
+  ArrowRight: [1, 0],
+  ArrowUp: [0, -1],
+  ArrowDown: [0, 1],
+}
+
 type Props = {
   title: string
   children: ReactNode
@@ -69,10 +99,47 @@ export function Window({
   const ref = useRef<HTMLElement>(null)
   const drag = useRef<{ dx: number; dy: number } | null>(null)
   const id = useWindowId()
-  const { stack, focus, close: closeWindow, minimized } = useWindows()
-  const active = stack.at(-1) === id
+  const titleId = useId()
+  const hintId = useId()
+  const {
+    stack,
+    focus,
+    close: closeWindow,
+    minimized,
+    focusRequest,
+    peek,
+    setPeek,
+  } = useWindows()
+  const active = peek ? peek === id : stack.at(-1) === id
   const hidden = minimized.includes(id)
   const close = () => closeWindow(id)
+  // Restacking moves windows in the DOM, which resets their scroll; put
+  // it back.
+  const body = useRef<HTMLDivElement>(null)
+  const place = stack.indexOf(id)
+  useLayoutEffect(() => {
+    const el = body.current
+    const y = el && scrollBefore.get(el)
+    if (el && y) el.scrollTop = y
+  }, [place])
+
+  // Rolled up to its title bar, like a windowshade.
+  const [shaded, setShaded] = useState(false)
+  const shade = () => setShaded((s) => !s)
+
+  // Take keyboard focus when asked (opened, raised, or the window above
+  // closed), unless it is already inside. A control marked
+  // data-autofocus, like the terminal's prompt, takes it over the window.
+  const handled = useRef(0)
+  useEffect(() => {
+    const el = ref.current
+    const { id: want, seq } = focusRequest
+    if (!el || want !== id || seq === handled.current) return
+    handled.current = seq
+    if (el.contains(document.activeElement)) return
+    const target = el.querySelector<HTMLElement>('[data-autofocus]') ?? el
+    target.focus({ preventScroll: true })
+  }, [focusRequest, id])
 
   // Animate into the dock and hide, or show and animate back out. Hidden
   // windows stay mounted, keeping their place and state.
@@ -104,21 +171,7 @@ export function Window({
   const onPointerMove = useCallback((e: PointerEvent<HTMLDivElement>) => {
     const d = drag.current
     if (!d || !ref.current) return
-    const el = ref.current
-    const { left = 0, top = 0 } = el.offsetParent?.getBoundingClientRect() ?? {}
-    // Keep the whole window inside the browser viewport on every side; it
-    // may cover the menu bar and dock.
-    const vx = Math.max(
-      0,
-      Math.min(innerWidth - el.offsetWidth, e.clientX - d.dx),
-    )
-    const vy = Math.max(
-      0,
-      Math.min(innerHeight - el.offsetHeight, e.clientY - d.dy),
-    )
-    const nx = Math.round(vx - left)
-    const ny = Math.round(vy - top)
-    el.style.transform = `translate3d(${nx}px, ${ny}px, 0)`
+    moveTo(ref.current, e.clientX - d.dx, e.clientY - d.dy)
   }, [])
 
   const onPointerUp = useCallback(() => {
@@ -126,29 +179,74 @@ export function Window({
     if (ref.current) ref.current.style.willChange = ''
   }, [])
 
+  // The keyboard's way to drag: arrow keys on the title.
+  const onTitleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+    const arrow = ARROWS[e.key]
+    if (!arrow || !ref.current || e.altKey || e.metaKey || e.ctrlKey) return
+    e.preventDefault()
+    const step = e.shiftKey ? BIG_STEP : STEP
+    const r = ref.current.getBoundingClientRect()
+    moveTo(ref.current, r.left + arrow[0] * step, r.top + arrow[1] * step)
+  }
+
+  // Window management, listened for on the window rather than making it a
+  // control: pressing anywhere in it raises it, Escape anywhere in it
+  // closes it, and focus inside it brings it to the top while it stays.
+  const top = stack.at(-1)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    // The close box closes a window behind without bringing it forward.
+    const onPointerDown = (e: globalThis.PointerEvent) => {
+      if (!(e.target as Element).closest('[data-close]')) focus(id)
+    }
+    const onKeyDown = (e: globalThis.KeyboardEvent) => {
+      if (e.key !== 'Escape' || e.defaultPrevented) return
+      e.preventDefault()
+      closeWindow(id)
+    }
+    const onFocusIn = () => setPeek(() => (top === id ? null : id))
+    const onFocusOut = (e: FocusEvent) => {
+      if (!el.contains(e.relatedTarget as Node | null))
+        setPeek((p) => (p === id ? null : p))
+    }
+    el.addEventListener('pointerdown', onPointerDown)
+    el.addEventListener('keydown', onKeyDown)
+    el.addEventListener('focusin', onFocusIn)
+    el.addEventListener('focusout', onFocusOut)
+    return () => {
+      el.removeEventListener('pointerdown', onPointerDown)
+      el.removeEventListener('keydown', onKeyDown)
+      el.removeEventListener('focusin', onFocusIn)
+      el.removeEventListener('focusout', onFocusOut)
+    }
+  }, [focus, closeWindow, setPeek, top, id])
+
   return (
+    // A labelled region rather than a dialog: several are open at once and
+    // none is modal, so each is a landmark of its own, named by its title.
     <section
       ref={ref}
-      role="dialog"
-      aria-label={title}
-      onPointerDown={() => focus(id)}
+      aria-labelledby={titleId}
+      data-window={id}
+      tabIndex={-1}
       style={{
         // Centred in CSS, so the prerendered HTML is already in place. The
         // window's top sits a little above middle since heights vary.
         transform: `translate3d(max(8px, calc(${right ? `100vw - ${width + 16}px` : `50vw - ${width / 2}px`} + ${x}px)), max(8px, calc(40vh - 180px + ${y}px)), 0)`,
         width,
-        height,
-        zIndex: stack.indexOf(id) + 1,
+        height: shaded ? undefined : height,
+        zIndex: peek === id ? stack.length + 1 : stack.indexOf(id) + 1,
       }}
-      className={`pointer-events-auto absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col border border-(--ink) bg-(--surface) shadow-(--window-shadow) ${className}`}
+      className={`pointer-events-auto absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col border border-(--ink) bg-(--surface) shadow-(--window-shadow) outline-none ${className}`}
     >
       <div
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
-        onDoubleClick={close}
-        className={`grid h-(--title-height) shrink-0 cursor-grab touch-none grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-(--ink) px-1.5 active:cursor-grabbing ${active ? 'bg-(--title) text-(--on-title)' : 'bg-(--surface)'}`}
+        onDoubleClick={shade}
+        className={`grid h-(--title-height) shrink-0 cursor-grab touch-none grid-cols-[1fr_auto_1fr] items-center gap-2 px-1.5 active:cursor-grabbing ${shaded ? '' : 'border-b border-(--ink)'} ${active ? 'bg-(--title) text-(--on-title)' : 'bg-(--surface)'}`}
       >
         {/* Equal side columns keep the title centred on the whole bar, not
             on the space left over after the buttons. */}
@@ -157,8 +255,9 @@ export function Window({
             type="button"
             onClick={close}
             onPointerDown={(e) => e.stopPropagation()}
-            aria-label="Close"
-            className="relative flex size-(--box-size) shrink-0 cursor-pointer items-center justify-center border border-current after:absolute after:-inset-x-[2px] after:-inset-y-[5px] after:content-[''] bg-(--close-bg) shadow-(--close-shadow) active:bg-(--ink) active:text-(--surface)"
+            data-close
+            aria-label={`Close ${title}`}
+            className="relative flex size-(--box-size) shrink-0 cursor-pointer items-center justify-center border border-current outline-current outline-dotted outline-offset-2 not-focus-visible:outline-none after:absolute after:-inset-x-[2px] after:-inset-y-[5px] after:content-[''] bg-(--close-bg) shadow-(--close-shadow) active:bg-(--ink) active:text-(--surface)"
           >
             {/* X drawn as two smooth 1px strokes, like the box borders */}
             <svg aria-hidden viewBox="0 0 8 8" className="size-(--glyph-size)">
@@ -173,11 +272,29 @@ export function Window({
             </svg>
           </button>
         </div>
-        <span className="px-2 font-mono text-(length:--title-size) tracking-tight [text-box:trim-both_cap_alphabetic] [text-transform:var(--title-case)] [font-weight:var(--title-weight)] before:content-(--title-open) after:content-(--title-close)">
-          {title}
+        {/* The title is the window's handle: arrow keys move it, and
+            Enter rolls it up like a double-click does. A mouse click does
+            nothing, so a drag never toggles it. */}
+        <h2 id={titleId} className="flex min-w-0">
+          <button
+            type="button"
+            aria-expanded={!shaded}
+            aria-describedby={hintId}
+            onKeyDown={onTitleKeyDown}
+            onClick={(e) => e.detail === 0 && shade()}
+            className="cursor-[inherit] px-2 font-mono text-(length:--title-size) tracking-tight outline-current outline-dotted outline-offset-2 not-focus-visible:outline-none [text-box:trim-both_cap_alphabetic] [text-transform:var(--title-case)] [font-weight:var(--title-weight)] before:content-(--title-open) after:content-(--title-close)"
+          >
+            {title}
+          </button>
+        </h2>
+        <span id={hintId} hidden>
+          Arrow keys move the window, Enter rolls it up, Escape closes it.
         </span>
       </div>
       <div
+        ref={body}
+        data-window-body
+        hidden={shaded}
         className={`os-scroll min-h-0 flex-1 select-text ${flush ? '' : 'p-5'}`}
       >
         {children}

@@ -1,15 +1,22 @@
 import { Link } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import { Window } from '#/components/Window'
 import { useWindows } from '#/components/WindowManager'
+
+// The path never changes while the window is open: the URL leaving it
+// closes the window.
+const noChange = () => () => {}
 
 /** Opens for any URL without a window of its own. */
 export function NotFound() {
   const { close } = useWindows()
   // Prerendered once as 404.html and served for every unknown URL, so the
   // path is only known in the browser.
-  const [path, setPath] = useState<string | null>(null)
-  useEffect(() => setPath(location.pathname), [])
+  const path = useSyncExternalStore(
+    noChange,
+    () => location.pathname,
+    () => null,
+  )
 
   return (
     <Window title="File Not Found" x={40} y={60} width={360}>

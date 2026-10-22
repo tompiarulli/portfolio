@@ -18,7 +18,7 @@ export function SystemInfo() {
           key={group}
           className="mt-3 border-t border-dotted border-(--ink) pt-3"
         >
-          <h2 className="font-mono">{group}</h2>
+          <h3 className="font-mono">{group}</h3>
           <ul className="mt-1 space-y-1">
             {items.map((c) => (
               <li key={c.name}>

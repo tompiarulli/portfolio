@@ -1,4 +1,12 @@
-import { Suspense, lazy, useEffect, useId, useRef, useState } from 'react'
+import {
+  Suspense,
+  lazy,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react'
 import { ORBITS } from '#/components/Backdrop'
 import { Window } from '#/components/Window'
 import { DEFAULT_THEME, THEMES, applyTheme, currentTheme } from '#/lib/theme'
@@ -8,18 +16,24 @@ import type { Backdrop, Theme } from '#/lib/theme'
 // into the shell.
 const Orbits = lazy(() => import('#/components/Orbits'))
 
+/** The terminal can switch theme too, so follow <html>. */
+function subscribeTheme(onChange: () => void) {
+  const observer = new MutationObserver(onChange)
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  })
+  return () => observer.disconnect()
+}
+
 export function Settings() {
-  const [theme, setTheme] = useState<Theme>(DEFAULT_THEME)
-  useEffect(() => {
-    setTheme(currentTheme())
-    // The terminal can switch theme too, so follow <html>.
-    const observer = new MutationObserver(() => setTheme(currentTheme()))
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme'],
-    })
-    return () => observer.disconnect()
-  }, [])
+  // The prerendered page can't know the saved theme, so it shows the
+  // default until hydrated.
+  const theme = useSyncExternalStore(
+    subscribeTheme,
+    currentTheme,
+    () => DEFAULT_THEME,
+  )
   const pick = (t: Theme) => applyTheme(t)
 
   return (

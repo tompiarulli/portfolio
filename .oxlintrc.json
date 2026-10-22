@@ -12,12 +12,17 @@
   "rules": {
     "eqeqeq": "warn",
     "no-unused-vars": "warn",
-    "no-console": "warn",
+    "no-console": "error",
     "import/no-cycle": "error",
     "unicorn/no-null": "off",
     "react/rules-of-hooks": "error",
     "react/exhaustive-deps": "warn",
-    "react/refs": "error"
+    "react/refs": "error",
+    "react/set-state-in-effect": "error",
+    "jsx-a11y/prefer-tag-over-role": "error",
+    "jsx-a11y/no-static-element-interactions": "error",
+    "jsx-a11y/click-events-have-key-events": "error",
+    "jsx-a11y/no-autofocus": "error"
   },
   "ignorePatterns": [
     "src/routeTree.gen.ts",

@@ -130,7 +130,13 @@ function useBackdrop() {
       attributes: true,
       attributeFilter: ['data-theme'],
     })
-    return () => observer.disconnect()
+    // Turning reduced motion on or off stills or restarts the backdrop.
+    const motion = matchMedia('(prefers-reduced-motion: reduce)')
+    motion.addEventListener('change', update)
+    return () => {
+      observer.disconnect()
+      motion.removeEventListener('change', update)
+    }
   }, [])
   return state
 }

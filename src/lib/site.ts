@@ -16,6 +16,16 @@ export const site = {
       "Version and credits for Tom Piarulli's site: the fonts, icons, photo and tools behind it.",
     notFound: "This page isn't on Tom Piarulli's desktop.",
   },
+  /** Each page's main heading, for screen readers and outlines; on screen,
+   *  the window's own title says it. Keyed by window. */
+  headings: {
+    about: 'Tom Piarulli, software engineer',
+    contact: 'Contact Tom Piarulli',
+    terminal: 'Terminal',
+    settings: 'Settings',
+    system: 'System Info',
+    notfound: 'File Not Found',
+  },
   letter: [
     'Welcome to my small corner of the internet.',
     "I'm a software developer with 15+ years of experience across engineering, product, and design. Most recently I was CTO at Nerd Street, an esports events company.",
