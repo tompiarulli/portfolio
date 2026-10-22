@@ -15,4 +15,4 @@ pip install -r scripts/requirements.txt
 | `cde_icons.py`      | The dock icons in `public/icons/cde/`, from CDE's pixmaps (see `public/icons/README.md`).         | `python3 scripts/cde_icons.py <path to a CDE checkout>`  |
 | `grass.py`          | The Shut Down photo in `public/images/`, from a source photo in the git-ignored `assets/` folder. | `python3 scripts/grass.py`                               |
 
-The menu mark scripts print the token to paste over the theme's `--logo`; with `preview` they also write a zoomed PNG to check the drawing, the only part of them that needs Pillow.
+The menu mark scripts print the token to paste over the theme's `--logo`; with `preview` they also write a zoomed PNG to check the drawing, the only part of them that needs Pillow. `grass.py` writes every width as AVIF, WebP and JPEG; AVIF needs Pillow 11.3 or later.

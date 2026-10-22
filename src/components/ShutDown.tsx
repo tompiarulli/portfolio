@@ -140,15 +140,28 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
       )}
       {ready && (
         <>
-          <img
-            src="/images/grass-1920.jpg"
-            srcSet="/images/grass-1280.jpg 1280w, /images/grass-1920.jpg 1920w, /images/grass-2560.jpg 2560w, /images/grass-3840.jpg 3840w"
-            sizes="100vw"
-            alt="Grass"
-            // Without the photo, leave the room dark rather than a broken image.
-            onError={(e) => (e.currentTarget.style.display = 'none')}
-            className="fade-in absolute inset-0 size-full object-cover [image-rendering:auto]!"
-          />
+          {/* Mounted only once the room is dark, so the photo never loads earlier. */}
+          <picture>
+            <source
+              type="image/avif"
+              srcSet="/images/grass-1280.avif 1280w, /images/grass-1920.avif 1920w, /images/grass-2560.avif 2560w, /images/grass-3840.avif 3840w"
+              sizes="100vw"
+            />
+            <source
+              type="image/webp"
+              srcSet="/images/grass-1280.webp 1280w, /images/grass-1920.webp 1920w, /images/grass-2560.webp 2560w, /images/grass-3840.webp 3840w"
+              sizes="100vw"
+            />
+            <img
+              src="/images/grass-1920.jpg"
+              srcSet="/images/grass-1280.jpg 1280w, /images/grass-1920.jpg 1920w, /images/grass-2560.jpg 2560w, /images/grass-3840.jpg 3840w"
+              sizes="100vw"
+              alt="Grass"
+              // Without the photo, leave the room dark rather than a broken image.
+              onError={(e) => (e.currentTarget.style.display = 'none')}
+              className="fade-in absolute inset-0 size-full object-cover [image-rendering:auto]!"
+            />
+          </picture>
           {/* Any click on the picture boots. */}
           <button
             type="button"
