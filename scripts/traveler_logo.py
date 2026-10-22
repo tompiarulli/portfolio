@@ -1,8 +1,6 @@
 """Builds OUTATIME's menu mark: a flux capacitor.
 
-The mark is drawn in code on a 16x16 character grid, one character per pixel,
-in up to three levels: '#' full, 'b' 0.7 and 'a' 0.4 opacity, and '.' clear
-so the menu bar shows through.
+Drawn on a 16x16 character grid with the helpers in logo.py.
 
     python scripts/traveler_logo.py            # print the --logo token
     python scripts/traveler_logo.py preview    # also write a zoomed PNG
@@ -10,13 +8,8 @@ so the menu bar shows through.
 
 import math
 import sys
-from urllib.parse import quote
 
-LEVELS = {"a": ".4", "b": ".7", "#": None}
-
-
-def blank(size=16):
-    return [["."] * size for _ in range(size)]
+from logo import art, blank, preview, token
 
 
 def rect(grid, x0, y0, x1, y1, level):
@@ -47,10 +40,6 @@ def line(grid, a, b, r, level):
                 row[x] = level
 
 
-def art(grid):
-    return "\n".join("".join(row) for row in grid)
-
-
 def flux():
     """The menu mark: the flux capacitor, three tubes meeting in a Y inside
     its case, lit along their length."""
@@ -65,60 +54,9 @@ def flux():
     return art(g)
 
 
-def rows(drawing, size):
-    lines = drawing.strip("\n").split("\n")
-    assert len(lines) == size, len(lines)
-    for line_ in lines:
-        assert len(line_) == size, (len(line_), line_)
-    return lines
-
-
-def token(drawing, size=16):
-    lines = rows(drawing, size)
-    paths = ""
-    for char, opacity in LEVELS.items():
-        d = ""
-        for y, row in enumerate(lines):
-            x = 0
-            while x < size:
-                if row[x] != char:
-                    x += 1
-                    continue
-                start = x
-                while x < size and row[x] == char:
-                    x += 1
-                d += f"M{start} {y}h{x - start}v1H{start}z"
-        if d:
-            attr = f" fill-opacity='{opacity}'" if opacity else ""
-            paths += f"<path{attr} d='{d}'/>"
-    svg = (
-        "<svg xmlns='http://www.w3.org/2000/svg' "
-        f"viewBox='0 0 {size} {size}' shape-rendering='crispEdges'>{paths}</svg>"
-    )
-    return 'url("data:image/svg+xml,' + quote(svg, safe=" '=:/.-") + '")'
-
-
-def preview(path):
-    """Draws the logo in ink on steel, zoomed."""
-    from PIL import Image
-
-    scale, pad = 12, 12
-    steel = (195, 199, 203)
-    ink = {"#": (16, 18, 20)}
-    ink["b"] = tuple(round(s + (i - s) * 0.7) for s, i in zip(steel, ink["#"]))
-    ink["a"] = tuple(round(s + (i - s) * 0.4) for s, i in zip(steel, ink["#"]))
-    size = 16 * scale
-    image = Image.new("RGB", (size + 2 * pad, size + 2 * pad), steel)
-    for y, row in enumerate(rows(flux(), 16)):
-        for x, char in enumerate(row):
-            if char in ink:
-                left = pad + x * scale
-                top = pad + y * scale
-                image.paste(ink[char], (left, top, left + scale, top + scale))
-    image.save(path)
-
-
 if __name__ == "__main__":
     print(f"  --logo: {token(flux())};")
     if len(sys.argv) > 1 and sys.argv[1] == "preview":
-        preview(sys.argv[2] if len(sys.argv) > 2 else "traveler-logo.png")
+        path = sys.argv[2] if len(sys.argv) > 2 else "traveler-logo.png"
+        # Ink on steel.
+        preview(flux(), path, back=(195, 199, 203), ink=(16, 18, 20))

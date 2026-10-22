@@ -58,17 +58,21 @@ def token(drawing, size=16):
     return 'url("data:image/svg+xml,' + quote(svg, safe=" '=:/.-") + '")'
 
 
-def preview(drawing, path):
-    """Draws the mark in ink on white, zoomed."""
+def preview(drawing, path, back=(255, 255, 255), ink=(0, 0, 0)):
+    """Draws the mark zoomed, in ink on a background like its menu bar's,
+    each level mixed between the two."""
     from PIL import Image
 
     scale, pad = 12, 12
-    ink = {"#": (0, 0, 0), "b": (77, 77, 77), "a": (153, 153, 153)}
+    shade = {
+        c: tuple(round(b + (i - b) * float(o or 1)) for b, i in zip(back, ink))
+        for c, o in LEVELS.items()
+    }
     size = 16 * scale
-    image = Image.new("RGB", (size + 2 * pad, size + 2 * pad), (255, 255, 255))
+    image = Image.new("RGB", (size + 2 * pad, size + 2 * pad), back)
     for y, row in enumerate(rows(drawing, 16)):
         for x, char in enumerate(row):
-            if char in ink:
+            if char in shade:
                 left, top = pad + x * scale, pad + y * scale
-                image.paste(ink[char], (left, top, left + scale, top + scale))
+                image.paste(shade[char], (left, top, left + scale, top + scale))
     image.save(path)
