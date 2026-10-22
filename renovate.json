@@ -1,0 +1,57 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "schedule": ["before 6am on monday"],
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
+  "prConcurrentLimit": 10,
+  "postUpdateOptions": ["pnpmDedupe"],
+  "osvVulnerabilityAlerts": true,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on monday"]
+  },
+  "packageRules": [
+    {
+      "description": "TanStack packages are pinned and must move together",
+      "matchPackageNames": ["@tanstack/**"],
+      "groupName": "tanstack"
+    },
+    {
+      "description": "Lint and format tooling",
+      "matchPackageNames": ["oxlint", "oxfmt"],
+      "groupName": "oxc tooling"
+    },
+    {
+      "description": "Vitest and testing libraries",
+      "matchPackageNames": [
+        "vitest",
+        "@vitest/**",
+        "jsdom",
+        "@testing-library/**"
+      ],
+      "groupName": "test tooling"
+    },
+    {
+      "description": "Keep @types/node on the major matching .nvmrc",
+      "matchPackageNames": ["@types/node"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions"
+    },
+    {
+      "description": "Pin and digest updates often lack a release timestamp, which minimumReleaseAge treats as never old enough",
+      "matchUpdateTypes": ["pin", "pinDigest", "digest"],
+      "minimumReleaseAge": null
+    }
+  ]
+}
