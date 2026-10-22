@@ -181,6 +181,9 @@
   /* The terminal's screen: a dark grey, so it reads as its own thing
      against the desktop in every theme. */
   --terminal: #1c1f1e;
+  /* The terminal's output text: the backdrop's colour, unless that is too
+     faint to read on the screen. */
+  --terminal-text: var(--warp);
   /* The screen with the power off; the same on every theme. */
   --off: #000;
   /* Mark in the top-left menu, like an old OS's system logo: the white rabbit's head
@@ -256,6 +259,8 @@
   --desk: #000000;
   --warp: #6e6e6e;
   --glint: #ededed;
+  /* The rings' grey is too faint for text on the terminal's screen. */
+  --terminal-text: #949494;
   /* The menu mark: a plain, smooth disc. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3C/svg%3E");
@@ -270,8 +275,9 @@
   --surface: #bfc6ce;
   --surface-dark: #7a848f;
   --tertiary: #7a848f;
-  /* The red ring around the logo's X. */
-  --accent: #d8362b;
+  /* The red ring around the logo's X, a shade deep enough for white text
+     and to stand out on the grey. */
+  --accent: #ca3127;
   --button: #bfc6ce;
   --ink: #0f1217;
   --highlight: #f1f4f7;
@@ -280,9 +286,9 @@
   --on-accent: #f1f4f7;
   --on-tertiary: #0f1217;
   /* The focused window's title bar in the logo's red. */
-  --title: #d8362b;
+  --title: #ca3127;
   --on-title: #f1f4f7;
-  --indicator: #d8362b;
+  --indicator: #ca3127;
   --backdrop-opacity: 1;
   /* Cold starlight over a near-black teal sky, like the posters' mist. */
   --desk: #0a1417;
@@ -381,19 +387,20 @@
   --bg: #16122a;
   --surface: #16122a;
   --surface-dark: #07060d;
-  /* Dock hover in the streaks' violet. */
-  --tertiary: #a24bff;
+  /* Dock hover in the streaks' violet, a shade deeper for white text. */
+  --tertiary: #9845fa;
   --on-tertiary: #ffffff;
-  /* Selections and the pressed dock in the streaks' magenta. */
+  /* Selections and the pressed dock in the streaks' magenta, lettered in
+     the panes' violet: white on it is too faint. */
   --accent: #ff3d9a;
-  --on-accent: #ffffff;
+  --on-accent: #16122a;
   --button: #16122a;
   --ink: #ece8ff;
   --highlight: #2c2550;
   --well: #0d0b1a;
   /* The focused window's title bar lit solid in the streaks' magenta. */
   --title: #ff3d9a;
-  --on-title: #ffffff;
+  --on-title: #16122a;
   /* Open-window marks in the streaks' blue. */
   --indicator: #2f9bff;
   /* Softened, so the dense stripes don't run at full contrast. */

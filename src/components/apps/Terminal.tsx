@@ -83,7 +83,7 @@ export function Terminal() {
         onClick={() => {
           if (!getSelection()?.toString()) field.current?.focus()
         }}
-        className="min-h-full bg-(--terminal) p-3 font-mono leading-[1.45] text-(--warp)"
+        className="min-h-full bg-(--terminal) p-3 font-mono leading-[1.45] text-(--terminal-text)"
       >
         {/* A log, so screen readers read out each command's output. */}
         <div role="log" aria-label="Terminal output">
