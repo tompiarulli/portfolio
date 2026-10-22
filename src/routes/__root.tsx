@@ -1,5 +1,5 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { Desktop } from '#/components/Desktop'
 import { ogImage } from '#/lib/seo'
 import { site } from '#/lib/site'
@@ -26,6 +26,35 @@ const Devtools = import.meta.env.DEV
     })
   : () => null
 
+// The browser tints its toolbar to theme-color, matched to the menu bar's
+// --surface. This hex is the one colour kept outside styles.css: static HTML
+// can only carry one, so it is the default theme's (Orbital's --surface)
+// and has to move with it. useThemeColor swaps in the live theme's.
+const DEFAULT_THEME_COLOR = '#0a0a0a'
+
+/** Copies the theme's --surface into theme-color, now and whenever the theme
+ *  changes. It waits for hydration: React matches the meta tag by its
+ *  content, so changing it any earlier makes React add a second one. */
+function useThemeColor() {
+  useEffect(() => {
+    const root = document.documentElement
+    const sync = () => {
+      const meta = document.querySelector<HTMLMetaElement>(
+        'meta[name="theme-color"]',
+      )
+      const color = getComputedStyle(root).getPropertyValue('--surface').trim()
+      if (meta && color) meta.content = color
+    }
+    sync()
+    const observer = new MutationObserver(sync)
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    })
+    return () => observer.disconnect()
+  }, [])
+}
+
 export const Route = createRootRoute({
   head: () => ({
     meta: [
@@ -33,16 +62,7 @@ export const Route = createRootRoute({
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       // Every page sets its own title and description.
       { title: site.title },
-      {
-        name: 'theme-color',
-        content: '#efebe2',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        name: 'theme-color',
-        content: '#111111',
-        media: '(prefers-color-scheme: dark)',
-      },
+      { name: 'theme-color', content: DEFAULT_THEME_COLOR },
       { property: 'og:site_name', content: site.name },
       { property: 'og:type', content: 'website' },
       { property: 'og:locale', content: 'en_US' },
@@ -68,6 +88,7 @@ export const Route = createRootRoute({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  useThemeColor()
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
