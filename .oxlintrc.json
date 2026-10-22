@@ -16,7 +16,8 @@
     "import/no-cycle": "error",
     "unicorn/no-null": "off",
     "react/rules-of-hooks": "error",
-    "react/exhaustive-deps": "warn"
+    "react/exhaustive-deps": "warn",
+    "react/refs": "error"
   },
   "ignorePatterns": [
     "src/routeTree.gen.ts",

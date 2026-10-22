@@ -4,7 +4,7 @@
 // ring is drawn brighter than the far half, which gives the depth. A small
 // bright point rides each ring. Drawn at the screen's own pixel density, so
 // the lines stay smooth and fine.
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { rgb } from '#/lib/color'
 
 type OrbitsProps = {
@@ -44,8 +44,11 @@ const SHADES = 32
 export default function Orbits(props: OrbitsProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   // The render loop reads props from here, so prop changes never restart it.
+  // Synced after each commit, before the next frame can read them.
   const live = useRef(props)
-  live.current = props
+  useLayoutEffect(() => {
+    live.current = props
+  })
 
   useEffect(() => {
     const canvas = canvasRef.current

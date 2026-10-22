@@ -1,7 +1,7 @@
 // An old film running through the projector: a frame that flickers under
 // a dark vignette. One fragment shader on raw WebGL, drawn
 // at a low resolution and scaled up, at the projector's 24 frames a second.
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { rgb } from '#/lib/color'
 
 const vertexShader = `
@@ -77,16 +77,8 @@ export default function Film({
 }: FilmProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   // The render loop reads props from here, so prop changes never restart WebGL.
-  const props = useRef({
-    flicker,
-    vignette,
-    paletteLow,
-    paletteHigh,
-    pixelSize,
-    fps,
-    disableAnimation,
-  })
-  props.current = {
+  // Synced after each commit, before the next frame can read them.
+  const latest = {
     flicker,
     vignette,
     paletteLow,
@@ -95,6 +87,10 @@ export default function Film({
     fps,
     disableAnimation,
   }
+  const props = useRef(latest)
+  useLayoutEffect(() => {
+    props.current = latest
+  })
 
   useEffect(() => {
     const canvas = canvasRef.current
