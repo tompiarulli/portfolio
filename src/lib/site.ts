@@ -89,7 +89,7 @@ export const credits: { group: string; items: Credit[] }[] = [
         license: 'OFL 1.1',
       },
       {
-        name: 'IBM Plex Mono',
+        name: 'Outpost Mono, a subset of IBM Plex Mono',
         by: 'IBM Corp.',
         url: 'https://github.com/IBM/plex',
         license: 'OFL 1.1',

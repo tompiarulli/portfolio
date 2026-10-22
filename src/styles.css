@@ -65,20 +65,20 @@
   font-weight: 600 900;
 }
 
-/* IBM Plex Mono (SIL OFL, see public/fonts/IBMPlexMono-OFL.txt): Outpost
+/* Outpost Mono (SIL OFL, see public/fonts/IBMPlexMono-OFL.txt): Outpost
    31's font, IBM's own monospace, for the station's computer room in the
-   year after the IBM PC. Latin subset from Fontsource, cut down with the
-   pyftsubset command in public/fonts/README.md. Only fetched while that
-   theme is on. */
+   year after the IBM PC. A subset of IBM Plex Mono, renamed because the
+   licence reserves "Plex" for unmodified copies; see public/fonts/README.md.
+   Only fetched while that theme is on. */
 @font-face {
-  font-family: 'IBM Plex Mono';
-  src: url('/fonts/ibm-plex-mono-400.woff2') format('woff2');
+  font-family: 'Outpost Mono';
+  src: url('/fonts/outpost-mono-400.woff2') format('woff2');
   font-display: swap;
   font-weight: 300 500;
 }
 @font-face {
-  font-family: 'IBM Plex Mono';
-  src: url('/fonts/ibm-plex-mono-600.woff2') format('woff2');
+  font-family: 'Outpost Mono';
+  src: url('/fonts/outpost-mono-600.woff2') format('woff2');
   font-display: swap;
   font-weight: 600 900;
 }
@@ -349,7 +349,7 @@
    flares, title bars black with a burning blue, over snow blowing through
    the night. */
 [data-theme='outpost'] {
-  --font-ui: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-ui: 'Outpost Mono', ui-monospace, monospace;
   /* Galvanised steel under fluorescent tubes. */
   --bg: #c5ccd2;
   --surface: #c5ccd2;
