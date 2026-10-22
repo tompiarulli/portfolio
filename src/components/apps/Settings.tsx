@@ -1,9 +1,12 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useId, useRef, useState } from 'react'
 import { ORBITS } from '#/components/Backdrop'
-import Orbits from '#/components/Orbits'
 import { Window } from '#/components/Window'
 import { DEFAULT_THEME, THEMES, applyTheme, currentTheme } from '#/lib/theme'
 import type { Backdrop, Theme } from '#/lib/theme'
+
+// The same chunk the backdrop loads, so the preview never pulls the rings
+// into the shell.
+const Orbits = lazy(() => import('#/components/Orbits'))
 
 export function Settings() {
   const [theme, setTheme] = useState<Theme>(DEFAULT_THEME)
@@ -136,22 +139,26 @@ function OrbitsPreview() {
   }, [])
   return (
     <span ref={ref} className="absolute inset-0">
-      {colors && (
-        <Orbits
-          {...ORBITS}
-          // Blown up past the tile's edges, so it shows a close crop of the
-          // rings like the other tiles, not the whole set shrunk down.
-          center={[0.65, 0.6]}
-          inner={0.6}
-          outer={2.4}
-          point={1.5}
-          background={colors[0]}
-          color={colors[1]}
-          highlight={colors[2]}
-          still
-          stillTime={20}
-        />
-      )}
+      {/* Its own boundary, so only the tile waits for the chunk, not the
+          whole window. */}
+      <Suspense>
+        {colors && (
+          <Orbits
+            {...ORBITS}
+            // Blown up past the tile's edges, so it shows a close crop of the
+            // rings like the other tiles, not the whole set shrunk down.
+            center={[0.65, 0.6]}
+            inner={0.6}
+            outer={2.4}
+            point={1.5}
+            background={colors[0]}
+            color={colors[1]}
+            highlight={colors[2]}
+            still
+            stillTime={20}
+          />
+        )}
+      </Suspense>
     </span>
   )
 }
