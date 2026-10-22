@@ -1,4 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { pageHead } from '#/lib/seo'
+import { site } from '#/lib/site'
 
 // Windows render from the desktop's window manager; routes set the URL and head.
-export const Route = createFileRoute('/')({})
+export const Route = createFileRoute('/')({
+  head: () =>
+    pageHead({
+      path: '/',
+      title: `${site.tagline} - ${site.title}`,
+      description: site.descriptions.home,
+    }),
+})

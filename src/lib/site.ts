@@ -1,7 +1,20 @@
 export const site = {
+  url: 'https://tompiarulli.com',
   name: 'Tom Piarulli',
   title: 'Tom Piarulli ☼',
   tagline: 'Software engineer',
+  /** What search results and link previews say about each page. */
+  descriptions: {
+    home: 'Portfolio of Tom Piarulli, a software engineer with 15+ years across engineering, product and design, most recently CTO at Nerd Street. Built as a small late-90s desktop.',
+    contact:
+      'How to reach Tom Piarulli, software engineer: email, LinkedIn and GitHub.',
+    terminal:
+      "A command line on Tom Piarulli's desktop. Type help for a list of commands.",
+    settings:
+      "Pick a theme for Tom Piarulli's desktop. Each one changes the colours, font and backdrop.",
+    system:
+      "Version and credits for Tom Piarulli's site: the fonts, icons, photo and tools behind it.",
+  },
   letter: [
     'Welcome to my small corner of the internet.',
     "I'm a software developer with 15+ years of experience across engineering, product, and design. Most recently I was CTO at Nerd Street, an esports events company.",

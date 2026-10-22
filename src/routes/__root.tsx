@@ -1,9 +1,10 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { Suspense, lazy } from 'react'
 import { Desktop } from '#/components/Desktop'
+import { ogImage } from '#/lib/seo'
 import { site } from '#/lib/site'
 import { themeBootScript } from '#/lib/theme'
-import appCss from '../styles.css?url'
+import appCss from '#/styles.css?url'
 
 const Devtools = import.meta.env.DEV
   ? lazy(async () => {
@@ -30,8 +31,8 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      // Every page sets its own title and description.
       { title: site.title },
-      { name: 'description', content: `${site.name} - ${site.tagline}` },
       {
         name: 'theme-color',
         content: '#efebe2',
@@ -42,10 +43,23 @@ export const Route = createRootRoute({
         content: '#111111',
         media: '(prefers-color-scheme: dark)',
       },
+      { property: 'og:site_name', content: site.name },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:locale', content: 'en_US' },
+      { property: 'og:image', content: ogImage.url },
+      { property: 'og:image:type', content: 'image/png' },
+      { property: 'og:image:width', content: String(ogImage.width) },
+      { property: 'og:image:height', content: String(ogImage.height) },
+      { property: 'og:image:alt', content: ogImage.alt },
+      // X falls back to the og: tags for everything else.
+      { name: 'twitter:card', content: 'summary_large_image' },
     ],
     links: [
       { rel: 'stylesheet', href: appCss },
       { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+      { rel: 'icon', href: '/favicon.ico', sizes: '32x32' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+      { rel: 'manifest', href: '/manifest.webmanifest' },
     ],
     scripts: [{ children: themeBootScript }],
   }),
