@@ -4,7 +4,7 @@ This is a personal site, so contributions are not expected, but the setup is doc
 
 ## Setup
 
-Requires Node 24 and pnpm.
+Requires Node 24 (pinned in `.nvmrc`) and pnpm 12.14.0 (pinned in `package.json`'s `packageManager`; `corepack enable` picks it up).
 
 ```bash
 pnpm install
@@ -14,15 +14,19 @@ pnpm dev        # http://localhost:3000
 ## Scripts
 
 ```bash
-pnpm build      # production build, prerenders every route into .output/
-pnpm preview    # serve the production build
-pnpm typecheck  # tsc --noEmit
-pnpm lint       # eslint
-pnpm format     # prettier --write + eslint --fix
-pnpm check      # prettier --check
+pnpm build         # production build, prerenders every route into .output/
+pnpm preview       # serve the production build
+pnpm test          # vitest run (jsdom, Testing Library)
+pnpm typecheck     # tsc --noEmit
+pnpm lint          # oxlint
+pnpm lint:fix      # oxlint --fix
+pnpm format        # oxfmt
+pnpm format:check  # oxfmt --check
 ```
 
-Run `pnpm typecheck && pnpm lint && pnpm build` before committing. The build runs the prerender crawl, which catches broken routes and loaders.
+Run `pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm build` before committing; CI runs the same five checks on every pull request. The build runs the prerender crawl, which catches broken routes and loaders. Tests sit next to the code they cover as `*.test.ts`.
+
+Renovate opens dependency updates weekly. TanStack packages are pinned exactly and move together.
 
 ## Layout
 
