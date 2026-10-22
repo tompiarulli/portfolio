@@ -36,9 +36,13 @@ Run `pnpm typecheck && pnpm lint && pnpm build` before committing. The build run
 - `src/styles.css` design tokens per theme, and the retro desktop chrome utilities.
 - `public/fonts/` self-hosted fonts.
 
+## Pull requests
+
+Every change lands on `main` through a pull request, squash merged, so each PR becomes one commit and its title becomes the commit message. The description says what changed and how it was verified. History stays linear: rebase on `main`, never merge it into a branch.
+
 ## Commits
 
-Conventional Commits with a required scope: `type(scope): subject`.
+Conventional Commits with a required scope: `type(scope): subject`. With squash merges this applies to PR titles.
 
 - Types: `feat`, `fix`, `refactor`, `style`, `perf`, `docs`, `chore`, `build`, `ci`, `test`.
 - Scopes: `app`, `desktop`, `theme`, `content`, `deps`, `config`. A `docs` commit takes the scope of what it documents, e.g. `docs(theme)`, never `docs(docs)`.
@@ -48,6 +52,6 @@ Conventional Commits with a required scope: `type(scope): subject`.
 
 ## Deploy
 
-Vercel auto-detects TanStack Start. Push to `main` to deploy. Nothing runs at request time, so no environment variables are needed.
+Production deploys only from tagged releases, which are being set up: Release Please opens a release PR from the Conventional Commits on `main`, and merging it tags the version and deploys it to Vercel. Pushes to `main` alone don't deploy. Nothing runs at request time, so the site itself needs no environment variables.
 
 See [CLAUDE.md](CLAUDE.md) for the conventions that apply to code and design.
