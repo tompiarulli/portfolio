@@ -22,7 +22,7 @@ export function Settings() {
   return (
     <Window title="Settings" right x={-199} y={249} width={420}>
       <fieldset className="border border-(--ink) p-3">
-        <legend className="px-1 font-title">Theme</legend>
+        <legend className="px-1 font-mono">Theme</legend>
         <div className="grid grid-cols-3 gap-3">
           {THEMES.map((t) => (
             <ThemeTile key={t.id} theme={t} on={theme === t.id} pick={pick} />
@@ -157,13 +157,12 @@ function OrbitsPreview() {
 }
 
 const PREVIEWS: Record<
-  Exclude<Backdrop, 'plain' | 'film' | 'orbits' | 'streaks'>,
+  Exclude<Backdrop, 'film' | 'orbits' | 'streaks'>,
   string
 > = {
   rain: digits(1999),
   stars: scatter('..··+*', 0.08, 7),
   snow: scatter('*·.+*', 0.2, 31),
-  dust: scatter('·.·', 0.05, 11),
 }
 
 const SKY_WIDTH = 64
@@ -248,16 +247,6 @@ function ThemePreview({
     >
       {theme === 'believe' ? (
         <TreelinePreview />
-      ) : backdrop === 'plain' ? (
-        // Nothing to show of a plain desktop, so the theme's menu mark, at
-        // twice its grid.
-        <span
-          className="logo absolute inset-0 m-auto text-(--on-title)"
-          style={{
-            width: 'calc(2 * var(--logo-size))',
-            height: 'calc(2 * var(--logo-size))',
-          }}
-        />
       ) : backdrop === 'orbits' ? (
         <OrbitsPreview />
       ) : backdrop === 'film' ? (

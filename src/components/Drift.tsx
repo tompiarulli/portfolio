@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { random } from '#/lib/random'
 
 type Props = {
   /** Base colour behind the glyphs. */
@@ -31,8 +32,6 @@ const LAYERS = [
 ] as const
 
 type Mote = { x: number; y: number; glyph: string; phase: number }
-
-const random = (min: number, max: number) => min + Math.random() * (max - min)
 
 /**
  * Glyphs scattered over three depths, like a starfield or a snowstorm seen

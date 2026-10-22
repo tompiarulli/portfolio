@@ -1,8 +1,8 @@
-import { MenuBar } from './MenuBar'
-import { Dock } from './Dock'
-import { Backdrop } from './Backdrop'
-import { WindowManager } from './WindowManager'
-import { OpenWindows } from './apps'
+import { MenuBar } from '#/components/MenuBar'
+import { Dock } from '#/components/Dock'
+import { Backdrop } from '#/components/Backdrop'
+import { WindowManager } from '#/components/WindowManager'
+import { OpenWindows } from '#/components/apps'
 
 export function Desktop() {
   return (

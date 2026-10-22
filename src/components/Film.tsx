@@ -2,6 +2,7 @@
 // a dark vignette. One fragment shader on raw WebGL, drawn
 // at a low resolution and scaled up, at the projector's 24 frames a second.
 import { useEffect, useRef } from 'react'
+import { rgb } from '#/lib/color'
 
 const vertexShader = `
 attribute vec2 position;
@@ -43,7 +44,7 @@ interface FilmProps {
   flicker?: number
   /** How dark the edges get; 0 is none. */
   vignette?: number
-  /** Shadows and highlights, as CSS hex. */
+  /** Shadows and highlights, as CSS colours. */
   paletteLow: string
   paletteHigh: string
   /** Cell size in CSS pixels. */
@@ -51,16 +52,10 @@ interface FilmProps {
   /** Projector speed. */
   fps?: number
   disableAnimation?: boolean
-  className?: string
 }
 
-/** "#rgb" or "#rrggbb" to 0..1 floats. */
-function hexToRgb(hex: string): [number, number, number] {
-  let h = hex.trim().replace('#', '')
-  if (h.length === 3) h = [...h].map((c) => c + c).join('')
-  const n = parseInt(h, 16) || 0
-  return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255]
-}
+/** A CSS colour to 0..1 floats, for the shader. */
+const floats = (color: string) => rgb(color).map((c) => c / 255)
 
 function compile(gl: WebGLRenderingContext, type: number, src: string) {
   const s = gl.createShader(type)!
@@ -79,7 +74,6 @@ export default function Film({
   pixelSize = 2,
   fps = 24,
   disableAnimation = false,
-  className = '',
 }: FilmProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   // The render loop reads props from here, so prop changes never restart WebGL.
@@ -173,8 +167,8 @@ export default function Film({
       gl.uniform1f(loc.frame, frame)
       gl.uniform1f(loc.flicker, p.flicker)
       gl.uniform1f(loc.vignette, p.vignette)
-      gl.uniform3fv(loc.paletteLow, hexToRgb(p.paletteLow))
-      gl.uniform3fv(loc.paletteHigh, hexToRgb(p.paletteHigh))
+      gl.uniform3fv(loc.paletteLow, floats(p.paletteLow))
+      gl.uniform3fv(loc.paletteHigh, floats(p.paletteHigh))
       gl.drawArrays(gl.TRIANGLES, 0, 3)
     }
     raf = requestAnimationFrame(render)
@@ -192,7 +186,7 @@ export default function Film({
   return (
     <canvas
       ref={canvasRef}
-      className={`block size-full [image-rendering:pixelated] ${className}`}
+      className="block size-full [image-rendering:pixelated]"
     />
   )
 }

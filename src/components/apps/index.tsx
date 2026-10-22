@@ -2,14 +2,14 @@ import { Suspense, lazy } from 'react'
 import type { ComponentType } from 'react'
 import { WindowIdContext, useWindows } from '#/components/WindowManager'
 import type { WindowId } from '#/lib/windows'
-import { About } from './About'
-import { Contact } from './Contact'
-import { Settings } from './Settings'
-import { SystemInfo } from './SystemInfo'
+import { About } from '#/components/apps/About'
+import { Contact } from '#/components/apps/Contact'
+import { Settings } from '#/components/apps/Settings'
+import { SystemInfo } from '#/components/apps/SystemInfo'
 
 // Only fetched once someone opens it, so the shell stays small.
 const Terminal = lazy(() =>
-  import('./Terminal').then((m) => ({ default: m.Terminal })),
+  import('#/components/apps/Terminal').then((m) => ({ default: m.Terminal })),
 )
 
 const APPS: Record<WindowId, ComponentType> = {

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { random } from '#/lib/random'
 
 type Props = {
   /** Base colour behind the streaks. */
@@ -33,8 +34,6 @@ type Streak = {
   size: number
   color: string
 }
-
-const random = (min: number, max: number) => min + Math.random() * (max - min)
 
 /**
  * Light trails racing left to right, seen side on in perspective: far

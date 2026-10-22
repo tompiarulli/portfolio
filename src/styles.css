@@ -1,16 +1,8 @@
 @import 'tailwindcss';
 
-/* ---------- Fonts ----------
-   Drop self-hosted WOFF2 pixel fonts in /public/fonts and uncomment.
-   Reference fonts: Pixolde (UI) + ChiKareGo2 (buttons).
-   Free stand-ins: "Silkscreen", "VT323".
-@font-face { font-family: 'UI'; src: url('/fonts/ui.woff2') format('woff2'); font-display: block; }
-@font-face { font-family: 'Title'; src: url('/fonts/title.woff2') format('woff2'); font-display: block; }
-*/
-
-/* Iosevka Extended (SIL OFL, see public/fonts/Iosevka-OFL.txt): the site
-   font, a Unix terminal monospace in its wider Extended cut to match
-   the film's screens, subset to Latin and a few symbols.
+/* Iosevka Extended (SIL OFL, see public/fonts/Iosevka-OFL.txt): White
+   Rabbit's font, a Unix terminal monospace in its wider Extended cut to
+   match the screens it nods to, subset to Latin and a few symbols.
    Medium for text, SemiBold for dock labels, Bold for window titles.
    Browsers only fetch it once text uses it. */
 @font-face {
@@ -108,28 +100,32 @@
   font-weight: 500 900;
 }
 
+/* Registered here so Tailwind makes font-ui and font-mono; each theme
+   sets the values with its other tokens below. */
 @theme {
   --font-ui: 'Iosevka', ui-monospace, monospace;
-  --font-title: 'Iosevka', ui-monospace, monospace;
   --font-mono: 'Iosevka', ui-monospace, monospace;
 }
 
 /* ---------- Tokens: the theme drives everything ----------
-   White Rabbit: a green phosphor terminal over a desktop of code rain, with solid title bars and a monospace font. It is
-   the default; other themes override whatever tokens they need under
-   their own [data-theme]. The selector also matches a nested
-   [data-theme] so Settings can preview each theme in place. */
+   The base values, and White Rabbit's: a green phosphor terminal over a
+   desktop of code rain, with solid title bars and a monospace font. Every
+   other theme, Orbital (the default, in src/lib/theme.ts) included,
+   overrides whatever tokens it needs under its own [data-theme]. The
+   selector also matches a nested [data-theme] so Settings can preview
+   each theme in place. */
 :root,
 [data-theme] {
+  /* Text font, and the monospace for titles, labels and the terminal:
+     the same face unless a theme sets both. */
+  --font-ui: 'Iosevka', ui-monospace, monospace;
+  --font-mono: var(--font-ui);
   --bg: #03120a;
   --surface: #03120a;
-  --surface-light: #072a15;
   --surface-dark: #41e07a;
   --tertiary: #41e07a;
   --accent: #41e07a;
-  --accent-shadow: #03120a;
   --button: #03120a;
-  --button-shadow: #03120a;
   --ink: #41e07a;
   --highlight: #03120a;
   --well: #020c06;
@@ -138,7 +134,6 @@
   /* Solid phosphor title bars, as in the film's terminal windows. */
   --title: #41e07a;
   --on-title: #03120a;
-  --stripe: transparent;
   /* Case and weight of dock labels, the clock and window titles. */
   --label-case: uppercase;
   --label-weight: 600;
@@ -181,7 +176,6 @@
   --terminal: #1c1f1e;
   /* The screen with the power off; the same on every theme. */
   --off: #000;
-  --off-text: #fff;
   /* Mark in the top-left menu, like an old OS's system logo: the white rabbit's head
      in slim black sunglasses, on a 16x16 grid.
      Bright all over with a dimmer edge on the right.
@@ -225,23 +219,18 @@
    no colour at all, over thin grey orbital rings turning slowly on black. */
 [data-theme='orbital'] {
   --font-ui: 'Geist Mono', ui-monospace, monospace;
-  --font-title: 'Geist Mono', ui-monospace, monospace;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
   /* Near-black panes, bevels only a step either side, so windows read as
      flat cards. */
   --bg: #0a0a0a;
   --surface: #0a0a0a;
-  --surface-light: #1f1f1f;
   --surface-dark: #000000;
   /* Dock hover a grey lift. */
   --tertiary: #1f1f1f;
   --on-tertiary: #ededed;
   /* White is the only accent: selections and the pressed dock. */
   --accent: #ededed;
-  --accent-shadow: #a1a1a1;
   --on-accent: #000000;
   --button: #0a0a0a;
-  --button-shadow: #000000;
   /* Soft white text; outlines in a quiet grey. */
   --ink: #ededed;
   --highlight: #2e2e2e;
@@ -269,19 +258,14 @@
    misty teal sky of twinkling stars. */
 [data-theme='believe'] {
   --font-ui: 'DM Mono', ui-monospace, monospace;
-  --font-title: 'DM Mono', ui-monospace, monospace;
-  --font-mono: 'DM Mono', ui-monospace, monospace;
   /* Blue-tinted greys, like the posters' cold night light. */
   --bg: #bfc6ce;
   --surface: #bfc6ce;
-  --surface-light: #d4dae0;
   --surface-dark: #7a848f;
   --tertiary: #7a848f;
   /* The red ring around the logo's X. */
   --accent: #d8362b;
-  --accent-shadow: #86201a;
   --button: #bfc6ce;
-  --button-shadow: #67717c;
   --ink: #0f1217;
   --highlight: #f1f4f7;
   /* Typing paper, for inset wells. */
@@ -309,22 +293,18 @@
    over a silver film flickering through the projector. */
 [data-theme='steamboat'] {
   --font-ui: 'Grandstander', ui-sans-serif, sans-serif;
-  --font-title: 'Recursive Mono Casual', ui-monospace, monospace;
   --font-mono: 'Recursive Mono Casual', ui-monospace, monospace;
   --text-size: 13px;
   /* Paper, a little grey, as it prints on old stock. */
   --bg: #e8e8e4;
   --surface: #e8e8e4;
-  --surface-light: #ffffff;
   --surface-dark: #8c8c88;
   /* Dock hover in a flat mid grey, like an inked fill. */
   --tertiary: #a0a09c;
   --on-tertiary: #111111;
   /* Solid black ink for selected controls and the pressed dock. */
   --accent: #111111;
-  --accent-shadow: #000000;
   --button: #e8e8e4;
-  --button-shadow: #5c5c58;
   /* Heavy black ink outlines. */
   --ink: #111111;
   --highlight: #ffffff;
@@ -357,19 +337,14 @@
    the night. */
 [data-theme='outpost'] {
   --font-ui: 'IBM Plex Mono', ui-monospace, monospace;
-  --font-title: 'IBM Plex Mono', ui-monospace, monospace;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
   /* Galvanised steel under fluorescent tubes. */
   --bg: #c5ccd2;
   --surface: #c5ccd2;
-  --surface-light: #dde2e6;
   --surface-dark: #7c8791;
   --tertiary: #7c8791;
   /* A road flare's red. */
   --accent: #d42a1c;
-  --accent-shadow: #7a150d;
   --button: #c5ccd2;
-  --button-shadow: #66717b;
   --ink: #0a0e12;
   --highlight: #f3f6f8;
   --well: #eef2f5;
@@ -398,17 +373,14 @@
 [data-theme='traveler'] {
   --bg: #16122a;
   --surface: #16122a;
-  --surface-light: #2c2550;
   --surface-dark: #07060d;
   /* Dock hover in the streaks' violet. */
   --tertiary: #a24bff;
   --on-tertiary: #ffffff;
   /* Selections and the pressed dock in the streaks' magenta. */
   --accent: #ff3d9a;
-  --accent-shadow: #8a1450;
   --on-accent: #ffffff;
   --button: #16122a;
-  --button-shadow: #07060d;
   --ink: #ece8ff;
   --highlight: #2c2550;
   --well: #0d0b1a;
@@ -469,7 +441,7 @@ svg {
 }
 
 /* ---------- Retro desktop chrome utilities ---------- */
-/* Engraved double rule instead of a raised bevel; accent inverts. */
+/* Engraved double rule instead of a raised bevel. */
 @utility bevel {
   background: var(--button);
   box-shadow:
@@ -477,38 +449,11 @@ svg {
     inset 0 0 0 3px var(--ink),
     0 0 0 1px var(--ink);
 }
-@utility bevel-accent {
-  background: var(--accent);
-  color: var(--on-accent);
-  box-shadow:
-    inset 0 0 0 2px var(--accent),
-    inset 0 0 0 3px var(--on-accent),
-    0 0 0 1px var(--ink);
-}
-@utility bevel-pressed {
-  box-shadow:
-    inset -1px -1px 0 0 var(--highlight),
-    inset 1px 1px 0 0 var(--button-shadow),
-    0 0 0 1px var(--ink);
-  transform: translateY(1px);
-}
 @utility inset-well {
   background: var(--well);
   color: var(--ink);
   border: 1px solid var(--ink);
   box-shadow: inset 1px 1px 0 0 var(--surface-dark);
-}
-@utility stripes {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    var(--stripe) 0 1px,
-    transparent 1px 4px
-  );
-  /* Four lines span 13px; inset 2px so they sit centered in a 17px band.
-     Clip to the content box so the repeat doesn't wrap into the padding. */
-  padding-block: 2px;
-  background-origin: content-box;
-  background-clip: content-box;
 }
 
 /* The theme's --logo, painted in the current text colour at its own

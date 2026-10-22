@@ -12,7 +12,7 @@ export function Contact() {
               rel="me"
               className="flex justify-between gap-4 px-1 py-1.5 outline-none hover:bg-(--accent) hover:text-(--on-accent) focus-visible:bg-(--accent) focus-visible:text-(--on-accent)"
             >
-              <span className="font-title">{p.label}</span>
+              <span className="font-mono">{p.label}</span>
               <span className="truncate">{p.handle}</span>
             </a>
           </li>

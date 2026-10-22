@@ -5,6 +5,7 @@
 // bright point rides each ring. Drawn at the screen's own pixel density, so
 // the lines stay smooth and fine.
 import { useEffect, useRef } from 'react'
+import { rgb } from '#/lib/color'
 
 type OrbitsProps = {
   /** Rings in the set. */
@@ -23,7 +24,7 @@ type OrbitsProps = {
   lineWidth?: number
   /** Radius of the riding points in CSS pixels; 0 is none. */
   point?: number
-  /** Colours, as CSS hex: the ground, the rings, the points. */
+  /** The ground, the rings and the points, as CSS colours. */
   background: string
   color: string
   highlight: string
@@ -39,14 +40,6 @@ type OrbitsProps = {
 const SEGMENTS = 160
 /** Steps of brightness from the far side of a ring to the near side. */
 const SHADES = 32
-
-/** "#rgb" or "#rrggbb" to 0..255 channels. */
-function channels(hex: string) {
-  let h = hex.trim().replace('#', '')
-  if (h.length === 3) h = [...h].map((c) => c + c).join('')
-  const n = parseInt(h, 16) || 0
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
-}
 
 export default function Orbits(props: OrbitsProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -84,8 +77,8 @@ export default function Orbits(props: OrbitsProps) {
       ctx.lineWidth = (p.lineWidth ?? 1) * dpr
       ctx.lineCap = 'round'
       ctx.lineJoin = 'round'
-      const back = channels(p.background)
-      const line = channels(p.color)
+      const back = rgb(p.background)
+      const line = rgb(p.color)
       const ramp = Array.from({ length: SHADES }, (_, i) => {
         const a = i / (SHADES - 1)
         return `rgb(${back.map((b, c) => Math.round(b + (line[c] - b) * a)).join(',')})`

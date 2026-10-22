@@ -1,14 +1,14 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
-import { RAIN_CHARACTERS, THEMES } from '#/lib/theme'
+import { RAIN_CHARACTERS, THEMES, currentTheme } from '#/lib/theme'
 import type { Backdrop } from '#/lib/theme'
 
 // Backgrounds load after hydration, so the shell stays small. Only the
 // current theme's one is fetched.
-const CodeRain = lazy(() => import('./CodeRain'))
-const Drift = lazy(() => import('./Drift'))
-const Orbits = lazy(() => import('./Orbits'))
-const Film = lazy(() => import('./Film'))
-const Streaks = lazy(() => import('./Streaks'))
+const CodeRain = lazy(() => import('#/components/CodeRain'))
+const Drift = lazy(() => import('#/components/Drift'))
+const Orbits = lazy(() => import('#/components/Orbits'))
+const Film = lazy(() => import('#/components/Film'))
+const Streaks = lazy(() => import('#/components/Streaks'))
 
 /** Code rain knobs, for themes with `backdrop: 'rain'`. */
 const RAIN = {
@@ -49,15 +49,6 @@ const STARS = {
   density: 1.4,
   wind: 3,
   twinkle: 0.25,
-} as const
-
-/** Dust hanging in a sunlit room, for `backdrop: 'dust'`: sparse dots,
- *  barely moving, no twinkle. */
-const DUST = {
-  characters: '·.·',
-  density: 0.8,
-  wind: 2,
-  fall: 1,
 } as const
 
 /** Orbital rings, for `backdrop: 'orbits'`: --warp rings tilted in 3D,
@@ -121,9 +112,9 @@ function useBackdrop() {
     const root = document.documentElement
     const update = () => {
       const s = getComputedStyle(root)
-      const theme = THEMES.find((t) => t.id === root.dataset.theme)
+      const theme = THEMES.find((t) => t.id === currentTheme()) ?? THEMES[0]
       setState({
-        backdrop: theme?.backdrop ?? 'rain',
+        backdrop: theme.backdrop,
         desk: s.getPropertyValue('--desk').trim(),
         warp: s.getPropertyValue('--warp').trim(),
         glint: s.getPropertyValue('--glint').trim(),
@@ -146,9 +137,8 @@ function useBackdrop() {
 
 export function Backdrop() {
   const b = useBackdrop()
-  // A plain desktop is just the page's --desk background.
-  if (!b || b.backdrop === 'plain') return null
-  // Every other backdrop draws --warp glyphs, lit in --glint, over --desk.
+  if (!b) return null
+  // Every backdrop draws in --warp, lit in --glint, over --desk.
   const shared = { background: b.desk, still: b.still }
   return (
     <div aria-hidden className="fixed inset-0 opacity-(--backdrop-opacity)">
@@ -170,15 +160,9 @@ export function Backdrop() {
             highlight={b.glint}
             still={b.still}
           />
-        ) : b.backdrop === 'stars' ||
-          b.backdrop === 'snow' ||
-          b.backdrop === 'dust' ? (
+        ) : b.backdrop === 'stars' || b.backdrop === 'snow' ? (
           <Drift
-            {...(b.backdrop === 'stars'
-              ? STARS
-              : b.backdrop === 'snow'
-                ? SNOW
-                : DUST)}
+            {...(b.backdrop === 'stars' ? STARS : SNOW)}
             {...shared}
             glyph={b.warp}
             glint={b.glint}

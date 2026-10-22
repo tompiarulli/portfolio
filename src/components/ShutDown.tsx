@@ -63,12 +63,12 @@ function Splash({
       <div className="flex items-center gap-4 border-b border-dotted border-(--ink) p-4">
         <span aria-hidden className="logo shrink-0 [--logo-size:48px]" />
         <div className="min-w-0">
-          <p className="font-title text-lg leading-tight">{site.os}</p>
+          <p className="font-mono text-lg leading-tight">{site.os}</p>
           <p className="truncate">{title}</p>
         </div>
       </div>
       <div className="p-4">
-        <div className="mb-2 flex justify-between gap-4 font-title">
+        <div className="mb-2 flex justify-between gap-4 font-mono">
           <span className="truncate">{step}…</span>
           <span className="tabular-nums">{pct}%</span>
         </div>
@@ -156,7 +156,7 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
             onClick={start}
             className="absolute inset-0 cursor-pointer outline-none"
           />
-          <span className="bevel blink pointer-events-none absolute top-1/2 left-1/2 -translate-1/2 px-6 py-2 font-title text-base text-(--ink)">
+          <span className="bevel blink pointer-events-none absolute top-1/2 left-1/2 -translate-1/2 px-6 py-2 font-mono text-base text-(--ink)">
             Touch grass to start
           </span>
         </>

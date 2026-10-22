@@ -1,6 +1,6 @@
 import { useCallback, useLayoutEffect, useRef } from 'react'
 import type { PointerEvent, ReactNode } from 'react'
-import { useWindowId, useWindows } from './WindowManager'
+import { useWindowId, useWindows } from '#/components/WindowManager'
 
 /**
  * Shrinks a window into its dock icon (or grows it back out when `restore`).
@@ -172,20 +172,10 @@ export function Window({
               />
             </svg>
           </button>
-          <span
-            aria-hidden
-            className={`stripes h-[17px] flex-1 ${active ? 'opacity-70' : 'opacity-0'}`}
-          />
         </div>
-        <span
-          className={`px-2 font-title text-(length:--title-size) tracking-tight [text-box:trim-both_cap_alphabetic] [text-transform:var(--title-case)] [font-weight:var(--title-weight)] before:content-(--title-open) after:content-(--title-close) ${active ? 'bg-(--title)' : 'bg-(--surface)'}`}
-        >
+        <span className="px-2 font-mono text-(length:--title-size) tracking-tight [text-box:trim-both_cap_alphabetic] [text-transform:var(--title-case)] [font-weight:var(--title-weight)] before:content-(--title-open) after:content-(--title-close)">
           {title}
         </span>
-        <span
-          aria-hidden
-          className={`stripes h-[17px] ${active ? 'opacity-70' : 'opacity-0'}`}
-        />
       </div>
       <div
         className={`os-scroll min-h-0 flex-1 select-text ${flush ? '' : 'p-5'}`}

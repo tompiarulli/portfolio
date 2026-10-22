@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { DockIcon } from './DockIcon'
-import { useWindows } from './WindowManager'
+import { DockIcon } from '#/components/DockIcon'
+import { useWindows } from '#/components/WindowManager'
 
 const APPS = [
   { id: 'about', to: '/', label: 'About' },
@@ -36,7 +36,7 @@ export function Dock() {
           className="group relative flex w-[calc(var(--icon-size)+51px)] flex-col items-center gap-[6px] border-r border-(--dock-divider) px-2 pt-[12px] pb-[7px] last:border-r-0 hover:bg-(--tertiary) hover:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
         >
           <DockIcon id={app.id} />
-          <span className="font-title text-(length:--dock-label-size) tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">
+          <span className="font-mono text-(length:--dock-label-size) tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">
             {app.label}
           </span>
           <span

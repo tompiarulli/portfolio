@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { random } from '#/lib/random'
 
 type Props = {
   /** Base colour behind the rain. */
@@ -29,8 +30,6 @@ type Props = {
 }
 
 type Drop = { y: number; speed: number; trail: number }
-
-const random = (min: number, max: number) => min + Math.random() * (max - min)
 
 /**
  * Falling code rain. Every column has its own drop falling at its own

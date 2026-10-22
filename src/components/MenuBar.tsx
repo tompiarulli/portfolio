@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import { Clock } from './Clock'
-import { ShutDown } from './ShutDown'
-import { useWindows } from './WindowManager'
+import { Clock } from '#/components/Clock'
+import { ShutDown } from '#/components/ShutDown'
+import { useWindows } from '#/components/WindowManager'
 
 const BAR =
   'fixed top-0 z-50 flex h-[32px] items-center border-b border-(--ink) bg-(--surface) text-(length:--menu-size)'
@@ -74,7 +74,7 @@ function SystemMenu({ onShutDown }: { onShutDown: () => void }) {
         <div
           role="menu"
           aria-label="System"
-          className="absolute top-full left-0 min-w-44 border border-(--ink) bg-(--surface) py-1 font-title tracking-tight shadow-(--window-shadow)"
+          className="absolute top-full left-0 min-w-44 border border-(--ink) bg-(--surface) py-1 font-mono tracking-tight shadow-(--window-shadow)"
         >
           <Link
             to="/system"

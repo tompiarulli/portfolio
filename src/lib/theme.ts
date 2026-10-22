@@ -1,5 +1,4 @@
-export type Backdrop =
-  'rain' | 'stars' | 'streaks' | 'snow' | 'dust' | 'orbits' | 'film' | 'plain'
+export type Backdrop = 'rain' | 'stars' | 'streaks' | 'snow' | 'orbits' | 'film'
 
 /** Themes set the colours (tokens in styles.css), the font, the menu mark,
  *  which background draws the desktop and the day the clock shows; the
