@@ -7,6 +7,7 @@ import {
   useState,
   useSyncExternalStore,
 } from 'react'
+
 import { ORBITS } from '#/components/Backdrop'
 import { Window } from '#/components/Window'
 import { DEFAULT_THEME, THEMES, applyTheme, currentTheme } from '#/lib/theme'
@@ -289,7 +290,7 @@ function ThemePreview({
           />
         ))
       ) : backdrop === 'rain' ? (
-        <span className="absolute inset-0 flex items-center justify-center font-mono text-[11px] leading-[11px] tracking-[1px] [text-shadow:0_0_6px_var(--warp)] whitespace-pre text-(--warp)">
+        <span className="absolute inset-0 flex items-center justify-center font-mono text-[11px] leading-[11px] tracking-[1px] whitespace-pre text-(--warp) [text-shadow:0_0_6px_var(--warp)]">
           {PREVIEWS.rain}
         </span>
       ) : (

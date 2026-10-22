@@ -2,6 +2,7 @@
 // a dark vignette. One fragment shader on raw WebGL, drawn
 // at a low resolution and scaled up, at the projector's 24 frames a second.
 import { useEffect, useLayoutEffect, useRef } from 'react'
+
 import { rgb } from '#/lib/color'
 
 const vertexShader = `

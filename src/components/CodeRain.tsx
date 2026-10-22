@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+
 import { random } from '#/lib/random'
 
 type Props = {

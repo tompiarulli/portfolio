@@ -1,13 +1,15 @@
 import { execSync } from 'node:child_process'
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { defineConfig } from 'vitest/config'
+
+import tailwindcss from '@tailwindcss/vite'
 import { devtools } from '@tanstack/devtools-vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import { nitro } from 'nitro/vite'
 import type { NitroModule } from 'nitro/types'
+import { nitro } from 'nitro/vite'
+import { defineConfig } from 'vitest/config'
+
 import { securityHeaders } from './src/lib/security-headers'
 import { site } from './src/lib/site'
 

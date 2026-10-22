@@ -5,6 +5,7 @@
 // bright point rides each ring. Drawn at the screen's own pixel density, so
 // the lines stay smooth and fine.
 import { useEffect, useLayoutEffect, useRef } from 'react'
+
 import { rgb } from '#/lib/color'
 
 type OrbitsProps = {

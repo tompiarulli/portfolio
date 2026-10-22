@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+
 import { THEMES } from '#/lib/theme'
 
 const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
@@ -91,7 +92,7 @@ export function Clock() {
   const shown = useFlip(date)
   if (!now) return <span className="inline-block w-40" />
   return (
-    <span className="flex items-center gap-3 py-[3px] font-mono tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">
+    <span className="flex items-center gap-3 py-[3px] font-mono [font-weight:var(--label-weight)] tracking-tight [text-transform:var(--label-case)]">
       <span className="whitespace-pre tabular-nums">{shown}</span>
       <span className="tabular-nums">{fmtTime(now)}</span>
     </span>

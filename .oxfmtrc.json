@@ -7,7 +7,7 @@
   "singleQuote": true,
   "trailingComma": "all",
   "insertFinalNewline": true,
-  "sortImports": false,
-  "sortTailwindcss": false,
+  "sortImports": true,
+  "sortTailwindcss": true,
   "ignorePatterns": ["src/routeTree.gen.ts", "pnpm-lock.yaml"]
 }

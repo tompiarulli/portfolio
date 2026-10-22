@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
+
 import { Window } from '#/components/Window'
 import { useWindows } from '#/components/WindowManager'
 import { BANNER, PROMPT, complete, run } from '#/lib/terminal'

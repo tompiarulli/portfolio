@@ -1,12 +1,13 @@
 import { Suspense, lazy } from 'react'
 import type { ComponentType } from 'react'
-import { WindowIdContext, useWindows } from '#/components/WindowManager'
-import type { WindowId } from '#/lib/windows'
+
 import { About } from '#/components/apps/About'
 import { Contact } from '#/components/apps/Contact'
 // Stays in the shell: it is tiny, and loading it lazily splits the router
 // off into a chunk of its own, which costs more than it saves.
 import { NotFound } from '#/components/apps/NotFound'
+import { WindowIdContext, useWindows } from '#/components/WindowManager'
+import type { WindowId } from '#/lib/windows'
 
 // Every page opens with About and Contact, so they ship in the shell; the
 // rest are chunks of their own. A page that prerenders one of them open

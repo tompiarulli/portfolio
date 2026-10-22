@@ -9,6 +9,7 @@ import {
   useState,
 } from 'react'
 import type { ReactNode } from 'react'
+
 import { idForPath, initialStack, pathFor } from '#/lib/windows'
 import type { WindowId } from '#/lib/windows'
 

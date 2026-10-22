@@ -1,9 +1,10 @@
 import { useRouterState } from '@tanstack/react-router'
-import { MenuBar } from '#/components/MenuBar'
-import { Dock } from '#/components/Dock'
-import { Backdrop } from '#/components/Backdrop'
-import { WindowManager } from '#/components/WindowManager'
+
 import { OpenWindows } from '#/components/apps'
+import { Backdrop } from '#/components/Backdrop'
+import { Dock } from '#/components/Dock'
+import { MenuBar } from '#/components/MenuBar'
+import { WindowManager } from '#/components/WindowManager'
 import { site } from '#/lib/site'
 import { idForPath } from '#/lib/windows'
 

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+
 import { site } from '#/lib/site'
 
 /** Shut Down plays out in stages: the desktop chrome collapses (CSS keyed

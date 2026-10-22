@@ -3,11 +3,13 @@ import type { ErrorComponentProps } from '@tanstack/react-router'
 import { createIsomorphicFn } from '@tanstack/react-start'
 import { setResponseStatus } from '@tanstack/react-start/server'
 import { Suspense, lazy, useEffect } from 'react'
+
 import { Desktop } from '#/components/Desktop'
 import { ogImage, pageHead } from '#/lib/seo'
 import { site } from '#/lib/site'
 import { themeBootScript } from '#/lib/theme'
 import { pathFor } from '#/lib/windows'
+
 import appCss from '#/styles.css?url'
 
 const Devtools = import.meta.env.DEV
@@ -179,7 +181,7 @@ function RootError({ error }: ErrorComponentProps) {
       >
         <h1
           id="error-title"
-          className="flex h-(--title-height) items-center justify-center border-b border-(--ink) bg-(--title) font-title text-(length:--title-size) text-(--on-title) [text-transform:var(--title-case)] [font-weight:var(--title-weight)]"
+          className="font-title flex h-(--title-height) items-center justify-center border-b border-(--ink) bg-(--title) text-(length:--title-size) [font-weight:var(--title-weight)] text-(--on-title) [text-transform:var(--title-case)]"
         >
           Error
         </h1>
@@ -192,7 +194,7 @@ function RootError({ error }: ErrorComponentProps) {
             <button
               type="button"
               onClick={() => location.reload()}
-              className="bevel cursor-pointer px-6 py-1 font-title outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ink) active:bevel-pressed"
+              className="bevel font-title active:bevel-pressed cursor-pointer px-6 py-1 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ink)"
             >
               Restart
             </button>

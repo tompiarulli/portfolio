@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent, RefObject } from 'react'
+
 import { Clock } from '#/components/Clock'
 import { ShutDown } from '#/components/ShutDown'
 import { useWindows } from '#/components/WindowManager'
@@ -106,7 +107,7 @@ function SystemMenu({
         aria-expanded={open}
         onClick={() => (open ? close() : openAt('first'))}
         onKeyDown={onTriggerKeyDown}
-        className={`flex h-full items-center px-3 outline-current outline-dotted -outline-offset-4 not-focus-visible:outline-none ${open ? 'bg-(--accent) text-(--on-accent)' : ''}`}
+        className={`flex h-full items-center px-3 -outline-offset-4 outline-current outline-dotted not-focus-visible:outline-none ${open ? 'bg-(--accent) text-(--on-accent)' : ''}`}
       >
         <span aria-hidden className="logo" />
       </button>

@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
+
 import { RAIN_CHARACTERS, THEMES, currentTheme } from '#/lib/theme'
 import type { Backdrop } from '#/lib/theme'
 
