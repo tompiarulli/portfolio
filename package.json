@@ -11,10 +11,11 @@
     "generate-routes": "tsr generate",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "format": "prettier --write . && eslint --fix",
-    "check": "prettier --check ."
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
   },
   "dependencies": {
     "@tanstack/react-router": "1.170.45",
@@ -25,20 +26,18 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/devtools-vite": "0.8.5",
-    "@tanstack/eslint-config": "0.4.0",
     "@tanstack/react-devtools": "0.10.13",
     "@tanstack/react-router-devtools": "1.167.2",
     "@tanstack/router-cli": "1.167.45",
     "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@typescript/native": "npm:typescript@^7.0.2",
     "@vitejs/plugin-react": "^6.1.2",
-    "eslint": "^10.13.0",
     "nitro": "3.0.260903-beta",
-    "prettier": "^3.9.10",
+    "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0",
     "tailwindcss": "^4.3.3",
-    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "typescript": "^7.0.2",
     "vite": "^8.3.4"
   },
   "packageManager": "pnpm@12.14.0"

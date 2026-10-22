@@ -1,6 +1,11 @@
 /** Every window the desktop can open. */
 export type WindowId =
-  'about' | 'contact' | 'terminal' | 'settings' | 'system' | 'notfound'
+  | 'about'
+  | 'contact'
+  | 'terminal'
+  | 'settings'
+  | 'system'
+  | 'notfound'
 
 const PATHS = {
   about: '/',
