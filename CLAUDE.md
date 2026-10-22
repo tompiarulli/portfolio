@@ -8,9 +8,9 @@ Setup, scripts, file layout, commit format, and deploy live in CONTRIBUTING.md a
 
 ## Conventions
 
-- Performance is the point. No state libraries, no icon packs. Animation libraries only arrive via vendored React Bits components, imported lazily in the route that uses them so the shell stays small. CSS transitions of 150 to 200 ms, `transform`-driven motion, pointer events. Keep client JS small; check gzipped size of `.output/public/assets` after adding a dependency.
+- Performance is the point. No state libraries, no icon packs, no animation libraries: the backdrops are hand-written canvas and WebGL, lazy-loaded so the shell stays small. CSS transitions of 150 to 200 ms, `transform`-driven motion, pointer events. Keep client JS small; check gzipped size of `.output/public/assets` after adding a dependency.
 - Prerender-safe components: anything reading `Date`, `localStorage`, or `window` must render a stable placeholder on the server and fill in inside `useEffect` (see `Clock.tsx`).
-- Colors come from CSS variables only (`var(--surface)`, Tailwind `bg-(--surface)`), never hard-coded hex in components. Add new tokens to the default `:root, [data-theme]` block (White Rabbit, the default theme) and override them in any theme that needs a different value. There is no light/dark mode; the theme drives everything.
+- Colors come from CSS variables only (`var(--surface)`, Tailwind `bg-(--surface)`), never hard-coded hex in components. Add new tokens to the base `:root, [data-theme]` block (White Rabbit's values; Orbital is the default theme) and override them in any theme that needs a different value. There is no light/dark mode; the theme drives everything.
 - Aesthetic rules: 1 px ink borders, zero border radius, bevels via inset box-shadow, `image-rendering: pixelated`, monospace fonts, antialiased (a theme may use a sans, as Steamboat does). Outline fonts never render with `font-smoothing: none`; it makes them jagged on macOS. No drop shadows.
 - Links between routes use `<Link>` with `preload="intent"` so hover preloads the route chunk.
 - Route `head()` sets a page title as `Page - {site.title}`.
