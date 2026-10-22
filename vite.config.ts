@@ -157,7 +157,6 @@ export default defineConfig({
             sitemap: { exclude: true },
           },
         ],
-        // Lists every prerendered page.
         sitemap: { host: site.url },
       }),
     viteReact(),

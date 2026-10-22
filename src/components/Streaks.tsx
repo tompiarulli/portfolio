@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react'
 import { random } from '#/lib/random'
 
 type Props = {
-  /** Base colour behind the streaks. */
   background: string
   /** Colours the streaks burn in, one picked per streak, fading out along
    *  their tails. */
@@ -36,13 +35,9 @@ type Streak = {
   color: string
 }
 
-/**
- * Light trails racing left to right, seen side on in perspective: far
- * streaks thin, slow and dim, near ones thicker and faster, all spread
- * evenly from the top of the screen to the bottom so the field seems to
- * run on past both edges. Each is a straight line fading out to its
- * tail. Drawn at a fixed pixel size, so every edge stays hard.
- */
+/** Light trails racing left to right in perspective: far streaks thin,
+ *  slow and dim, near ones thicker and faster. Drawn at a fixed pixel
+ *  size, so every edge stays hard. */
 export default function Streaks({
   background,
   colors,

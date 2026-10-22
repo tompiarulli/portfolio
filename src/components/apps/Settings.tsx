@@ -114,9 +114,8 @@ function scatter(chars: string, share: number, seed: number) {
   ).join('\n')
 }
 
-/** A still of the streaks, in percent of the tile: far ones short, thin
- *  and dim, near ones long and thicker, spread evenly from top to
- *  bottom, each in one of the four --streak colours. */
+/** A still of the streaks, laid out as the backdrop lays them out, in
+ *  percent of the tile. */
 function streaks(seed: number) {
   const next = seeded(seed)
   // Rounded, so the server and the browser print the same styles.
@@ -190,8 +189,8 @@ const PREVIEWS: Record<
 const SKY_WIDTH = 64
 const SKY_HEIGHT = 32
 
-/** Treetops as overlapping crowns, tallest at the left edge and thinning
- *  out to the right, as in the corner of an old photo. */
+/** Overlapping crowns, tallest at the left and thinning out to the
+ *  right. */
 function treetops(seed: number) {
   const next = seeded(seed)
   // Run past both edges so the blur has dark to pull in, not the sky.
@@ -208,8 +207,8 @@ function treetops(seed: number) {
 
 const TREETOPS = treetops(1993)
 
-/** Believe's still: a tight crop of a grainy, out of focus snapshot,
- *  dark treetops under a washed-out sky. */
+/** Believe's tile: dark treetops under a washed-out sky, grainy and out
+ *  of focus. */
 function TreelinePreview() {
   const id = useId()
   return (

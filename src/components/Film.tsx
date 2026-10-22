@@ -1,6 +1,5 @@
-// An old film running through the projector: a frame that flickers under
-// a dark vignette. One fragment shader on raw WebGL, drawn
-// at a low resolution and scaled up, at the projector's 24 frames a second.
+// A flickering frame under a vignette: one fragment shader on raw WebGL,
+// drawn at a low resolution and scaled up pixelated.
 import { useEffect, useLayoutEffect, useRef } from 'react'
 
 import { rgb } from '#/lib/color'
@@ -30,7 +29,6 @@ float hash(vec2 p) {
 void main() {
   vec2 cell = gl_FragCoord.xy;
   vec2 uv = cell / resolution;
-  // The whole frame brightens and dims a little, frame to frame.
   float t = 0.8 + flicker * (hash(vec2(frame, 1.7)) - 0.5);
   // Darker towards the edges, like a projector's hot spot.
   vec2 d = (uv - 0.5) * vec2(resolution.x / resolution.y, 1.0);
@@ -50,7 +48,6 @@ interface FilmProps {
   paletteHigh: string
   /** Cell size in CSS pixels. */
   pixelSize?: number
-  /** Projector speed. */
   fps?: number
   disableAnimation?: boolean
 }
@@ -78,7 +75,6 @@ export default function Film({
 }: FilmProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   // The render loop reads props from here, so prop changes never restart WebGL.
-  // Synced after each commit, before the next frame can read them.
   const latest = {
     flicker,
     vignette,

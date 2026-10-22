@@ -30,8 +30,8 @@ const TICK = 80
 const reducedMotion = () =>
   matchMedia('(prefers-reduced-motion: reduce)').matches
 
-/** The splash card: the system mark, name and what it is doing, then a
- *  status line and a segmented progress bar that walk through `steps`. */
+/** The splash card; its status line and progress bar walk through
+ *  `steps`. */
 function Splash({
   title,
   steps,

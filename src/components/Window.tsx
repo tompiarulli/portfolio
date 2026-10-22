@@ -14,11 +14,9 @@ import {
   useWindows,
 } from '#/components/WindowManager'
 
-/**
- * Shrinks a window into its dock icon (or grows it back out when `restore`).
- * Uses the individual translate/scale properties, which apply on top of the
- * window's position transform, so dragging and minimizing never fight.
- */
+/** Shrinks a window into its dock icon, or back out with `restore`. The
+ *  individual translate and scale properties compose with the window's
+ *  position transform, so dragging and minimizing never fight. */
 function flyToDock(el: HTMLElement, iconId: string, restore: boolean) {
   const icon = document.querySelector(`[data-dock-icon="${iconId}"]`)
   if (!icon || matchMedia('(prefers-reduced-motion: reduce)').matches)
@@ -72,9 +70,8 @@ const ARROWS: Record<string, [number, number]> = {
 type Props = {
   title: string
   children: ReactNode
-  /** Initial offset from the centre of the desktop, so open windows fan out
-   *  instead of stacking exactly. Drag state lives in a transform so React
-   *  never re-renders mid-drag. */
+  /** Initial offset from the centre, so open windows fan out. Dragging
+   *  writes the transform directly, so React never re-renders mid-drag. */
   x?: number
   y?: number
   /** Measure `x` from the right edge of the desktop instead of the centre. */
@@ -142,8 +139,7 @@ export function Window({
     target.focus({ preventScroll: true })
   }, [focusRequest, id])
 
-  // Animate into the dock and hide, or show and animate back out. Hidden
-  // windows stay mounted, keeping their place and state.
+  // Hidden windows stay mounted, keeping their place and state.
   const wasHidden = useRef(hidden)
   useLayoutEffect(() => {
     const el = ref.current
@@ -180,7 +176,6 @@ export function Window({
     if (ref.current) ref.current.style.willChange = ''
   }, [])
 
-  // The keyboard's way to drag: arrow keys on the title.
   const onTitleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     const arrow = ARROWS[e.key]
     if (!arrow || !ref.current || e.altKey || e.metaKey || e.ctrlKey) return
@@ -260,7 +255,6 @@ export function Window({
             aria-label={`Close ${title}`}
             className="relative flex size-(--box-size) shrink-0 cursor-pointer items-center justify-center border border-current bg-(--close-bg) shadow-(--close-shadow) outline-offset-2 outline-current outline-dotted not-focus-visible:outline-none after:absolute after:-inset-x-[2px] after:-inset-y-[5px] after:content-[''] active:bg-(--ink) active:text-(--surface) pointer-coarse:after:-inset-[11px]"
           >
-            {/* X drawn as two smooth 1px strokes, like the box borders */}
             <svg aria-hidden viewBox="0 0 8 8" className="size-(--glyph-size)">
               <path
                 d="M1 1l6 6M7 1L1 7"

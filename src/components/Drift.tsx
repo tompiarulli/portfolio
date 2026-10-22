@@ -3,13 +3,11 @@ import { useEffect, useRef } from 'react'
 import { random } from '#/lib/random'
 
 type Props = {
-  /** Base colour behind the glyphs. */
   background: string
   /** Colour of the far and middle glyphs. */
   glyph: string
   /** Colour of the nearest glyphs. */
   glint: string
-  /** Glyphs to draw from. */
   characters: string
   /** Glyphs per 10,000 square pixels. */
   density: number
@@ -34,11 +32,8 @@ const LAYERS = [
 
 type Mote = { x: number; y: number; glyph: string; phase: number }
 
-/**
- * Glyphs scattered over three depths, like a starfield or a snowstorm seen
- * through a window. Each drifts with the wind and the fall, nearer ones
- * faster and brighter, wrapping round the edges, and may twinkle.
- */
+/** Glyphs over three depths, nearer ones faster and brighter, wrapping
+ *  round the edges. Stars and snow are this with different settings. */
 export default function Drift({
   background,
   glyph,

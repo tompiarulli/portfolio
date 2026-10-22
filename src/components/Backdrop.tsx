@@ -11,7 +11,7 @@ const Orbits = lazy(() => import('#/components/Orbits'))
 const Film = lazy(() => import('#/components/Film'))
 const Streaks = lazy(() => import('#/components/Streaks'))
 
-/** Code rain knobs, for themes with `backdrop: 'rain'`. */
+/** For `backdrop: 'rain'`. */
 const RAIN = {
   characters: RAIN_CHARACTERS,
   /** Glyph cell in pixels; the glyph fills most of it. */
@@ -27,8 +27,7 @@ const RAIN = {
   dropsPerColumn: 2,
 } as const
 
-/** Light trails racing past in perspective, for `backdrop: 'streaks'`:
- *  straight lines in the --streak-1 to --streak-4 colours over --desk. */
+/** For `backdrop: 'streaks'`, drawn in --streak-1 to --streak-4. */
 const STREAKS = {
   /** Streaks on screen at once, per 100 rows of pixels. */
   density: 80,
@@ -44,7 +43,7 @@ const STREAKS = {
   pixelSize: 1,
 } as const
 
-/** A night sky of twinkling glyphs, for `backdrop: 'stars'`. */
+/** For `backdrop: 'stars'`. */
 const STARS = {
   characters: '..··+*',
   density: 1.4,
@@ -52,10 +51,8 @@ const STARS = {
   twinkle: 0.25,
 } as const
 
-/** Orbital rings, for `backdrop: 'orbits'`: --warp rings tilted in 3D,
- *  each with a --glint point riding it, over --desk. */
+/** For `backdrop: 'orbits'`; the Settings preview starts from it too. */
 export const ORBITS = {
-  /** Rings in the set. */
   count: 7,
   /** Centre of the set, as fractions of the width and height. */
   center: [0.6, 0.55],
@@ -71,12 +68,10 @@ export const ORBITS = {
   lineWidth: 1,
   /** Radius of the riding points in pixels; 0 is none. */
   point: 2,
-  /** Frames a second. */
   fps: 30,
 } as const
 
-/** An old film in the projector, for `backdrop: 'film'`: --warp
- *  frame darkening to --desk at the edges. */
+/** For `backdrop: 'film'`. */
 const FILM = {
   /** How much the frame's brightness jumps, frame to frame. */
   flicker: 0.08,
@@ -88,7 +83,7 @@ const FILM = {
   fps: 24,
 } as const
 
-/** Snow blowing past, for `backdrop: 'snow'`. */
+/** For `backdrop: 'snow'`. */
 const SNOW = {
   characters: '*·.+*',
   density: 3,

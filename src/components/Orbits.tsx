@@ -1,15 +1,10 @@
-// Orbital rings: thin ellipses tilted in 3D, like an orbit diagram, on a 2D
-// canvas. Each ring is a circle in space, tilted its own way and wobbling
-// slowly, and the whole set turns about the vertical; the near half of each
-// ring is drawn brighter than the far half, which gives the depth. A small
-// bright point rides each ring. Drawn at the screen's own pixel density, so
-// the lines stay smooth and fine.
+// Circles tilted in 3D and projected onto a 2D canvas, the near half of each
+// ring brighter than the far half for depth.
 import { useEffect, useLayoutEffect, useRef } from 'react'
 
 import { rgb } from '#/lib/color'
 
 type OrbitsProps = {
-  /** Rings in the set. */
   count?: number
   /** Centre of the set, as fractions of the width and height. */
   center?: readonly [number, number]
@@ -29,9 +24,7 @@ type OrbitsProps = {
   background: string
   color: string
   highlight: string
-  /** Frames a second. */
   fps?: number
-  /** Draw one still frame. */
   still?: boolean
   /** Seconds into the motion the still frame is taken. */
   stillTime?: number
@@ -45,7 +38,6 @@ const SHADES = 32
 export default function Orbits(props: OrbitsProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   // The render loop reads props from here, so prop changes never restart it.
-  // Synced after each commit, before the next frame can read them.
   const live = useRef(props)
   useLayoutEffect(() => {
     live.current = props
@@ -88,7 +80,6 @@ export default function Orbits(props: OrbitsProps) {
         return `rgb(${back.map((b, c) => Math.round(b + (line[c] - b) * a)).join(',')})`
       })
 
-      // The whole set turns about the vertical.
       const turn = t * 0.6
       const ct = Math.cos(turn)
       const st = Math.sin(turn)
@@ -98,8 +89,8 @@ export default function Orbits(props: OrbitsProps) {
       for (let k = 0; k < count; k++) {
         const r =
           count > 1 ? inner + ((outer - inner) * k) / (count - 1) : inner
-        // Each ring's own tilt: mostly towards the viewer, so it reads as a
-        // flattened ellipse, wobbling slowly.
+        // Mostly towards the viewer, so each ring reads as a flattened
+        // ellipse.
         const tilt = 1.15 + 0.25 * Math.sin(k * 1.7) + 0.08 * Math.sin(t + k)
         const roll = 0.45 * Math.sin(k * 2.3) + 0.05 * Math.cos(t * 0.8 + k)
         const cx1 = Math.cos(tilt)
@@ -123,8 +114,7 @@ export default function Orbits(props: OrbitsProps) {
           return [cx + x * s, cy + y * s, z / r] as const
         }
 
-        // Near half bright, far half dim, blended through the sides. Each
-        // stretch of one shade is a single opaque path in a pre-mixed
+        // Each run of one shade is a single opaque path in a pre-mixed
         // colour: overlapping semi-transparent segments would double up at
         // every joint and show as a string of dots.
         let points = [project(0)]
@@ -159,7 +149,6 @@ export default function Orbits(props: OrbitsProps) {
         riders.push(project(t * pace + k * 2.1))
       }
 
-      // The points go on top of every ring.
       const point = (p.point ?? 2) * dpr
       if (point > 0) {
         ctx.fillStyle = p.highlight
@@ -173,9 +162,8 @@ export default function Orbits(props: OrbitsProps) {
       ctx.globalAlpha = 1
     }
 
-    // One canvas pixel per screen pixel. Setting the size clears the
-    // canvas, so redraw before the browser paints, or resizing flashes
-    // blank between throttled frames.
+    // Setting the size clears the canvas, so redraw before the browser
+    // paints, or resizing flashes blank between throttled frames.
     const resize = () => {
       const dpr = devicePixelRatio
       canvas.width = Math.max(1, Math.round(canvas.clientWidth * dpr))

@@ -1,15 +1,12 @@
 export type Backdrop = 'rain' | 'stars' | 'streaks' | 'snow' | 'orbits' | 'film'
 
-/** Themes set the colours (tokens in styles.css), the font, the menu mark,
- *  which background draws the desktop and the day the clock shows; the
- *  rest of the chrome is shared. Each is an homage to something I like. */
+/** A theme sets only its colour tokens and font (styles.css), the menu
+ *  mark, the backdrop and the clock's date; the rest of the chrome is
+ *  shared. */
 export const THEMES = [
-  // Each theme's clock shows a day that matters to what it nods to; the
-  // default shows today.
   { id: 'orbital', label: 'Orbital', backdrop: 'orbits', date: undefined },
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
   { id: 'believe', label: 'Believe', backdrop: 'stars', date: '1993-09-10' },
-  // The first fully hand-drawn animated film.
   { id: 'steamboat', label: 'Steamboat', backdrop: 'film', date: '1908-08-17' },
   {
     id: 'traveler',
@@ -32,8 +29,8 @@ export const THEMES = [
 }[]
 export type Theme = (typeof THEMES)[number]['id']
 export const DEFAULT_THEME: Theme = 'orbital'
-/** Glyphs of White Rabbit's code rain: half-width katakana and digits, as
- *  in the film. Shared with the Settings preview. */
+/** White Rabbit's code rain: half-width katakana, digits and a few
+ *  symbols. */
 export const RAIN_CHARACTERS =
   'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789Z:.=*+<>'
 
@@ -53,9 +50,8 @@ export function currentTheme(): Theme {
   return THEMES.find((x) => x.id === t)?.id ?? DEFAULT_THEME
 }
 
-/** Inline in <head> so the first paint already has the saved theme. A saved
- *  theme that no longer exists falls back to the default. The router runs it
- *  again on every navigation, so it only writes when the theme differs:
- *  rewriting the same value would still restart everything watching
- *  data-theme, like the backdrop. */
+/** Inline in <head> so the first paint already has the saved theme. The
+ *  router runs it again on every navigation, so it only writes when the
+ *  theme differs: rewriting the same value still fires every observer of
+ *  data-theme and restarts the backdrop. */
 export const themeBootScript = `(function(){var t;try{t=localStorage.getItem('${THEME_KEY}')}catch(e){}t=${JSON.stringify(THEMES.map((x) => x.id))}.indexOf(t)<0?'${DEFAULT_THEME}':t;var d=document.documentElement.dataset;if(d.theme!==t)d.theme=t})()`

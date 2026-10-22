@@ -12,8 +12,8 @@ from logo import art, blank, preview, stamp, token
 
 
 def husky():
-    """The menu mark: a husky running into camp, on a 16x16
-    grid, dark cap and ears over a pale mask, with clear ice-blue eyes."""
+    """The menu mark: a husky's head, dark cap and ears over a pale
+    mask."""
     g = blank(16)
     stamp(
         g,

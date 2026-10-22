@@ -5,13 +5,13 @@
    rarely sees the fallback, and the monospace fallback keeps nearly the
    same advance, so lines barely move when it does. Not `optional`: a font
    that missed its first 100 ms would stay on the fallback all visit, so a
-   theme picked in Settings could show without its font. */
+   theme picked in Settings could show without its font. Browsers only
+   fetch a face once text uses it, so each theme's font loads only while
+   that theme is on. */
 
 /* Iosevka Extended (SIL OFL, see public/fonts/Iosevka-OFL.txt): White
-   Rabbit's font, a Unix terminal monospace in its wider Extended cut to
-   match the screens it nods to, subset to Latin and a few symbols.
-   Medium for text, SemiBold for dock labels, Bold for window titles.
-   Browsers only fetch it once text uses it. */
+   Rabbit's font and the base --font-ui. Medium for text, SemiBold for
+   dock labels, Bold for window titles. */
 @font-face {
   font-family: 'Iosevka';
   src: url('/fonts/iosevka-500.woff2') format('woff2');
@@ -31,10 +31,8 @@
   font-weight: 700 900;
 }
 
-/* DM Mono (SIL OFL, see public/fonts/DMMono-OFL.txt): Believe's font, a
-   soft, elegant monospace. Latin subset from Google Fonts; Regular for
-   text and Medium for labels and titles. Only fetched while that theme
-   is on. */
+/* DM Mono (SIL OFL, see public/fonts/DMMono-OFL.txt): Believe's font.
+   Regular for text, Medium for labels and titles. */
 @font-face {
   font-family: 'DM Mono';
   src: url('/fonts/dm-mono-400.woff2') format('woff2');
@@ -49,9 +47,8 @@
 }
 
 /* Geist Mono (SIL OFL, see public/fonts/GeistMono-OFL.txt): Orbital's font,
-   a crisp, modern monospace. Latin subset from Fontsource; Regular for
-   text and SemiBold for labels and titles. Only fetched while that theme
-   is on. */
+   preloaded in __root.tsx. Regular for text, SemiBold for labels and
+   titles. */
 @font-face {
   font-family: 'Geist Mono';
   src: url('/fonts/geist-mono-400.woff2') format('woff2');
@@ -66,10 +63,8 @@
 }
 
 /* Outpost Mono (SIL OFL, see public/fonts/IBMPlexMono-OFL.txt): Outpost
-   31's font, IBM's own monospace, for the station's computer room in the
-   year after the IBM PC. A subset of IBM Plex Mono, renamed because the
-   licence reserves "Plex" for unmodified copies; see public/fonts/README.md.
-   Only fetched while that theme is on. */
+   31's font. A subset of IBM Plex Mono, renamed because the licence
+   reserves "Plex" for unmodified copies; see public/fonts/README.md. */
 @font-face {
   font-family: 'Outpost Mono';
   src: url('/fonts/outpost-mono-400.woff2') format('woff2');
@@ -84,16 +79,14 @@
 }
 
 /* Grandstander (SIL OFL, see public/fonts/Grandstander-OFL.txt): Steamboat's
-   text font, round and bouncy like a cartoon's hand lettering. Only fetched
-   while that theme is on. */
+   text font. */
 @font-face {
   font-family: 'Grandstander';
   src: url('/fonts/grandstander-400.woff2') format('woff2');
   font-display: swap;
 }
 /* Recursive (SIL OFL, see public/fonts/Recursive-OFL.txt): Steamboat's mono,
-   brush-like Casual curves in two static cuts from Fontsource's variable
-   Latin file, Regular and Medium, for the terminal, titles and labels. */
+   two static Casual cuts for the terminal, titles and labels. */
 @font-face {
   font-family: 'Recursive Mono Casual';
   src: url('/fonts/recursive-mono-casual-400.woff2') format('woff2');
@@ -115,12 +108,10 @@
 }
 
 /* ---------- Tokens: the theme drives everything ----------
-   The base values, and White Rabbit's: a green phosphor terminal over a
-   desktop of code rain, with solid title bars and a monospace font. Every
-   other theme, Orbital (the default, in src/lib/theme.ts) included,
-   overrides whatever tokens it needs under its own [data-theme]. The
-   selector also matches a nested [data-theme] so Settings can preview
-   each theme in place. */
+   The base values are White Rabbit's, a green phosphor terminal. Every
+   other theme, Orbital (the default) included, overrides what it needs
+   under its own [data-theme]. The selector also matches a nested
+   [data-theme] so Settings can preview each theme in place. */
 :root,
 [data-theme] {
   /* Text font, and the monospace for titles, labels and the terminal:
@@ -138,7 +129,6 @@
   --well: #020c06;
   --on-accent: #03120a;
   --on-tertiary: #03120a;
-  /* Solid phosphor title bars, as in the film's terminal windows. */
   --title: #41e07a;
   --on-title: #03120a;
   /* Case and weight of dock labels, the clock and window titles. */
@@ -146,23 +136,19 @@
   --label-weight: 600;
   --menu-size: 12px;
   --dock-label-size: 13px;
-  /* Base text size. */
   --text-size: 12px;
   --title-case: uppercase;
   --title-weight: 700;
   --title-size: 12px;
-  /* Flat terminal windows: thin bar and a close box at the left. The
-     title's brackets, like "[mobile]", are White Rabbit's alone. */
   --window-shadow: none;
   --title-height: 23px;
   --title-open: '';
   --title-close: '';
   --close-bg: transparent;
   --close-shadow: none;
-  /* A small hollow close box like the film's. */
   --box-size: 15px;
   --glyph-size: 9px;
-  /* Open-window marks: a pale phosphor green, between rain head and ink. */
+  /* Open-window marks in the dock. */
   --indicator: #aef5c0;
   /* Lines between dock slots; transparent leaves one outer border. */
   --dock-divider: transparent;
@@ -186,18 +172,14 @@
   --terminal-text: var(--warp);
   /* The screen with the power off; the same on every theme. */
   --off: #000;
-  /* Mark in the top-left menu, like an old OS's system logo: the white rabbit's head
-     in slim black sunglasses, on a 16x16 grid.
-     Bright all over with a dimmer edge on the right.
-     --logo-size is its grid, so the pixels stay crisp. */
+  /* The 16x16 menu mark, here a rabbit's head in sunglasses. --logo-size
+     is its grid, so the pixels stay crisp. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.4' d=''/%3E%3Cpath fill-opacity='.7' d='M12 0h1v1H12zM4 1h1v1H4zM11 1h1v1H11zM13 1h1v1H13zM4 2h1v1H4zM11 2h1v1H11zM13 2h1v1H13zM4 3h1v1H4zM11 3h1v1H11zM13 3h1v1H13zM4 4h1v1H4zM11 4h1v1H11zM13 4h1v1H13zM4 5h1v1H4zM11 5h1v1H11zM12 6h1v1H12zM13 7h1v1H13zM14 8h1v1H14zM14 9h1v1H14zM14 10h1v1H14zM13 11h2v1H13zM13 12h2v1H13zM12 13h1v1H12zM12 14h1v1H12zM4 15h8v1H4z'/%3E%3Cpath d='M3 0h2v1H3zM11 0h1v1H11zM2 1h2v1H2zM5 1h1v1H5zM10 1h1v1H10zM12 1h1v1H12zM2 2h2v1H2zM5 2h1v1H5zM10 2h1v1H10zM12 2h1v1H12zM2 3h2v1H2zM5 3h1v1H5zM10 3h1v1H10zM12 3h1v1H12zM2 4h2v1H2zM5 4h1v1H5zM10 4h1v1H10zM12 4h1v1H12zM3 5h1v1H3zM5 5h1v1H5zM10 5h1v1H10zM12 5h1v1H12zM3 6h9v1H3zM2 7h11v1H2zM1 8h1v1H1zM3 8h1v1H3zM10 8h1v1H10zM1 9h1v1H1zM7 9h2v1H7zM1 10h2v1H1zM7 10h2v1H7zM13 10h1v1H13zM1 11h6v1H1zM9 11h4v1H9zM1 12h12v1H1zM2 13h4v1H2zM10 13h2v1H10zM3 14h9v1H3z'/%3E%3C/svg%3E");
-  /* Dock icons: a 90s Unix workstation's icons (see
-     public/icons/README.md) as masks painted in the dock's text colour, so
-     each theme tints them its own way. Dark docks use the icons lit; light
-     docks an inverted copy. Built in scripts/cde_icons.py. A theme may show
-     a drawing itself instead through --icon-<id>-image, with --icon-fill
-     transparent. */
+  /* Dock icons (see public/icons/README.md) as masks painted in the dock's
+     text colour, so each theme tints them; light docks use inverted
+     copies. A theme may show a drawing instead through --icon-<id>-image,
+     with --icon-fill transparent. */
   --icon-fill: currentColor;
   --icon-size: 32px;
   /* A filter over the drawn icons, e.g. greyscale; none keeps them as is. */
@@ -225,27 +207,20 @@
   --icon-settings-mask: url('/icons/cde/settings-light.png');
 }
 
-/* Orbital: pure black and white with greys between, hairline grey outlines,
-   no colour at all, over thin grey orbital rings turning slowly on black. */
+/* Orbital: black, white and greys, no colour at all. */
 [data-theme='orbital'] {
   --font-ui: 'Geist Mono', ui-monospace, monospace;
-  /* Near-black panes, bevels only a step either side, so windows read as
-     flat cards. */
   --bg: #0a0a0a;
   --surface: #0a0a0a;
   --surface-dark: #000000;
-  /* Dock hover a grey lift. */
   --tertiary: #1f1f1f;
   --on-tertiary: #ededed;
-  /* White is the only accent: selections and the pressed dock. */
   --accent: #ededed;
   --on-accent: #000000;
   --button: #0a0a0a;
-  /* Soft white text; outlines in a quiet grey. */
   --ink: #ededed;
   --highlight: #2e2e2e;
   --well: #000000;
-  /* The focused window's title bar white, black text on it. */
   --title: #ededed;
   --on-title: #000000;
   --label-case: none;
@@ -255,76 +230,61 @@
   --indicator: #ededed;
   --dock-divider: #2e2e2e;
   --backdrop-opacity: 1;
-  /* Grey rings on black, the points riding them white. */
   --desk: #000000;
   --warp: #6e6e6e;
   --glint: #ededed;
   /* The rings' grey is too faint for text on the terminal's screen. */
   --terminal-text: #949494;
-  /* The menu mark: a plain, smooth disc. */
+  /* Menu mark: a disc. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3C/svg%3E");
 }
 
-/* Believe: cold black, white and grey with a single red, over a
-   misty teal sky of twinkling stars. */
+/* Believe: cold blue-greys with a single red. */
 [data-theme='believe'] {
   --font-ui: 'DM Mono', ui-monospace, monospace;
-  /* Blue-tinted greys, like the posters' cold night light. */
   --bg: #bfc6ce;
   --surface: #bfc6ce;
   --surface-dark: #7a848f;
   --tertiary: #7a848f;
-  /* The red ring around the logo's X, a shade deep enough for white text
-     and to stand out on the grey. */
+  /* Deep enough for white text. */
   --accent: #ca3127;
   --button: #bfc6ce;
   --ink: #0f1217;
   --highlight: #f1f4f7;
-  /* Typing paper, for inset wells. */
   --well: #eef1f5;
   --on-accent: #f1f4f7;
   --on-tertiary: #0f1217;
-  /* The focused window's title bar in the logo's red. */
   --title: #ca3127;
   --on-title: #f1f4f7;
   --indicator: #ca3127;
   --backdrop-opacity: 1;
-  /* Cold starlight over a near-black teal sky, like the posters' mist. */
   --desk: #0a1417;
   --warp: #b9c9cd;
   --glint: #e4f2f5;
-  /* The menu mark: a grey alien's head on a 16x16 grid, shaded in three
-     levels and lit from the upper left, with a glint in each eye. */
+  /* Menu mark: a grey alien's head. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.4' d='M5 1h6v1H5zM3 2h1v1H3zM6 2h5v1H6zM2 3h1v1H2zM5 3h7v1H5zM2 4h1v1H2zM4 4h8v1H4zM1 5h12v1H1zM1 6h12v1H1zM1 7h2v1H1zM6 7h4v1H6zM1 8h1v1H1zM7 8h2v1H7zM2 9h1v1H2zM7 9h2v1H7zM2 10h2v1H2zM7 10h2v1H7zM3 11h2v1H3zM7 11h2v1H7zM4 12h6v1H4zM5 13h4v1H5zM6 14h2v1H6z'/%3E%3Cpath fill-opacity='.7' d='M11 2h2v1H11zM12 3h2v1H12zM12 4h2v1H12zM13 5h2v1H13zM13 6h2v1H13zM13 7h2v1H13zM14 8h1v1H14zM13 9h1v1H13zM12 10h2v1H12zM11 11h2v1H11zM10 12h2v1H10zM9 13h2v1H9zM8 14h2v1H8z'/%3E%3Cpath d='M5 0h6v1H5zM3 1h2v1H3zM11 1h2v1H11zM2 2h1v1H2zM13 2h1v1H13zM1 3h1v1H1zM14 3h1v1H14zM1 4h1v1H1zM14 4h1v1H14zM0 5h1v1H0zM15 5h1v1H15zM0 6h1v1H0zM15 6h1v1H15zM0 7h1v1H0zM3 7h3v1H3zM10 7h3v1H10zM15 7h1v1H15zM0 8h1v1H0zM2 8h1v1H2zM4 8h3v1H4zM9 8h1v1H9zM11 8h3v1H11zM15 8h1v1H15zM1 9h1v1H1zM3 9h4v1H3zM9 9h4v1H9zM14 9h1v1H14zM1 10h1v1H1zM4 10h3v1H4zM9 10h3v1H9zM14 10h1v1H14zM2 11h1v1H2zM5 11h2v1H5zM9 11h2v1H9zM13 11h1v1H13zM3 12h1v1H3zM12 12h1v1H12zM4 13h1v1H4zM11 13h1v1H11zM5 14h1v1H5zM10 14h1v1H10zM6 15h4v1H6z'/%3E%3C/svg%3E");
   color-scheme: light;
 }
 
-/* Steamboat: an early black and white cartoon. Grey-white paper with
-   heavy black ink and nothing in colour, lettered in a round, bouncy hand,
-   over a silver film flickering through the projector. */
+/* Steamboat: black ink on grey-white paper, no colour, with a rounded sans
+   for text. */
 [data-theme='steamboat'] {
   --font-ui: 'Grandstander', ui-sans-serif, sans-serif;
   --font-mono: 'Recursive Mono Casual', ui-monospace, monospace;
   --text-size: 13px;
-  /* Paper, a little grey, as it prints on old stock. */
   --bg: #e8e8e4;
   --surface: #e8e8e4;
   --surface-dark: #8c8c88;
-  /* Dock hover in a flat mid grey, like an inked fill. */
   --tertiary: #a0a09c;
   --on-tertiary: #111111;
-  /* Solid black ink for selected controls and the pressed dock. */
   --accent: #111111;
   --button: #e8e8e4;
-  /* Heavy black ink outlines. */
   --ink: #111111;
   --highlight: #ffffff;
-  /* White, like the gloves, for inset wells. */
   --well: #ffffff;
   --on-accent: #ffffff;
-  /* The focused window's title bar inked solid black, white text on it. */
   --title: #111111;
   --on-title: #ffffff;
   --label-case: none;
@@ -332,30 +292,25 @@
   --title-case: none;
   --title-weight: 500;
   --indicator: #111111;
-  /* Inked lines between the dock slots, like panel borders. */
   --dock-divider: #111111;
   --backdrop-opacity: 1;
-  /* The film: a silver-grey frame, black at the edges. */
   --desk: #0c0c0c;
   --warp: #a8a8a4;
-  /* The menu mark: a stand-in film leader's countdown circle.
-     Drawn in scripts/steamboat_logo.py. */
+  /* Menu mark: a film leader's countdown circle, a stand-in drawn in
+     scripts/steamboat_logo.py. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.7' d='M7 2h1v1H7zM7 3h1v1H7zM7 4h1v1H7zM7 5h1v1H7zM7 6h1v1H7zM1 7h13v1H1zM7 8h1v1H7zM7 9h1v1H7zM7 10h1v1H7zM7 11h1v1H7zM7 12h1v1H7z'/%3E%3Cpath d='M5 1h6v1H5zM3 2h2v1H3zM11 2h2v1H11zM2 3h1v1H2zM12 3h1v1H12zM1 4h1v1H1zM13 4h1v1H13zM1 5h1v1H1zM13 5h1v1H13zM0 6h1v1H0zM14 6h1v1H14zM0 7h1v1H0zM14 7h1v1H14zM0 8h1v1H0zM14 8h1v1H14zM1 9h1v1H1zM13 9h1v1H13zM1 10h1v1H1zM13 10h1v1H13zM2 11h1v1H2zM12 11h1v1H12zM3 12h2v1H3zM11 12h2v1H11zM5 13h6v1H5z'/%3E%3C/svg%3E");
   color-scheme: light;
 }
 
-/* Outpost 31: a research station's cold steel greys and the red of road
-   flares, title bars black with a burning blue, over snow blowing through
-   the night. */
+/* Outpost 31: steel greys, a flare red, and black title bars lettered in
+   pale blue. */
 [data-theme='outpost'] {
   --font-ui: 'Outpost Mono', ui-monospace, monospace;
-  /* Galvanised steel under fluorescent tubes. */
   --bg: #c5ccd2;
   --surface: #c5ccd2;
   --surface-dark: #7c8791;
   --tertiary: #7c8791;
-  /* A road flare's red. */
   --accent: #d42a1c;
   --button: #c5ccd2;
   --ink: #0a0e12;
@@ -363,50 +318,40 @@
   --well: #eef2f5;
   --on-accent: #f3f6f8;
   --on-tertiary: #0a0e12;
-  /* The focused window's title bar black, lettered in the blue light
-     that burns through the title card. */
   --title: #0a0e12;
   --on-title: #7fd3ff;
   --indicator: #d42a1c;
   --backdrop-opacity: 1;
-  /* Moonlit snow blowing through a polar night. */
   --desk: #070b12;
   --warp: #a9b8c6;
   --glint: #eef4f8;
-  /* The menu mark: a husky running into camp, on a 16x16
-     grid. Drawn in scripts/outpost_logo.py. */
+  /* Menu mark: a husky, drawn in scripts/outpost_logo.py. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.4' d='M7 6h2v1H7zM3 7h3v1H3zM7 7h2v1H7zM10 7h3v1H10zM2 8h2v1H2zM6 8h4v1H6zM12 8h2v1H12zM2 9h12v1H2zM3 10h4v1H3zM9 10h4v1H9zM3 11h4v1H3zM9 11h4v1H9zM4 12h8v1H4zM5 13h2v1H5zM9 13h2v1H9zM6 14h4v1H6z'/%3E%3Cpath fill-opacity='.7' d='M2 2h1v1H2zM13 2h1v1H13zM2 3h2v1H2zM12 3h2v1H12zM2 4h3v1H2zM11 4h3v1H11z'/%3E%3Cpath d='M1 1h2v1H1zM13 1h2v1H13zM1 2h1v1H1zM3 2h1v1H3zM12 2h1v1H12zM14 2h1v1H14zM1 3h1v1H1zM4 3h1v1H4zM11 3h1v1H11zM14 3h1v1H14zM1 4h1v1H1zM5 4h6v1H5zM14 4h1v1H14zM1 5h14v1H1zM1 6h6v1H1zM9 6h6v1H9zM1 7h2v1H1zM6 7h1v1H6zM9 7h1v1H9zM13 7h2v1H13zM1 8h1v1H1zM14 8h1v1H14zM1 9h1v1H1zM14 9h1v1H14zM2 10h1v1H2zM7 10h2v1H7zM13 10h1v1H13zM2 11h1v1H2zM7 11h2v1H7zM13 11h1v1H13zM3 12h1v1H3zM12 12h1v1H12zM4 13h1v1H4zM7 13h2v1H7zM11 13h1v1H11zM5 14h1v1H5zM10 14h1v1H10zM6 15h4v1H6z'/%3E%3C/svg%3E");
   color-scheme: light;
 }
 
-/* OUTATIME: deep violet panes in ice-white ink, magenta title bars, and
-   the four streak colours as the accents, over a night where streaks of
-   light race past. */
+/* OUTATIME: deep violet panes, magenta title bars, and the four streak
+   colours as accents. */
 [data-theme='traveler'] {
   --bg: #16122a;
   --surface: #16122a;
   --surface-dark: #07060d;
-  /* Dock hover in the streaks' violet, a shade deeper for white text. */
+  /* A shade deeper than --streak-3, for white text. */
   --tertiary: #9845fa;
   --on-tertiary: #ffffff;
-  /* Selections and the pressed dock in the streaks' magenta, lettered in
-     the panes' violet: white on it is too faint. */
+  /* Lettered in violet: white on this magenta is too faint. */
   --accent: #ff3d9a;
   --on-accent: #16122a;
   --button: #16122a;
   --ink: #ece8ff;
   --highlight: #2c2550;
   --well: #0d0b1a;
-  /* The focused window's title bar lit solid in the streaks' magenta. */
   --title: #ff3d9a;
   --on-title: #16122a;
-  /* Open-window marks in the streaks' blue. */
   --indicator: #2f9bff;
   /* Softened, so the dense stripes don't run at full contrast. */
   --backdrop-opacity: 0.7;
-  /* Light streaks in candy pink, electric blue, violet and magenta,
-     racing across a violet-black night. */
   --desk: #07060d;
   --warp: #ff3d9a;
   --glint: #ffd6ee;
@@ -414,8 +359,7 @@
   --streak-2: #2f9bff;
   --streak-3: #a24bff;
   --streak-4: #ff3d9a;
-  /* The menu mark: the flux capacitor. Drawn in
-     scripts/traveler_logo.py. */
+  /* Menu mark: a flux capacitor, drawn in scripts/traveler_logo.py. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.7' d='M2 2h2v1H2zM12 2h2v1H12zM2 3h3v1H2zM11 3h3v1H11zM3 4h1v1H3zM5 4h1v1H5zM10 4h1v1H10zM12 4h1v1H12zM4 5h3v1H4zM9 5h3v1H9zM5 6h1v1H5zM7 6h2v1H7zM10 6h1v1H10zM6 7h1v1H6zM9 7h1v1H9zM7 9h2v1H7zM8 10h1v1H8zM7 11h2v1H7zM8 12h1v1H8zM7 13h2v1H7zM7 14h2v1H7z'/%3E%3Cpath d='M0 0h16v1H0zM0 1h1v1H0zM15 1h1v1H15zM0 2h1v1H0zM15 2h1v1H15zM0 3h1v1H0zM15 3h1v1H15zM0 4h1v1H0zM4 4h1v1H4zM11 4h1v1H11zM15 4h1v1H15zM0 5h1v1H0zM15 5h1v1H15zM0 6h1v1H0zM6 6h1v1H6zM9 6h1v1H9zM15 6h1v1H15zM0 7h1v1H0zM7 7h2v1H7zM15 7h1v1H15zM0 8h1v1H0zM7 8h2v1H7zM15 8h1v1H15zM0 9h1v1H0zM15 9h1v1H15zM0 10h1v1H0zM7 10h1v1H7zM15 10h1v1H15zM0 11h1v1H0zM15 11h1v1H15zM0 12h1v1H0zM7 12h1v1H7zM15 12h1v1H15zM0 13h1v1H0zM15 13h1v1H15zM0 14h1v1H0zM15 14h1v1H15zM0 15h16v1H0z'/%3E%3C/svg%3E");
   color-scheme: dark;
@@ -493,7 +437,6 @@ svg {
   mask: var(--logo) center / contain no-repeat;
 }
 
-/* A dock icon, sized for the dock */
 .dock-icon {
   width: var(--icon-size);
   height: var(--icon-size);
@@ -506,7 +449,6 @@ svg {
   filter: var(--icon-filter);
 }
 
-/* Scrollbars, black-bordered like the original */
 .os-scroll {
   overflow: auto;
   scrollbar-width: thin;

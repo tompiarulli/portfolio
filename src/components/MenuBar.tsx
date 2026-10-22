@@ -42,7 +42,6 @@ function SystemMenu({
     ...(menu.current?.querySelectorAll<HTMLElement>('[role=menuitem]') ?? []),
   ]
 
-  /** Opens the menu with the first or last item focused. */
   const openAt = (at: 'first' | 'last') => {
     setStart(at)
     setOpen(true)

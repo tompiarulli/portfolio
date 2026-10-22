@@ -3,13 +3,11 @@ import { useEffect, useRef } from 'react'
 import { random } from '#/lib/random'
 
 type Props = {
-  /** Base colour behind the rain. */
   background: string
   /** Colour of the falling trails. */
   trail: string
   /** Colour of the leading glyph in each drop. */
   head: string
-  /** Glyphs to draw from. */
   characters: string
   /** Size of one glyph cell in CSS pixels. */
   cellWidth?: number
@@ -32,11 +30,8 @@ type Props = {
 
 type Drop = { y: number; speed: number; trail: number }
 
-/**
- * Falling code rain. Every column has its own drop falling at its own
- * speed; glyphs sit on a fixed grid and light up as a drop passes, fading
- * along its trail. Glyphs also change at random, so the code keeps shifting.
- */
+/** Glyphs sit on a fixed grid and light up as a drop passes over them,
+ *  rather than falling with it; a few change at random each second. */
 export default function CodeRain({
   background,
   trail,
