@@ -421,6 +421,17 @@
   color-scheme: dark;
 }
 
+/* Touch screens get a taller title bar to drag windows by and a bigger
+   close box; the layout is otherwise the same as with a mouse. */
+@media (pointer: coarse) {
+  :root,
+  [data-theme] {
+    --title-height: 34px;
+    --box-size: 22px;
+    --glyph-size: 12px;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -441,6 +452,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   image-rendering: pixelated;
   user-select: none;
+  /* No double-tap zoom, so quick taps never zoom the desktop and a
+     double-tap on a title bar rolls the window up; pinching still zooms. */
+  touch-action: manipulation;
 }
 
 img,

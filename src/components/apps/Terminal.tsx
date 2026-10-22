@@ -77,13 +77,14 @@ export function Terminal() {
   return (
     <Window title="Terminal" x={-40} y={60} width={560} height={340} flush>
       {/* Clicking anywhere types at the prompt, like a real terminal. Only a
-          shortcut for the pointer: the prompt is a plain, tabbable field. */}
+          shortcut for the pointer: the prompt is a plain, tabbable field.
+          Touch screens get 16px text, or iOS zooms in on the prompt. */}
       <div
         role="presentation"
         onClick={() => {
           if (!getSelection()?.toString()) field.current?.focus()
         }}
-        className="min-h-full bg-(--terminal) p-3 font-mono leading-[1.45] text-(--terminal-text)"
+        className="min-h-full bg-(--terminal) p-3 font-mono leading-[1.45] text-(--terminal-text) pointer-coarse:text-[16px]"
       >
         {/* A log, so screen readers read out each command's output. */}
         <div role="log" aria-label="Terminal output">

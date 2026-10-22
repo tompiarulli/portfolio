@@ -15,7 +15,7 @@ export function Dock() {
     <nav
       aria-label="Applications"
       data-shutdown="dock"
-      className="fixed bottom-0 left-1/2 z-50 flex -translate-x-1/2 border border-b-0 border-(--ink) bg-(--surface)"
+      className="fixed bottom-0 left-1/2 z-50 flex max-w-full -translate-x-1/2 border border-b-0 border-(--ink) bg-(--surface)"
     >
       {APPS.map((app) => {
         const open = stack.includes(app.id)
@@ -39,7 +39,7 @@ export function Dock() {
               // minimized window.
               raise(app.id)
             }}
-            className="group relative flex w-[calc(var(--icon-size)+51px)] flex-col items-center gap-[6px] border-r border-(--dock-divider) px-2 pt-[12px] pb-[7px] outline-current outline-dotted -outline-offset-4 last:border-r-0 not-focus-visible:outline-none hover:bg-(--tertiary) hover:text-(--on-tertiary) focus-visible:bg-(--tertiary) focus-visible:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
+            className="group relative flex w-[calc(var(--icon-size)+51px)] min-w-0 flex-col items-center gap-[6px] border-r border-(--dock-divider) px-2 pt-[12px] pb-[7px] outline-current outline-dotted -outline-offset-4 last:border-r-0 not-focus-visible:outline-none hover:bg-(--tertiary) hover:text-(--on-tertiary) focus-visible:bg-(--tertiary) focus-visible:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
           >
             <DockIcon id={app.id} />
             <span className="font-mono text-(length:--dock-label-size) tracking-tight [text-transform:var(--label-case)] [font-weight:var(--label-weight)]">

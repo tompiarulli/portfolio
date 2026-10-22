@@ -257,7 +257,7 @@ export function Window({
             onPointerDown={(e) => e.stopPropagation()}
             data-close
             aria-label={`Close ${title}`}
-            className="relative flex size-(--box-size) shrink-0 cursor-pointer items-center justify-center border border-current outline-current outline-dotted outline-offset-2 not-focus-visible:outline-none after:absolute after:-inset-x-[2px] after:-inset-y-[5px] after:content-[''] bg-(--close-bg) shadow-(--close-shadow) active:bg-(--ink) active:text-(--surface)"
+            className="relative flex size-(--box-size) shrink-0 cursor-pointer items-center justify-center border border-current outline-current outline-dotted outline-offset-2 not-focus-visible:outline-none after:absolute after:-inset-x-[2px] after:-inset-y-[5px] after:content-[''] pointer-coarse:after:-inset-[11px] bg-(--close-bg) shadow-(--close-shadow) active:bg-(--ink) active:text-(--surface)"
           >
             {/* X drawn as two smooth 1px strokes, like the box borders */}
             <svg aria-hidden viewBox="0 0 8 8" className="size-(--glyph-size)">
