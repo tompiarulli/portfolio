@@ -1,10 +1,12 @@
-"""Builds White Rabbit's dock icons from CDE's 32x32 pixmaps.
+"""Builds the dock icons from CDE's 32x32 pixmaps.
 
-CDE's icons are greyscale XPMs. Each pixel's brightness becomes its opacity in
-three steps (0.4, 0.7, full), and the darkest pixels drop out, so the dock
-paints the icons as lit phosphor in the theme's text colour. The outer edge
-is always lit, so the black half of CDE's bevelled outlines stays. Writes
-public/icons/cde/<id>.png.
+CDE's icons are greyscale XPMs. For dark docks each pixel's brightness becomes
+its opacity in three steps (0.4, 0.7, full), and the darkest pixels drop out,
+so the dock paints the icons lit in the theme's text colour. Light docks get
+an inverted copy, darkness becoming opacity, so the same drawing reads as ink
+on paper. The outer edge is always painted, so the half of CDE's bevelled
+outlines that would drop out stays. Writes public/icons/cde/<id>-dark.png and
+<id>-light.png.
 
     git clone --depth 1 https://git.code.sf.net/p/cdesktopenv/code cde
     python scripts/cde_icons.py cde
@@ -61,7 +63,7 @@ def outer(pixels, x, y):
     return False
 
 
-def mask(path):
+def mask(path, light_dock=False):
     width, height, pixels = load(path)
     image = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     for y, row in enumerate(pixels):
@@ -69,9 +71,11 @@ def mask(path):
             if rgb is None:
                 continue
             light = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 255000
+            if light_dock:
+                light = 1 - light
             level = 0 if light < 0.2 else 0.4 if light < 0.5 else 0.7 if light < 0.8 else 1
             # CDE bevels its outlines, light on the top and left and black
-            # on the bottom and right; lighting the whole outer edge keeps
+            # on the bottom and right; painting the whole outer edge keeps
             # each shape closed.
             if outer(pixels, x, y):
                 level = 1
@@ -84,5 +88,6 @@ if __name__ == "__main__":
     icons = Path(sys.argv[1]) / "cde" / "programs" / "icons"
     OUT.mkdir(parents=True, exist_ok=True)
     for name, source in ICONS.items():
-        mask(icons / source).save(OUT / f"{name}.png", optimize=True)
+        mask(icons / source).save(OUT / f"{name}-dark.png", optimize=True)
+        mask(icons / source, light_dock=True).save(OUT / f"{name}-light.png", optimize=True)
         print(f"{name}: {source}")

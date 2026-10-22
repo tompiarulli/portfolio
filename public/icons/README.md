@@ -1,37 +1,17 @@
 # Icons
 
-The dock icons in this folder are served as is and picked per theme by tokens in `src/styles.css`; the menu marks are inlined there. This file records where they come from.
+Dock icons live in this folder and are picked per theme by tokens in `src/styles.css`; the menu marks are inlined there. This file records where they come from.
 
 ## Dock icons
 
-Themes without a set of their own share one: icons from Haiku's icon set, by the Haiku project, MIT License (from `data/artwork/icons/` in [haiku/haiku](https://github.com/haiku/haiku)). The originals are kept as SVG in `haiku/`; the dock uses 32x32 masks painted in the theme's text colour. Dark docks use the `-dark` copies as drawn; light docks (Believe, Steamboat, Outpost 31) use the `-light` copies, inverted so outlines and holes are painted in ink.
-
-- About: `App_StyledEdit`
-- Contact: `App_Mail`
-- Terminal: `App_Terminal`
-- Settings: `Folder_prefs`
-
-### White Rabbit
-
-32x32 icons from CDE, the Common Desktop Environment (1993-95), designed by the User Interaction Design Group at Hewlett-Packard; GNU Lesser General Public License v2 or later (`COPYING` in [cdesktopenv](https://sourceforge.net/p/cdesktopenv/code/)). Brightness becomes opacity in three steps, in `cde/`, built by `scripts/cde_icons.py` and painted in the theme's text colour.
+Every theme shares one set, painted in its dock's text colour: 32x32 icons from CDE, the Common Desktop Environment (1993-95), designed by the User Interaction Design Group at Hewlett-Packard; GNU Lesser General Public License v2 or later, with the licence text in `cde/COPYING`. Modified from the originals by `scripts/cde_icons.py`, from the pixmaps in [cdesktopenv](https://sourceforge.net/p/cdesktopenv/code/): on dark docks brightness becomes opacity in three steps (`-dark` copies); light docks (Believe, Steamboat, Outpost 31) use inverted `-light` copies, so the drawing reads as ink on paper.
 
 - About: `cde/programs/icons/Dtinfo.m.pm`
 - Contact: `cde/programs/icons/DtMnew.m.pm`
 - Terminal: `cde/programs/icons/Fpterm.m.pm`
 - Settings: `cde/programs/icons/Fpstyle.m.pm`
 
-### Orbital
-
-32x32 icons from the Tango Desktop Project's icon theme 0.8.90 (2009), released into the public domain (`tango/COPYING`), as published, shown in greyscale.
-
-- About: `32x32/apps/accessories-text-editor.png`
-- Contact: `32x32/apps/internet-mail.png`
-- Terminal: `32x32/apps/utilities-terminal.png`
-- Settings: `32x32/categories/preferences-system.png`
-
-### OUTATIME
-
-Placeholder blocks for now: the theme sets no masks, so each icon paints as a solid square in the text colour.
+A theme can swap in a set of its own through `--icon-<id>-mask` (painted in the text colour) or `--icon-<id>-image` (shown as drawn) in `src/styles.css`, credited here with its licence.
 
 ## Menu marks
 

@@ -190,20 +190,20 @@
      --logo-size is its grid, so the pixels stay crisp. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.4' d=''/%3E%3Cpath fill-opacity='.7' d='M12 0h1v1H12zM4 1h1v1H4zM11 1h1v1H11zM13 1h1v1H13zM4 2h1v1H4zM11 2h1v1H11zM13 2h1v1H13zM4 3h1v1H4zM11 3h1v1H11zM13 3h1v1H13zM4 4h1v1H4zM11 4h1v1H11zM13 4h1v1H13zM4 5h1v1H4zM11 5h1v1H11zM12 6h1v1H12zM13 7h1v1H13zM14 8h1v1H14zM14 9h1v1H14zM14 10h1v1H14zM13 11h2v1H13zM13 12h2v1H13zM12 13h1v1H12zM12 14h1v1H12zM4 15h8v1H4z'/%3E%3Cpath d='M3 0h2v1H3zM11 0h1v1H11zM2 1h2v1H2zM5 1h1v1H5zM10 1h1v1H10zM12 1h1v1H12zM2 2h2v1H2zM5 2h1v1H5zM10 2h1v1H10zM12 2h1v1H12zM2 3h2v1H2zM5 3h1v1H5zM10 3h1v1H10zM12 3h1v1H12zM2 4h2v1H2zM5 4h1v1H5zM10 4h1v1H10zM12 4h1v1H12zM3 5h1v1H3zM5 5h1v1H5zM10 5h1v1H10zM12 5h1v1H12zM3 6h9v1H3zM2 7h11v1H2zM1 8h1v1H1zM3 8h1v1H3zM10 8h1v1H10zM1 9h1v1H1zM7 9h2v1H7zM1 10h2v1H1zM7 10h2v1H7zM13 10h1v1H13zM1 11h6v1H1zM9 11h4v1H9zM1 12h12v1H1zM2 13h4v1H2zM10 13h2v1H10zM3 14h9v1H3z'/%3E%3C/svg%3E");
-  /* Dock icons: Haiku's drawings (see public/icons/README.md) as masks
-     painted in the text colour. Dark docks use the icon's own light;
-     light docks an inverted copy. A theme may show the drawing itself
-     instead through --icon-<id>-image, with --icon-fill transparent. */
+  /* Dock icons: a 90s Unix workstation's icons (see
+     public/icons/README.md) as masks painted in the dock's text colour, so
+     each theme tints them its own way. Dark docks use the icons lit; light
+     docks an inverted copy. Built in scripts/cde_icons.py. A theme may show
+     a drawing itself instead through --icon-<id>-image, with --icon-fill
+     transparent. */
   --icon-fill: currentColor;
-  /* Dock icon size. Pixel-art sets stay at the 32px they're drawn at;
-     a theme with smooth drawings may go larger. */
   --icon-size: 32px;
   /* A filter over the drawn icons, e.g. greyscale; none keeps them as is. */
   --icon-filter: none;
-  --icon-about-mask: url('/icons/haiku/App_StyledEdit-dark.png');
-  --icon-contact-mask: url('/icons/haiku/App_Mail-dark.png');
-  --icon-terminal-mask: url('/icons/haiku/App_Terminal-dark.png');
-  --icon-settings-mask: url('/icons/haiku/Folder_prefs-dark.png');
+  --icon-about-mask: url('/icons/cde/about-dark.png');
+  --icon-contact-mask: url('/icons/cde/contact-dark.png');
+  --icon-terminal-mask: url('/icons/cde/terminal-dark.png');
+  --icon-settings-mask: url('/icons/cde/settings-dark.png');
   color-scheme: dark;
 }
 
@@ -211,22 +211,16 @@
 [data-theme='rabbit'] {
   --title-open: '[';
   --title-close: ']';
-  /* A 90s Unix workstation's icons, lit in phosphor. Built in
-     scripts/cde_icons.py. */
-  --icon-about-mask: url('/icons/cde/about.png');
-  --icon-contact-mask: url('/icons/cde/contact.png');
-  --icon-terminal-mask: url('/icons/cde/terminal.png');
-  --icon-settings-mask: url('/icons/cde/settings.png');
 }
 
 /* The light docks take the inverted copies. */
 [data-theme='believe'],
 [data-theme='steamboat'],
 [data-theme='outpost'] {
-  --icon-about-mask: url('/icons/haiku/App_StyledEdit-light.png');
-  --icon-contact-mask: url('/icons/haiku/App_Mail-light.png');
-  --icon-terminal-mask: url('/icons/haiku/App_Terminal-light.png');
-  --icon-settings-mask: url('/icons/haiku/Folder_prefs-light.png');
+  --icon-about-mask: url('/icons/cde/about-light.png');
+  --icon-contact-mask: url('/icons/cde/contact-light.png');
+  --icon-terminal-mask: url('/icons/cde/terminal-light.png');
+  --icon-settings-mask: url('/icons/cde/settings-light.png');
 }
 
 /* Orbital: pure black and white with greys between, hairline grey outlines,
@@ -269,17 +263,6 @@
   --desk: #000000;
   --warp: #6e6e6e;
   --glint: #ededed;
-  /* A 2000s Linux desktop's icons as drawn, with the colour taken out. */
-  --icon-fill: transparent;
-  --icon-filter: grayscale(1);
-  --icon-about-mask: none;
-  --icon-contact-mask: none;
-  --icon-terminal-mask: none;
-  --icon-settings-mask: none;
-  --icon-about-image: url('/icons/tango/accessories-text-editor.png');
-  --icon-contact-image: url('/icons/tango/internet-mail.png');
-  --icon-terminal-image: url('/icons/tango/utilities-terminal.png');
-  --icon-settings-image: url('/icons/tango/preferences-system.png');
   /* The menu mark: a plain, smooth disc. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3C/svg%3E");
@@ -449,12 +432,6 @@
   --streak-2: #2f9bff;
   --streak-3: #a24bff;
   --streak-4: #ff3d9a;
-  /* Dock icons: placeholder blocks until this theme has a set of its own.
-     With no mask, each icon paints as a solid square in the text colour. */
-  --icon-about-mask: none;
-  --icon-contact-mask: none;
-  --icon-terminal-mask: none;
-  --icon-settings-mask: none;
   /* The menu mark: the flux capacitor. Drawn in
      scripts/traveler_logo.py. */
   --logo-size: 16px;

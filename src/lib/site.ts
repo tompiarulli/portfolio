@@ -82,22 +82,10 @@ export const credits: { group: string; items: Credit[] }[] = [
     group: 'Icons',
     items: [
       {
-        name: 'KDE 1.1',
-        by: 'the KDE artists',
-        url: 'https://github.com/KDE/kde1-kdebase',
-        license: 'GPL v2',
-      },
-      {
         name: 'CDE',
         by: 'the User Interaction Design Group at Hewlett-Packard',
         url: 'https://sourceforge.net/p/cdesktopenv/code/',
         license: 'LGPL v2+',
-      },
-      {
-        name: 'Tango',
-        by: 'the Tango Desktop Project',
-        url: 'http://tango.freedesktop.org',
-        license: 'Public domain',
       },
     ],
   },
