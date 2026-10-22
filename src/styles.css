@@ -146,8 +146,6 @@
   --dock-label-size: 13px;
   /* Base text size. */
   --text-size: 12px;
-  /* Crisp, unsmoothed type; a theme may turn smoothing back on. */
-  --font-smoothing: none;
   --title-case: uppercase;
   --title-weight: 700;
   --title-size: 12px;
@@ -229,7 +227,6 @@
   --font-ui: 'Geist Mono', ui-monospace, monospace;
   --font-title: 'Geist Mono', ui-monospace, monospace;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
-  --font-smoothing: antialiased;
   /* Near-black panes, bevels only a step either side, so windows read as
      flat cards. */
   --bg: #0a0a0a;
@@ -314,7 +311,6 @@
   --font-ui: 'Grandstander', ui-sans-serif, sans-serif;
   --font-title: 'Recursive Mono Casual', ui-monospace, monospace;
   --font-mono: 'Recursive Mono Casual', ui-monospace, monospace;
-  --font-smoothing: antialiased;
   --text-size: 13px;
   /* Paper, a little grey, as it prints on old stock. */
   --bg: #e8e8e4;
@@ -453,7 +449,10 @@ body {
   font-family: var(--font-ui);
   font-size: var(--text-size);
   line-height: 1.35;
-  -webkit-font-smoothing: var(--font-smoothing);
+  /* Greyscale antialiasing on macOS, where these outline fonts would
+     otherwise draw their curves as stair-steps. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   image-rendering: pixelated;
   user-select: none;
 }
