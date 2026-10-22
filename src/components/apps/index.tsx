@@ -4,6 +4,7 @@ import { WindowIdContext, useWindows } from '#/components/WindowManager'
 import type { WindowId } from '#/lib/windows'
 import { About } from '#/components/apps/About'
 import { Contact } from '#/components/apps/Contact'
+import { NotFound } from '#/components/apps/NotFound'
 import { Settings } from '#/components/apps/Settings'
 import { SystemInfo } from '#/components/apps/SystemInfo'
 
@@ -18,6 +19,7 @@ const APPS: Record<WindowId, ComponentType> = {
   terminal: Terminal,
   settings: Settings,
   system: SystemInfo,
+  notfound: NotFound,
 }
 
 /** Renders every open window. DOM order is stable; z-index follows the stack. */

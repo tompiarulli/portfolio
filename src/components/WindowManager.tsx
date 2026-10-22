@@ -64,7 +64,6 @@ export function WindowManager({ children }: { children: ReactNode }) {
       return
     }
     const id = idForPath(pathname)
-    if (!id) return
     setStack((s) => toFront(s, id))
     unminimize(id)
   }, [pathname, unminimize])

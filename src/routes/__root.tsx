@@ -1,9 +1,13 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import type { ErrorComponentProps } from '@tanstack/react-router'
+import { createIsomorphicFn } from '@tanstack/react-start'
+import { setResponseStatus } from '@tanstack/react-start/server'
 import { Suspense, lazy, useEffect } from 'react'
 import { Desktop } from '#/components/Desktop'
-import { ogImage } from '#/lib/seo'
+import { ogImage, pageHead } from '#/lib/seo'
 import { site } from '#/lib/site'
 import { themeBootScript } from '#/lib/theme'
+import { pathFor } from '#/lib/windows'
 import appCss from '#/styles.css?url'
 
 const Devtools = import.meta.env.DEV
@@ -55,13 +59,39 @@ function useThemeColor() {
   }, [])
 }
 
+// A URL no route matches leaves the root matched alone. The server answers
+// those with a 404, and the desktop opens File Not Found for them. A catch-
+// all route would do the same, but its match is keyed by the URL, so
+// 404.html (rendered at /404) wouldn't hydrate cleanly at any other URL.
+const notFoundHead = pageHead({
+  path: pathFor('notfound'),
+  title: `File Not Found - ${site.title}`,
+  description: site.descriptions.notFound,
+  noindex: true,
+})
+
+// The prerender only writes pages that answer 200, so /404 does while it is
+// rendered into 404.html. Vercel then serves that file with a 404 for every
+// unknown URL (see vite.config.ts).
+const keepPrerenderedNotFound = createIsomorphicFn().server(
+  (pathname: string) => {
+    if (
+      process.env.TSS_PRERENDERING === 'true' &&
+      pathname === pathFor('notfound')
+    )
+      setResponseStatus(200)
+  },
+)
+
 export const Route = createRootRoute({
-  head: () => ({
+  loader: ({ location }) => keepPrerenderedNotFound(location.pathname),
+  head: ({ matches }) => ({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      // Every page sets its own title and description.
-      { title: site.title },
+      // Every page sets its own title and description; the root alone is a
+      // URL nothing else matched.
+      ...(matches.length === 1 ? notFoundHead.meta : [{ title: site.title }]),
       { name: 'theme-color', content: DEFAULT_THEME_COLOR },
       { property: 'og:site_name', content: site.name },
       { property: 'og:type', content: 'website' },
@@ -85,6 +115,9 @@ export const Route = createRootRoute({
   }),
   shellComponent: RootDocument,
   component: Desktop,
+  // Nothing to render for a not-found: the desktop shows its own window.
+  notFoundComponent: () => null,
+  errorComponent: RootError,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -102,5 +135,51 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
+  )
+}
+
+/** Stands in for the whole desktop, which is what failed, so it draws a
+ *  plain alert box in the window chrome's tokens rather than a Window. The
+ *  error itself only reaches the console, and in full only in development. */
+function RootError({ error }: ErrorComponentProps) {
+  if (import.meta.env.DEV) {
+    console.error(error)
+  } else {
+    console.error(
+      'Desktop error:',
+      error instanceof Error ? error.message : 'Unknown error',
+    )
+  }
+  return (
+    <div className="grid h-dvh place-items-center bg-(--desk) p-4">
+      <section
+        role="alertdialog"
+        aria-labelledby="error-title"
+        aria-describedby="error-body"
+        className="w-[360px] max-w-full border border-(--ink) bg-(--surface) shadow-(--window-shadow)"
+      >
+        <h1
+          id="error-title"
+          className="flex h-(--title-height) items-center justify-center border-b border-(--ink) bg-(--title) font-title text-(length:--title-size) text-(--on-title) [text-transform:var(--title-case)] [font-weight:var(--title-weight)]"
+        >
+          Error
+        </h1>
+        <div className="p-5">
+          <p id="error-body">
+            Something went wrong and the desktop quit unexpectedly. Restart to
+            try again.
+          </p>
+          <div className="mt-5 flex justify-end">
+            <button
+              type="button"
+              onClick={() => location.reload()}
+              className="bevel cursor-pointer px-6 py-1 font-title outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ink) active:bevel-pressed"
+            >
+              Restart
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
   )
 }

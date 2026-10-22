@@ -14,6 +14,7 @@ export const site = {
       "Pick a theme for Tom Piarulli's desktop. Each one changes the colours, font and backdrop.",
     system:
       "Version and credits for Tom Piarulli's site: the fonts, icons, photo and tools behind it.",
+    notFound: "This page isn't on Tom Piarulli's desktop.",
   },
   letter: [
     'Welcome to my small corner of the internet.',
