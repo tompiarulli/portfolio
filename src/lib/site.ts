@@ -71,6 +71,12 @@ export const credits: { group: string; items: Credit[] }[] = [
         license: 'OFL 1.1',
       },
       {
+        name: 'Grandstander',
+        by: 'the Grandstander Project Authors',
+        url: 'https://github.com/Etcetera-Type-Co/Grandstander',
+        license: 'OFL 1.1',
+      },
+      {
         name: 'Recursive',
         by: 'the Recursive Project Authors',
         url: 'https://github.com/arrowtype/recursive',
