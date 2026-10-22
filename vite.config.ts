@@ -1,7 +1,7 @@
 import { execSync } from 'node:child_process'
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import { devtools } from '@tanstack/devtools-vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
@@ -95,60 +95,73 @@ const vercelRoutes: NitroModule = {
   },
 }
 
+// Tests only need React and Tailwind; Start and Nitro would build the app.
+const isTest = process.env.VITEST === 'true'
+
 export default defineConfig({
   define: { __BUILD__: JSON.stringify(build) },
   resolve: { tsconfigPaths: true },
   plugins: [
-    devtools(),
-    nitro({
-      routeRules: {
-        // Security headers for every response. Vercel applies header rules
-        // before its filesystem check, so they reach the prerendered pages
-        // too. They set no cache-control, so the rules below still apply.
-        // Rules are fixed at build time; Vercel sets VERCEL_ENV on preview
-        // builds, which allow the Vercel Toolbar.
-        '/**': {
-          headers: securityHeaders({
-            vercelToolbar: process.env.VERCEL_ENV === 'preview',
-          }),
+    !isTest && devtools(),
+    !isTest &&
+      nitro({
+        routeRules: {
+          // Security headers for every response. Vercel applies header rules
+          // before its filesystem check, so they reach the prerendered pages
+          // too. They set no cache-control, so the rules below still apply.
+          // Rules are fixed at build time; Vercel sets VERCEL_ENV on preview
+          // builds, which allow the Vercel Toolbar.
+          '/**': {
+            headers: securityHeaders({
+              vercelToolbar: process.env.VERCEL_ENV === 'preview',
+            }),
+          },
+          // Hashed by Vite, so they can be cached for good.
+          '/assets/**': {
+            headers: { 'cache-control': 'public, max-age=31536000, immutable' },
+          },
+          '/fonts/**': oneWeek,
+          '/icons/**': oneWeek,
+          '/images/**': oneWeek,
+          '/favicon.svg': oneDay,
+          '/favicon.ico': oneDay,
+          '/apple-touch-icon.png': oneDay,
+          '/icon-192.png': oneDay,
+          '/icon-512.png': oneDay,
+          '/og.png': oneDay,
+          '/manifest.webmanifest': oneDay,
+          '/robots.txt': oneDay,
+          '/sitemap.xml': oneDay,
         },
-        // Hashed by Vite, so they can be cached for good.
-        '/assets/**': {
-          headers: { 'cache-control': 'public, max-age=31536000, immutable' },
-        },
-        '/fonts/**': oneWeek,
-        '/icons/**': oneWeek,
-        '/images/**': oneWeek,
-        '/favicon.svg': oneDay,
-        '/favicon.ico': oneDay,
-        '/apple-touch-icon.png': oneDay,
-        '/icon-192.png': oneDay,
-        '/icon-512.png': oneDay,
-        '/og.png': oneDay,
-        '/manifest.webmanifest': oneDay,
-        '/robots.txt': oneDay,
-        '/sitemap.xml': oneDay,
-      },
-      modules: [vercelRoutes],
-    }),
+        modules: [vercelRoutes],
+      }),
     tailwindcss(),
-    tanstackStart({
-      // Every route is static HTML on Vercel's CDN. No function on the hot path.
-      prerender: { enabled: true, crawlLinks: true, autoSubfolderIndex: true },
-      pages: [
-        // System sits in a closed menu, so no prerendered page links to it
-        // and the crawl alone never finds it.
-        { path: '/system' },
-        // The page for unknown URLs (see src/routes/__root.tsx).
-        {
-          path: '/404',
-          prerender: { outputPath: '/404.html' },
-          sitemap: { exclude: true },
+    !isTest &&
+      tanstackStart({
+        // Every route is static HTML on Vercel's CDN. No function on the hot path.
+        prerender: {
+          enabled: true,
+          crawlLinks: true,
+          autoSubfolderIndex: true,
         },
-      ],
-      // Lists every prerendered page.
-      sitemap: { host: site.url },
-    }),
+        pages: [
+          // System sits in a closed menu, so no prerendered page links to it
+          // and the crawl alone never finds it.
+          { path: '/system' },
+          // The page for unknown URLs (see src/routes/__root.tsx).
+          {
+            path: '/404',
+            prerender: { outputPath: '/404.html' },
+            sitemap: { exclude: true },
+          },
+        ],
+        // Lists every prerendered page.
+        sitemap: { host: site.url },
+      }),
     viteReact(),
   ],
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+  },
 })
