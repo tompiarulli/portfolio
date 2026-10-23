@@ -10,8 +10,8 @@ import type { NitroModule } from 'nitro/types'
 import { nitro } from 'nitro/vite'
 import { defineConfig } from 'vitest/config'
 
-import { securityHeaders } from './src/lib/security-headers'
-import { site } from './src/lib/site'
+import { securityHeaders } from './src/lib/security-headers.ts'
+import { site } from './src/lib/site.ts'
 
 const git = (args: string) => {
   try {
