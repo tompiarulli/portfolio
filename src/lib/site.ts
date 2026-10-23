@@ -146,5 +146,9 @@ export const profiles: Profile[] = [
     handle: 'tompiarulli',
     url: 'https://www.linkedin.com/in/tompiarulli/',
   },
-  { label: 'GitHub', handle: 'tomparkp', url: 'https://github.com/tomparkp' },
+  {
+    label: 'GitHub',
+    handle: 'tompiarulli',
+    url: 'https://github.com/tompiarulli',
+  },
 ]
