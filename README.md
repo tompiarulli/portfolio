@@ -18,7 +18,7 @@ My personal portfolio, styled as a late-90s desktop OS and inspired by [Poolsuit
 - **Terminal:** a small shell with `ls`, `cat`, `open`, `theme`, `neofetch` and friends, command history on the arrow keys, and Tab completion. It also has easter eggs.
 - **Shut Down:** the system menu shuts the desktop down: the chrome folds away, the picture tube switches off, and there is grass to touch to start it up again.
 - **Mobile:** the same desktop on phones and tablets, with bigger title bars and close boxes for touch, windows that fit the screen, and no double-tap zoom.
-- **Accessibility:** every window is a labelled landmark, and the whole desktop works from the keyboard: arrow keys move a window by its title, Enter rolls it up, Escape closes it, and focus moves on to the next window as on a desktop OS. The system menu follows the ARIA menu pattern, the terminal's output is a live log, theme colours meet WCAG AA contrast, and reduced motion stills the backdrops and turns off the animations.
+- **Accessibility:** every window is a labelled landmark, and the whole desktop works from the keyboard: arrow keys move a window by its title, Enter rolls it up, Escape closes it, and focus moves on to the next window as on a desktop OS. The system menu follows the ARIA menu pattern, the terminal's output is a live log, every theme meets WCAG AA contrast (checked with axe in CI, since Lighthouse only sees the default theme), and reduced motion stills the backdrops and turns off the animations.
 
 ## Tech Stack
 
