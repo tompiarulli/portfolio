@@ -4,9 +4,26 @@ import type { Page } from '@playwright/test'
 import { THEMES } from '../src/lib/theme'
 import { expect, test } from './fixtures'
 
+// Colours are measured at rest: no transitions, and the minimize animation
+// (which fades a window to 30%) is skipped.
+test.use({ reducedMotion: 'reduce' })
+
+/** Waits for every finite animation on the page to finish, so nothing is
+ *  measured mid-fade. */
+const settle = (page: Page) =>
+  page.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations()
+        .filter((a) => a.effect?.getTiming().iterations !== Infinity)
+        .map((a) => a.finished.catch(() => {})),
+    ),
+  )
+
 /** axe's colour-contrast rule (WCAG 2 AA) over `selector`. Lighthouse only
  *  sees the default theme, so this runs it in every theme. */
 async function contrastViolations(page: Page, selector: string) {
+  await settle(page)
   const { violations } = await new AxeBuilder({ page })
     .include(selector)
     .withRules(['color-contrast'])
@@ -23,10 +40,11 @@ async function open(page: Page, name: string) {
     await page.getByRole('button', { name: 'System menu' }).click()
     await page.getByRole('menuitem', { name }).click()
   } else {
-    await page
+    const icon = page
       .getByRole('navigation', { name: 'Applications' })
       .getByRole('button', { name: new RegExp(`^${name}`) })
-      .click()
+    // Pressing the front window's icon would minimize it instead.
+    if ((await icon.getAttribute('aria-current')) !== 'true') await icon.click()
   }
   const window = page.getByRole('region', { name })
   await expect(window).toBeVisible()
