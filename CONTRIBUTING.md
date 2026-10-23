@@ -15,8 +15,12 @@ pnpm dev        # http://localhost:3000
 
 ```bash
 pnpm build         # production build, prerenders every route into .output/
+pnpm build:vercel  # the same build with Vercel's output, into .vercel/output/
 pnpm preview       # serve the production build
+pnpm serve:prod    # serve the Vercel build as Vercel does, on :4173
 pnpm test          # vitest run (jsdom, Testing Library)
+pnpm test:e2e      # Playwright smoke tests against pnpm serve:prod
+pnpm lighthouse    # Lighthouse CI budgets against pnpm serve:prod
 pnpm typecheck     # tsc --noEmit
 pnpm lint          # oxlint
 pnpm lint:fix      # oxlint --fix
@@ -24,7 +28,9 @@ pnpm format        # oxfmt
 pnpm format:check  # oxfmt --check
 ```
 
-Run `pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm build` before committing; CI runs the same five checks on every push to `main` and every pull request. The build runs the prerender crawl, which catches broken routes and loaders. Tests sit next to the code they cover as `*.test.ts`.
+Run `pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm build` before committing; CI runs the same five checks on every push to `main` and every pull request. The build runs the prerender crawl, which catches broken routes and loaders. Tests sit next to the code they cover as `*.test.ts` or `*.test.tsx`; component tests render the whole desktop through `src/test/desktop.tsx`.
+
+The end-to-end tests and Lighthouse need the Vercel build: `pnpm build:vercel`, then `pnpm test:e2e` or `pnpm lighthouse`. Both start `scripts/serve-prod.mjs`, which follows the routes in `.vercel/output/config.json`, so pages get production's headers, statuses and compression, unknown URLs included. The Playwright tests live in `e2e/` and fail on any console error or CSP violation; run `pnpm exec playwright install --only-shell chromium` once first. Lighthouse runs the mobile preset three times on every page and the 404 page, against the budgets in `lighthouserc.json` (performance at least 0.95, accessibility, best practices and SEO all 1, LCP under 2.5 s, CLS under 0.1, TBT under 200 ms). Two pages are checked audit by audit instead: the 404 skips SEO's indexing check, since it is `noindex` on purpose (the end-to-end tests check that it is), and Terminal skips the touch target size check, since it opens over About and Contact and partly covers their close boxes, as overlapping windows do. It uses your installed Chrome and writes its reports to `.lighthouseci/`. CI runs both as their own jobs; the Lighthouse reports are uploaded as an artifact.
 
 Renovate opens dependency updates weekly. TanStack packages are pinned exactly and move together.
 
