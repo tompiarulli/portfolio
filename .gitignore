@@ -10,6 +10,8 @@ dist
 coverage
 *.log
 .lighthouseci
+test-results
+playwright-report
 
 # Source photos keep their camera metadata (GPS); only processed copies ship.
 assets/

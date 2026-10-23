@@ -162,6 +162,8 @@ export default defineConfig({
     viteReact(),
   ],
   test: {
+    // e2e/ holds the Playwright tests.
+    include: ['src/**/*.test.{ts,tsx}'],
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
   },
