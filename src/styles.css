@@ -164,9 +164,9 @@
   --streak-2: var(--warp);
   --streak-3: var(--warp);
   --streak-4: var(--warp);
-  /* The terminal's screen: a dark grey, so it reads as its own thing
-     against the desktop in every theme. */
-  --terminal: #1c1f1e;
+  /* The terminal's screen: the theme's own near-black desktop colour, so
+     it reads as a window onto that theme's screen. */
+  --terminal: var(--desk);
   /* The terminal's output text: the backdrop's colour, unless that is too
      faint to read on the screen. */
   --terminal-text: var(--warp);
@@ -296,6 +296,8 @@
   --backdrop-opacity: 1;
   --desk: #0c0c0c;
   --warp: #a8a8a4;
+  /* Silver, like the film; the base theme's is phosphor green. */
+  --glint: #f4f4f0;
   /* Menu mark: a film leader's countdown circle, a stand-in drawn in
      scripts/steamboat_logo.py. */
   --logo-size: 16px;
