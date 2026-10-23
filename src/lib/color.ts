@@ -19,7 +19,7 @@ export function rgb(color: string): [number, number, number] {
   ctx.fillStyle = '#000'
   ctx.fillStyle = color
   ctx.fillRect(0, 0, 1, 1)
-  const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data
+  const [r = 0, g = 0, b = 0] = ctx.getImageData(0, 0, 1, 1).data
   const channels: [number, number, number] = [r, g, b]
   cache.set(color, channels)
   return channels

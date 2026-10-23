@@ -59,12 +59,12 @@ export default function Drift({
     const margin = 20
     let width = 0
     let height = 0
-    let layers: Mote[][] = []
+    let layers: { layer: (typeof LAYERS)[number]; motes: Mote[] }[] = []
 
     const mote = (): Mote => ({
       x: random(-margin, width + margin),
       y: random(-margin, height + margin),
-      glyph: glyphs[Math.floor(Math.random() * glyphs.length)],
+      glyph: glyphs[Math.floor(Math.random() * glyphs.length)] ?? '',
       phase: random(0, Math.PI * 2),
     })
 
@@ -76,9 +76,10 @@ export default function Drift({
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       // Split evenly across the depths.
       const count = Math.round(((width * height) / 10_000) * density)
-      layers = LAYERS.map(() =>
-        Array.from({ length: Math.ceil(count / LAYERS.length) }, mote),
-      )
+      layers = LAYERS.map((layer) => ({
+        layer,
+        motes: Array.from({ length: Math.ceil(count / LAYERS.length) }, mote),
+      }))
       draw(0)
     }
 
@@ -88,10 +89,10 @@ export default function Drift({
       ctx.fillRect(0, 0, width, height)
       ctx.textBaseline = 'middle'
       ctx.textAlign = 'center'
-      LAYERS.forEach((layer, i) => {
+      layers.forEach(({ layer, motes }, i) => {
         ctx.font = `${layer.size}px monospace`
-        ctx.fillStyle = i === LAYERS.length - 1 ? glint : glyph
-        for (const m of layers[i]) {
+        ctx.fillStyle = i === layers.length - 1 ? glint : glyph
+        for (const m of motes) {
           const shimmer = twinkle
             ? 0.55 + 0.45 * Math.sin(m.phase + t * twinkle * Math.PI * 2)
             : 1
@@ -118,12 +119,12 @@ export default function Drift({
       // Two slow waves beating against each other make irregular gusts.
       const blow =
         wind * (1 + gust * Math.sin(t * 0.7) * Math.sin(t * 0.23 + 1))
-      LAYERS.forEach((layer, i) => {
-        for (const m of layers[i]) {
+      for (const { layer, motes } of layers) {
+        for (const m of motes) {
           m.x = span(m.x + blow * layer.speed * dt, width)
           m.y = span(m.y + fall * layer.speed * dt, height)
         }
-      })
+      }
       draw(t)
       frame = requestAnimationFrame(tick)
     }

@@ -97,21 +97,23 @@ export default function CodeRain({
       ctx.font = `${cellHeight - 2}px monospace`
       ctx.textBaseline = 'top'
       ctx.textAlign = 'center'
-      for (let i = 0; i < drops.length; i++) {
-        const d = drops[i]
+      drops.forEach((d, i) => {
         const lane = i % lanes
         const top = Math.floor(d.y)
         for (let p = Math.max(0, top - d.trail); p <= top && p < length; p++) {
+          const cell = cells[p * columns + lane]
+          const glyph = cell === undefined ? undefined : glyphs[cell]
+          if (glyph === undefined) continue
           // Square-root falloff keeps most of the trail bright, fading late.
           ctx.globalAlpha = Math.sqrt(1 - (top - p) / d.trail)
           ctx.fillStyle = p === top ? head : trail
           ctx.fillText(
-            glyphs[cells[p * columns + lane]],
+            glyph,
             lane * cellWidth + cellWidth / 2,
             p * cellHeight + 1,
           )
         }
-      }
+      })
     }
 
     let frame = 0
@@ -121,11 +123,10 @@ export default function CodeRain({
       // Cap the step so a background tab doesn't lurch when it returns.
       const dt = Math.min(now - last, 100) / 1000
       last = now
-      for (let i = 0; i < drops.length; i++) {
-        const d = drops[i]
+      drops.forEach((d, i) => {
         d.y += d.speed * dt
         if (d.y - d.trail > length) drops[i] = spawn()
-      }
+      })
       pending += cells.length * mutation * dt
       for (; pending >= 1; pending--)
         cells[Math.floor(Math.random() * cells.length)] = pick()

@@ -75,9 +75,11 @@ export default function Orbits(props: OrbitsProps) {
       ctx.lineJoin = 'round'
       const back = rgb(p.background)
       const line = rgb(p.color)
+      const mix = (c: 0 | 1 | 2, a: number) =>
+        Math.round(back[c] + (line[c] - back[c]) * a)
       const ramp = Array.from({ length: SHADES }, (_, i) => {
         const a = i / (SHADES - 1)
-        return `rgb(${back.map((b, c) => Math.round(b + (line[c] - b) * a)).join(',')})`
+        return `rgb(${mix(0, a)},${mix(1, a)},${mix(2, a)})`
       })
 
       const turn = t * 0.6
@@ -117,20 +119,21 @@ export default function Orbits(props: OrbitsProps) {
         // Each run of one shade is a single opaque path in a pre-mixed
         // colour: overlapping semi-transparent segments would double up at
         // every joint and show as a string of dots.
-        let points = [project(0)]
+        let prev = project(0)
+        let points = [prev]
         let shade = -1
         const flush = () => {
-          if (points.length < 2) return
-          ctx.strokeStyle = ramp[shade]
+          const [first, ...rest] = points
+          const style = ramp[shade]
+          if (!first || !rest.length || !style) return
+          ctx.strokeStyle = style
           ctx.beginPath()
-          ctx.moveTo(points[0][0], points[0][1])
-          for (let i = 1; i < points.length; i++)
-            ctx.lineTo(points[i][0], points[i][1])
+          ctx.moveTo(first[0], first[1])
+          for (const [x, y] of rest) ctx.lineTo(x, y)
           ctx.stroke()
         }
         for (let i = 1; i <= SEGMENTS; i++) {
           const next = project((i / SEGMENTS) * Math.PI * 2)
-          const prev = points[points.length - 1]
           const depth = (prev[2] + next[2]) / 2
           const level = Math.round(
             (far + (1 - far) * (0.5 + 0.5 * depth)) * (SHADES - 1),
@@ -141,6 +144,7 @@ export default function Orbits(props: OrbitsProps) {
             shade = level
           }
           points.push(next)
+          prev = next
         }
         flush()
 

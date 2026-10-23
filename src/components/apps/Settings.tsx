@@ -142,14 +142,11 @@ const STREAKS_PREVIEW = streaks(88)
  *  the tile's --desk, --warp and --glint can be read. */
 function OrbitsPreview() {
   const ref = useRef<HTMLSpanElement>(null)
-  const [colors, setColors] = useState<string[] | null>(null)
+  const [colors, setColors] = useState<[string, string, string] | null>(null)
   useEffect(() => {
     const style = getComputedStyle(ref.current!)
-    setColors(
-      ['--desk', '--warp', '--glint'].map((v) =>
-        style.getPropertyValue(v).trim(),
-      ),
-    )
+    const token = (name: string) => style.getPropertyValue(name).trim()
+    setColors([token('--desk'), token('--warp'), token('--glint')])
   }, [])
   return (
     <span ref={ref} className="absolute inset-0">

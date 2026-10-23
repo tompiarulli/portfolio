@@ -72,7 +72,8 @@ export default function Streaks({
         speed: random(minSpeed, maxSpeed) * width * scale,
         length,
         size: Math.max(1, Math.round(thickness * depth)),
-        color: colors[Math.floor(Math.random() * colors.length)],
+        color:
+          colors[Math.floor(Math.random() * colors.length)] ?? 'transparent',
       }
     }
 
@@ -117,11 +118,10 @@ export default function Streaks({
       const dt = Math.min(now - last, 100) / 1000
       last = now
       if (document.hidden) return
-      for (let i = 0; i < streaks.length; i++) {
-        const s = streaks[i]
+      streaks.forEach((s, i) => {
         s.x += s.speed * dt
         if (s.x - s.length > width) streaks[i] = spawn(s.depth)
-      }
+      })
       draw()
     }
 
