@@ -26,7 +26,7 @@ export function SystemInfo() {
                   href={c.url}
                   target="_blank"
                   rel="noopener"
-                  className="underline"
+                  className="underline pointer-coarse:inline-flex pointer-coarse:min-h-[24px] pointer-coarse:items-center"
                 >
                   {c.name}
                 </a>

@@ -289,11 +289,11 @@ function ThemePreview({
           />
         ))
       ) : backdrop === 'rain' ? (
-        <span className="absolute inset-0 flex items-center justify-center font-mono text-[11px] leading-[11px] tracking-[1px] whitespace-pre text-(--warp) [text-shadow:0_0_6px_var(--warp)]">
+        <span className="absolute inset-0 flex items-center justify-center font-mono text-[12px] leading-[12px] tracking-[1px] whitespace-pre text-(--warp) [text-shadow:0_0_6px_var(--warp)]">
           {PREVIEWS.rain}
         </span>
       ) : (
-        <span className="absolute inset-0 font-mono text-[10px] leading-[10px] tracking-[1px] whitespace-pre text-(--warp)">
+        <span className="absolute inset-0 font-mono text-[12px] leading-[12px] tracking-[1px] whitespace-pre text-(--warp)">
           {PREVIEWS[backdrop]}
         </span>
       )}

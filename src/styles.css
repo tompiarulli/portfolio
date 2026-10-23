@@ -371,7 +371,7 @@
   :root,
   [data-theme] {
     --title-height: 34px;
-    --box-size: 22px;
+    --box-size: 24px;
     --glyph-size: 12px;
   }
 }
