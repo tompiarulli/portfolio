@@ -33,3 +33,13 @@ Object.defineProperty(globalThis, 'ResizeObserver', {
   writable: true,
   value: ResizeObserverMock,
 })
+
+// Nor these. Windows fly into the dock with the Web Animations API, the
+// terminal scrolls its prompt into view and the router restores scroll on
+// navigation; an animation that ends at once and scrolls that do nothing
+// are enough.
+window.scrollTo = () => {}
+Element.prototype.getAnimations ??= () => []
+Element.prototype.animate ??= () =>
+  ({ finished: Promise.resolve(), cancel: () => {} }) as unknown as Animation
+Element.prototype.scrollIntoView ??= () => {}
