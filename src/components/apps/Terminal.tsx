@@ -15,7 +15,7 @@ const banner = (): Line[] => BANNER.map((text) => ({ text }))
 
 /** A small shell full of easter eggs. Commands live in lib/terminal. */
 export function Terminal() {
-  const { focus, close } = useWindows()
+  const { raise, close } = useWindows()
   const [lines, setLines] = useState<Line[]>(banner)
   const [input, setInput] = useState('')
   const [history, setHistory] = useState<string[]>([])
@@ -45,7 +45,7 @@ export function Terminal() {
       ...out.map((text) => ({ text })),
     ])
     if (effect?.type === 'exit') close('terminal')
-    if (effect?.type === 'open') focus(effect.id)
+    if (effect?.type === 'open') raise(effect.id)
     if (effect?.type === 'theme') applyTheme(effect.id)
   }
 

@@ -147,9 +147,6 @@ export default defineConfig({
           autoSubfolderIndex: true,
         },
         pages: [
-          // System sits in a closed menu, so no prerendered page links to it
-          // and the crawl alone never finds it.
-          { path: '/system' },
           // The page for unknown URLs (see src/routes/__root.tsx).
           {
             path: '/404',

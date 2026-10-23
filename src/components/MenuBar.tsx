@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent, RefObject } from 'react'
 
@@ -119,9 +118,8 @@ function SystemMenu({
           onKeyDown={onMenuKeyDown}
           className="absolute top-full left-0 min-w-44 border border-(--ink) bg-(--surface) py-1 font-mono tracking-tight shadow-(--window-shadow)"
         >
-          <Link
-            to="/system"
-            preload="intent"
+          <button
+            type="button"
             role="menuitem"
             tabIndex={-1}
             onClick={() => {
@@ -131,7 +129,7 @@ function SystemMenu({
             className={ITEM}
           >
             System Info
-          </Link>
+          </button>
           {actions.map((a) => (
             <button
               key={a.label}

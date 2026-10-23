@@ -101,7 +101,7 @@ export function Window({
   const hintId = useId()
   const {
     stack,
-    focus,
+    raise,
     close: closeWindow,
     minimized,
     focusRequest,
@@ -194,7 +194,7 @@ export function Window({
     if (!el) return
     // The close box closes a window behind without bringing it forward.
     const onPointerDown = (e: globalThis.PointerEvent) => {
-      if (!(e.target as Element).closest('[data-close]')) focus(id)
+      if (!(e.target as Element).closest('[data-close]')) raise(id)
     }
     const onKeyDown = (e: globalThis.KeyboardEvent) => {
       if (e.key !== 'Escape' || e.defaultPrevented) return
@@ -216,7 +216,7 @@ export function Window({
       el.removeEventListener('focusin', onFocusIn)
       el.removeEventListener('focusout', onFocusOut)
     }
-  }, [focus, closeWindow, setPeek, top, id])
+  }, [raise, closeWindow, setPeek, top, id])
 
   return (
     // A labelled region rather than a dialog: several are open at once and

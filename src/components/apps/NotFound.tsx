@@ -4,8 +4,8 @@ import { useSyncExternalStore } from 'react'
 import { Window } from '#/components/Window'
 import { useWindows } from '#/components/WindowManager'
 
-// The path never changes while the window is open: the URL leaving it
-// closes the window.
+// The path never changes while the window is open: closing it is what moves
+// the URL home.
 const noChange = () => () => {}
 
 /** Opens for any URL without a window of its own. */

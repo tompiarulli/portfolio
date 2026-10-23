@@ -9,22 +9,18 @@ import { render } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
 
 import { Desktop } from '#/components/Desktop'
-import { pathFor } from '#/lib/windows'
 import type { WindowId } from '#/lib/windows'
 
-/** The site's routes as the router sees them: one per window, each only a
- *  URL, with the desktop at the root. Unknown URLs match the root alone. */
+/** The site's routes as the router sees them: the desktop at the root and
+ *  the home page its one child. Unknown URLs match the root alone. */
 function testRouter(url: string) {
   const root = createRootRoute({
     component: Desktop,
     notFoundComponent: () => null,
   })
-  const paths = ['about', 'contact', 'terminal', 'settings', 'system'] as const
-  const routes = paths.map((id) =>
-    createRoute({ getParentRoute: () => root, path: pathFor(id) }),
-  )
+  const home = createRoute({ getParentRoute: () => root, path: '/' })
   return createRouter({
-    routeTree: root.addChildren(routes),
+    routeTree: root.addChildren([home]),
     history: createMemoryHistory({ initialEntries: [url] }),
   })
 }

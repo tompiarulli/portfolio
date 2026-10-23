@@ -8,7 +8,7 @@ import { Desktop } from '#/components/Desktop'
 import { ogImage, pageHead } from '#/lib/seo'
 import { site } from '#/lib/site'
 import { themeBootScript } from '#/lib/theme'
-import { pathFor } from '#/lib/windows'
+import { NOT_FOUND_PATH } from '#/lib/windows'
 
 import appCss from '#/styles.css?url'
 
@@ -75,7 +75,7 @@ function useThemeColor() {
 // all route would do the same, but its match is keyed by the URL, so
 // 404.html (rendered at /404) wouldn't hydrate cleanly at any other URL.
 const notFoundHead = pageHead({
-  path: pathFor('notfound'),
+  path: NOT_FOUND_PATH,
   title: `File Not Found - ${site.title}`,
   description: site.descriptions.notFound,
   noindex: true,
@@ -86,10 +86,7 @@ const notFoundHead = pageHead({
 // unknown URL (see vite.config.ts).
 const keepPrerenderedNotFound = createIsomorphicFn().server(
   (pathname: string) => {
-    if (
-      process.env.TSS_PRERENDERING === 'true' &&
-      pathname === pathFor('notfound')
-    )
+    if (process.env.TSS_PRERENDERING === 'true' && pathname === NOT_FOUND_PATH)
       setResponseStatus(200)
   },
 )
@@ -100,8 +97,8 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      // Every page sets its own title and description; the root alone is a
-      // URL nothing else matched.
+      // The home page sets its own title and description; the root alone is
+      // a URL nothing else matched.
       ...(matches.length === 1 ? notFoundHead.meta : [{ title: site.title }]),
       { name: 'theme-color', content: DEFAULT_THEME_COLOR },
       { property: 'og:site_name', content: site.name },

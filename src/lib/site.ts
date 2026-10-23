@@ -3,28 +3,16 @@ export const site = {
   name: 'Tom Piarulli',
   title: 'Tom Piarulli ☼',
   tagline: 'Software engineer',
-  /** What search results and link previews say about each page. */
+  /** What search results and link previews say about the site's two pages. */
   descriptions: {
     home: 'Portfolio of Tom Piarulli, a software engineer with 15+ years across engineering, product and design, most recently CTO at Nerd Street. Built as a small late-90s desktop.',
-    contact:
-      'How to reach Tom Piarulli, software engineer: email, LinkedIn and GitHub.',
-    terminal:
-      "A command line on Tom Piarulli's desktop. Type help for a list of commands.",
-    settings:
-      "Pick a theme for Tom Piarulli's desktop. Each one changes the colours, font and backdrop.",
-    system:
-      "Version and credits for Tom Piarulli's site: the fonts, icons, photo and tools behind it.",
     notFound: "This page isn't on Tom Piarulli's desktop.",
   },
   /** Each page's main heading, for screen readers and outlines; on screen,
-   *  the window's own title says it. Keyed by window. */
+   *  the windows' own titles say it. */
   headings: {
-    about: 'Tom Piarulli, software engineer',
-    contact: 'Contact Tom Piarulli',
-    terminal: 'Terminal',
-    settings: 'Settings',
-    system: 'System Info',
-    notfound: 'File Not Found',
+    home: 'Tom Piarulli, software engineer',
+    notFound: 'File Not Found',
   },
   letter: [
     'Welcome to my small corner of the internet.',

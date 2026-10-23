@@ -35,9 +35,8 @@ test('tapping the dock opens a window', async ({ page }) => {
   await page.waitForLoadState('networkidle')
   await page
     .getByRole('navigation', { name: 'Applications' })
-    .getByRole('link', { name: /Terminal/ })
+    .getByRole('button', { name: /^Terminal/ })
     .tap()
-  await expect(page).toHaveURL('/terminal')
   const terminal = page.getByRole('region', { name: 'Terminal' })
   await expect(terminal).toBeVisible()
   expect((await windowOrder(page))[0]).toBe('terminal')

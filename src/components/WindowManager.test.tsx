@@ -13,14 +13,8 @@ describe('window manager', () => {
     it('opens About in front of Contact at /', async () => {
       await renderDesktop('/')
       expect(windowOrder()).toEqual(['about', 'contact'])
-      expect(dockLink('about').getAttribute('aria-current')).toBe('page')
+      expect(dockLink('about').getAttribute('aria-current')).toBe('true')
       expect(dockLink('contact').getAttribute('aria-current')).toBeNull()
-    })
-
-    it("opens the URL's window in front", async () => {
-      await renderDesktop('/terminal')
-      await screen.findByRole('region', { name: 'Terminal' })
-      expect(windowOrder()).toEqual(['terminal', 'about', 'contact'])
     })
 
     it('opens File Not Found for an unknown URL', async () => {
@@ -33,7 +27,7 @@ describe('window manager', () => {
     })
 
     it('leaves focus where the page put it', async () => {
-      await renderDesktop('/contact')
+      await renderDesktop('/')
       expect(document.activeElement).toBe(document.body)
     })
 
@@ -45,32 +39,31 @@ describe('window manager', () => {
   })
 
   describe('opening and raising', () => {
-    it('opens a closed window from the dock, focused, with its URL', async () => {
+    it('opens a closed window from the dock, focused', async () => {
       const { user, pathname } = await renderDesktop('/')
       await user.click(dockLink('terminal'))
       const input = await screen.findByRole('textbox', {
         name: 'Terminal input',
       })
       expect(windowOrder()).toEqual(['terminal', 'about', 'contact'])
-      expect(pathname()).toBe('/terminal')
+      expect(pathname()).toBe('/')
       // The prompt is marked to take focus over the window itself.
       await waitFor(() => expect(document.activeElement).toBe(input))
     })
 
-    it('raises a window behind when it is pressed, and points the URL at it', async () => {
-      const { pathname } = await renderDesktop('/')
+    it('raises a window behind when it is pressed', async () => {
+      await renderDesktop('/')
       fireEvent.pointerDown(windowEl('contact'))
-      await waitFor(() => expect(pathname()).toBe('/contact'))
-      expect(windowOrder()).toEqual(['contact', 'about'])
+      await waitFor(() => expect(windowOrder()).toEqual(['contact', 'about']))
       expect(document.activeElement).toBe(windowEl('contact'))
-      expect(dockLink('contact').getAttribute('aria-current')).toBe('page')
+      expect(dockLink('contact').getAttribute('aria-current')).toBe('true')
     })
 
     it('raises a window behind from the dock', async () => {
-      const { user, pathname } = await renderDesktop('/')
+      const { user } = await renderDesktop('/')
       await user.click(dockLink('contact'))
       await waitFor(() => expect(windowOrder()).toEqual(['contact', 'about']))
-      expect(pathname()).toBe('/contact')
+      expect(document.activeElement).toBe(windowEl('contact'))
     })
 
     it('keeps one window per app', async () => {
@@ -83,28 +76,25 @@ describe('window manager', () => {
   })
 
   describe('closing', () => {
-    it('closes the front window and hands focus and the URL to the next', async () => {
-      const { user, pathname } = await renderDesktop('/')
+    it('closes the front window and hands focus to the next', async () => {
+      const { user } = await renderDesktop('/')
       await user.click(closeBox('About'))
       expect(windowOrder()).toEqual(['contact'])
-      await waitFor(() => expect(pathname()).toBe('/contact'))
-      expect(document.activeElement).toBe(windowEl('contact'))
+      await waitFor(() =>
+        expect(document.activeElement).toBe(windowEl('contact')),
+      )
     })
 
-    it('closes a window behind without raising it or moving the URL', async () => {
-      const { user, pathname } = await renderDesktop('/')
+    it('closes a window behind without raising it', async () => {
+      const { user } = await renderDesktop('/')
       await user.click(closeBox('Contact'))
       expect(windowOrder()).toEqual(['about'])
-      expect(pathname()).toBe('/')
     })
 
-    it('goes home with nothing open after the last window closes', async () => {
-      const { user, pathname } = await renderDesktop('/contact')
+    it('leaves the desktop empty after the last window closes', async () => {
+      const { user } = await renderDesktop('/')
       await user.click(closeBox('Contact'))
       await user.click(closeBox('About'))
-      expect(windowOrder()).toEqual([])
-      // Nothing reopens About, though the URL is now its own.
-      await waitFor(() => expect(pathname()).toBe('/'))
       expect(windowOrder()).toEqual([])
     })
 
@@ -118,17 +108,17 @@ describe('window manager', () => {
     })
 
     it('closes the window holding focus on Escape', async () => {
-      const { user, pathname } = await renderDesktop('/')
+      const { user } = await renderDesktop('/')
       const link = windowEl('contact').querySelector('a')
       act(() => link?.focus())
       await user.keyboard('{Escape}')
       expect(windowOrder()).toEqual(['about'])
-      expect(pathname()).toBe('/')
       expect(document.activeElement).toBe(windowEl('about'))
     })
 
     it('closes only the innermost window on Escape', async () => {
-      const { user } = await renderDesktop('/terminal')
+      const { user } = await renderDesktop('/')
+      await user.click(dockLink('terminal'))
       const input = await screen.findByRole('textbox', {
         name: 'Terminal input',
       })
@@ -150,17 +140,20 @@ describe('window manager', () => {
       expect(windowOrder()).toEqual(['about', 'contact'])
     })
 
-    it('closes File Not Found with OK and goes to the next window', async () => {
-      const { user, pathname } = await renderDesktop('/nope')
+    it('closes File Not Found with OK and moves the URL home', async () => {
+      const { user, router, pathname } = await renderDesktop('/nope')
+      const length = router.history.length
       await user.click(screen.getByRole('link', { name: 'OK' }))
       expect(windowOrder()).toEqual(['about', 'contact'])
       await waitFor(() => expect(pathname()).toBe('/'))
+      // Replaced, so Back doesn't return to the bad URL.
+      expect(router.history.length).toBe(length)
     })
   })
 
   describe('minimizing', () => {
     it("hides the front window into its dock icon when the icon's pressed", async () => {
-      const { user, pathname } = await renderDesktop('/')
+      const { user } = await renderDesktop('/')
       await user.click(dockLink('about'))
       // Still mounted, keeping its place, but out of sight and at the back.
       await waitFor(() =>
@@ -168,63 +161,56 @@ describe('window manager', () => {
       )
       expect(windowOrder()).toEqual(['contact', 'about'])
       expect(dockLink('about').textContent).toContain('minimized')
-      expect(dockLink('contact').getAttribute('aria-current')).toBe('page')
-      await waitFor(() => expect(pathname()).toBe('/contact'))
-      expect(document.activeElement).toBe(windowEl('contact'))
+      expect(dockLink('contact').getAttribute('aria-current')).toBe('true')
+      // Focus stays on the icon that was pressed, so the dock can be worked
+      // from the keyboard without being thrown into a window.
+      expect(document.activeElement).toBe(dockLink('about'))
     })
 
     it('brings a minimized window back from the dock', async () => {
-      const { user, pathname } = await renderDesktop('/')
+      const { user } = await renderDesktop('/')
       await user.click(dockLink('about'))
-      await waitFor(() => expect(pathname()).toBe('/contact'))
+      await waitFor(() =>
+        expect(windowEl('about').style.visibility).toBe('hidden'),
+      )
       await user.click(dockLink('about'))
-      await waitFor(() => expect(pathname()).toBe('/'))
-      expect(windowOrder()).toEqual(['about', 'contact'])
+      await waitFor(() => expect(windowOrder()).toEqual(['about', 'contact']))
       expect(windowEl('about').style.visibility).toBe('')
       expect(dockLink('about').textContent).not.toContain('minimized')
     })
 
-    it('stays home when the last visible window is minimized', async () => {
-      const { user, pathname } = await renderDesktop('/')
+    it('keeps the last visible window mounted when it is minimized', async () => {
+      const { user } = await renderDesktop('/')
       await user.click(closeBox('Contact'))
       await user.click(dockLink('about'))
       await waitFor(() =>
         expect(windowEl('about').style.visibility).toBe('hidden'),
       )
-      expect(pathname()).toBe('/')
       expect(windowOrder()).toEqual(['about'])
     })
   })
 
   describe('URL', () => {
-    it('opens and focuses the window a new URL points at', async () => {
-      const { router } = await renderDesktop('/')
-      await act(() => router.navigate({ to: '/system' }))
+    it('stays on / and adds no history as windows open, close and minimize', async () => {
+      const { user, router, pathname } = await renderDesktop('/')
+      const length = router.history.length
+      await user.click(dockLink('terminal'))
+      await screen.findByRole('region', { name: 'Terminal' })
+      fireEvent.pointerDown(windowEl('contact'))
+      await user.click(dockLink('contact'))
+      await user.click(closeBox('About'))
+      expect(pathname()).toBe('/')
+      expect(router.history.length).toBe(length)
+    })
+
+    it('opens System Info from the menu without a URL of its own', async () => {
+      const { user, pathname } = await renderDesktop('/')
+      await user.click(screen.getByRole('button', { name: 'System menu' }))
+      await user.click(screen.getByRole('menuitem', { name: 'System Info' }))
       const system = await screen.findByRole('region', { name: 'System Info' })
       expect(windowOrder()[0]).toBe('system')
       await waitFor(() => expect(document.activeElement).toBe(system))
-    })
-
-    it('follows back and forward', async () => {
-      const { user, router, pathname } = await renderDesktop('/')
-      await user.click(dockLink('terminal'))
-      await screen.findByRole('region', { name: 'Terminal' })
-      act(() => router.history.back())
-      await waitFor(() => expect(pathname()).toBe('/'))
-      await waitFor(() => expect(windowOrder()[0]).toBe('about'))
-      await waitFor(() =>
-        expect(document.activeElement).toBe(windowEl('about')),
-      )
-      act(() => router.history.forward())
-      await waitFor(() => expect(windowOrder()[0]).toBe('terminal'))
-    })
-
-    it('replaces the history entry when focus moves between windows', async () => {
-      const { router, pathname } = await renderDesktop('/')
-      const length = router.history.length
-      fireEvent.pointerDown(windowEl('contact'))
-      await waitFor(() => expect(pathname()).toBe('/contact'))
-      expect(router.history.length).toBe(length)
+      expect(pathname()).toBe('/')
     })
   })
 

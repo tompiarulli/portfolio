@@ -6,7 +6,7 @@ import { Dock } from '#/components/Dock'
 import { MenuBar } from '#/components/MenuBar'
 import { WindowManager } from '#/components/WindowManager'
 import { site } from '#/lib/site'
-import { idForPath } from '#/lib/windows'
+import { isHome } from '#/lib/windows'
 
 export function Desktop() {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
@@ -20,7 +20,9 @@ export function Desktop() {
         data-shutdown="windows"
         className="pointer-events-none absolute inset-x-0 top-0 bottom-[88px] z-60"
       >
-        <h1 className="sr-only">{site.headings[idForPath(pathname)]}</h1>
+        <h1 className="sr-only">
+          {isHome(pathname) ? site.headings.home : site.headings.notFound}
+        </h1>
         <OpenWindows />
       </main>
       <Dock />

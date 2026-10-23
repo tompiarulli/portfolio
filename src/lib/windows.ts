@@ -7,34 +7,16 @@ export type WindowId =
   | 'system'
   | 'notfound'
 
-const PATHS = {
-  about: '/',
-  contact: '/contact',
-  terminal: '/terminal',
-  settings: '/settings',
-  system: '/system',
-  // Any URL without a window of its own opens this one; /404 is where it
-  // prerenders, as 404.html.
-  notfound: '/404',
-} as const satisfies Record<WindowId, string>
+/** Where the page for unknown URLs prerenders, as 404.html. */
+export const NOT_FOUND_PATH = '/404'
 
-export function pathFor(id: WindowId): string {
-  return PATHS[id]
-}
+/** Whether a URL is the desktop's one page, ignoring trailing slashes. Any
+ *  other URL is a 404. */
+export const isHome = (pathname: string) => pathname.replace(/\/+$/, '') === ''
 
-/** The window a URL opens. Unknown URLs open File Not Found. */
-export function idForPath(pathname: string): WindowId {
-  const path = pathname.replace(/\/+$/, '') || '/'
-  return (
-    (Object.keys(PATHS) as WindowId[]).find((k) => PATHS[k] === path) ??
-    'notfound'
-  )
-}
-
-/** Windows open on first paint for a URL, back to front. About and Contact
- *  are always open; the URL's window comes to the front. */
+/** Windows open on first paint, back to front: About in front of Contact,
+ *  with File Not Found on top for any URL but the home page. */
 export function initialStack(pathname: string): WindowId[] {
-  const id = idForPath(pathname)
   const base: WindowId[] = ['contact', 'about']
-  return [...base.filter((w) => w !== id), id]
+  return isHome(pathname) ? base : [...base, 'notfound']
 }

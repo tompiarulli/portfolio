@@ -1,13 +1,11 @@
-import { Link } from '@tanstack/react-router'
-
 import { DockIcon } from '#/components/DockIcon'
 import { useWindows } from '#/components/WindowManager'
 
 const APPS = [
-  { id: 'about', to: '/', label: 'About' },
-  { id: 'contact', to: '/contact', label: 'Contact' },
-  { id: 'terminal', to: '/terminal', label: 'Terminal' },
-  { id: 'settings', to: '/settings', label: 'Settings' },
+  { id: 'about', label: 'About' },
+  { id: 'contact', label: 'Contact' },
+  { id: 'terminal', label: 'Terminal' },
+  { id: 'settings', label: 'Settings' },
 ] as const
 
 export function Dock() {
@@ -23,24 +21,16 @@ export function Dock() {
         const hidden = minimized.includes(app.id)
         const front = stack.at(-1) === app.id && !hidden
         return (
-          <Link
-            key={app.to}
-            to={app.to}
-            preload="intent"
+          <button
+            key={app.id}
+            type="button"
             data-dock-link={app.id}
-            aria-current={front ? 'page' : undefined}
-            onClick={(e) => {
+            aria-current={front ? 'true' : undefined}
+            onClick={() =>
               // Clicking the focused window's icon minimizes it into the dock.
-              if (front) {
-                e.preventDefault()
-                minimize(app.id)
-                return
-              }
-              // Also raise here: the URL may already point at a closed or
-              // minimized window.
-              raise(app.id)
-            }}
-            className="group relative flex w-[calc(var(--icon-size)+51px)] min-w-0 flex-col items-center gap-[6px] border-r border-(--dock-divider) px-2 pt-[12px] pb-[7px] -outline-offset-4 outline-current outline-dotted not-focus-visible:outline-none last:border-r-0 hover:bg-(--tertiary) hover:text-(--on-tertiary) focus-visible:bg-(--tertiary) focus-visible:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
+              front ? minimize(app.id) : raise(app.id)
+            }
+            className="group relative flex w-[calc(var(--icon-size)+51px)] min-w-0 cursor-pointer flex-col items-center gap-[6px] border-r border-(--dock-divider) px-2 pt-[12px] pb-[7px] -outline-offset-4 outline-current outline-dotted not-focus-visible:outline-none last:border-r-0 hover:bg-(--tertiary) hover:text-(--on-tertiary) focus-visible:bg-(--tertiary) focus-visible:text-(--on-tertiary) active:bg-(--accent) active:text-(--on-accent)"
           >
             <DockIcon id={app.id} />
             <span className="font-mono text-(length:--dock-label-size) [font-weight:var(--label-weight)] tracking-tight [text-transform:var(--label-case)]">
@@ -61,7 +51,7 @@ export function Dock() {
                     : 'scale-x-0'
               }`}
             />
-          </Link>
+          </button>
         )
       })}
     </nav>

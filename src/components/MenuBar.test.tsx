@@ -116,13 +116,13 @@ describe('system menu', () => {
   })
 
   it('opens System Info from the menu', async () => {
-    const { user, pathname } = await renderDesktop('/')
+    const { user } = await renderDesktop('/')
     await user.click(trigger())
     await user.click(item('System Info'))
     expect(menu()).toBeNull()
-    await screen.findByRole('region', { name: 'System Info' })
-    await waitFor(() => expect(pathname()).toBe('/system'))
+    const system = await screen.findByRole('region', { name: 'System Info' })
     expect(windowOrder()[0]).toBe('system')
+    await waitFor(() => expect(document.activeElement).toBe(system))
   })
 
   it('does not close the window behind it on Escape', async () => {

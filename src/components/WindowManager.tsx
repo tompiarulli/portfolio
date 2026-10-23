@@ -3,23 +3,20 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react'
 import type { ReactNode } from 'react'
 
-import { idForPath, initialStack, pathFor } from '#/lib/windows'
+import { initialStack } from '#/lib/windows'
 import type { WindowId } from '#/lib/windows'
 
 type Windows = {
   /** Open windows, back to front. The last one is focused. */
   stack: WindowId[]
-  /** Open a window, or bring it to the front if already open. */
+  /** Open a window, or bring it to the front if already open, and move
+   *  keyboard focus into it. */
   raise: (id: WindowId) => void
-  /** Raise a window and point the URL at it. */
-  focus: (id: WindowId) => void
   close: (id: WindowId) => void
   /** Open windows hidden in the dock. They stay mounted, keeping their place. */
   minimized: WindowId[]
@@ -81,8 +78,9 @@ const focusDock = (id: WindowId) =>
   )
 
 /**
- * Keeps a stack of open windows. The URL tracks the focused window, so every
- * route still prerenders with its window open and back/forward work.
+ * Keeps a stack of open windows. The desktop has one URL: windows are state,
+ * not routes, so opening one never touches history. Only an unknown URL
+ * matters, opening File Not Found on load.
  */
 export function WindowManager({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
@@ -101,27 +99,6 @@ export function WindowManager({ children }: { children: ReactNode }) {
   const unminimize = useCallback((id: WindowId) => {
     setMinimized((m) => (m.includes(id) ? m.filter((w) => w !== id) : m))
   }, [])
-  // Set when closing or minimizing the last window sends the URL to /, so
-  // About isn't reopened.
-  const skipSync = useRef(false)
-  // The page's own URL leaves focus alone, at the top of the document;
-  // later ones (back, forward) move it into their window.
-  const loadedPath = useRef<string | null>(pathname)
-
-  useEffect(() => {
-    if (skipSync.current) {
-      skipSync.current = false
-      return
-    }
-    const id = idForPath(pathname)
-    keepScroll()
-    setStack((s) => toFront(s, id))
-    unminimize(id)
-    if (pathname !== loadedPath.current) {
-      loadedPath.current = null
-      requestFocus(id)
-    }
-  }, [pathname, unminimize, requestFocus])
 
   const raise = useCallback(
     (id: WindowId) => {
@@ -131,18 +108,6 @@ export function WindowManager({ children }: { children: ReactNode }) {
       requestFocus(id)
     },
     [unminimize, requestFocus],
-  )
-
-  const focus = useCallback(
-    (id: WindowId) => {
-      keepScroll()
-      setStack((s) => toFront(s, id))
-      unminimize(id)
-      requestFocus(id)
-      if (idForPath(pathname) !== id)
-        navigate({ href: pathFor(id), replace: true })
-    },
-    [pathname, navigate, unminimize, requestFocus],
   )
 
   const close = useCallback(
@@ -157,15 +122,11 @@ export function WindowManager({ children }: { children: ReactNode }) {
         if (top) requestFocus(top)
         else focusDock(id)
       }
-      if (idForPath(pathname) !== id) return
-      if (top) {
-        navigate({ href: pathFor(top), replace: true })
-      } else if (id !== 'about') {
-        skipSync.current = true
-        navigate({ href: '/', replace: true })
-      }
+      // Dismissing File Not Found leaves the bad URL for the home page, so
+      // a reload doesn't bring it back.
+      if (id === 'notfound') navigate({ to: '/', replace: true })
     },
-    [stack, minimized, pathname, navigate, unminimize, requestFocus],
+    [stack, minimized, navigate, unminimize, requestFocus],
   )
 
   const minimize = useCallback(
@@ -181,20 +142,14 @@ export function WindowManager({ children }: { children: ReactNode }) {
         if (top) requestFocus(top)
         else focusDock(id)
       }
-      if (idForPath(pathname) !== id) return
-      const href = top ? pathFor(top) : '/'
-      if (href === pathname) return
-      skipSync.current = !top
-      navigate({ href, replace: true })
     },
-    [stack, minimized, pathname, navigate, requestFocus],
+    [stack, minimized, requestFocus],
   )
 
   const value = useMemo(
     () => ({
       stack,
       raise,
-      focus,
       close,
       minimized,
       minimize,
@@ -202,7 +157,7 @@ export function WindowManager({ children }: { children: ReactNode }) {
       peek,
       setPeek,
     }),
-    [stack, raise, focus, close, minimized, minimize, focusRequest, peek],
+    [stack, raise, close, minimized, minimize, focusRequest, peek],
   )
 
   return (
