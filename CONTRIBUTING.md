@@ -30,18 +30,18 @@ pnpm format:check  # oxfmt --check
 
 Run `pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm build` before committing; CI runs the same five checks on every push to `main` and every pull request. The build runs the prerender crawl, which catches broken routes and loaders. Tests sit next to the code they cover as `*.test.ts` or `*.test.tsx`; component tests render the whole desktop through `src/test/desktop.tsx`.
 
-The end-to-end tests and Lighthouse need the Vercel build: `pnpm build:vercel`, then `pnpm test:e2e` or `pnpm lighthouse`. Both start `scripts/serve-prod.mjs`, which follows the routes in `.vercel/output/config.json`, so pages get production's headers, statuses and compression, unknown URLs included. The Playwright tests live in `e2e/` and fail on any console error or CSP violation; run `pnpm exec playwright install --only-shell chromium` once first. Lighthouse runs the mobile preset three times on every page and the 404 page, against the budgets in `lighthouserc.json` (performance at least 0.95, accessibility, best practices and SEO all 1, LCP under 2.5 s, CLS under 0.1, TBT under 200 ms). Two pages are checked audit by audit instead: the 404 skips SEO's indexing check, since it is `noindex` on purpose (the end-to-end tests check that it is), and Terminal skips the touch target size check, since it opens over About and Contact and partly covers their close boxes, as overlapping windows do. It uses your installed Chrome and writes its reports to `.lighthouseci/`. CI runs both as their own jobs; the Lighthouse reports are uploaded as an artifact.
+The end-to-end tests and Lighthouse need the Vercel build: `pnpm build:vercel`, then `pnpm test:e2e` or `pnpm lighthouse`. Both start `scripts/serve-prod.mjs`, which follows the routes in `.vercel/output/config.json`, so pages get production's headers, statuses and compression, unknown URLs included. The Playwright tests live in `e2e/` and fail on any console error or CSP violation; run `pnpm exec playwright install --only-shell chromium` once first. Lighthouse runs the mobile preset three times on the home page and the 404 page, against the budgets in `lighthouserc.json` (performance at least 0.95, accessibility, best practices and SEO all 1, LCP under 2.5 s, CLS under 0.1, TBT under 200 ms). The 404 is checked audit by audit for SEO instead, skipping the indexing check, since it is `noindex` on purpose (the end-to-end tests check that it is). It uses your installed Chrome and writes its reports to `.lighthouseci/`. CI runs both as their own jobs; the Lighthouse reports are uploaded as an artifact.
 
 Renovate opens dependency updates weekly. TanStack packages are pinned exactly and move together.
 
 ## Layout
 
-- `src/routes/` file-based routes. They set the URL and `head()` only; the root route renders `<Desktop>` (menu bar, dock, open windows).
+- `src/routes/` file-based routes: the home page, which sets `head()` only. The root route renders `<Desktop>` (menu bar, dock, open windows) and the head for unknown URLs.
 - `src/components/` desktop chrome: `Desktop`, `MenuBar`, `Clock`, `Dock`, `DockIcon`, `Window`, `WindowManager` and `ShutDown`, plus `Backdrop`, which lazy-loads the current theme's desktop background (`CodeRain`, `Drift`, `Orbits`, `Film` or `Streaks`).
 - `src/components/apps/` window contents, one component per app, registered in `apps/index.tsx`.
-- `src/lib/windows.ts` window ids and their URLs. The URL follows the focused window, so each route prerenders with its window open.
-- `src/lib/site.ts` all copy and project data, including each page's description.
-- `src/lib/seo.ts` the head tags a route sets: title, description, canonical URL and link preview.
+- `src/lib/windows.ts` window ids and the windows open on first paint. The desktop has one URL; windows are state in `WindowManager`, and any other URL opens File Not Found.
+- `src/lib/site.ts` all copy and project data, including the descriptions and headings of the home page and the 404.
+- `src/lib/seo.ts` the head tags a page sets: title, description, canonical URL and link preview.
 - `src/lib/security-headers.ts` and `src/lib/content-security-policy.ts` the headers every response gets, applied through Nitro route rules in `vite.config.ts`.
 - `src/lib/theme.ts` the theme list (Orbital, the default, White Rabbit, Believe, Steamboat, OUTATIME and Outpost 31) and the inline script that applies the saved theme before first paint.
 - `src/lib/terminal.ts` the Terminal app's commands.

@@ -12,7 +12,7 @@ Setup, scripts, file layout, commit format, and deploy live in CONTRIBUTING.md a
 - Prerender-safe components: anything reading `Date`, `localStorage`, or `window` must render a stable placeholder on the server and fill in inside `useEffect` (see `Clock.tsx`).
 - Colors come from CSS variables only (`var(--surface)`, Tailwind `bg-(--surface)`), never hard-coded hex in components. Add new tokens to the base `:root, [data-theme]` block (White Rabbit's values; Orbital is the default theme) and override them in any theme that needs a different value. There is no light/dark mode; the theme drives everything.
 - Aesthetic rules: 1 px ink borders, zero border radius, bevels via inset box-shadow, `image-rendering: pixelated`, monospace fonts, antialiased (a theme may use a sans, as Steamboat does). Outline fonts never render with `font-smoothing: none`; it makes them jagged on macOS. No drop shadows.
-- Links between routes use `<Link>` with `preload="intent"` so hover preloads the route chunk.
+- The desktop has one URL. Windows open through `WindowManager` (`raise`), never through routes or links, and never touch history; any other URL opens File Not Found.
 - Route `head()` sets a page title as `Page - {site.title}`.
 - Imports use the `#/` alias for `src/`.
 - `src/routeTree.gen.ts` is generated; never edit by hand.
