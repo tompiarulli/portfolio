@@ -1,0 +1,130 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "node scripts/serve-prod.mjs",
+      "startServerReadyPattern": "Serving production build",
+      "url": [
+        "http://localhost:4173/",
+        "http://localhost:4173/contact",
+        "http://localhost:4173/terminal",
+        "http://localhost:4173/settings",
+        "http://localhost:4173/system",
+        "http://localhost:4173/404.html"
+      ],
+      "numberOfRuns": 3,
+      "settings": {
+        "chromeFlags": "--headless=new --no-sandbox"
+      }
+    },
+    "assert": {
+      "assertMatrix": [
+        {
+          "matchingUrlPattern": ".*",
+          "assertions": {
+            "categories:performance": ["error", { "minScore": 0.95 }],
+            "categories:best-practices": ["error", { "minScore": 1 }],
+            "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+            "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+            "total-blocking-time": ["error", { "maxNumericValue": 200 }]
+          }
+        },
+        {
+          "matchingUrlPattern": "^http://localhost:4173/(contact|settings|system|404\\.html)?$",
+          "assertions": {
+            "categories:accessibility": ["error", { "minScore": 1 }]
+          }
+        },
+        {
+          "matchingUrlPattern": "/terminal$",
+          "assertions": {
+            "accesskeys": ["error", { "minScore": 1 }],
+            "aria-allowed-attr": ["error", { "minScore": 1 }],
+            "aria-allowed-role": ["error", { "minScore": 1 }],
+            "aria-command-name": ["error", { "minScore": 1 }],
+            "aria-conditional-attr": ["error", { "minScore": 1 }],
+            "aria-deprecated-role": ["error", { "minScore": 1 }],
+            "aria-dialog-name": ["error", { "minScore": 1 }],
+            "aria-hidden-body": ["error", { "minScore": 1 }],
+            "aria-hidden-focus": ["error", { "minScore": 1 }],
+            "aria-input-field-name": ["error", { "minScore": 1 }],
+            "aria-meter-name": ["error", { "minScore": 1 }],
+            "aria-progressbar-name": ["error", { "minScore": 1 }],
+            "aria-prohibited-attr": ["error", { "minScore": 1 }],
+            "aria-required-attr": ["error", { "minScore": 1 }],
+            "aria-required-children": ["error", { "minScore": 1 }],
+            "aria-required-parent": ["error", { "minScore": 1 }],
+            "aria-roles": ["error", { "minScore": 1 }],
+            "aria-text": ["error", { "minScore": 1 }],
+            "aria-toggle-field-name": ["error", { "minScore": 1 }],
+            "aria-tooltip-name": ["error", { "minScore": 1 }],
+            "aria-treeitem-name": ["error", { "minScore": 1 }],
+            "aria-valid-attr": ["error", { "minScore": 1 }],
+            "aria-valid-attr-value": ["error", { "minScore": 1 }],
+            "button-name": ["error", { "minScore": 1 }],
+            "bypass": ["error", { "minScore": 1 }],
+            "color-contrast": ["error", { "minScore": 1 }],
+            "definition-list": ["error", { "minScore": 1 }],
+            "dlitem": ["error", { "minScore": 1 }],
+            "document-title": ["error", { "minScore": 1 }],
+            "duplicate-id-aria": ["error", { "minScore": 1 }],
+            "empty-heading": ["error", { "minScore": 1 }],
+            "form-field-multiple-labels": ["error", { "minScore": 1 }],
+            "frame-title": ["error", { "minScore": 1 }],
+            "heading-order": ["error", { "minScore": 1 }],
+            "html-has-lang": ["error", { "minScore": 1 }],
+            "html-lang-valid": ["error", { "minScore": 1 }],
+            "html-xml-lang-mismatch": ["error", { "minScore": 1 }],
+            "identical-links-same-purpose": ["error", { "minScore": 1 }],
+            "image-alt": ["error", { "minScore": 1 }],
+            "image-redundant-alt": ["error", { "minScore": 1 }],
+            "input-button-name": ["error", { "minScore": 1 }],
+            "input-image-alt": ["error", { "minScore": 1 }],
+            "label": ["error", { "minScore": 1 }],
+            "label-content-name-mismatch": ["error", { "minScore": 1 }],
+            "landmark-one-main": ["error", { "minScore": 1 }],
+            "link-in-text-block": ["error", { "minScore": 1 }],
+            "link-name": ["error", { "minScore": 1 }],
+            "list": ["error", { "minScore": 1 }],
+            "listitem": ["error", { "minScore": 1 }],
+            "meta-refresh": ["error", { "minScore": 1 }],
+            "meta-viewport": ["error", { "minScore": 1 }],
+            "object-alt": ["error", { "minScore": 1 }],
+            "select-name": ["error", { "minScore": 1 }],
+            "skip-link": ["error", { "minScore": 1 }],
+            "tabindex": ["error", { "minScore": 1 }],
+            "table-duplicate-name": ["error", { "minScore": 1 }],
+            "table-fake-caption": ["error", { "minScore": 1 }],
+            "td-has-header": ["error", { "minScore": 1 }],
+            "td-headers-attr": ["error", { "minScore": 1 }],
+            "th-has-data-cells": ["error", { "minScore": 1 }],
+            "valid-lang": ["error", { "minScore": 1 }],
+            "video-caption": ["error", { "minScore": 1 }]
+          }
+        },
+        {
+          "matchingUrlPattern": "^http://localhost:4173/(contact|terminal|settings|system)?$",
+          "assertions": {
+            "categories:seo": ["error", { "minScore": 1 }]
+          }
+        },
+        {
+          "matchingUrlPattern": "/404\\.html$",
+          "assertions": {
+            "document-title": ["error", { "minScore": 1 }],
+            "meta-description": ["error", { "minScore": 1 }],
+            "http-status-code": ["error", { "minScore": 1 }],
+            "link-text": ["error", { "minScore": 1 }],
+            "crawlable-anchors": ["error", { "minScore": 1 }],
+            "robots-txt": ["error", { "minScore": 1 }],
+            "hreflang": ["error", { "minScore": 1 }],
+            "canonical": ["error", { "minScore": 1 }]
+          }
+        }
+      ]
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": ".lighthouseci/reports"
+    }
+  }
+}
