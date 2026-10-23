@@ -51,9 +51,17 @@ flowchart LR
 
 Nothing runs at request time: every page is static HTML on Vercel's CDN.
 
-<!-- TODO(lighthouse): once the Lighthouse CI job lands on main, add its budgets here
-(the scores and Core Web Vitals each page must meet, and the throttling profile), and
-how to run it locally. -->
+**Budgets.** CI runs Lighthouse ([`lighthouserc.json`](lighthouserc.json)) three times against every page, including the 404, on Lighthouse's default mobile profile (emulated phone, simulated slow 4G and CPU throttling), served by [`scripts/serve-prod.mjs`](scripts/serve-prod.mjs) with production's headers. A build fails if any page misses:
+
+| Metric                             | Budget   |
+| ---------------------------------- | -------- |
+| Performance score                  | ≥ 95     |
+| Accessibility, best practices, SEO | 100      |
+| Largest Contentful Paint           | ≤ 2.5 s  |
+| Cumulative Layout Shift            | ≤ 0.1    |
+| Total Blocking Time                | ≤ 200 ms |
+
+Two pages enforce a subset. The 404 skips SEO's crawlability audit, because it is `noindex` on purpose. On `/terminal`, every accessibility audit is enforced except touch-target size, because on a narrow phone the Terminal window overlaps About and Contact. Run the same checks locally with `pnpm build:vercel && pnpm lighthouse`.
 
 **What keeps it fast:**
 
