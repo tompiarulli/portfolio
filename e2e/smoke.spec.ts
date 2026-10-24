@@ -12,7 +12,7 @@ async function openApp(page: Page, name: string) {
     .click()
 }
 
-test('/ loads with About in front of Contact', async ({ page }) => {
+test('/ loads with Contact in front of About', async ({ page }) => {
   const response = await page.goto('/')
   expect(response?.status()).toBe(200)
   expect(response?.headers()['content-security-policy']).toContain(
@@ -24,7 +24,7 @@ test('/ loads with About in front of Contact', async ({ page }) => {
   expect(html).toContain('data-window="contact"')
   await expect(page.getByRole('region', { name: 'About' })).toBeVisible()
   await page.waitForLoadState('networkidle')
-  expect(await windowOrder(page)).toEqual(['about', 'contact'])
+  expect(await windowOrder(page)).toEqual(['contact', 'about'])
   await expect(page.locator('meta[name="robots"]')).toHaveCount(0)
   await expect(
     page.getByRole('navigation', { name: 'Applications' }),
@@ -164,16 +164,16 @@ test('the dock minimizes the front window and brings it back', async ({
 }) => {
   await page.goto('/')
   await page.waitForLoadState('networkidle')
-  const about = page.getByRole('region', { name: 'About' })
+  const contact = page.getByRole('region', { name: 'Contact' })
   const icon = page
     .getByRole('navigation', { name: 'Applications' })
-    .getByRole('button', { name: /^About/ })
+    .getByRole('button', { name: /^Contact/ })
   await icon.click()
-  // It flies into the dock, then hides; Contact comes to the front.
-  await expect(about).toBeHidden()
+  // It flies into the dock, then hides; About comes to the front.
+  await expect(contact).toBeHidden()
   await expect(icon).toContainText('minimized')
-  expect((await windowOrder(page))[0]).toBe('contact')
-  await icon.click()
-  await expect(about).toBeVisible()
   expect((await windowOrder(page))[0]).toBe('about')
+  await icon.click()
+  await expect(contact).toBeVisible()
+  expect((await windowOrder(page))[0]).toBe('contact')
 })

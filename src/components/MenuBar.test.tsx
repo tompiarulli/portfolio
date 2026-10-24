@@ -128,6 +128,6 @@ describe('system menu', () => {
   it('does not close the window behind it on Escape', async () => {
     const { user } = await withTrigger()
     await user.keyboard('{ArrowDown}{Escape}')
-    expect(windowOrder()).toEqual(['about', 'contact'])
+    expect(windowOrder()).toEqual(['contact', 'about'])
   })
 })

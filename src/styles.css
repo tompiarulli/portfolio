@@ -380,16 +380,17 @@
 
 /* On a phone every window spans the screen, so where they open matters:
    each steps down one title bar from the one before, in the order they
-   usually open, so the title bars and close boxes of the windows behind
-   stay clear to tap. Dragging still moves them anywhere. */
+   usually open (About, then Contact in front of it), so the title bars
+   and close boxes of the windows behind stay clear to tap. Dragging still
+   moves them anywhere. */
 @media (max-width: 639px) {
   section[data-window] {
     --open-y: calc(40px + var(--slot) * (var(--title-height) + 8px));
   }
-  section[data-window='contact'] {
+  section[data-window='about'] {
     --slot: 0;
   }
-  section[data-window='about'] {
+  section[data-window='contact'] {
     --slot: 1;
   }
   section[data-window='notfound'] {
