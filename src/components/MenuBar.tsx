@@ -1,9 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent, RefObject } from 'react'
 
 import { Clock } from '#/components/Clock'
-import { ShutDown } from '#/components/ShutDown'
 import { useWindows } from '#/components/WindowManager'
+
+// Only needed once someone shuts down, so it is a chunk of its own, fetched
+// while the browser is idle after load so choosing it is still instant.
+const loadShutDown = () =>
+  import('#/components/ShutDown').then((m) => ({ default: m.ShutDown }))
+const ShutDown = lazy(loadShutDown)
+if (typeof window !== 'undefined') {
+  const prefetch = () =>
+    (window.requestIdleCallback ?? setTimeout)(() => void loadShutDown())
+  if (document.readyState === 'complete') prefetch()
+  else addEventListener('load', prefetch, { once: true })
+}
 
 const BAR =
   'fixed top-0 z-50 flex h-[32px] items-center border-b border-(--ink) bg-(--surface) text-(length:--menu-size)'
@@ -164,7 +175,11 @@ export function MenuBar() {
   }, [off])
   return (
     <>
-      {off && <ShutDown onBoot={boot} />}
+      {off && (
+        <Suspense>
+          <ShutDown onBoot={boot} />
+        </Suspense>
+      )}
       {/* One banner for both halves of the bar: the menu at the left, the
           clock at the right. */}
       <header>
