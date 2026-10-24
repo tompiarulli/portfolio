@@ -378,6 +378,26 @@
   }
 }
 
+/* Phones show one window at a time, like apps: the front one fills the
+   space between the menu bar and the dock, and the rest wait, as if
+   minimized, until the dock brings one forward. Windows never overlap, so
+   every close box stays clear to tap. Placement and size are inline styles
+   set for the desktop, hence !important. */
+@media (max-width: 639px) {
+  section[data-window] {
+    inset: 40px 8px 8px !important;
+    width: auto !important;
+    height: auto !important;
+    transform: none !important;
+  }
+  section[data-window][data-shaded] {
+    bottom: auto !important;
+  }
+  section[data-window]:not([data-front]) {
+    visibility: hidden;
+  }
+}
+
 * {
   box-sizing: border-box;
 }

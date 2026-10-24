@@ -110,6 +110,8 @@ export function Window({
   } = useWindows()
   const active = peek ? peek === id : stack.at(-1) === id
   const hidden = minimized.includes(id)
+  // The top window not minimized; phones show only this one (styles.css).
+  const front = stack.filter((w) => !minimized.includes(w)).at(-1) === id
   const close = () => closeWindow(id)
   // Restacking moves windows in the DOM, which resets their scroll; put
   // it back.
@@ -225,6 +227,8 @@ export function Window({
       ref={ref}
       aria-labelledby={titleId}
       data-window={id}
+      data-front={front || undefined}
+      data-shaded={shaded || undefined}
       tabIndex={-1}
       style={{
         // Centred in CSS, so the prerendered HTML is already in place. The

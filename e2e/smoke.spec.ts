@@ -158,3 +158,11 @@ test.describe('themes', () => {
     ).toContainText('Outpost 31')
   })
 })
+
+test('a tablet keeps the overlapping desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 1024 })
+  await page.goto('/')
+  await page.waitForLoadState('networkidle')
+  for (const name of ['About', 'Contact'])
+    await expect(page.getByRole('region', { name })).toBeVisible()
+})
