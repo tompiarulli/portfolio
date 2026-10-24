@@ -12,43 +12,51 @@ async function openApp(page: Page, name: string) {
     .click()
 }
 
-test('/ loads with Contact in front of About', async ({ page }) => {
-  const response = await page.goto('/')
-  expect(response?.status()).toBe(200)
-  expect(response?.headers()['content-security-policy']).toContain(
-    "default-src 'self'",
-  )
-  // In the prerendered HTML, before any script runs.
-  const html = await response?.text()
-  expect(html).toContain('data-window="about"')
-  expect(html).toContain('data-window="contact"')
-  await expect(page.getByRole('region', { name: 'About' })).toBeVisible()
-  await page.waitForLoadState('networkidle')
-  expect(await windowOrder(page)).toEqual(['contact', 'about'])
-  await expect(page.locator('meta[name="robots"]')).toHaveCount(0)
-  await expect(
-    page.getByRole('navigation', { name: 'Applications' }),
-  ).toBeVisible()
-})
+test(
+  '/ loads with Contact in front of About',
+  { tag: '@smoke' },
+  async ({ page }) => {
+    const response = await page.goto('/')
+    expect(response?.status()).toBe(200)
+    expect(response?.headers()['content-security-policy']).toContain(
+      "default-src 'self'",
+    )
+    // In the prerendered HTML, before any script runs.
+    const html = await response?.text()
+    expect(html).toContain('data-window="about"')
+    expect(html).toContain('data-window="contact"')
+    await expect(page.getByRole('region', { name: 'About' })).toBeVisible()
+    await page.waitForLoadState('networkidle')
+    expect(await windowOrder(page)).toEqual(['contact', 'about'])
+    await expect(page.locator('meta[name="robots"]')).toHaveCount(0)
+    await expect(
+      page.getByRole('navigation', { name: 'Applications' }),
+    ).toBeVisible()
+  },
+)
 
 test.describe('not found', () => {
   // Chromium logs the page's own 404 as a failed load.
   test.use({ allowErrors: [/status of 404/] })
 
-  test('an unknown URL gets File Not Found with a 404', async ({ page }) => {
-    const response = await page.goto('/no/such/page')
-    expect(response?.status()).toBe(404)
-    const window = page.getByRole('region', { name: 'File Not Found' })
-    await expect(window).toBeVisible()
-    await expect(window).toContainText('/no/such/page')
-    expect((await windowOrder(page))[0]).toBe('notfound')
-    await expect(page).toHaveTitle(/^File Not Found - /)
-    // Kept out of search results; Lighthouse's SEO check skips this.
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
-      'content',
-      'noindex',
-    )
-  })
+  test(
+    'an unknown URL gets File Not Found with a 404',
+    { tag: '@smoke' },
+    async ({ page }) => {
+      const response = await page.goto('/no/such/page')
+      expect(response?.status()).toBe(404)
+      const window = page.getByRole('region', { name: 'File Not Found' })
+      await expect(window).toBeVisible()
+      await expect(window).toContainText('/no/such/page')
+      expect((await windowOrder(page))[0]).toBe('notfound')
+      await expect(page).toHaveTitle(/^File Not Found - /)
+      // Kept out of search results; Lighthouse's SEO check skips this.
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+        'content',
+        'noindex',
+      )
+    },
+  )
 
   test('OK closes it and goes home', async ({ page }) => {
     await page.goto('/nope')
@@ -79,25 +87,35 @@ test.describe('not found', () => {
   })
 })
 
-test('the dock opens a window without changing the URL', async ({ page }) => {
-  await page.goto('/')
-  await openApp(page, 'Terminal')
-  await expect(
-    page.getByRole('textbox', { name: 'Terminal input' }),
-  ).toBeFocused()
-  expect((await windowOrder(page))[0]).toBe('terminal')
-  await expect(page).toHaveURL('/')
-})
+test(
+  'the dock opens a window without changing the URL',
+  { tag: '@smoke' },
+  async ({ page }) => {
+    await page.goto('/')
+    await openApp(page, 'Terminal')
+    await expect(
+      page.getByRole('textbox', { name: 'Terminal input' }),
+    ).toBeFocused()
+    expect((await windowOrder(page))[0]).toBe('terminal')
+    await expect(page).toHaveURL('/')
+  },
+)
 
-test('the system menu opens System Info', async ({ page }) => {
-  await page.goto('/')
-  await page.waitForLoadState('networkidle')
-  await page.getByRole('button', { name: 'System menu' }).click()
-  await page.getByRole('menuitem', { name: 'System Info' }).click()
-  await expect(page.getByRole('region', { name: 'System Info' })).toBeVisible()
-  expect((await windowOrder(page))[0]).toBe('system')
-  await expect(page).toHaveURL('/')
-})
+test(
+  'the system menu opens System Info',
+  { tag: '@smoke' },
+  async ({ page }) => {
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+    await page.getByRole('button', { name: 'System menu' }).click()
+    await page.getByRole('menuitem', { name: 'System Info' }).click()
+    await expect(
+      page.getByRole('region', { name: 'System Info' }),
+    ).toBeVisible()
+    expect((await windowOrder(page))[0]).toBe('system')
+    await expect(page).toHaveURL('/')
+  },
+)
 
 test.describe('themes', () => {
   // The radios are visually hidden; people click the tile around them.

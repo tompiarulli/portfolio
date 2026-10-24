@@ -81,16 +81,27 @@ flowchart LR
 3. Merging the release PR tags the version and creates a GitHub Release. The same workflow then builds with the Vercel CLI and deploys to production.
 4. After each deploy, and weekly, `.github/workflows/lighthouse-badges.yml` runs Lighthouse against the live site and publishes the README badges to an orphan `badges` branch, so badge updates never touch `main`.
 
-Nothing runs at request time, so the site itself needs no environment variables. The workflows need three repository secrets: `VERCEL_TOKEN`, `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID`.
+Nothing runs at request time, so the site itself needs no environment variables. The workflows need five repository secrets: `VERCEL_TOKEN`, `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` for deploys, and `CHECKLY_API_KEY` and `CHECKLY_ACCOUNT_ID` for monitoring.
+
+### Monitoring
+
+[Checkly](https://www.checklyhq.com) watches production, configured as code in `checkly.config.ts` and `__checks__/`:
+
+- **Home page is up:** a URL monitor every 5 minutes from two regions, failing above 3 s.
+- **Desktop smoke tests:** the Playwright tests tagged `@smoke` in `e2e/smoke.spec.ts`, run every 30 minutes against the live site. `playwright.config.ts` targets `ENVIRONMENT_URL` when it's set, instead of starting the local server.
+- **Alerts and status page:** failures and recoveries email Tom, and a failing check opens an incident on the public status page.
+
+`.github/workflows/checkly.yml` runs the same checks against each Vercel preview, and the release workflow runs them against production and then deploys them with `checkly deploy`. To try them yourself, run `pnpm checkly login` once, then `pnpm checkly test --env ENVIRONMENT_URL=<url>`.
 
 ### Launching v1.0.0
 
 The history before 1.0.0 is the build-up, so the first release is written by hand and Release Please starts after it:
 
-1. Create the Vercel project, point `tompiarulli.com` at it, and add the three secrets.
+1. Create the Vercel project, point `tompiarulli.com` at it, and add the five secrets (the two Checkly ones come from Checkly's account settings: an API key and the account ID).
 2. Fill in the date of the 1.0.0 entry in `CHANGELOG.md`.
 3. Tag the launch commit `v1.0.0` and create a GitHub Release from that entry. Release Please finds its last release by that tag (the manifest already says `1.0.0`), so it only reads commits after it.
 4. Turn on the `main` ruleset: pull requests only, CI required, linear history, no force pushes, squash merges.
-5. Uncomment the live link and badges at the top of the README.
+5. Run `pnpm checkly login`, then `pnpm checkly test` against the live site to confirm the checks pass before the first release deploys them. Confirm the status page's `url` (`tompiarulli`) is free and that the plan includes a status page.
+6. Uncomment the live link, badges and status page link at the top of the README.
 
 See [CLAUDE.md](CLAUDE.md) for the conventions that apply to code and design.

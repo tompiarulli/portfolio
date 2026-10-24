@@ -3,7 +3,11 @@ import { defineConfig, devices } from '@playwright/test'
 const PORT = 4173
 
 // Smoke tests against the production build, served as Vercel serves it
-// (scripts/serve-prod.mjs). Build it first with `pnpm build:vercel`.
+// (scripts/serve-prod.mjs). Build it first with `pnpm build:vercel`. With
+// ENVIRONMENT_URL set (Checkly runs the @smoke tests against production or
+// a preview this way), they run against that site instead.
+const target = process.env.ENVIRONMENT_URL
+
 export default defineConfig({
   testDir: 'e2e',
   fullyParallel: true,
@@ -11,14 +15,16 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['github'], ['list']] : 'list',
   use: {
-    baseURL: `http://localhost:${PORT}`,
+    baseURL: target ?? `http://localhost:${PORT}`,
     trace: 'retain-on-failure',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
-  webServer: {
-    command: 'node scripts/serve-prod.mjs',
-    url: `http://localhost:${PORT}/`,
-    env: { PORT: String(PORT) },
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: target
+    ? undefined
+    : {
+        command: 'node scripts/serve-prod.mjs',
+        url: `http://localhost:${PORT}/`,
+        env: { PORT: String(PORT) },
+        reuseExistingServer: !process.env.CI,
+      },
 })
