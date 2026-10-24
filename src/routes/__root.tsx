@@ -10,7 +10,11 @@ import { site } from '#/lib/site'
 import { themeBootScript } from '#/lib/theme'
 import { NOT_FOUND_PATH } from '#/lib/windows'
 
-import appCss from '#/styles.css?url'
+// Inlined rather than linked: the stylesheet was the only render-blocking
+// request, an extra round trip before first paint on a slow connection. It
+// is about 9 kB compressed and the site is one page, so caching it
+// separately buys little.
+import appCss from '#/styles.css?inline'
 
 const Devtools = import.meta.env.DEV
   ? lazy(async () => {
@@ -39,7 +43,7 @@ const Devtools = import.meta.env.DEV
 const DEFAULT_THEME_COLOR = '#0a0a0a'
 
 // Orbital's font, both weights on screen at first paint, preloaded so it is
-// fetched alongside the stylesheet rather than after it. Like the colour
+// fetched straight away rather than once the inlined styles are parsed. Like the colour
 // above, it is the default theme's and has to move with it (see its
 // @font-face rules in styles.css).
 const DEFAULT_FONTS = [
@@ -112,8 +116,8 @@ export const Route = createRootRoute({
       // X falls back to the og: tags for everything else.
       { name: 'twitter:card', content: 'summary_large_image' },
     ],
+    styles: [{ children: appCss }],
     links: [
-      { rel: 'stylesheet', href: appCss },
       ...DEFAULT_FONTS.map((href) => ({
         rel: 'preload',
         href,
