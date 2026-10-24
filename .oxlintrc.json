@@ -30,5 +30,13 @@
     ".nitro",
     ".tanstack",
     "node_modules"
+  ],
+  "overrides": [
+    {
+      "files": ["scripts/**"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
   ]
 }

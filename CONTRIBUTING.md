@@ -63,8 +63,34 @@ Conventional Commits with a required scope: `type(scope): subject`. From v1.0.0,
 - Themes are homages: describe what a change looks like, never name the film, show or site behind it.
 - No AI attribution trailers (`Co-Authored-By: Claude`, "Generated with"). `Co-Authored-By` is a human-collaborator convention; AI tooling is a tool like a linter, not an author. The README already says the site is built with Claude Code.
 
-## Deploy
+## Releases and deploys
 
-Production deploys only from tagged releases, which are being set up: Release Please opens a release PR from the Conventional Commits on `main`, and merging it tags the version and deploys it to Vercel. Pushes to `main` alone don't deploy. Nothing runs at request time, so the site itself needs no environment variables.
+Production deploys only from tagged releases. Vercel's own Git deploys are off for `main` (`vercel.json`); pull requests still get preview deploys.
+
+```mermaid
+flowchart LR
+  pr["Pull request<br/>CI and a preview"] -->|squash merge| main["main"]
+  main --> rp["Release Please<br/>keeps a release PR open"]
+  rp -->|merge it| tag["Tag vX.Y.Z<br/>and GitHub Release"]
+  tag --> deploy["Deploy to Vercel"]
+  deploy --> badges["Lighthouse badges"]
+```
+
+1. Every change lands on `main` as a squash-merged pull request with a Conventional Commit title.
+2. Release Please (`.github/workflows/release.yml`) keeps a release PR open that bumps the version and writes `CHANGELOG.md` from those titles: `feat` is a minor release, `fix` and `perf` a patch.
+3. Merging the release PR tags the version and creates a GitHub Release. The same workflow then builds with the Vercel CLI and deploys to production.
+4. After each deploy, and weekly, `.github/workflows/lighthouse-badges.yml` runs Lighthouse against the live site and publishes the README badges to an orphan `badges` branch, so badge updates never touch `main`.
+
+Nothing runs at request time, so the site itself needs no environment variables. The workflows need three repository secrets: `VERCEL_TOKEN`, `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID`.
+
+### Launching v1.0.0
+
+The history before 1.0.0 is the build-up, so the first release is written by hand and Release Please starts after it:
+
+1. Create the Vercel project, point `tompiarulli.com` at it, and add the three secrets.
+2. Fill in the date of the 1.0.0 entry in `CHANGELOG.md`.
+3. Tag the launch commit `v1.0.0` and create a GitHub Release from that entry. Release Please finds its last release by that tag (the manifest already says `1.0.0`), so it only reads commits after it.
+4. Turn on the `main` ruleset: pull requests only, CI required, linear history, no force pushes, squash merges.
+5. Uncomment the live link and badges at the top of the README.
 
 See [CLAUDE.md](CLAUDE.md) for the conventions that apply to code and design.
