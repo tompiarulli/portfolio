@@ -378,23 +378,31 @@
   }
 }
 
-/* Phones show one window at a time, like apps: the front one fills the
-   space between the menu bar and the dock, and the rest wait, as if
-   minimized, until the dock brings one forward. Windows never overlap, so
-   every close box stays clear to tap. Placement and size are inline styles
-   set for the desktop, hence !important. */
+/* On a phone every window spans the screen, so where they open matters:
+   each steps down one title bar from the one before, in the order they
+   usually open, so the title bars and close boxes of the windows behind
+   stay clear to tap. Dragging still moves them anywhere. */
 @media (max-width: 639px) {
   section[data-window] {
-    inset: 40px 8px 8px !important;
-    width: auto !important;
-    height: auto !important;
-    transform: none !important;
+    --open-y: calc(40px + var(--slot) * (var(--title-height) + 8px));
   }
-  section[data-window][data-shaded] {
-    bottom: auto !important;
+  section[data-window='contact'] {
+    --slot: 0;
   }
-  section[data-window]:not([data-front]) {
-    visibility: hidden;
+  section[data-window='about'] {
+    --slot: 1;
+  }
+  section[data-window='notfound'] {
+    --slot: 2;
+  }
+  section[data-window='terminal'] {
+    --slot: 3;
+  }
+  section[data-window='settings'] {
+    --slot: 4;
+  }
+  section[data-window='system'] {
+    --slot: 5;
   }
 }
 

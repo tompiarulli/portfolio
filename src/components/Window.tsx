@@ -110,8 +110,6 @@ export function Window({
   } = useWindows()
   const active = peek ? peek === id : stack.at(-1) === id
   const hidden = minimized.includes(id)
-  // The top window not minimized; phones show only this one (styles.css).
-  const front = stack.filter((w) => !minimized.includes(w)).at(-1) === id
   const close = () => closeWindow(id)
   // Restacking moves windows in the DOM, which resets their scroll; put
   // it back.
@@ -227,13 +225,12 @@ export function Window({
       ref={ref}
       aria-labelledby={titleId}
       data-window={id}
-      data-front={front || undefined}
-      data-shaded={shaded || undefined}
       tabIndex={-1}
       style={{
         // Centred in CSS, so the prerendered HTML is already in place. The
-        // window's top sits a little above middle since heights vary.
-        transform: `translate3d(max(8px, calc(${right ? `100vw - ${width + 16}px` : `50vw - ${width / 2}px`} + ${x}px)), max(8px, calc(40vh - 180px + ${y}px)), 0)`,
+        // window's top sits a little above middle since heights vary. On a
+        // phone, --open-y (styles.css) steps windows down instead.
+        transform: `translate3d(max(8px, calc(${right ? `100vw - ${width + 16}px` : `50vw - ${width / 2}px`} + ${x}px)), var(--open-y, max(8px, calc(40vh - 180px + ${y}px))), 0)`,
         width,
         height: shaded ? undefined : height,
         zIndex: peek === id ? stack.length + 1 : stack.indexOf(id) + 1,

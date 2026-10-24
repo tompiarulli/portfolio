@@ -159,10 +159,21 @@ test.describe('themes', () => {
   })
 })
 
-test('a tablet keeps the overlapping desktop', async ({ page }) => {
-  await page.setViewportSize({ width: 768, height: 1024 })
+test('the dock minimizes the front window and brings it back', async ({
+  page,
+}) => {
   await page.goto('/')
   await page.waitForLoadState('networkidle')
-  for (const name of ['About', 'Contact'])
-    await expect(page.getByRole('region', { name })).toBeVisible()
+  const about = page.getByRole('region', { name: 'About' })
+  const icon = page
+    .getByRole('navigation', { name: 'Applications' })
+    .getByRole('button', { name: /^About/ })
+  await icon.click()
+  // It flies into the dock, then hides; Contact comes to the front.
+  await expect(about).toBeHidden()
+  await expect(icon).toContainText('minimized')
+  expect((await windowOrder(page))[0]).toBe('contact')
+  await icon.click()
+  await expect(about).toBeVisible()
+  expect((await windowOrder(page))[0]).toBe('about')
 })
