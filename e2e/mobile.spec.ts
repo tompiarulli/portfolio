@@ -68,3 +68,21 @@ test('every tap target meets WCAG 2.2 target size', async ({ page }) => {
   await expect(page.getByRole('region', { name: 'Terminal' })).toBeVisible()
   expect(await check()).toEqual([])
 })
+
+test('windows opened in any order keep the close boxes behind them clear', async ({
+  page,
+}) => {
+  await page.goto('/')
+  await page.waitForLoadState('networkidle')
+  // Settings, then Terminal: the reverse of the usual order.
+  for (const name of ['Settings', 'Terminal']) {
+    await dockIcon(page, name).tap()
+    await expect(page.getByRole('region', { name })).toBeVisible()
+  }
+  const { violations } = await new AxeBuilder({ page })
+    .withRules(['target-size'])
+    .analyze()
+  expect(
+    violations.flatMap((v) => v.nodes.map((n) => n.target.join(' '))),
+  ).toEqual([])
+})

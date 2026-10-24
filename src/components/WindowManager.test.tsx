@@ -39,6 +39,31 @@ describe('window manager', () => {
   })
 
   describe('opening and raising', () => {
+    it('opens each window one slot below the last one opened', async () => {
+      const { user } = await renderDesktop('/')
+      const slot = (id: Parameters<typeof windowEl>[0]) =>
+        windowEl(id).style.getPropertyValue('--slot')
+      const openSystemInfo = async () => {
+        await user.click(screen.getByRole('button', { name: 'System menu' }))
+        await user.click(screen.getByRole('menuitem', { name: 'System Info' }))
+        await screen.findByRole('region', { name: 'System Info' })
+      }
+      expect([slot('about'), slot('contact')]).toEqual(['0', '1'])
+      // Out of the usual order: System Info before Terminal.
+      await openSystemInfo()
+      await user.click(dockLink('terminal'))
+      await screen.findByRole('region', { name: 'Terminal' })
+      expect([slot('system'), slot('terminal')]).toEqual(['2', '3'])
+      // Raising keeps a window's slot; reopening takes the next one.
+      await openSystemInfo()
+      expect(slot('system')).toBe('2')
+      await user.click(
+        screen.getByRole('button', { name: 'Close System Info' }),
+      )
+      await openSystemInfo()
+      expect(slot('system')).toBe('4')
+    })
+
     it('opens a closed window from the dock, focused', async () => {
       const { user, pathname } = await renderDesktop('/')
       await user.click(dockLink('terminal'))

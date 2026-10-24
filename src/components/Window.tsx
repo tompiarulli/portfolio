@@ -101,6 +101,7 @@ export function Window({
   const hintId = useId()
   const {
     stack,
+    slots,
     raise,
     close: closeWindow,
     minimized,
@@ -233,6 +234,7 @@ export function Window({
         transform: `translate3d(max(8px, calc(${right ? `100vw - ${width + 16}px` : `50vw - ${width / 2}px`} + ${x}px)), var(--open-y, max(8px, calc(40vh - 180px + ${y}px))), 0)`,
         width,
         height: shaded ? undefined : height,
+        ['--slot' as string]: slots[id] ?? 0,
         zIndex: peek === id ? stack.length + 1 : stack.indexOf(id) + 1,
       }}
       className={`pointer-events-auto absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col border border-(--ink) bg-(--surface) shadow-(--window-shadow) outline-none ${className}`}

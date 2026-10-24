@@ -14,6 +14,10 @@ import type { WindowId } from '#/lib/windows'
 type Windows = {
   /** Open windows, back to front. The last one is focused. */
   stack: WindowId[]
+  /** Where each open window opened, in order: on a phone, each opens one
+   *  title bar below the one before (styles.css), so the close boxes of
+   *  the windows behind stay clear. */
+  slots: Partial<Record<WindowId, number>>
   /** Open a window, or bring it to the front if already open, and move
    *  keyboard focus into it. */
   raise: (id: WindowId) => void
@@ -54,6 +58,13 @@ const keepScroll = () => {
     scrollBefore.set(el, el.scrollTop)
 }
 
+// Past this, a new window would open too low on a small phone.
+const LAST_SLOT = 5
+
+/** The slot below every open window's, for a window opening now. */
+const nextSlot = (slots: Partial<Record<WindowId, number>>) =>
+  Math.min(LAST_SLOT, Math.max(-1, ...Object.values(slots)) + 1)
+
 const toFront = (stack: WindowId[], id: WindowId) =>
   stack.at(-1) === id ? stack : [...stack.filter((w) => w !== id), id]
 
@@ -86,6 +97,9 @@ export function WindowManager({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const navigate = useNavigate()
   const [stack, setStack] = useState(() => initialStack(pathname))
+  const [slots, setSlots] = useState<Partial<Record<WindowId, number>>>(() =>
+    Object.fromEntries(initialStack(pathname).map((id, i) => [id, i])),
+  )
   const [minimized, setMinimized] = useState<WindowId[]>([])
   const [focusRequest, setFocusRequest] = useState<{
     id: WindowId | null
@@ -104,6 +118,7 @@ export function WindowManager({ children }: { children: ReactNode }) {
     (id: WindowId) => {
       keepScroll()
       setStack((s) => toFront(s, id))
+      setSlots((s) => (id in s ? s : { ...s, [id]: nextSlot(s) }))
       unminimize(id)
       requestFocus(id)
     },
@@ -115,6 +130,11 @@ export function WindowManager({ children }: { children: ReactNode }) {
       const next = stack.filter((w) => w !== id)
       keepScroll()
       setStack(next)
+      setSlots((s) => {
+        const rest = { ...s }
+        delete rest[id]
+        return rest
+      })
       unminimize(id)
       const top = next.filter((w) => !minimized.includes(w)).at(-1)
       // Focus moves on to the next window, as on a desktop OS.
@@ -149,6 +169,7 @@ export function WindowManager({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       stack,
+      slots,
       raise,
       close,
       minimized,
@@ -157,7 +178,7 @@ export function WindowManager({ children }: { children: ReactNode }) {
       peek,
       setPeek,
     }),
-    [stack, raise, close, minimized, minimize, focusRequest, peek],
+    [stack, slots, raise, close, minimized, minimize, focusRequest, peek],
   )
 
   return (
