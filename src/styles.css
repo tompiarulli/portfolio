@@ -48,11 +48,16 @@
 }
 
 /* Grandstander (SIL OFL, see public/fonts/Grandstander-OFL.txt): Steamboat's
-   text font. */
+   text font. Its own metrics (ascent 73%, descent 26%) leave its letters
+   sitting high in the line, so these move the same total height to
+   centre the capitals, with lowercase a touch below. */
 @font-face {
   font-family: 'Grandstander';
   src: url('/fonts/grandstander-400.woff2') format('woff2');
   font-display: swap;
+  ascent-override: 83%;
+  descent-override: 16%;
+  line-gap-override: 0%;
 }
 /* Recursive (SIL OFL, see public/fonts/Recursive-OFL.txt): Steamboat's mono,
    two static Casual cuts for the terminal, titles and labels. */
