@@ -6,7 +6,6 @@ import type { Backdrop } from '#/lib/theme'
 // Backgrounds load after hydration, so the shell stays small. Only the
 // current theme's one is fetched.
 const CodeRain = lazy(() => import('#/components/CodeRain'))
-const Drift = lazy(() => import('#/components/Drift'))
 const Orbits = lazy(() => import('#/components/Orbits'))
 const Film = lazy(() => import('#/components/Film'))
 const Streaks = lazy(() => import('#/components/Streaks'))
@@ -43,14 +42,6 @@ const STREAKS = {
   pixelSize: 1,
 } as const
 
-/** For `backdrop: 'stars'`. */
-const STARS = {
-  characters: '..··+*',
-  density: 1.4,
-  wind: 3,
-  twinkle: 0.25,
-} as const
-
 /** For `backdrop: 'orbits'`; the Settings preview starts from it too. */
 export const ORBITS = {
   count: 7,
@@ -81,15 +72,6 @@ const FILM = {
   pixelSize: 2,
   /** Projector speed, in frames a second. */
   fps: 24,
-} as const
-
-/** For `backdrop: 'snow'`. */
-const SNOW = {
-  characters: '*·.+*',
-  density: 3,
-  wind: 90,
-  fall: 50,
-  gust: 0.8,
 } as const
 
 type State = {
@@ -161,13 +143,6 @@ export function Backdrop() {
             color={b.warp}
             highlight={b.glint}
             still={b.still}
-          />
-        ) : b.backdrop === 'stars' || b.backdrop === 'snow' ? (
-          <Drift
-            {...(b.backdrop === 'stars' ? STARS : SNOW)}
-            {...shared}
-            glyph={b.warp}
-            glint={b.glint}
           />
         ) : (
           <CodeRain {...RAIN} {...shared} trail={b.warp} head={b.glint} />

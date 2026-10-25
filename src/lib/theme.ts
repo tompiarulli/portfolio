@@ -1,4 +1,4 @@
-export type Backdrop = 'rain' | 'stars' | 'streaks' | 'snow' | 'orbits' | 'film'
+export type Backdrop = 'rain' | 'streaks' | 'orbits' | 'film'
 
 /** A theme sets only its colour tokens and font (styles.css), the menu
  *  mark, the backdrop and the clock's date; the rest of the chrome is
@@ -6,19 +6,12 @@ export type Backdrop = 'rain' | 'stars' | 'streaks' | 'snow' | 'orbits' | 'film'
 export const THEMES = [
   { id: 'orbital', label: 'Orbital', backdrop: 'orbits', date: undefined },
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
-  { id: 'believe', label: 'Believe', backdrop: 'stars', date: '1993-09-10' },
   { id: 'steamboat', label: 'Steamboat', backdrop: 'film', date: '1908-08-17' },
   {
     id: 'traveler',
     label: 'OUTATIME',
     backdrop: 'streaks',
     date: '1985-10-26',
-  },
-  {
-    id: 'outpost',
-    label: 'Outpost 31',
-    backdrop: 'snow',
-    date: '1982-06-25',
   },
 ] as const satisfies readonly {
   id: string
@@ -41,7 +34,7 @@ const THEME_KEY = 'theme'
 export const THEME_PARAM = 'theme'
 
 /** Every name `?theme=` accepts, lower case, to its theme: the id, and the
- *  label as a slug (`white-rabbit`, `outatime`, `outpost-31`). */
+ *  label as a slug (`white-rabbit`, `outatime`). */
 export const THEME_NAMES: Record<string, Theme> = Object.fromEntries(
   THEMES.flatMap((t) => [
     [t.id, t.id],

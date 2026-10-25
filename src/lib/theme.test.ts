@@ -34,7 +34,7 @@ describe('?theme=', () => {
     ['white-rabbit', 'rabbit'],
     ['rabbit', 'rabbit'],
     ['outatime', 'traveler'],
-    ['outpost-31', 'outpost'],
+    ['WHITE-RABBIT', 'rabbit'],
   ])('opens ?theme=%s in %s', (name, id) => {
     visit(`?theme=${name}`)
     boot()
@@ -101,8 +101,8 @@ describe('themeBootScript', () => {
 
   // Rewriting the same value would still restart the backdrop.
   it('leaves data-theme alone when it already matches', () => {
-    localStorage.setItem('theme', 'believe')
-    root.dataset.theme = 'believe'
+    localStorage.setItem('theme', 'traveler')
+    root.dataset.theme = 'traveler'
     const observer = new MutationObserver(() => {})
     observer.observe(root, {
       attributes: true,
@@ -112,11 +112,11 @@ describe('themeBootScript', () => {
     const writes = observer.takeRecords()
     observer.disconnect()
     expect(writes).toEqual([])
-    expect(root.dataset.theme).toBe('believe')
+    expect(root.dataset.theme).toBe('traveler')
   })
 
   it('does write when the value differs', () => {
-    localStorage.setItem('theme', 'believe')
+    localStorage.setItem('theme', 'traveler')
     const observer = new MutationObserver(() => {})
     observer.observe(root, {
       attributes: true,
@@ -128,10 +128,10 @@ describe('themeBootScript', () => {
   })
 
   it('replaces a stale data-theme', () => {
-    localStorage.setItem('theme', 'outpost')
+    localStorage.setItem('theme', 'traveler')
     root.dataset.theme = 'rabbit'
     boot()
-    expect(root.dataset.theme).toBe('outpost')
+    expect(root.dataset.theme).toBe('traveler')
   })
 })
 
@@ -160,8 +160,8 @@ describe('applyTheme', () => {
 
 describe('currentTheme', () => {
   it('reads the theme from <html>', () => {
-    root.dataset.theme = 'believe'
-    expect(currentTheme()).toBe('believe')
+    root.dataset.theme = 'traveler'
+    expect(currentTheme()).toBe('traveler')
   })
 
   it('is Orbital when <html> has no known theme', () => {

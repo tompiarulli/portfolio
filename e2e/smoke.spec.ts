@@ -131,14 +131,7 @@ test.describe('themes', () => {
   test('every theme loads its backdrop without errors', async ({ page }) => {
     await page.goto('/')
     await openApp(page, 'Settings')
-    for (const name of [
-      'White Rabbit',
-      'Believe',
-      'Steamboat',
-      'OUTATIME',
-      'Outpost 31',
-      'Orbital',
-    ]) {
+    for (const name of ['White Rabbit', 'Steamboat', 'OUTATIME', 'Orbital']) {
       await tile(page, name).click()
       await expect(page.getByRole('radio', { name })).toBeChecked()
       await page.waitForLoadState('networkidle')
@@ -164,12 +157,12 @@ test.describe('themes', () => {
     await page.goto('/')
     await openApp(page, 'Terminal')
     const input = page.getByRole('textbox', { name: 'Terminal input' })
-    await input.fill('theme  outpost   31')
+    await input.fill('theme  white   rabbit')
     await input.press('Enter')
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'outpost')
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'rabbit')
     await expect(
       page.getByRole('log', { name: 'Terminal output' }),
-    ).toContainText('Outpost 31')
+    ).toContainText('White Rabbit')
   })
 })
 

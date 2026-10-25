@@ -9,7 +9,6 @@ pip install -r scripts/requirements.txt
 | Script              | Builds                                                                                            | Run                                                      |
 | ------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | `logo.py`           | Nothing on its own: the 16x16 grid, SVG token and preview helpers the menu mark scripts share.    |                                                          |
-| `outpost_logo.py`   | Outpost 31's menu mark, the `--logo` token in `src/styles.css`.                                   | `python3 scripts/outpost_logo.py [preview [file.png]]`   |
 | `traveler_logo.py`  | OUTATIME's menu mark, the `--logo` token in `src/styles.css`.                                     | `python3 scripts/traveler_logo.py [preview [file.png]]`  |
 | `steamboat_logo.py` | Steamboat's stand-in menu mark, the `--logo` token in `src/styles.css`.                           | `python3 scripts/steamboat_logo.py [preview [file.png]]` |
 | `cde_icons.py`      | The dock icons in `public/icons/cde/`, from CDE's pixmaps (see `public/icons/README.md`).         | `python3 scripts/cde_icons.py <path to a CDE checkout>`  |

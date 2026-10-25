@@ -99,19 +99,9 @@ const SECRETS: { match: RegExp; theme: Theme; out: string[] }[] = [
     out: ['Wake up, guest...', 'Knock, knock.'],
   },
   {
-    match: /^(the truth is out there|trust no one|i want to believe)$/,
-    theme: 'believe',
-    out: ['The truth is out there.'],
-  },
-  {
     match: /^(88 ?mph|great scott|121 gigawatts)$/,
     theme: 'traveler',
     out: ["Where we're going, we don't need roads."],
-  },
-  {
-    match: /^(who goes there|blood test|outpost 31)$/,
-    theme: 'outpost',
-    out: ['Blood test came back human. Probably.'],
   },
 ]
 

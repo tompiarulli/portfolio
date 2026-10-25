@@ -2,7 +2,6 @@ import {
   Suspense,
   lazy,
   useEffect,
-  useId,
   useRef,
   useState,
   useSyncExternalStore,
@@ -41,7 +40,7 @@ export function Settings() {
     <Window title="Settings" right x={-199} y={249} width={420}>
       <fieldset className="border border-(--ink) p-3">
         <legend className="px-1 font-mono">Theme</legend>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           {THEMES.map((t) => (
             <ThemeTile key={t.id} theme={t} on={theme === t.id} pick={pick} />
           ))}
@@ -97,20 +96,6 @@ function digits(seed: number) {
   const next = seeded(seed)
   return Array.from({ length: 7 }, () =>
     Array.from({ length: 24 }, () => Math.floor(next() * 10)).join(''),
-  ).join('\n')
-}
-
-const PREVIEW_ROWS = 7
-const PREVIEW_COLUMNS = 32
-
-/** A still of a drifting backdrop: `chars` scattered over a share of the
- *  cells. */
-function scatter(chars: string, share: number, seed: number) {
-  const next = seeded(seed)
-  return Array.from({ length: PREVIEW_ROWS }, () =>
-    Array.from({ length: PREVIEW_COLUMNS }, () =>
-      next() < share ? chars[Math.floor(next() * chars.length)] : ' ',
-    ).join(''),
   ).join('\n')
 }
 
@@ -174,80 +159,7 @@ function OrbitsPreview() {
   )
 }
 
-const PREVIEWS: Record<
-  Exclude<Backdrop, 'film' | 'orbits' | 'streaks'>,
-  string
-> = {
-  rain: digits(1999),
-  stars: scatter('..··+*', 0.08, 7),
-  snow: scatter('*·.+*', 0.2, 31),
-}
-
-const SKY_WIDTH = 64
-const SKY_HEIGHT = 32
-
-/** Overlapping crowns, tallest at the left and thinning out to the
- *  right. */
-function treetops(seed: number) {
-  const next = seeded(seed)
-  // Run past both edges so the blur has dark to pull in, not the sky.
-  return Array.from({ length: 32 }, (_, i) => {
-    const x = (i / 31) * (SKY_WIDTH + 12) - 6
-    const rise = Math.min(1, 1 - x / SKY_WIDTH)
-    return {
-      x,
-      y: SKY_HEIGHT - 2 - rise * 8 - next() * 3,
-      r: 2.2 + rise * 2.2 + next() * 1.8,
-    }
-  })
-}
-
-const TREETOPS = treetops(1993)
-
-/** Believe's tile: dark treetops under a washed-out sky, grainy and out
- *  of focus. */
-function TreelinePreview() {
-  const id = useId()
-  return (
-    <svg
-      viewBox={`0 0 ${SKY_WIDTH} ${SKY_HEIGHT}`}
-      preserveAspectRatio="xMidYMid slice"
-      className="absolute inset-0 size-full"
-    >
-      <defs>
-        <linearGradient id={`${id}sky`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="var(--highlight)" />
-          <stop offset="1" stopColor="var(--surface)" />
-        </linearGradient>
-        <filter id={`${id}softer`} x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="1.2" />
-        </filter>
-        <filter id={`${id}grain`}>
-          <feTurbulence type="fractalNoise" baseFrequency="1.4" seed="9" />
-          <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.4 1" />
-        </filter>
-      </defs>
-      <rect width={SKY_WIDTH} height={SKY_HEIGHT} fill={`url(#${id}sky)`} />
-      <g filter={`url(#${id}softer)`} fill="var(--ink)">
-        {/* Each crown with a trunk of dark down to the ground, so no sky
-            shows through under it. */}
-        {TREETOPS.map(({ x, y, r }) => (
-          <path
-            key={x}
-            d={`M${x - r} ${SKY_HEIGHT + 6}V${y}a${r} ${r} 0 0 1 ${2 * r} 0V${SKY_HEIGHT + 6}z`}
-          />
-        ))}
-        <rect x={-6} y={SKY_HEIGHT - 5} width={SKY_WIDTH + 12} height="11" />
-      </g>
-      <rect
-        width={SKY_WIDTH}
-        height={SKY_HEIGHT}
-        filter={`url(#${id}grain)`}
-        opacity="0.18"
-      />
-    </svg>
-  )
-}
+const RAIN_PREVIEW = digits(1999)
 
 /** A tiny desktop: just the theme's backdrop. */
 function ThemePreview({
@@ -263,9 +175,7 @@ function ThemePreview({
       aria-hidden
       className="relative block h-16 overflow-hidden bg-(--desk)"
     >
-      {theme === 'believe' ? (
-        <TreelinePreview />
-      ) : backdrop === 'orbits' ? (
+      {backdrop === 'orbits' ? (
         <OrbitsPreview />
       ) : backdrop === 'film' ? (
         // A still of the film: the frame darkening to the edges.
@@ -285,13 +195,9 @@ function ThemePreview({
             }}
           />
         ))
-      ) : backdrop === 'rain' ? (
-        <span className="absolute inset-0 flex items-center justify-center font-mono text-[12px] leading-[12px] tracking-[1px] whitespace-pre text-(--warp) [text-shadow:0_0_6px_var(--warp)]">
-          {PREVIEWS.rain}
-        </span>
       ) : (
-        <span className="absolute inset-0 font-mono text-[12px] leading-[12px] tracking-[1px] whitespace-pre text-(--warp)">
-          {PREVIEWS[backdrop]}
+        <span className="absolute inset-0 flex items-center justify-center font-mono text-[12px] leading-[12px] tracking-[1px] whitespace-pre text-(--warp) [text-shadow:0_0_6px_var(--warp)]">
+          {RAIN_PREVIEW}
         </span>
       )}
     </span>

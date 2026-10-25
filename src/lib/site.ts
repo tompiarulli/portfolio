@@ -71,18 +71,6 @@ export const credits: { group: string; items: Credit[] }[] = [
         license: 'OFL 1.1',
       },
       {
-        name: 'DM Mono',
-        by: 'the DM Mono Project Authors',
-        url: 'https://github.com/googlefonts/dm-mono',
-        license: 'OFL 1.1',
-      },
-      {
-        name: 'Outpost Mono, a subset of IBM Plex Mono',
-        by: 'IBM Corp.',
-        url: 'https://github.com/IBM/plex',
-        license: 'OFL 1.1',
-      },
-      {
         name: 'Grandstander',
         by: 'the Grandstander Project Authors',
         url: 'https://github.com/Etcetera-Type-Co/Grandstander',

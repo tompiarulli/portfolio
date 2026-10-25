@@ -180,11 +180,11 @@ describe('run', () => {
 
   describe('theme', () => {
     it('lists every theme and marks the current one', () => {
-      const lines = out('theme', { theme: 'believe' })
+      const lines = out('theme', { theme: 'steamboat' })
       for (const t of THEMES) {
         const line = lines.find((l) => l.includes(t.label))
         expect(line).toBeDefined()
-        expect(line?.startsWith('*')).toBe(t.id === 'believe')
+        expect(line?.startsWith('*')).toBe(t.id === 'steamboat')
       }
     })
 
@@ -200,7 +200,7 @@ describe('run', () => {
       for (const line of [
         'theme   white rabbit',
         'theme white    rabbit',
-        '  theme outpost   31  ',
+        '  theme   outatime  ',
       ])
         expect(run(line, env()).effect?.type).toBe('theme')
       expect(run('theme  white   rabbit ', env()).effect).toEqual({
@@ -282,11 +282,9 @@ describe('run', () => {
     it.each([
       ['follow the white rabbit', 'rabbit'],
       ['Take the red pill.', 'rabbit'],
-      ['I want to believe', 'believe'],
       ['Great Scott!', 'traveler'],
       ['88mph', 'traveler'],
       ['88 mph', 'traveler'],
-      ['Who goes there?', 'outpost'],
     ])('%s switches theme to %s', (line, id) => {
       const result = run(line, env())
       expect(result.effect).toEqual({ type: 'theme', id })

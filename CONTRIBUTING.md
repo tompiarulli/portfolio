@@ -37,13 +37,13 @@ Renovate opens dependency updates weekly. TanStack packages are pinned exactly a
 ## Layout
 
 - `src/routes/` file-based routes: the home page, which sets `head()` only. The root route renders `<Desktop>` (menu bar, dock, open windows) and the head for unknown URLs.
-- `src/components/` desktop chrome: `Desktop`, `MenuBar`, `Clock`, `Dock`, `DockIcon`, `Window`, `WindowManager` and `ShutDown`, plus `Backdrop`, which lazy-loads the current theme's desktop background (`CodeRain`, `Drift`, `Orbits`, `Film` or `Streaks`).
+- `src/components/` desktop chrome: `Desktop`, `MenuBar`, `Clock`, `Dock`, `DockIcon`, `Window`, `WindowManager` and `ShutDown`, plus `Backdrop`, which lazy-loads the current theme's desktop background (`CodeRain`, `Orbits`, `Film` or `Streaks`).
 - `src/components/apps/` window contents, one component per app, registered in `apps/index.tsx`.
 - `src/lib/windows.ts` window ids and the windows open on first paint. The desktop has one URL; windows are state in `WindowManager`, and any other URL opens File Not Found.
 - `src/lib/site.ts` all copy and project data, including the descriptions and headings of the home page and the 404.
 - `src/lib/seo.ts` the head tags a page sets: title, description, canonical URL and link preview.
 - `src/lib/security-headers.ts` and `src/lib/content-security-policy.ts` the headers every response gets, applied through Nitro route rules in `vite.config.ts`.
-- `src/lib/theme.ts` the theme list (Orbital, the default, White Rabbit, Believe, Steamboat, OUTATIME and Outpost 31) and the inline script that applies the theme before first paint: the one named by `?theme=` (an id or the label as a slug, like `?theme=white-rabbit`), for that visit only, else the saved one.
+- `src/lib/theme.ts` the theme list (Orbital, the default, White Rabbit, Steamboat and OUTATIME) and the inline script that applies the theme before first paint: the one named by `?theme=` (an id or the label as a slug, like `?theme=white-rabbit`), for that visit only, else the saved one.
 - `src/lib/terminal.ts` the Terminal app's commands.
 - `src/styles.css` design tokens per theme, and the retro desktop chrome utilities.
 - `public/fonts/` self-hosted fonts.
