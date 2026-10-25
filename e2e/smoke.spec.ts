@@ -146,6 +146,20 @@ test.describe('themes', () => {
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'orbital')
   })
 
+  test('?theme= opens a theme for the visit, before first paint', async ({
+    page,
+  }) => {
+    const response = await page.goto('/?theme=steamboat')
+    expect(response?.status()).toBe(200)
+    await expect(page.locator('html')).toHaveAttribute(
+      'data-theme',
+      'steamboat',
+    )
+    // Not saved: the next visit without it is back to the default.
+    await page.goto('/')
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'orbital')
+  })
+
   test('the terminal switches theme', async ({ page }) => {
     await page.goto('/')
     await openApp(page, 'Terminal')
