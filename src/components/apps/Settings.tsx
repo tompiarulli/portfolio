@@ -37,7 +37,7 @@ export function Settings() {
   const pick = (t: Theme) => applyTheme(t)
 
   return (
-    <Window title="Settings" right x={-199} y={249} width={420}>
+    <Window title="Settings" right x={-199} y={249} width={360}>
       <fieldset className="border border-(--ink) p-3">
         <legend className="px-1 font-mono">Theme</legend>
         <div className="grid grid-cols-2 gap-3">
