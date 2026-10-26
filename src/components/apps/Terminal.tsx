@@ -3,6 +3,7 @@ import type { KeyboardEvent } from 'react'
 
 import { Window } from '#/components/Window'
 import { useWindows } from '#/components/WindowManager'
+import { clockMode } from '#/lib/clock'
 import { BANNER, PROMPT, complete, run } from '#/lib/terminal'
 import { applyTheme, currentTheme } from '#/lib/theme'
 
@@ -32,6 +33,7 @@ export function Terminal() {
     const next = typed.trim() ? [...history, typed] : history
     const { out, effect } = run(typed, {
       theme: currentTheme(),
+      clock: clockMode(),
       history: next,
       bootedAt,
     })

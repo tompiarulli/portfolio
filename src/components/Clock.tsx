@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { clockMode, subscribeClockMode } from '#/lib/clock'
 import { THEMES } from '#/lib/theme'
 
 const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
@@ -11,11 +12,15 @@ function fmtTime(d: Date) {
   return `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`
 }
 
-/** "WED 31 MAR 1999": the theme's day, or today; the time stays real. */
+/** "WED 31 MAR 1999": the theme's day, unless Settings asks for today;
+ *  the time stays real. */
 function fmtDate() {
   const id = document.documentElement.dataset.theme
   const theme = THEMES.find((t) => t.id === id) ?? THEMES[0]
-  const d = theme.date ? new Date(`${theme.date}T12:00:00`) : new Date()
+  const d =
+    theme.date && clockMode() === 'theme'
+      ? new Date(`${theme.date}T12:00:00`)
+      : new Date()
   const day = String(d.getDate()).padStart(2, '0')
   return `${DAYS[d.getDay()]} ${day} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`
 }
@@ -78,15 +83,19 @@ export function Clock() {
       )
     }
     tick()
-    // Each theme has its own day, so follow theme switches too.
-    const observer = new MutationObserver(() => setDate(fmtDate()))
+    // Each theme has its own day, so follow theme switches too, and the
+    // choice in Settings between that day and today.
+    const update = () => setDate(fmtDate())
+    const observer = new MutationObserver(update)
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['data-theme'],
     })
+    const unsubscribe = subscribeClockMode(update)
     return () => {
       clearTimeout(id)
       observer.disconnect()
+      unsubscribe()
     }
   }, [])
   const shown = useFlip(date)

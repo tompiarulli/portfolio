@@ -9,6 +9,12 @@ import {
 
 import { ORBITS } from '#/components/Backdrop'
 import { Window } from '#/components/Window'
+import {
+  CLOCK_MODES,
+  clockMode,
+  setClockMode,
+  subscribeClockMode,
+} from '#/lib/clock'
 import { DEFAULT_THEME, THEMES, applyTheme, currentTheme } from '#/lib/theme'
 import type { Backdrop, Theme } from '#/lib/theme'
 
@@ -35,10 +41,38 @@ export function Settings() {
     () => DEFAULT_THEME,
   )
   const pick = (t: Theme) => applyTheme(t)
+  const clock = useSyncExternalStore(
+    subscribeClockMode,
+    clockMode,
+    () => 'theme' as const,
+  )
 
   return (
-    <Window title="Settings" right x={-199} y={249} width={360}>
+    <Window title="Settings" right x={-199} y={189} width={360}>
       <fieldset className="border border-(--ink) p-3">
+        <legend className="px-1 font-mono">Date &amp; Time</legend>
+        <div className="grid grid-cols-2 border border-(--ink)">
+          {CLOCK_MODES.map((m) => (
+            <label
+              key={m.id}
+              className={`cursor-pointer py-1 text-center outline-offset-2 transition-colors duration-150 not-first:border-l not-first:border-(--ink) has-focus-visible:outline-2 has-focus-visible:outline-(--ink) ${
+                clock === m.id ? 'bg-(--accent) text-(--on-accent)' : ''
+              }`}
+            >
+              <input
+                type="radio"
+                name="clock"
+                value={m.id}
+                checked={clock === m.id}
+                onChange={() => setClockMode(m.id)}
+                className="sr-only"
+              />
+              {m.label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <fieldset className="mt-4 border border-(--ink) p-3">
         <legend className="px-1 font-mono">Theme</legend>
         <div className="grid grid-cols-2 gap-3">
           {THEMES.map((t) => (

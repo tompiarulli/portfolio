@@ -8,6 +8,7 @@ import { DEFAULT_THEME, THEMES } from '#/lib/theme'
 
 const env = (over: Partial<Env> = {}): Env => ({
   theme: DEFAULT_THEME,
+  clock: 'theme',
   history: [],
   bootedAt: Date.now(),
   ...over,
@@ -147,6 +148,17 @@ describe('run', () => {
         new Date(2026, 9, 22).toDateString(),
       ])
     })
+
+    it.each(THEMES)(
+      'shows today in $label with the clock set to Accurate',
+      ({ id }) => {
+        vi.useFakeTimers()
+        vi.setSystemTime(new Date(2026, 9, 22, 9))
+        expect(out('date', { theme: id, clock: 'accurate' })).toEqual([
+          new Date(2026, 9, 22).toDateString(),
+        ])
+      },
+    )
   })
 
   describe('uname', () => {

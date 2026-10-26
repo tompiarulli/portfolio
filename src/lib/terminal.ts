@@ -1,4 +1,5 @@
 import { build } from '#/lib/build'
+import type { ClockMode } from '#/lib/clock'
 import { email, profiles, site } from '#/lib/site'
 import { THEMES } from '#/lib/theme'
 import type { Theme } from '#/lib/theme'
@@ -15,6 +16,8 @@ export type Result = { out: string[]; effect?: Effect }
 
 export type Env = {
   theme: Theme
+  /** Whether `date` gives the theme's day or today, as the clock does. */
+  clock: ClockMode
   history: string[]
   /** When the page loaded, for uptime. */
   bootedAt: number
@@ -79,9 +82,10 @@ function cow(text: string) {
   ]
 }
 
-function themeDate(theme: Theme) {
+function themeDate(theme: Theme, clock: ClockMode) {
   const t = THEMES.find((x) => x.id === theme) ?? THEMES[0]
-  const d = t.date ? new Date(`${t.date}T12:00:00`) : new Date()
+  const d =
+    t.date && clock === 'theme' ? new Date(`${t.date}T12:00:00`) : new Date()
   return d.toDateString()
 }
 
@@ -226,7 +230,7 @@ export function run(line: string, env: Env): Result {
       return { out: ['/home/guest'] }
     case 'date':
       return {
-        out: [themeDate(env.theme)],
+        out: [themeDate(env.theme, env.clock)],
       }
     case 'uname':
       return {
