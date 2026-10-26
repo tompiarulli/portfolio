@@ -152,7 +152,7 @@ describe('run', () => {
     })
 
     it.each(THEMES)(
-      'shows today in $label with the clock set to Accurate',
+      'shows today in $label with the clock set to Current',
       ({ id }) => {
         vi.useFakeTimers()
         vi.setSystemTime(new Date(2026, 9, 22, 9))

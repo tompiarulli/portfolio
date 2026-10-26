@@ -24,12 +24,12 @@ const showsYear = (year: string) =>
   })
 
 describe('Date & Time', () => {
-  it("shows the theme's day until Accurate is picked, and remembers it", async () => {
+  it("shows the theme's day until Current is picked, and remembers it", async () => {
     const { user } = await renderDesktop('/')
     await showsYear('1908')
 
     await user.click(dockLink('settings'))
-    const accurate = await screen.findByRole('radio', { name: 'Accurate' })
+    const accurate = await screen.findByRole('radio', { name: 'Current' })
     expect(screen.getByRole('radio', { name: 'Themed' })).toHaveProperty(
       'checked',
       true,
@@ -45,7 +45,7 @@ describe('Date & Time', () => {
     await showsYear('1908')
   })
 
-  it('opens on a saved choice of Accurate', async () => {
+  it('opens on a saved choice of Current', async () => {
     localStorage.setItem('clock', 'accurate')
     await renderDesktop('/')
     await showsYear(thisYear)
