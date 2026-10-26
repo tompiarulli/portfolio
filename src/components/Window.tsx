@@ -286,7 +286,7 @@ export function Window({
             aria-describedby={hintId}
             onKeyDown={onTitleKeyDown}
             onClick={(e) => e.detail === 0 && shade()}
-            className="group flex cursor-[inherit] items-center font-mono text-(length:--title-size) [font-weight:var(--title-weight)] tracking-tight [text-transform:var(--title-case)] outline-none"
+            className="group flex cursor-[inherit] items-center font-(family-name:--font-title) text-(length:--title-size) [font-weight:var(--title-weight)] tracking-(--title-tracking) [text-transform:var(--title-case)] outline-none"
           >
             <span className="px-2 outline-offset-2 outline-current outline-dotted [text-box:trim-both_cap_alphabetic] group-[:not(:focus-visible)]:outline-none before:content-(--title-open) after:content-(--title-close)">
               {title}

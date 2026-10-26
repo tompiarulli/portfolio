@@ -133,6 +133,12 @@
      the same face unless a theme sets both. */
   --font-ui: 'Iosevka', ui-monospace, monospace;
   --font-mono: var(--font-ui);
+  /* Window titles, and the dock, menu and clock labels: the mono unless a
+     theme sets its own, with their letter spacing. */
+  --font-title: var(--font-mono);
+  --font-label: var(--font-mono);
+  --title-tracking: -0.025em;
+  --label-tracking: -0.025em;
   --bg: #03120a;
   --surface: #03120a;
   --surface-dark: #41e07a;

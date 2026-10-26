@@ -135,7 +135,7 @@ function SystemMenu({
           aria-label="System"
           tabIndex={-1}
           onKeyDown={onMenuKeyDown}
-          className="absolute top-full left-0 min-w-44 border border-(--ink) bg-(--surface) py-1 font-mono tracking-tight shadow-(--window-shadow)"
+          className="absolute top-full left-0 min-w-44 border border-(--ink) bg-(--surface) py-1 font-(family-name:--font-label) tracking-(--label-tracking) shadow-(--window-shadow)"
         >
           <button
             type="button"
