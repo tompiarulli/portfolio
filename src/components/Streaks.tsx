@@ -80,8 +80,12 @@ export default function Streaks({
     const draw = () => {
       ctx.globalCompositeOperation = 'source-over'
       ctx.globalAlpha = 1
-      ctx.fillStyle = background
-      ctx.fillRect(0, 0, width, height)
+      // Transparent leaves the page's own sky showing between streaks.
+      if (background === 'transparent') ctx.clearRect(0, 0, width, height)
+      else {
+        ctx.fillStyle = background
+        ctx.fillRect(0, 0, width, height)
+      }
       // Overlapping light adds up, so crossings burn hotter.
       ctx.globalCompositeOperation = 'lighter'
       for (const s of streaks) {

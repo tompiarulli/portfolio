@@ -200,6 +200,8 @@
   /* The desktop's backdrop, all glyphs: --warp ones, the leading or
      nearest lit in --glint, over --desk. */
   --desk: #020806;
+  /* A gradient behind the backdrop, over --desk; none for a flat desk. */
+  --desk-sky: none;
   --warp: #22b455;
   --glint: #d8ffe0;
   /* Colours of the streaks backdrop, picked at random per streak. */
@@ -378,10 +380,14 @@
   /* Softened, so the dense stripes don't run at full contrast. */
   --backdrop-opacity: 0.7;
   --desk: #07060d;
+  /* A night sky behind the streaks, deep navy glowing hot pink at the
+     horizon. */
+  --desk-sky: linear-gradient(#0a0820, #2a0d4a 59%, #7f155d);
   --warp: #ff3d9a;
   --glint: #ffd6ee;
   --streak-1: #ff8fd0;
-  --streak-2: #2f9bff;
+  /* Sunset orange. */
+  --streak-2: #ff7a3d;
   --streak-3: #a24bff;
   --streak-4: #ff3d9a;
   color-scheme: light;
@@ -542,6 +548,8 @@
   --script-glow: #ff1fa0;
   --prompt: #8ff4ff;
   --prompt-glow: #19d3ff;
+  /* The sky's middle, where the lettering sits. */
+  --start-ground: #2a0d4a;
 }
 
 /* Touch screens get a taller title bar to drag windows by and a bigger
@@ -582,7 +590,7 @@ body {
   height: 100%;
   margin: 0;
   overflow: hidden;
-  background: var(--desk);
+  background: var(--desk-sky), var(--desk);
   color: var(--ink);
   font-family: var(--font-ui);
   font-size: var(--text-size);

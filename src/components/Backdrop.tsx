@@ -77,6 +77,8 @@ const FILM = {
 type State = {
   backdrop: Backdrop
   desk: string
+  /** Whether the theme paints a sky (--desk-sky) under the backdrop. */
+  sky: boolean
   warp: string
   glint: string
   streaks: string[]
@@ -94,6 +96,7 @@ function useBackdrop() {
       setState({
         backdrop: theme.backdrop,
         desk: s.getPropertyValue('--desk').trim(),
+        sky: s.getPropertyValue('--desk-sky').trim() !== 'none',
         warp: s.getPropertyValue('--warp').trim(),
         glint: s.getPropertyValue('--glint').trim(),
         streaks: [1, 2, 3, 4].map((n) =>
@@ -135,7 +138,13 @@ export function Backdrop() {
             disableAnimation={b.still}
           />
         ) : b.backdrop === 'streaks' ? (
-          <Streaks {...STREAKS} {...shared} colors={b.streaks} />
+          <Streaks
+            {...STREAKS}
+            {...shared}
+            // Over a sky, the streaks draw on clear glass.
+            background={b.sky ? 'transparent' : b.desk}
+            colors={b.streaks}
+          />
         ) : b.backdrop === 'orbits' ? (
           <Orbits
             {...ORBITS}

@@ -230,7 +230,7 @@ function ThemePreview({
     <span
       data-theme={theme}
       aria-hidden
-      className="relative block h-16 overflow-hidden bg-(--desk)"
+      className="relative block h-16 overflow-hidden [background:var(--desk-sky),var(--desk)]"
     >
       {backdrop === 'orbits' ? (
         <OrbitsPreview />
