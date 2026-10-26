@@ -1,24 +1,23 @@
-import {
-  BuildLine,
-  Dither,
-  Prompt,
-  Thin,
-  Title,
-} from '#/components/start/parts'
+import { BuildLine, Thin, Title } from '#/components/start/parts'
 
-/** OUTATIME's start screen: an 80s arcade logo over the streaks, the title
- *  dithered and the version in brush script. */
+/** OUTATIME's start screen: a game's heads-up display over the grid. The
+ *  title in electric blue with the version in pink brush script, and the
+ *  prompt boxed in a royal blue rule in the title's wide capitals. */
 export default function TravelerStart() {
   return (
     <>
-      {/* Filters the theme's tokens point at. */}
+      {/* The filter the version's tokens point at. */}
       <svg aria-hidden className="absolute size-0">
-        <Dither id="title-dither" levels={8} />
-        <Thin id="script-thin" />
+        <Thin id="script-thin" radius={1.6} />
       </svg>
-      <div className="fade-in pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-[8vh] px-4">
+      <div className="fade-in pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-[7vh] px-4">
         <Title />
-        <Prompt className="blink">Press Any Key to Start</Prompt>
+        <p
+          aria-hidden
+          className="blink border-2 border-(--start-title-edge) bg-(--off) px-[16px] py-[8px] pl-[calc(16px+0.25em)] font-(family-name:--start-title-font) text-[12px] tracking-[0.25em] text-(--start-title-1) uppercase sm:text-[14px]"
+        >
+          Press Any Key to Start
+        </p>
       </div>
       <BuildLine />
     </>

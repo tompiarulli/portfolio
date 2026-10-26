@@ -542,13 +542,15 @@
     --start-title-scale: 1;
   }
 }
-/* OUTATIME: an 80s arcade logo, lavender and dithered on a pink and purple
-   drop, the version in pink brush script and a cyan prompt. */
+/* OUTATIME: a game's heads-up display. The title in smooth bands, white
+   to electric blue on a deep blue edge, the version in pink brush script
+   across its corner, and the prompt in the title's face. */
 [data-theme='traveler'] {
   --start-font: 'Geist Mono', ui-monospace, monospace;
   --start-title-font: 'Righteous', ui-sans-serif, sans-serif;
   --start-title-weight: 400;
-  --start-title-depth: 0.1em;
+  --start-title-dither: none;
+  --start-title-depth: 0.05em;
   --script-font: 'Permanent Marker', cursive;
   --script-weight: 400;
   --script-size: 0.45em;
@@ -559,19 +561,19 @@
   --script-filter: url(#script-thin) drop-shadow(0 0 0.08em var(--script-glow));
   --prompt-font: 'Space Mono', ui-monospace, monospace;
   --prompt-weight: 700;
-  --start-text: #ffffff;
+  --start-text: #bfe9ff;
   --start-title-1: #ffffff;
-  --start-title-2: #f3ecfc;
-  --start-title-3: #ddcdf3;
-  --start-title-4: #bfa8e6;
-  --start-title-edge: #ff4fb0;
-  --start-title-shade: #3d0f55;
-  --script: #ff3fc8;
+  --start-title-2: #d6f3ff;
+  --start-title-3: #8fdcff;
+  --start-title-4: #2fb8ff;
+  --start-title-edge: #3d6bff;
+  --start-title-shade: #0a1640;
+  --script: #ff3d9a;
   --script-glow: #ff1fa0;
-  --prompt: #8ff4ff;
-  --prompt-glow: #19d3ff;
+  --prompt: #2fb8ff;
+  --prompt-glow: #3d6bff;
   /* The sky's middle, where the lettering sits. */
-  --start-ground: #2a0d4a;
+  --start-ground: #050a1f;
 }
 
 /* Touch screens get a taller title bar to drag windows by and a bigger

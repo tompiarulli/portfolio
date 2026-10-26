@@ -104,11 +104,12 @@ export function Dither({ id, levels }: { id: string; levels: number }) {
   )
 }
 
-/** A filter that shaves strokes thinner, for a face with one weight. */
-export function Thin({ id }: { id: string }) {
+/** A filter that shaves strokes thinner, for a face with one weight, by
+ *  `radius` pixels each side. */
+export function Thin({ id, radius = 1 }: { id: string; radius?: number }) {
   return (
     <filter id={id}>
-      <feMorphology operator="erode" radius="1" />
+      <feMorphology operator="erode" radius={radius} />
     </filter>
   )
 }
