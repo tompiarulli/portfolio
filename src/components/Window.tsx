@@ -183,7 +183,7 @@ export function Window({
         ['--slot' as string]: slots[id] ?? 0,
         zIndex: peek === id ? stack.length + 1 : stack.indexOf(id) + 1,
       }}
-      className={`pointer-events-auto absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col overflow-clip rounded-(--window-radius) border border-(--ink) bg-(--surface) shadow-(--window-shadow) outline-none ${className}`}
+      className={`pointer-events-auto absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col overflow-clip rounded-(--window-radius) border border-(--frame) bg-(--surface) shadow-(--window-shadow) outline-none ${className}`}
     >
       <div
         onPointerDown={onPointerDown}
@@ -191,7 +191,7 @@ export function Window({
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         onDoubleClick={shade}
-        className={`grid h-(--title-height) shrink-0 cursor-grab touch-none grid-cols-[1fr_auto_1fr] items-center gap-2 px-1.5 active:cursor-grabbing ${shaded ? '' : 'border-b border-(--ink)'} ${active ? 'bg-(--title-bar) text-(--title-bar-ink) [--bar:var(--title-bar)]' : 'bg-(--surface) [--bar:var(--surface)]'}`}
+        className={`grid h-(--title-height) shrink-0 cursor-grab touch-none grid-cols-[1fr_auto_1fr] items-center gap-2 px-1.5 active:cursor-grabbing ${shaded ? '' : 'border-b border-(--frame)'} ${active ? 'bg-(--title-bar) text-(--title-bar-ink) [--bar:var(--title-bar)]' : 'bg-(--surface) [--bar:var(--surface)]'}`}
       >
         {/* Equal side columns keep the title centred on the whole bar, not
             on the space left over after the buttons. */}

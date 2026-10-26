@@ -15,7 +15,7 @@ export function Dock() {
       aria-label="Applications"
       data-shutdown="dock"
       // On a phone the dock spans the screen and its keys share it.
-      className="fixed bottom-0 left-1/2 z-50 flex max-w-full -translate-x-1/2 gap-[6px] overflow-clip rounded-t-(--dock-radius) border border-b-0 border-(--ink) bg-(--surface) p-[6px] max-sm:inset-x-0 max-sm:translate-x-0 max-sm:gap-[4px] max-sm:p-[4px]"
+      className="fixed bottom-0 left-1/2 z-50 flex max-w-full -translate-x-1/2 gap-[6px] overflow-clip rounded-t-(--dock-radius) border border-b-0 border-(--frame) bg-(--surface) p-[6px] max-sm:inset-x-0 max-sm:translate-x-0 max-sm:gap-[4px] max-sm:p-[4px]"
     >
       {APPS.map((app) => {
         const open = stack.includes(app.id)

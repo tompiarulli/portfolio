@@ -68,6 +68,7 @@ const PAIRS: [string, string, number, string][] = [
   ['--terminal-text', '--terminal', 4.5, "the terminal's output"],
   ['--terminal-prompt', '--terminal', 4.5, "the terminal's prompt and input"],
   ['--indicator', '--surface', 3, "the dock's open-window mark"],
+  ['--frame', '--surface', 3, 'the frames of windows, bars and menus'],
   ['--title-bar-ink', '--title-bar', 4.5, "the focused window's bar"],
   ['--on-title-tag', '--title-tag', 4.5, "the focused window's title"],
   ['--start-text', '--start-ground', 4.5, "the start screen's build line"],

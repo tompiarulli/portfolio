@@ -203,6 +203,9 @@
   --title-height: 23px;
   --title-open: '';
   --title-close: '';
+  /* The outer frames of windows, the menu bar, its menu and the dock: the
+     ink unless a theme frames them in a colour of its own. */
+  --frame: var(--ink);
   /* The focused window's bar and its text, and a tag behind its title
      (the same colours, unless a theme sets the title in a tag of its
      own on a plain bar). */
@@ -409,6 +412,8 @@
   --title: #2fb8ff;
   --on-title: #120a2a;
   --indicator: #ff3d9a;
+  /* Windows and bars framed in the dock's electric blue. */
+  --frame: #2fb8ff;
   --window-radius: 4px;
   --close-radius: 2px;
   /* Lettered like its start screen: titles in its title's rounded retro

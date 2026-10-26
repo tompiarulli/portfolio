@@ -63,7 +63,7 @@ function Splash({
       Math.min(Math.floor((filled / CELLS) * steps.length), steps.length - 1)
     ]
   return (
-    <div className="absolute top-1/2 left-1/2 w-[min(320px,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 border border-(--ink) bg-(--surface) text-(--ink) shadow-(--window-shadow)">
+    <div className="absolute top-1/2 left-1/2 w-[min(320px,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 border border-(--frame) bg-(--surface) text-(--ink) shadow-(--window-shadow)">
       <div className="flex items-center gap-4 border-b border-dotted border-(--ink) p-4">
         <span aria-hidden className="logo shrink-0 [--logo-size:48px]" />
         <div className="min-w-0">
