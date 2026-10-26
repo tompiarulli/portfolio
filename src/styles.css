@@ -298,10 +298,12 @@
   color-scheme: dark;
 }
 
-/* White Rabbit's window titles sit in brackets, like a terminal's. */
+/* White Rabbit's window titles sit in brackets, like a terminal's, and
+   its dock and clock are a size up, to carry the shortcut bar. */
 [data-theme='rabbit'] {
   --title-open: '[';
   --title-close: ']';
+  --label-size: 13px;
 }
 
 /* Orbital: black, white and greys, no colour at all. */
@@ -696,6 +698,69 @@ svg {
 }
 [data-off] [data-shutdown='dock'] {
   transition-delay: 200ms;
+}
+
+/* White Rabbit's dock is a terminal program's shortcut bar: each app's
+   name after one of the code rain's glyphs in an inverted block, the
+   katakana for the name's first sound, with no boxes; on a phone the
+   glyph sits above the name. The focused app's name is underlined; one
+   open behind it has a dotted underline. */
+[data-theme='rabbit'] [data-shutdown='dock'] {
+  gap: 0;
+}
+[data-theme='rabbit'] [data-dock-link] {
+  width: auto;
+  height: 32px;
+  gap: 1ch;
+  padding-inline: 1.5ch;
+  border: 0;
+}
+[data-theme='rabbit'] [data-dock-link]::before {
+  padding-inline: 0.5ch;
+  background: var(--ink);
+  color: var(--surface);
+  font-family: var(--font-label);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+}
+[data-theme='rabbit'] [data-dock-link='about']::before {
+  content: 'ｱ';
+}
+[data-theme='rabbit'] [data-dock-link='contact']::before {
+  content: 'ｺ';
+}
+[data-theme='rabbit'] [data-dock-link='work']::before {
+  content: 'ﾜ';
+}
+[data-theme='rabbit'] [data-dock-link='terminal']::before {
+  content: 'ﾀ';
+}
+[data-theme='rabbit'] [data-dock-link='settings']::before {
+  content: 'ｾ';
+}
+[data-theme='rabbit'] [data-dock-link] > span:first-child {
+  padding-inline: 0.5ch;
+}
+[data-theme='rabbit'] [data-dock-link][aria-current] > span:first-child {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+[data-theme='rabbit']
+  [data-dock-link][data-open]:not([aria-current])
+  > span:first-child {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+[data-theme='rabbit'] [data-lamp] {
+  display: none;
+}
+@media (max-width: 639px) {
+  [data-theme='rabbit'] [data-dock-link] {
+    flex-direction: column;
+    gap: 3px;
+    height: 44px;
+    padding-inline: 0;
+  }
 }
 
 /* Steamboat's dock is a row of folder tabs standing on a folder's edge:
