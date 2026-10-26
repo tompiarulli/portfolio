@@ -47,7 +47,8 @@ Renovate opens dependency updates weekly. TanStack packages are pinned exactly a
 - `src/lib/terminal.ts` the Terminal app's commands.
 - `src/styles.css` design tokens per theme, and the retro desktop chrome utilities.
 - `public/fonts/` self-hosted fonts.
-- `scripts/` Python scripts that build the menu marks, dock icons and Shut Down photo; see `scripts/README.md`.
+- `public/icons/` each theme's menu mark and dock icons, one folder per theme; see `public/icons/README.md`.
+- `scripts/` scripts that build the Shut Down photo; see `scripts/README.md`.
 
 ## Workflow
 

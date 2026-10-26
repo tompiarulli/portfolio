@@ -1,23 +1,16 @@
 # Icons
 
-Dock icons live in this folder and are picked per theme by tokens in `src/styles.css`; the menu marks are inlined there. This file records where they come from.
+Each theme has its own menu mark and dock icons, original art, in a folder named for the theme's id (`orbital`, `rabbit`, `steamboat`, `traveler`). `src/styles.css` points each theme at its folder under "Menu marks and dock icons". Until a theme's art is drawn, its files are plain placeholder boxes.
 
-## Dock icons
+| File           | Where                                                          | How it's drawn                                                                                                                            |
+| -------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `mark.svg`     | The menu mark, top left of the menu bar, 16x16 (`--logo-size`) | As a mask: only its shape counts, painted in the menu bar's text colour, so it inverts when the menu opens. Draw it in any single colour. |
+| `about.svg`    | The About icon in the dock, 40x40 (36x36 on phones)            | As drawn, in its own colours. Draw on a square canvas; the icon fills it.                                                                 |
+| `contact.svg`  | The Contact icon                                               | As drawn.                                                                                                                                 |
+| `work.svg`     | The Work icon                                                  | As drawn.                                                                                                                                 |
+| `terminal.svg` | The Terminal icon                                              | As drawn.                                                                                                                                 |
+| `settings.svg` | The Settings icon                                              | As drawn.                                                                                                                                 |
 
-Every theme shares one set, painted in its dock's text colour: 32x32 icons from CDE, the Common Desktop Environment (1993-95), designed by the User Interaction Design Group at Hewlett-Packard; GNU Lesser General Public License v2 or later, with the licence text in `cde/COPYING`. Modified from the originals by `scripts/cde_icons.py`, from the pixmaps in [cdesktopenv](https://sourceforge.net/p/cdesktopenv/code/): on dark docks brightness becomes opacity in three steps (`-dark` copies); light docks (Steamboat's) use inverted `-light` copies, so the drawing reads as ink on paper.
+To swap one in, export the design as an SVG over the placeholder with the same name; the dev server picks it up. A PNG works too: export it at twice the size it shows at (80x80 for a dock icon, 32x32 for a mark) and change the file name in that theme's rule in `src/styles.css`. Pixel art reads sharpest at whole multiples of its grid; set `--icon-rendering: pixelated` in the theme's rule so it scales without blurring.
 
-- About: `cde/programs/icons/Dtinfo.m.pm`
-- Contact: `cde/programs/icons/DtMnew.m.pm`
-- Terminal: `cde/programs/icons/Fpterm.m.pm`
-- Settings: `cde/programs/icons/Fpstyle.m.pm`
-
-A theme can swap in a set of its own through `--icon-<id>-mask` (painted in the text colour) or `--icon-<id>-image` (shown as drawn) in `src/styles.css`, credited here with its licence.
-
-## Menu marks
-
-Each theme has its own 16x16 mark in the top-left menu, original art:
-
-- Orbital: a plain, smooth disc, an SVG circle in `src/styles.css`.
-- White Rabbit: a white rabbit's head in slim black sunglasses.
-- Steamboat: a stand-in film leader's countdown circle, drawn in `scripts/steamboat_logo.py`.
-- OUTATIME: the flux capacitor, drawn in `scripts/traveler_logo.py`.
+Art from elsewhere is fine too: credit it here with its licence and in `credits` in `src/lib/site.ts`, and for a paid set commit only the exported icons, never the source pack.

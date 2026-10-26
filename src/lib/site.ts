@@ -85,17 +85,6 @@ export const credits: { group: string; items: Credit[] }[] = [
     ],
   },
   {
-    group: 'Icons',
-    items: [
-      {
-        name: 'CDE',
-        by: 'the User Interaction Design Group at Hewlett-Packard',
-        url: 'https://sourceforge.net/p/cdesktopenv/code/',
-        license: 'LGPL v2+',
-      },
-    ],
-  },
-  {
     group: 'Photo',
     items: [
       {

@@ -153,22 +153,18 @@
   --terminal-prompt: var(--glint);
   /* The screen with the power off; the same on every theme. */
   --off: #000;
-  /* The 16x16 menu mark, here a rabbit's head in sunglasses. --logo-size
-     is its grid, so the pixels stay crisp. */
+  /* The menu mark's size; the mark itself is set per theme, with the
+     dock icons, under "Menu marks and dock icons" below. */
   --logo-size: 16px;
-  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.4' d=''/%3E%3Cpath fill-opacity='.7' d='M12 0h1v1H12zM4 1h1v1H4zM11 1h1v1H11zM13 1h1v1H13zM4 2h1v1H4zM11 2h1v1H11zM13 2h1v1H13zM4 3h1v1H4zM11 3h1v1H11zM13 3h1v1H13zM4 4h1v1H4zM11 4h1v1H11zM13 4h1v1H13zM4 5h1v1H4zM11 5h1v1H11zM12 6h1v1H12zM13 7h1v1H13zM14 8h1v1H14zM14 9h1v1H14zM14 10h1v1H14zM13 11h2v1H13zM13 12h2v1H13zM12 13h1v1H12zM12 14h1v1H12zM4 15h8v1H4z'/%3E%3Cpath d='M3 0h2v1H3zM11 0h1v1H11zM2 1h2v1H2zM5 1h1v1H5zM10 1h1v1H10zM12 1h1v1H12zM2 2h2v1H2zM5 2h1v1H5zM10 2h1v1H10zM12 2h1v1H12zM2 3h2v1H2zM5 3h1v1H5zM10 3h1v1H10zM12 3h1v1H12zM2 4h2v1H2zM5 4h1v1H5zM10 4h1v1H10zM12 4h1v1H12zM3 5h1v1H3zM5 5h1v1H5zM10 5h1v1H10zM12 5h1v1H12zM3 6h9v1H3zM2 7h11v1H2zM1 8h1v1H1zM3 8h1v1H3zM10 8h1v1H10zM1 9h1v1H1zM7 9h2v1H7zM1 10h2v1H1zM7 10h2v1H7zM13 10h1v1H13zM1 11h6v1H1zM9 11h4v1H9zM1 12h12v1H1zM2 13h4v1H2zM10 13h2v1H10zM3 14h9v1H3z'/%3E%3C/svg%3E");
-  /* Dock icons (see public/icons/README.md) as masks painted in the dock's
-     text colour, so each theme tints them; light docks use inverted
-     copies. A theme may show a drawing instead through --icon-<id>-image,
-     with --icon-fill transparent. */
-  --icon-fill: currentColor;
-  --icon-size: 32px;
+  /* Dock icons are shown as drawn. A theme can paint one in the dock's
+     text colour instead with --icon-<id>-mask and --icon-fill. */
+  --icon-fill: transparent;
+  /* 36px on phones, below. */
+  --icon-size: 40px;
+  /* Smooth for vector and drawn icons; pixelated keeps pixel art crisp. */
+  --icon-rendering: auto;
   /* A filter over the drawn icons, e.g. greyscale; none keeps them as is. */
   --icon-filter: none;
-  --icon-about-mask: url('/icons/cde/about-dark.png');
-  --icon-contact-mask: url('/icons/cde/contact-dark.png');
-  --icon-terminal-mask: url('/icons/cde/terminal-dark.png');
-  --icon-settings-mask: url('/icons/cde/settings-dark.png');
   color-scheme: dark;
 }
 
@@ -176,14 +172,6 @@
 [data-theme='rabbit'] {
   --title-open: '[';
   --title-close: ']';
-}
-
-/* Steamboat's light dock takes the inverted copies. */
-[data-theme='steamboat'] {
-  --icon-about-mask: url('/icons/cde/about-light.png');
-  --icon-contact-mask: url('/icons/cde/contact-light.png');
-  --icon-terminal-mask: url('/icons/cde/terminal-light.png');
-  --icon-settings-mask: url('/icons/cde/settings-light.png');
 }
 
 /* Orbital: black, white and greys, no colour at all. */
@@ -213,9 +201,6 @@
   --glint: #ededed;
   /* The rings' grey is too faint for text on the terminal's screen. */
   --terminal-text: #949494;
-  /* Menu mark: a disc. */
-  --logo-size: 16px;
-  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3C/svg%3E");
 }
 
 /* Steamboat: black ink on grey-white paper, no colour, with a rounded sans
@@ -255,10 +240,6 @@
   --warp: #a8a8a4;
   /* Silver, like the film; the base theme's is phosphor green. */
   --glint: #f4f4f0;
-  /* Menu mark: a film leader's countdown circle, a stand-in drawn in
-     scripts/steamboat_logo.py. */
-  --logo-size: 16px;
-  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.7' d='M7 2h1v1H7zM7 3h1v1H7zM7 4h1v1H7zM7 5h1v1H7zM7 6h1v1H7zM1 7h13v1H1zM7 8h1v1H7zM7 9h1v1H7zM7 10h1v1H7zM7 11h1v1H7zM7 12h1v1H7z'/%3E%3Cpath d='M5 1h6v1H5zM3 2h2v1H3zM11 2h2v1H11zM2 3h1v1H2zM12 3h1v1H12zM1 4h1v1H1zM13 4h1v1H13zM1 5h1v1H1zM13 5h1v1H13zM0 6h1v1H0zM14 6h1v1H14zM0 7h1v1H0zM14 7h1v1H14zM0 8h1v1H0zM14 8h1v1H14zM1 9h1v1H1zM13 9h1v1H13zM1 10h1v1H1zM13 10h1v1H13zM2 11h1v1H2zM12 11h1v1H12zM3 12h2v1H3zM11 12h2v1H11zM5 13h6v1H5z'/%3E%3C/svg%3E");
   color-scheme: light;
 }
 
@@ -293,10 +274,45 @@
   --streak-2: #2f9bff;
   --streak-3: #a24bff;
   --streak-4: #ff3d9a;
-  /* Menu mark: a flux capacitor, drawn in scripts/traveler_logo.py. */
-  --logo-size: 16px;
-  --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.7' d='M2 2h2v1H2zM12 2h2v1H12zM2 3h3v1H2zM11 3h3v1H11zM3 4h1v1H3zM5 4h1v1H5zM10 4h1v1H10zM12 4h1v1H12zM4 5h3v1H4zM9 5h3v1H9zM5 6h1v1H5zM7 6h2v1H7zM10 6h1v1H10zM6 7h1v1H6zM9 7h1v1H9zM7 9h2v1H7zM8 10h1v1H8zM7 11h2v1H7zM8 12h1v1H8zM7 13h2v1H7zM7 14h2v1H7z'/%3E%3Cpath d='M0 0h16v1H0zM0 1h1v1H0zM15 1h1v1H15zM0 2h1v1H0zM15 2h1v1H15zM0 3h1v1H0zM15 3h1v1H15zM0 4h1v1H0zM4 4h1v1H4zM11 4h1v1H11zM15 4h1v1H15zM0 5h1v1H0zM15 5h1v1H15zM0 6h1v1H0zM6 6h1v1H6zM9 6h1v1H9zM15 6h1v1H15zM0 7h1v1H0zM7 7h2v1H7zM15 7h1v1H15zM0 8h1v1H0zM7 8h2v1H7zM15 8h1v1H15zM0 9h1v1H0zM15 9h1v1H15zM0 10h1v1H0zM7 10h1v1H7zM15 10h1v1H15zM0 11h1v1H0zM15 11h1v1H15zM0 12h1v1H0zM7 12h1v1H7zM15 12h1v1H15zM0 13h1v1H0zM15 13h1v1H15zM0 14h1v1H0zM15 14h1v1H15zM0 15h16v1H0z'/%3E%3C/svg%3E");
   color-scheme: light;
+}
+
+/* ---------- Menu marks and dock icons ----------
+   Each theme's own art, in public/icons/<theme>/: mark.svg for the menu,
+   a mask painted in the menu bar's text colour, and about, contact,
+   work, terminal and settings for the dock, shown as drawn. Swap a file to
+   change one; see public/icons/README.md. */
+[data-theme='orbital'] {
+  --logo: url('/icons/orbital/mark.svg');
+  --icon-about-image: url('/icons/orbital/about.svg');
+  --icon-contact-image: url('/icons/orbital/contact.svg');
+  --icon-work-image: url('/icons/orbital/work.svg');
+  --icon-terminal-image: url('/icons/orbital/terminal.svg');
+  --icon-settings-image: url('/icons/orbital/settings.svg');
+}
+[data-theme='rabbit'] {
+  --logo: url('/icons/rabbit/mark.svg');
+  --icon-about-image: url('/icons/rabbit/about.svg');
+  --icon-contact-image: url('/icons/rabbit/contact.svg');
+  --icon-work-image: url('/icons/rabbit/work.svg');
+  --icon-terminal-image: url('/icons/rabbit/terminal.svg');
+  --icon-settings-image: url('/icons/rabbit/settings.svg');
+}
+[data-theme='steamboat'] {
+  --logo: url('/icons/steamboat/mark.svg');
+  --icon-about-image: url('/icons/steamboat/about.svg');
+  --icon-contact-image: url('/icons/steamboat/contact.svg');
+  --icon-work-image: url('/icons/steamboat/work.svg');
+  --icon-terminal-image: url('/icons/steamboat/terminal.svg');
+  --icon-settings-image: url('/icons/steamboat/settings.svg');
+}
+[data-theme='traveler'] {
+  --logo: url('/icons/traveler/mark.svg');
+  --icon-about-image: url('/icons/traveler/about.svg');
+  --icon-contact-image: url('/icons/traveler/contact.svg');
+  --icon-work-image: url('/icons/traveler/work.svg');
+  --icon-terminal-image: url('/icons/traveler/terminal.svg');
+  --icon-settings-image: url('/icons/traveler/settings.svg');
 }
 
 /* Touch screens get a taller title bar to drag windows by and a bigger
@@ -316,6 +332,10 @@
    windows behind stay clear to tap, whatever order they open in. Dragging
    still moves them anywhere. */
 @media (max-width: 639px) {
+  :root,
+  [data-theme] {
+    --icon-size: 36px;
+  }
   section[data-window] {
     --open-y: calc(40px + var(--slot) * (var(--title-height) + 8px));
   }
@@ -373,8 +393,7 @@ svg {
   box-shadow: inset 1px 1px 0 0 var(--surface-dark);
 }
 
-/* The theme's --logo, painted in the current text colour at its own
-   pixel grid (--logo-size) so the pixels stay crisp. */
+/* The theme's --logo, painted in the current text colour at --logo-size. */
 .logo {
   width: var(--logo-size);
   height: var(--logo-size);
@@ -390,7 +409,7 @@ svg {
   mask-position: center;
   mask-size: contain;
   mask-repeat: no-repeat;
-  image-rendering: pixelated;
+  image-rendering: var(--icon-rendering);
   filter: var(--icon-filter);
 }
 
