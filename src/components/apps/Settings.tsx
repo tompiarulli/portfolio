@@ -39,7 +39,7 @@ export function Settings() {
   return (
     <Window title="Settings" right x={-199} y={189} width={360}>
       <fieldset className="border border-(--ink) p-3">
-        <legend className="px-1 font-mono">Date &amp; Time</legend>
+        <legend className="heading px-1">Date &amp; Time</legend>
         <div className="grid grid-cols-2 border border-(--ink)">
           {CLOCK_MODES.map((m) => (
             <label
@@ -62,7 +62,7 @@ export function Settings() {
         </div>
       </fieldset>
       <fieldset className="mt-4 border border-(--ink) p-3">
-        <legend className="px-1 font-mono">Theme</legend>
+        <legend className="heading px-1">Theme</legend>
         <div className="grid grid-cols-2 gap-3">
           {THEMES.map((t) => (
             <ThemeTile key={t.id} theme={t} on={theme === t.id} pick={pick} />

@@ -7,7 +7,7 @@ export function SystemInfo() {
     <Window title="System Info" x={-80} y={-10} width={340} height={420}>
       <p className="font-mono text-base">{site.os}</p>
       <dl className="mt-1 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
-        <dt className="font-mono">Version</dt>
+        <dt className="heading">Version</dt>
         <dd>
           {build.commit}
           {build.date && ` (${build.date})`}
@@ -18,7 +18,7 @@ export function SystemInfo() {
           key={group}
           className="mt-3 border-t border-dotted border-(--ink) pt-3"
         >
-          <h3 className="font-mono">{group}</h3>
+          <h3 className="heading">{group}</h3>
           <ul className="mt-1 space-y-1">
             {items.map((c) => (
               <li key={c.name}>

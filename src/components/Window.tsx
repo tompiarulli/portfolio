@@ -245,7 +245,7 @@ export function Window({
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         onDoubleClick={shade}
-        className={`grid h-(--title-height) shrink-0 cursor-grab touch-none grid-cols-[1fr_auto_1fr] items-center gap-2 px-1.5 active:cursor-grabbing ${shaded ? '' : 'border-b border-(--ink)'} ${active ? 'bg-(--title) text-(--on-title) [--bar:var(--title)]' : 'bg-(--surface) [--bar:var(--surface)]'}`}
+        className={`grid h-(--title-height) shrink-0 cursor-grab touch-none grid-cols-[1fr_auto_1fr] items-center gap-2 px-1.5 active:cursor-grabbing ${shaded ? '' : 'border-b border-(--ink)'} ${active ? 'bg-(--title-bar) text-(--title-bar-ink) [--bar:var(--title-bar)]' : 'bg-(--surface) [--bar:var(--surface)]'}`}
       >
         {/* Equal side columns keep the title centred on the whole bar, not
             on the space left over after the buttons. */}
@@ -288,7 +288,9 @@ export function Window({
             onClick={(e) => e.detail === 0 && shade()}
             className="group flex cursor-[inherit] items-center font-(family-name:--font-title) text-(length:--title-size) [font-weight:var(--title-weight)] tracking-(--title-tracking) [text-transform:var(--title-case)] outline-none"
           >
-            <span className="px-2 outline-offset-2 outline-current outline-dotted [text-box:trim-both_cap_alphabetic] group-[:not(:focus-visible)]:outline-none before:content-(--title-open) after:content-(--title-close)">
+            <span
+              className={`px-2 py-[3px] outline-offset-2 outline-current outline-dotted [text-box:trim-both_cap_alphabetic] group-[:not(:focus-visible)]:outline-none before:content-(--title-open) after:content-(--title-close) ${active ? 'bg-(--title-tag) text-(--on-title-tag)' : ''}`}
+            >
               {title}
             </span>
           </button>

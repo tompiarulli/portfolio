@@ -32,13 +32,19 @@
 }
 
 /* Geist Mono (SIL OFL, see public/fonts/GeistMono-OFL.txt): Orbital's font,
-   preloaded in __root.tsx. Regular for text, SemiBold for labels and
-   titles. */
+   preloaded in __root.tsx. Regular for text, Medium for labels, and
+   SemiBold for titles. */
 @font-face {
   font-family: 'Geist Mono';
   src: url('/fonts/geist-mono-400.woff2') format('woff2');
   font-display: swap;
-  font-weight: 300 500;
+  font-weight: 300 400;
+}
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/geist-mono-500.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 500;
 }
 @font-face {
   font-family: 'Geist Mono';
@@ -197,6 +203,17 @@
   --title-height: 23px;
   --title-open: '';
   --title-close: '';
+  /* The focused window's bar and its text, and a tag behind its title
+     (the same colours, unless a theme sets the title in a tag of its
+     own on a plain bar). */
+  --title-bar: var(--title);
+  --title-bar-ink: var(--on-title);
+  --title-tag: var(--title);
+  --on-title-tag: var(--on-title);
+  /* How headings and labels in windows are set. */
+  --heading-case: none;
+  --heading-tracking: 0em;
+  --heading-size: var(--text-size);
   --close-bg: transparent;
   --close-shadow: none;
   --box-size: 15px;
@@ -312,9 +329,7 @@
   --well: #000000;
   --title: #ededed;
   --on-title: #000000;
-  --label-case: none;
   --label-weight: 600;
-  --title-case: none;
   --title-weight: 600;
   --indicator: #ededed;
   --backdrop-opacity: 1;
@@ -323,6 +338,24 @@
   --glint: #ededed;
   /* The rings' grey is too faint for text on the terminal's screen. */
   --terminal-text: #949494;
+  /* Its start screen's ruled panel, on the desktop: labels, titles and
+     headings in small spaced capitals, labels in Medium, and the focused
+     title in a filled tag on a plain bar. */
+  --label-case: uppercase;
+  --label-weight: 500;
+  --label-tracking: 0.15em;
+  --dock-label-size: 11px;
+  --menu-size: 11px;
+  --title-case: uppercase;
+  --title-size: 11px;
+  --title-tracking: 0.15em;
+  --title-bar: var(--surface);
+  --title-bar-ink: var(--ink);
+  --title-tag: #ededed;
+  --on-title-tag: #000000;
+  --heading-case: uppercase;
+  --heading-tracking: 0.15em;
+  --heading-size: 11px;
 }
 
 /* Steamboat: black ink on grey-white paper, no colour, with a rounded sans
@@ -754,6 +787,13 @@ svg {
   color: var(--start-title-shade);
   translate: var(--start-title-drift) var(--start-title-depth);
   text-shadow: 0 calc(var(--start-title-depth) / -2) 0 var(--start-title-edge);
+}
+/* A heading or label in a window, styled by the theme. */
+.heading {
+  font-family: var(--font-mono);
+  font-size: var(--heading-size);
+  letter-spacing: var(--heading-tracking);
+  text-transform: var(--heading-case);
 }
 /* The prompt, glowing. */
 .prompt-glow {
