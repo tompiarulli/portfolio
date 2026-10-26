@@ -712,8 +712,9 @@ svg {
 
 /* White Rabbit's dock is a terminal program's shortcut bar: each app's
    name after one of the code rain's glyphs in an inverted block, the
-   katakana for the name's first sound, with no boxes; on a phone the
-   glyph sits above the name. The focused app's name is underlined; one
+   katakana for the name's first sound (decoration, so given empty
+   alternative text and left out of the key's name), with no boxes; on a
+   phone the glyph sits above the name. The focused app's name is underlined; one
    open behind it has a dotted underline. */
 [data-theme='rabbit'] [data-shutdown='dock'] {
   gap: 0;
@@ -734,19 +735,19 @@ svg {
   font-weight: var(--label-weight);
 }
 [data-theme='rabbit'] [data-dock-link='about']::before {
-  content: 'ｱ';
+  content: 'ｱ' / '';
 }
 [data-theme='rabbit'] [data-dock-link='contact']::before {
-  content: 'ｺ';
+  content: 'ｺ' / '';
 }
 [data-theme='rabbit'] [data-dock-link='work']::before {
-  content: 'ﾜ';
+  content: 'ﾜ' / '';
 }
 [data-theme='rabbit'] [data-dock-link='terminal']::before {
-  content: 'ﾀ';
+  content: 'ﾀ' / '';
 }
 [data-theme='rabbit'] [data-dock-link='settings']::before {
-  content: 'ｾ';
+  content: 'ｾ' / '';
 }
 [data-theme='rabbit'] [data-dock-link] > span:first-child {
   padding-inline: 0.5ch;
