@@ -698,6 +698,52 @@ svg {
   filter: var(--icon-filter);
 }
 
+/* Orbital's dock has no icons: each app is a ruled soft key, like the keys
+   along the foot of a flight console, marked when open as in the other
+   themes. */
+[data-theme='orbital'] .dock {
+  gap: 6px;
+  padding: 6px;
+}
+[data-theme='orbital'] .dock-key {
+  width: 96px;
+  height: 42px;
+  border: 1px solid var(--ink);
+}
+[data-theme='orbital'] .dock-icon {
+  display: none;
+}
+/* Its open-window mark is a lamp in the key's top left corner: lit for
+   the focused app, an outline for one open behind it. */
+[data-theme='orbital'] .dock-mark {
+  top: 5px;
+  bottom: auto;
+  left: 5px;
+  width: 5px;
+  height: 5px;
+  translate: none;
+  scale: none;
+  opacity: 1;
+}
+[data-theme='orbital'] .dock-mark[data-state='open'] {
+  background: transparent;
+  border: 1px solid var(--ink);
+}
+[data-theme='orbital'] .dock-mark[data-state='closed'] {
+  opacity: 0;
+}
+@media (max-width: 639px) {
+  [data-theme='orbital'] .dock {
+    gap: 4px;
+    padding: 4px;
+  }
+  [data-theme='orbital'] .dock-key {
+    width: auto;
+    padding-inline: 0;
+    --label-tracking: 0.04em;
+  }
+}
+
 .os-scroll {
   overflow: auto;
   scrollbar-width: thin;
