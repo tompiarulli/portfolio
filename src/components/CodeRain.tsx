@@ -52,7 +52,8 @@ export default function CodeRain({
 
   useEffect(() => {
     const canvas = ref.current
-    const ctx = canvas?.getContext('2d')
+    // Opaque, so the browser needn't blend it over the page.
+    const ctx = canvas?.getContext('2d', { alpha: false })
     const parent = canvas?.parentElement
     if (!canvas || !ctx || !parent) return
 
@@ -81,6 +82,11 @@ export default function CodeRain({
       canvas.width = Math.round(width * dpr)
       canvas.height = Math.round(height * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      // Sizing the canvas resets its text settings, so set them here,
+      // once, rather than every frame.
+      ctx.font = `${cellHeight - 2}px monospace`
+      ctx.textBaseline = 'top'
+      ctx.textAlign = 'center'
       columns = Math.ceil(width / cellWidth)
       rows = Math.ceil(height / cellHeight)
       lanes = columns
@@ -94,9 +100,6 @@ export default function CodeRain({
       ctx.globalAlpha = 1
       ctx.fillStyle = background
       ctx.fillRect(0, 0, columns * cellWidth, rows * cellHeight)
-      ctx.font = `${cellHeight - 2}px monospace`
-      ctx.textBaseline = 'top'
-      ctx.textAlign = 'center'
       drops.forEach((d, i) => {
         const lane = i % lanes
         const top = Math.floor(d.y)
