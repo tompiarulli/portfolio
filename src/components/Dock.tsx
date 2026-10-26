@@ -35,7 +35,7 @@ export function Dock() {
             className="dock-key group relative flex h-[88px] w-[84px] min-w-0 cursor-pointer flex-col items-center justify-center gap-[4px] px-1 -outline-offset-4 outline-current outline-dotted not-focus-visible:outline-none focus-visible:bg-(--tertiary) focus-visible:text-(--on-tertiary) max-sm:h-[76px] max-sm:w-auto max-sm:flex-1"
           >
             <DockIcon id={app.id} />
-            <span className="font-(family-name:--font-label) text-(length:--dock-label-size) [font-weight:var(--label-weight)] tracking-(--label-tracking) [text-transform:var(--label-case)]">
+            <span className="font-(family-name:--font-label) text-(length:--label-size) [font-weight:var(--label-weight)] tracking-(--label-tracking) [text-transform:var(--label-case)]">
               {app.label}
               {/* The marks below say this by sight. */}
               <span className="sr-only">

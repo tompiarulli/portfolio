@@ -185,11 +185,11 @@
   --on-tertiary: #03120a;
   --title: #41e07a;
   --on-title: #03120a;
-  /* Case and weight of dock labels, the clock and window titles. */
+  /* Case and weight of dock labels, the clock and window titles; and the
+     size of the dock labels and menu bar, kept the same. */
   --label-case: uppercase;
   --label-weight: 600;
-  --menu-size: 12px;
-  --dock-label-size: 12px;
+  --label-size: 12px;
   --text-size: 12px;
   --title-case: uppercase;
   --title-weight: 700;
@@ -344,8 +344,7 @@
   --label-case: uppercase;
   --label-weight: 500;
   --label-tracking: 0.15em;
-  --dock-label-size: 11px;
-  --menu-size: 11px;
+  --label-size: 11px;
   --title-case: uppercase;
   --title-size: 11px;
   --title-tracking: 0.15em;
@@ -465,8 +464,7 @@
   --label-case: uppercase;
   --label-weight: 600;
   --label-tracking: 0.1em;
-  --dock-label-size: 11px;
-  --menu-size: 11px;
+  --label-size: 11px;
   --bg: #f2f0e6;
   --surface: #f2f0e6;
   --button: #f2f0e6;

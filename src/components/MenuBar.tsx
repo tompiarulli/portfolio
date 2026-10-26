@@ -25,7 +25,7 @@ if (typeof window !== 'undefined') {
 }
 
 const BAR =
-  'fixed top-0 z-50 flex h-[32px] items-center border-b border-(--ink) bg-(--surface) text-(length:--menu-size)'
+  'fixed top-0 z-50 flex h-[32px] items-center border-b border-(--ink) bg-(--surface) text-(length:--label-size)'
 
 const ITEM =
   'block w-full px-4 py-[3px] pointer-coarse:py-3 text-left whitespace-nowrap outline-none hover:bg-(--accent) hover:text-(--on-accent) focus-visible:bg-(--accent) focus-visible:text-(--on-accent)'
