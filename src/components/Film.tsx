@@ -1,7 +1,8 @@
 // A flickering frame under a vignette: one fragment shader on raw WebGL,
-// drawn at a low resolution and scaled up pixelated.
+// drawn at a low resolution and scaled up pixelated, with grain over it.
 import { useEffect, useLayoutEffect, useRef } from 'react'
 
+import { FilmGrain } from '#/components/FilmGrain'
 import { rgb } from '#/lib/color'
 
 const vertexShader = `
@@ -177,9 +178,13 @@ export default function Film({
   }, [])
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="block size-full [image-rendering:pixelated]"
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className="block size-full [image-rendering:pixelated]"
+      />
+      {/* Fainter than on the start screen, under the windows all day. */}
+      <FilmGrain strength={0.22} />
+    </>
   )
 }

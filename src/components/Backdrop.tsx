@@ -65,7 +65,7 @@ export const ORBITS = {
 /** For `backdrop: 'film'`. */
 const FILM = {
   /** How much the frame's brightness jumps, frame to frame. */
-  flicker: 0.08,
+  flicker: 0.04,
   /** How dark the edges get; 0 is none. */
   vignette: 0.7,
   /** Cell size in pixels. */
