@@ -697,6 +697,44 @@ svg {
 [data-off] [data-shutdown='dock'] {
   transition-delay: 200ms;
 }
+
+/* Steamboat's dock is a row of folder tabs standing on a folder's edge:
+   the focused app's tab raised and joined to the folder, the rest behind
+   the edge. The dock keeps one height, whichever tab is up. */
+[data-theme='steamboat'] [data-shutdown='dock'] {
+  height: 55px;
+  align-items: flex-end;
+  gap: 4px;
+  padding-block: 0 7px;
+  border: 0;
+  background: transparent;
+}
+/* The folder: a strip of paper the tabs stand on. */
+[data-theme='steamboat'] [data-shutdown='dock']::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 8px;
+  border: 1px solid var(--ink);
+  border-bottom: 0;
+  background: var(--surface);
+}
+[data-theme='steamboat'] [data-dock-link] {
+  height: 36px;
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  background: var(--surface);
+}
+[data-theme='steamboat'] [data-dock-link][aria-current='true'] {
+  z-index: 1;
+  height: 42px;
+}
+/* The raised tab marks the front window and the others are in sight, so
+   there are no lamps. */
+[data-theme='steamboat'] [data-lamp] {
+  display: none;
+}
 [data-off] [data-shutdown='bar'] {
   transition-delay: 400ms;
 }
