@@ -20,6 +20,13 @@ export const site = {
     "I'm also a former digital nomad and 90s kid with a deep love of travel, movies, and pop culture.",
   ],
   signoff: '- Tom',
+  /** The Work window: a write-up of work history, then a link to the full
+   *  history on LinkedIn. Placeholder until written. */
+  work: [
+    'A short write-up of my work history goes here: the companies, the teams and what we built.',
+    'A paragraph or two per role, most recent first.',
+  ],
+  workLink: 'Full work history on LinkedIn',
   os: 'TomOS 9.2',
   builtWith: 'React 19, TanStack Start, Tailwind 4',
   /** Status lines the splash card walks through at shut down and start up. */

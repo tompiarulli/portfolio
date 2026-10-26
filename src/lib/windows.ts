@@ -2,6 +2,7 @@
 export type WindowId =
   | 'about'
   | 'contact'
+  | 'work'
   | 'terminal'
   | 'settings'
   | 'system'

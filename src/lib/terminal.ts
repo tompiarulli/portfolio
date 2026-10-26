@@ -33,12 +33,14 @@ export const BANNER = [
 const FILES: Partial<Record<string, string[]>> = {
   'about.txt': [...site.letter, site.signoff],
   'contact.txt': profiles.map((p) => `${p.label.padEnd(10)}${p.handle}`),
+  'work.txt': site.work,
   '.plan': ['Build something small and fast.', 'Ship it.'],
 }
 
 const OPENABLE: Partial<Record<string, WindowId>> = {
   about: 'about',
   contact: 'contact',
+  work: 'work',
   settings: 'settings',
   system: 'system',
   'system info': 'system',

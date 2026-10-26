@@ -14,6 +14,8 @@ import type { WindowId } from '#/lib/windows'
 // keeps the server's HTML on screen until its chunk arrives and hydrates
 // it, so nothing flashes or moves.
 const load = {
+  work: () =>
+    import('#/components/apps/Work').then((m) => ({ default: m.Work })),
   terminal: () =>
     import('#/components/apps/Terminal').then((m) => ({ default: m.Terminal })),
   settings: () =>
@@ -38,6 +40,7 @@ if (typeof window !== 'undefined') {
 const APPS: Record<WindowId, ComponentType> = {
   about: About,
   contact: Contact,
+  work: lazy(load.work),
   terminal: lazy(load.terminal),
   settings: lazy(load.settings),
   system: lazy(load.system),

@@ -69,6 +69,7 @@ for (const { id, label } of THEMES) {
     for (const name of [
       'About',
       'Contact',
+      'Work',
       'Terminal',
       'Settings',
       'System Info',

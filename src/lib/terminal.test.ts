@@ -68,6 +68,7 @@ describe('run', () => {
   describe('cat', () => {
     it('prints a file', () => {
       expect(out('cat about.txt')).toEqual([...site.letter, site.signoff])
+      expect(out('cat work.txt')).toEqual(site.work)
       expect(out('cat .plan').length).toBeGreaterThan(0)
     })
 
@@ -104,6 +105,7 @@ describe('run', () => {
     it.each([
       ['about', 'about'],
       ['contact', 'contact'],
+      ['work', 'work'],
       ['settings', 'settings'],
       ['system', 'system'],
       ['system info', 'system'],

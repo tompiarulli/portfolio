@@ -64,6 +64,18 @@ describe('window manager', () => {
       expect(slot('system')).toBe('4')
     })
 
+    it('opens Work from the dock, with its link to LinkedIn', async () => {
+      const { user } = await renderDesktop('/')
+      await user.click(dockLink('work'))
+      const link = await screen.findByRole('link', {
+        name: 'Full work history on LinkedIn',
+      })
+      expect(windowOrder()).toEqual(['work', 'contact', 'about'])
+      expect(link.getAttribute('href')).toBe(
+        'https://www.linkedin.com/in/tompiarulli/',
+      )
+    })
+
     it('opens a closed window from the dock, focused', async () => {
       const { user, pathname } = await renderDesktop('/')
       await user.click(dockLink('terminal'))
