@@ -70,7 +70,7 @@ function Title() {
   return (
     <p
       aria-hidden
-      className="relative grid font-(family-name:--start-title-font) text-[96px] leading-none *:col-start-1 *:row-start-1 sm:text-[144px]"
+      className="relative -top-[3vh] grid font-(family-name:--start-title-font) text-[96px] leading-none *:col-start-1 *:row-start-1 sm:text-[144px]"
     >
       <span className="title-extrude">TomOS</span>
       <span className="title-bands">TomOS</span>
@@ -315,7 +315,9 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
             <div className="scroll-grid" />
           </div>
           {/* Sizes are in pixels, since rems follow the theme's text size
-              and this screen is the same on every theme. */}
+              and this screen is the same on every theme. The prompt sits
+              20px under the grass, which is nudged up 1.5vh, against the
+              column's 5vh gap. */}
           <div className="fade-in absolute inset-0 flex flex-col items-center justify-center gap-[5vh] px-4">
             <Title />
             <button
@@ -323,7 +325,7 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
               type="button"
               aria-label="Touch Grass to Start"
               onClick={onBoot}
-              className="grid w-[min(40vw,154px)] cursor-pointer outline-offset-8 outline-(--start-text) *:col-start-1 *:row-start-1 focus-visible:outline-2"
+              className="relative -top-[1.5vh] grid w-[min(40vw,154px)] cursor-pointer outline-offset-8 outline-(--start-text) *:col-start-1 *:row-start-1 focus-visible:outline-2"
             >
               {FRAMES.map((cells, i) => (
                 <Pixels
@@ -337,14 +339,14 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
             </button>
             <span
               aria-hidden
-              className="blink prompt-glow -mt-[3vh] pl-[0.4em] font-(family-name:--prompt-font) text-[12px] font-bold tracking-[0.4em] whitespace-nowrap uppercase sm:pl-[0.6em] sm:text-[14px] sm:tracking-[0.6em]"
+              className="blink prompt-glow mt-[calc(20px-6.5vh)] pl-[0.3em] font-(family-name:--prompt-font) text-[14px] font-bold tracking-[0.3em] whitespace-nowrap uppercase sm:pl-[0.4em] sm:text-[16px] sm:tracking-[0.4em]"
             >
               Touch Grass to Start
             </span>
           </div>
           <p
             aria-hidden
-            className="fade-in absolute inset-x-0 bottom-6 text-center font-(family-name:--start-font) text-[12px] text-(--start-text)"
+            className="fade-in absolute inset-x-0 bottom-4 text-center font-(family-name:--start-font) text-[11.5px] text-(--start-text)"
           >
             Build {build.commit}
             {build.date && ` (${build.date})`}

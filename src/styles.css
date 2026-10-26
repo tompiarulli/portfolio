@@ -59,17 +59,17 @@
   descent-override: 16%;
   line-gap-override: 0%;
 }
-/* Righteous (SIL OFL, see public/fonts/Righteous-OFL.txt) and Exo 2 Bold
-   (SIL OFL, see public/fonts/Exo2-OFL.txt): the start screen's title and
-   prompt, so they load only at shut down. */
+/* Righteous (SIL OFL, see public/fonts/Righteous-OFL.txt) and Space Mono
+   Bold (SIL OFL, see public/fonts/SpaceMono-OFL.txt): the start screen's
+   title and prompt, so they load only at shut down. */
 @font-face {
   font-family: 'Righteous';
   src: url('/fonts/righteous-400.woff2') format('woff2');
   font-display: swap;
 }
 @font-face {
-  font-family: 'Exo 2';
-  src: url('/fonts/exo-2-700.woff2') format('woff2');
+  font-family: 'Space Mono';
+  src: url('/fonts/space-mono-700.woff2') format('woff2');
   font-display: swap;
   font-weight: 700;
 }
@@ -191,7 +191,7 @@
   --start-title-edge: #ff4fb0;
   --start-title-shade: #3d0f55;
   /* The prompt under the grass: its face, its cyan, and its glow. */
-  --prompt-font: 'Exo 2', var(--start-font);
+  --prompt-font: 'Space Mono', var(--start-font);
   --prompt: #8ff4ff;
   --prompt-glow: #19d3ff;
   /* The brush script across the title: its face, its paint, and a faint

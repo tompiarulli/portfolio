@@ -12,4 +12,4 @@ pyftsubset font.ttf --flavor=woff2 --unicodes="U+0020-007E,U+2600-26FF" --output
 - `recursive-mono-casual-400.woff2`, `recursive-mono-casual-500.woff2`: Recursive by the Recursive Project Authors, SIL Open Font License 1.1 (`Recursive-OFL.txt`). Steamboat's mono. Static instances of Fontsource's variable Latin file at `CASL` 1, `slnt` 0, `CRSV` 0.5, `MONO` 1, `wght` 400 and 500 (fontTools `instancer`), subset with the `pyftsubset` command above using Iosevka's `--unicodes`.
 - `righteous-400.woff2`: Righteous Regular by Astigmatic, SIL Open Font License 1.1 (`Righteous-OFL.txt`). The start screen's title. Fontsource's Latin file.
 - `permanent-marker-400.woff2`: Permanent Marker Regular by Font Diner, Apache License 2.0 (`PermanentMarker-LICENSE.txt`). The brush script on the start screen. Fontsource's Latin file.
-- `exo-2-700.woff2`: Exo 2 Bold by the Exo 2 Project Authors, SIL Open Font License 1.1 (`Exo2-OFL.txt`). The start screen's prompt. Fontsource's Latin file.
+- `space-mono-700.woff2`: Space Mono Bold by the Space Mono Project Authors, SIL Open Font License 1.1 (`SpaceMono-OFL.txt`). The start screen's prompt. Fontsource's Latin file.

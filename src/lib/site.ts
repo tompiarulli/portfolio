@@ -92,9 +92,9 @@ export const credits: { group: string; items: Credit[] }[] = [
         license: 'OFL 1.1',
       },
       {
-        name: 'Exo 2',
-        by: 'the Exo 2 Project Authors',
-        url: 'https://github.com/google/fonts/tree/main/ofl/exo2',
+        name: 'Space Mono',
+        by: 'the Space Mono Project Authors',
+        url: 'https://github.com/google/fonts/tree/main/ofl/spacemono',
         license: 'OFL 1.1',
       },
       {
