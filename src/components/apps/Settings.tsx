@@ -2,6 +2,7 @@ import {
   Suspense,
   lazy,
   useEffect,
+  useId,
   useRef,
   useState,
   useSyncExternalStore,
@@ -195,6 +196,28 @@ function OrbitsPreview() {
 
 const RAIN_PREVIEW = digits(1999)
 
+/** Steamboat's tile: a still of the film as projected, brightest in the
+ *  middle and grainy. */
+function FilmPreview() {
+  const id = useId()
+  return (
+    <span className="absolute inset-0 overflow-hidden bg-[radial-gradient(ellipse_at_center,var(--glint)_0%,var(--warp)_100%)]">
+      <svg aria-hidden className="absolute inset-0 size-full">
+        <filter id={`${id}grain`}>
+          <feTurbulence type="fractalNoise" baseFrequency="1.2" seed="7" />
+          <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.4 1" />
+        </filter>
+        <rect
+          width="100%"
+          height="100%"
+          filter={`url(#${id}grain)`}
+          opacity="0.3"
+        />
+      </svg>
+    </span>
+  )
+}
+
 /** A tiny desktop: just the theme's backdrop. */
 function ThemePreview({
   theme,
@@ -212,8 +235,7 @@ function ThemePreview({
       {backdrop === 'orbits' ? (
         <OrbitsPreview />
       ) : backdrop === 'film' ? (
-        // A still of the film: the frame darkening to the edges.
-        <span className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--warp)_30%,var(--desk)_110%)]" />
+        <FilmPreview />
       ) : backdrop === 'streaks' ? (
         STREAKS_PREVIEW.map((l, i) => (
           <span
