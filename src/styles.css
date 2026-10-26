@@ -193,8 +193,6 @@
   --close-shadow: none;
   --box-size: 15px;
   --glyph-size: 9px;
-  /* Lines between dock keys. */
-  --dock-divider: var(--ink);
   /* Open-window marks in the dock. */
   --indicator: #aef5c0;
   /* Strength of the desktop background under the windows. */

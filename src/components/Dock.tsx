@@ -16,7 +16,7 @@ export function Dock() {
       aria-label="Applications"
       data-shutdown="dock"
       // On a phone the dock spans the screen and its buttons share it.
-      className="fixed bottom-0 left-1/2 z-50 flex max-w-full -translate-x-1/2 overflow-clip rounded-t-(--dock-radius) border border-b-0 border-(--ink) bg-(--surface) max-sm:inset-x-0 max-sm:translate-x-0"
+      className="fixed bottom-0 left-1/2 z-50 flex max-w-full -translate-x-1/2 overflow-clip rounded-t-(--dock-radius) border border-b-0 border-(--ink) bg-(--surface) px-[8px] max-sm:inset-x-0 max-sm:translate-x-0 max-sm:px-0"
     >
       {APPS.map((app) => {
         const open = stack.includes(app.id)
@@ -32,7 +32,7 @@ export function Dock() {
               // Clicking the focused window's icon minimizes it into the dock.
               front ? minimize(app.id) : raise(app.id)
             }
-            className="group relative flex size-[88px] min-w-0 cursor-pointer flex-col items-center justify-center gap-[4px] border-r border-(--dock-divider) px-1 -outline-offset-4 outline-current outline-dotted not-focus-visible:outline-none last:border-r-0 focus-visible:bg-(--tertiary) focus-visible:text-(--on-tertiary) max-sm:h-[76px] max-sm:w-auto max-sm:flex-1"
+            className="group relative flex h-[88px] w-[84px] min-w-0 cursor-pointer flex-col items-center justify-center gap-[4px] px-1 -outline-offset-4 outline-current outline-dotted not-focus-visible:outline-none focus-visible:bg-(--tertiary) focus-visible:text-(--on-tertiary) max-sm:h-[76px] max-sm:w-auto max-sm:flex-1"
           >
             <DockIcon id={app.id} />
             <span className="font-(family-name:--font-label) text-(length:--dock-label-size) [font-weight:var(--label-weight)] tracking-(--label-tracking) [text-transform:var(--label-case)]">
@@ -44,7 +44,7 @@ export function Dock() {
             </span>
             <span
               aria-hidden
-              className={`absolute bottom-[7px] left-1/2 h-[2px] w-[20px] -translate-x-1/2 transition-[scale,opacity] duration-150 ${
+              className={`absolute bottom-[8px] left-1/2 h-[2px] w-[20px] -translate-x-1/2 transition-[scale,opacity] duration-150 ${
                 stack.at(-1) === app.id
                   ? 'bg-(--indicator)'
                   : stack.includes(app.id)
