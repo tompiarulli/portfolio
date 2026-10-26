@@ -675,21 +675,50 @@ svg {
   mask: var(--logo) center / contain no-repeat;
 }
 
+/* A window's scroll bar, like an old desktop's: a ruled channel shaded in
+   a fine dither of the ink, and a box in the window's colour with a grip
+   of three rules at its middle. Firefox, which can't draw one, gets a
+   thin bar in the same two colours. */
 .os-scroll {
   overflow: auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--tertiary) var(--surface);
+  scrollbar-color: var(--ink) var(--surface);
+}
+/* Chrome ignores the drawn bar while the standard properties are set. */
+@supports selector(::-webkit-scrollbar) {
+  .os-scroll {
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+  }
 }
 .os-scroll::-webkit-scrollbar {
-  width: 14px;
+  width: 16px;
+  height: 16px;
 }
 .os-scroll::-webkit-scrollbar-track {
-  background: var(--surface);
   border-left: 1px solid var(--ink);
+  background: conic-gradient(var(--ink) 0 25%, var(--surface) 0) 0 0 / 2px 2px;
+}
+.os-scroll::-webkit-scrollbar-track:horizontal {
+  border-top: 1px solid var(--ink);
+  border-left: 0;
 }
 .os-scroll::-webkit-scrollbar-thumb {
-  background: var(--tertiary);
   border: 1px solid var(--ink);
+  border-radius: var(--close-radius);
+  background:
+    repeating-linear-gradient(var(--ink) 0 1px, transparent 0 3px) center / 7px
+      7px no-repeat,
+    var(--surface);
+}
+.os-scroll::-webkit-scrollbar-thumb:horizontal {
+  background:
+    repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 0 3px)
+      center / 7px 7px no-repeat,
+    var(--surface);
+}
+.os-scroll::-webkit-scrollbar-corner {
+  background: var(--surface);
 }
 
 /* ---------- Shut Down ---------- */
