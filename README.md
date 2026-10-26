@@ -24,7 +24,7 @@ Every push runs lint, typecheck, unit tests, Playwright smoke tests and Lighthou
 
 ## Credits
 
-Fonts and icons are listed with their licences in [`public/fonts`](public/fonts/README.md) and [`public/icons`](public/icons/README.md). The Shut Down photo is by [Bruno Aguirre](https://unsplash.com/photos/green-field-YRfaG3JVwkU) on Unsplash.
+Fonts and icons are listed with their licences in [`public/fonts`](public/fonts/README.md) and [`public/icons`](public/icons/README.md).
 
 ## License
 

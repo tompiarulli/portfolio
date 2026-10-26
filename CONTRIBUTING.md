@@ -48,7 +48,7 @@ Renovate opens dependency updates weekly. TanStack packages are pinned exactly a
 - `src/styles.css` design tokens per theme, and the retro desktop chrome utilities.
 - `public/fonts/` self-hosted fonts.
 - `public/icons/` each theme's menu mark and dock icons, one folder per theme; see `public/icons/README.md`.
-- `scripts/` scripts that build the Shut Down photo; see `scripts/README.md`.
+- `scripts/` `serve-prod.mjs`, which serves the Vercel build as Vercel does; see `scripts/README.md`.
 
 ## Workflow
 

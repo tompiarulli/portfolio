@@ -59,6 +59,27 @@
   descent-override: 16%;
   line-gap-override: 0%;
 }
+/* Righteous (SIL OFL, see public/fonts/Righteous-OFL.txt) and Exo 2 Bold
+   (SIL OFL, see public/fonts/Exo2-OFL.txt): the start screen's title and
+   prompt, so they load only at shut down. */
+@font-face {
+  font-family: 'Righteous';
+  src: url('/fonts/righteous-400.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Exo 2';
+  src: url('/fonts/exo-2-700.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 700;
+}
+/* Permanent Marker (Apache 2.0, see public/fonts/PermanentMarker-LICENSE.txt):
+   the brush script across the start screen's title. */
+@font-face {
+  font-family: 'Permanent Marker';
+  src: url('/fonts/permanent-marker-400.woff2') format('woff2');
+  font-display: swap;
+}
 /* Recursive (SIL OFL, see public/fonts/Recursive-OFL.txt): Steamboat's mono,
    two static Casual cuts for the terminal, titles and labels. */
 @font-face {
@@ -153,6 +174,38 @@
   --terminal-prompt: var(--glint);
   /* The screen with the power off; the same on every theme. */
   --off: #000;
+  /* The start screen shown with the power off, the same on every theme:
+     its text and face; a night sky glowing pink at the horizon; the
+     title's face, its lavenders stepping down from the text's white, and
+     its extrusion, a pink edge over purple depth; and the greens of the
+     grass. */
+  --start-text: #fff;
+  --start-font: 'Geist Mono', ui-monospace, monospace;
+  --start-sky-top: #0a0820;
+  --start-sky-mid: #2a0d4a;
+  --start-sky-glow: #b0186f;
+  --start-title-font: 'Righteous', var(--start-font);
+  --start-title-2: #f3ecfc;
+  --start-title-3: #ddcdf3;
+  --start-title-4: #bfa8e6;
+  --start-title-edge: #ff4fb0;
+  --start-title-shade: #3d0f55;
+  /* The prompt under the grass: its face, its cyan, and its glow. */
+  --prompt-font: 'Exo 2', var(--start-font);
+  --prompt: #8ff4ff;
+  --prompt-glow: #19d3ff;
+  /* The brush script across the title: its face, its paint, and a faint
+     glow. */
+  --script-font: 'Permanent Marker', cursive;
+  --script: #ff3fc8;
+  --script-glow: #ff1fa0;
+  /* The grid scrolling behind it: its lines, and the size of a square. */
+  --grid-line: #7a2a8c;
+  --grid-cell: 48px;
+  --grass-tip: #e4f58a;
+  --grass-light: #9be15d;
+  --grass: #4caf3a;
+  --grass-dark: #2b7a2e;
   /* The menu mark's size; the mark itself is set per theme, with the
      dock icons, under "Menu marks and dock icons" below. */
   --logo-size: 16px;
@@ -480,6 +533,88 @@ svg {
 @keyframes fade-in {
   from {
     opacity: 0;
+  }
+}
+/* The start screen's title: white fading to grey down the capitals, which
+   fill about 15% to 86% of the line, dithered (see Dither in ShutDown.tsx),
+   over a copy dropped straight down for depth. */
+.title-bands {
+  /* Positioned, so it paints over the translated copy behind it. */
+  position: relative;
+  filter: url(#title-dither);
+  color: transparent;
+  background: linear-gradient(
+      var(--start-text) 0.2em,
+      var(--start-title-2) 0.45em,
+      var(--start-title-3) 0.65em,
+      var(--start-title-4) 0.86em
+    )
+    text;
+}
+.title-extrude {
+  color: var(--start-title-shade);
+  translate: 0 0.1em;
+  text-shadow: 0 -0.05em 0 var(--start-title-edge);
+}
+/* The start screen's night sky, dithered (see Dither in ShutDown.tsx). */
+.start-sky {
+  filter: url(#sky-dither);
+  background: linear-gradient(
+    var(--start-sky-top),
+    var(--start-sky-mid) 55%,
+    var(--start-sky-glow)
+  );
+}
+/* Its grid, on the lower half like ground under the sky: one square
+   taller than its frame and sliding down a square at a time, so it
+   scrolls forever. */
+.grid-fade {
+  overflow: hidden;
+  mask-image: linear-gradient(transparent 40%, #000);
+}
+.scroll-grid {
+  position: absolute;
+  inset: calc(-1 * var(--grid-cell)) 0 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 0),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 0);
+  background-size: var(--grid-cell) var(--grid-cell);
+  background-position: center top;
+  animation: scroll-grid 2s linear infinite;
+}
+@keyframes scroll-grid {
+  to {
+    translate: 0 var(--grid-cell);
+  }
+}
+/* The prompt: cyan, glowing like the sign's second tube. */
+.prompt-glow {
+  color: var(--prompt);
+  text-shadow: 0 0 0.4em var(--prompt-glow);
+}
+/* Brush script: hot pink paint, its strokes shaved thinner (see
+   ShutDown.tsx), with a faint glow. */
+.script {
+  color: var(--script);
+  filter: url(#script-thin) drop-shadow(0 0 0.08em var(--script-glow));
+}
+/* The grass's two frames taking turns, like a sprite. The second is
+   hidden unless animating, so without motion the first stands still. */
+.sway-a {
+  animation: sway-a 1.2s steps(1) infinite;
+}
+.sway-b {
+  opacity: 0;
+  animation: sway-b 1.2s steps(1) infinite;
+}
+@keyframes sway-a {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes sway-b {
+  50% {
+    opacity: 1;
   }
 }
 /* A hard cursor blink, no fade. */

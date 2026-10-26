@@ -64,7 +64,7 @@ function SystemMenu({
   }, [open, start])
 
   const actions: { label: string; onSelect: () => void }[] = [
-    { label: 'Shut Down…', onSelect: onShutDown },
+    { label: 'Restart…', onSelect: onShutDown },
   ]
 
   // Down or Up on the button opens the menu at its first or last item.

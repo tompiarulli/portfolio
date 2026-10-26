@@ -124,7 +124,6 @@ export default defineConfig({
           },
           '/fonts/**': oneWeek,
           '/icons/**': oneWeek,
-          '/images/**': oneWeek,
           '/favicon.svg': oneDay,
           '/favicon.ico': oneDay,
           '/apple-touch-icon.png': oneDay,

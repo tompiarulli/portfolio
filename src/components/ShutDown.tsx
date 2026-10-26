@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { build } from '#/lib/build'
 import { site } from '#/lib/site'
 
 /** Shut Down plays out in stages: the desktop chrome collapses (CSS keyed
  *  off `data-off` on <html>), a splash card counts the system down, the
- *  picture tube switches off, the room goes dark, then a photo of outside
- *  comes up. Touching the grass boots: the splash card counts back up, then
- *  the chrome folds open again. */
-type Phase = 'closing' | 'down' | 'tube' | 'dark' | 'outside' | 'up'
+ *  picture tube switches off, the room goes dark, then a game-style start
+ *  screen comes up. Touching the grass boots straight back in: the chrome
+ *  folds open again. The splash card and the tube follow the theme; the
+ *  start screen is the same on every theme. */
+type Phase = 'closing' | 'down' | 'tube' | 'dark' | 'title'
 
 // Timed stages: how long each holds, and what follows. The splash stages
 // move on when their steps run out instead.
@@ -19,13 +21,162 @@ const HOLD: Partial<Record<Phase, number>> = {
 const NEXT: Partial<Record<Phase, Phase>> = {
   closing: 'down',
   tube: 'dark',
-  dark: 'outside',
+  dark: 'title',
 }
 
 // Whole squares in the progress bar. It fills one square per tick, and the
 // status line moves through `steps` as the squares fill.
 const CELLS = 18
 const TICK = 80
+
+// The start screen's pixel art, as cells keyed `x,y` with a colour token.
+type Cells = Map<string, string>
+
+/** Draws cells as one crisp path per colour, a unit square per cell, on a
+ *  `width` by `height` grid. */
+function Pixels({
+  cells,
+  width,
+  height,
+  className,
+}: {
+  cells: Cells
+  width: number
+  height: number
+  className: string
+}) {
+  const paths = new Map<string, string>()
+  for (const [key, fill] of cells) {
+    const [x, y] = key.split(',')
+    paths.set(fill, `${paths.get(fill) ?? ''}M${x} ${y}h1v1h-1z`)
+  }
+  return (
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      shapeRendering="crispEdges"
+      className={className}
+    >
+      {[...paths].map(([fill, d]) => (
+        <path key={fill} d={d} fill={`var(${fill})`} />
+      ))}
+    </svg>
+  )
+}
+
+/** The title, shaded like an arcade logo and stood on an extrusion: a
+ *  second copy behind it. The version, in brush script, slants across
+ *  its lower right corner. */
+function Title() {
+  return (
+    <p
+      aria-hidden
+      className="relative grid font-(family-name:--start-title-font) text-[96px] leading-none *:col-start-1 *:row-start-1 sm:text-[144px]"
+    >
+      <span className="title-extrude">TomOS</span>
+      <span className="title-bands">TomOS</span>
+      <span className="script absolute -right-[0.3em] -bottom-[0.26em] -rotate-8 font-(family-name:--script-font) text-[0.45em]">
+        v{site.version}
+      </span>
+    </p>
+  )
+}
+
+// Ordered dithering: a 4x4 Bayer threshold map, each cell DOT pixels
+// square, nudges every pixel up to one colour step before the colours snap
+// to a few steps, so a smooth gradient comes out as patterned bands. The
+// map's greys are thresholds, not colours.
+const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5]
+const DOT = 2
+const BAYER_MAP = `data:image/svg+xml,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4" width="${4 * DOT}" height="${4 * DOT}" shape-rendering="crispEdges">${BAYER.map(
+    (b, i) => {
+      const v = Math.round(((b + 0.5) / 16) * 255)
+      return `<rect x="${i % 4}" y="${Math.floor(i / 4)}" width="1" height="1" fill="rgb(${v},${v},${v})"/>`
+    },
+  ).join('')}</svg>`,
+)}`
+/** The dither as an SVG filter, snapping each colour channel to `levels`
+ *  steps; its edges snap to fully in or out. */
+function Dither({ id, levels }: { id: string; levels: number }) {
+  const step = 1 / (levels - 1)
+  const table = Array.from({ length: levels }, (_, i) => i * step).join(' ')
+  return (
+    <filter
+      id={id}
+      x="0"
+      y="0"
+      width="1"
+      height="1"
+      colorInterpolationFilters="sRGB"
+    >
+      <feImage href={BAYER_MAP} width={4 * DOT} height={4 * DOT} />
+      <feTile result="bayer" />
+      <feComposite
+        in="SourceGraphic"
+        in2="bayer"
+        operator="arithmetic"
+        k2="1"
+        k3={step}
+        k4={-step / 2}
+      />
+      <feComponentTransfer>
+        <feFuncR type="discrete" tableValues={table} />
+        <feFuncG type="discrete" tableValues={table} />
+        <feFuncB type="discrete" tableValues={table} />
+        <feFuncA type="discrete" tableValues="0 1" />
+      </feComponentTransfer>
+    </filter>
+  )
+}
+
+// A few blades of grass: where each one roots, how tall it grows, and how
+// far its tip leans. The second frame bends them all one cell further, and
+// the two alternate like a sprite in the wind.
+const BLADES: [x: number, height: number, lean: number][] = [
+  [0, 9, -3],
+  [3, 14, -2],
+  [6, 17, 1],
+  [9, 12, 3],
+  [11, 8, 4],
+]
+const GRASS_WIDTH = 22
+const GRASS_HEIGHT = 17
+// Margin either side for the leaning tips.
+const GRASS_LEFT = 4
+// Rows of solid grass across the roots.
+const CLUMP = 6
+
+/** One frame of the blades: each curves toward its lean, two cells wide
+ *  until it tapers to one near the tip, dark at the root and bright at
+ *  the tip, joined at the bottom by a dark clump. */
+function grass(bend: number): Cells {
+  const cells: Cells = new Map()
+  const base = GRASS_HEIGHT
+  const first = BLADES[0]?.[0] ?? 0
+  const last = (BLADES.at(-1)?.[0] ?? 0) + 1
+  for (let y = base - CLUMP; y < base; y++)
+    for (let x = first; x <= last; x++)
+      cells.set(`${x + GRASS_LEFT},${y}`, '--grass-dark')
+  for (const [root, height, lean] of BLADES) {
+    for (let i = 0; i < height; i++) {
+      const t = i / (height - 1)
+      const x = Math.round(root + (lean + bend) * t * t) + GRASS_LEFT
+      const y = base - 1 - i
+      const fill =
+        t > 0.85
+          ? '--grass-tip'
+          : t > 0.55
+            ? '--grass-light'
+            : t > 0.25
+              ? '--grass'
+              : '--grass-dark'
+      cells.set(`${x},${y}`, fill)
+      if (t < 0.75) cells.set(`${x + 1},${y}`, fill)
+    }
+  }
+  return cells
+}
+const FRAMES = [grass(0), grass(1)]
 
 const reducedMotion = () =>
   matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -89,10 +240,10 @@ function Splash({
 
 export function ShutDown({ onBoot }: { onBoot: () => void }) {
   const [phase, setPhase] = useState<Phase>(() =>
-    reducedMotion() ? 'outside' : 'closing',
+    reducedMotion() ? 'title' : 'closing',
   )
   const dialog = useRef<HTMLDialogElement>(null)
-  const grass = useRef<HTMLButtonElement>(null)
+  const button = useRef<HTMLButtonElement>(null)
 
   // Modal, so it takes focus and leaves the rest of the desktop inert.
   useEffect(() => {
@@ -115,31 +266,22 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
     return () => clearTimeout(t)
   }, [phase])
 
-  const ready = phase === 'outside'
-  // Touching the grass runs the boot splash; reduced motion boots at once.
-  const start = () => (reducedMotion() ? onBoot() : setPhase('up'))
+  const ready = phase === 'title'
+  // Only the grass boots, by click, tap, or Enter or Space once it has
+  // focus.
   useEffect(() => {
-    if (!ready) return
-    window.addEventListener('keydown', start)
-    return () => window.removeEventListener('keydown', start)
-  })
-  useEffect(() => {
-    if (ready) grass.current?.focus()
+    if (ready) button.current?.focus()
   }, [ready])
 
   const bg =
-    phase === 'closing' || phase === 'down'
-      ? 'bg-transparent'
-      : phase === 'up'
-        ? 'bg-(--desk)'
-        : 'bg-(--off)'
+    phase === 'closing' || phase === 'down' ? 'bg-transparent' : 'bg-(--off)'
 
   return (
     <dialog
       ref={dialog}
       aria-label="Shut down"
       aria-busy={!ready}
-      // Escape doesn't dismiss it; any key boots once the grass is up. If
+      // Escape doesn't dismiss it; only the grass boots. If
       // the browser closes it anyway, boot.
       onCancel={(e) => e.preventDefault()}
       onClose={(e) => !e.currentTarget.open && onBoot()}
@@ -157,45 +299,57 @@ export function ShutDown({ onBoot }: { onBoot: () => void }) {
       )}
       {ready && (
         <>
-          {/* Mounted only once the room is dark, so the photo never loads earlier. */}
-          <picture>
-            <source
-              type="image/avif"
-              srcSet="/images/grass-1280.avif 1280w, /images/grass-1920.avif 1920w, /images/grass-2560.avif 2560w, /images/grass-3840.avif 3840w"
-              sizes="100vw"
-            />
-            <source
-              type="image/webp"
-              srcSet="/images/grass-1280.webp 1280w, /images/grass-1920.webp 1920w, /images/grass-2560.webp 2560w, /images/grass-3840.webp 3840w"
-              sizes="100vw"
-            />
-            <img
-              src="/images/grass-1920.jpg"
-              srcSet="/images/grass-1280.jpg 1280w, /images/grass-1920.jpg 1920w, /images/grass-2560.jpg 2560w, /images/grass-3840.jpg 3840w"
-              sizes="100vw"
-              alt="Grass"
-              // Without the photo, leave the room dark rather than a broken image.
-              onError={(e) => (e.currentTarget.style.display = 'none')}
-              className="fade-in absolute inset-0 size-full object-cover [image-rendering:auto]!"
-            />
-          </picture>
-          {/* Any click on the picture boots. */}
-          <button
-            ref={grass}
-            type="button"
-            aria-label="Touch grass to start"
-            onClick={start}
-            className="peer absolute inset-0 cursor-pointer outline-none"
-          />
-          {/* The button covers the screen, so its focus ring goes on the
-              label, which stops blinking while focused. */}
-          <span className="bevel blink pointer-events-none absolute top-1/2 left-1/2 -translate-1/2 px-6 py-2 font-mono text-base text-(--ink) outline-offset-4 outline-(--ink) peer-focus-visible:animate-none! peer-focus-visible:outline-2">
-            Touch grass to start
-          </span>
+          {/* The dithers the sky and title use (the sky's colours sit
+              closer together, so it gets finer steps), and a filter that
+              shaves the version's marker strokes thinner, since the face
+              comes in one weight. */}
+          <svg aria-hidden className="absolute size-0">
+            <Dither id="title-dither" levels={8} />
+            <Dither id="sky-dither" levels={16} />
+            <filter id="script-thin">
+              <feMorphology operator="erode" radius="1" />
+            </filter>
+          </svg>
+          <div aria-hidden className="start-sky absolute inset-0" />
+          <div aria-hidden className="fade-in grid-fade absolute inset-0">
+            <div className="scroll-grid" />
+          </div>
+          {/* Sizes are in pixels, since rems follow the theme's text size
+              and this screen is the same on every theme. */}
+          <div className="fade-in absolute inset-0 flex flex-col items-center justify-center gap-[5vh] px-4">
+            <Title />
+            <button
+              ref={button}
+              type="button"
+              aria-label="Touch Grass to Start"
+              onClick={onBoot}
+              className="grid w-[min(40vw,154px)] cursor-pointer outline-offset-8 outline-(--start-text) *:col-start-1 *:row-start-1 focus-visible:outline-2"
+            >
+              {FRAMES.map((cells, i) => (
+                <Pixels
+                  key={i}
+                  cells={cells}
+                  width={GRASS_WIDTH}
+                  height={GRASS_HEIGHT}
+                  className={i ? 'sway-b' : 'sway-a'}
+                />
+              ))}
+            </button>
+            <span
+              aria-hidden
+              className="blink prompt-glow -mt-[3vh] pl-[0.4em] font-(family-name:--prompt-font) text-[12px] font-bold tracking-[0.4em] whitespace-nowrap uppercase sm:pl-[0.6em] sm:text-[14px] sm:tracking-[0.6em]"
+            >
+              Touch Grass to Start
+            </span>
+          </div>
+          <p
+            aria-hidden
+            className="fade-in absolute inset-x-0 bottom-6 text-center font-(family-name:--start-font) text-[12px] text-(--start-text)"
+          >
+            Build {build.commit}
+            {build.date && ` (${build.date})`}
+          </p>
         </>
-      )}
-      {phase === 'up' && (
-        <Splash title="Starting up" steps={site.shutdown.up} onDone={onBoot} />
       )}
     </dialog>
   )

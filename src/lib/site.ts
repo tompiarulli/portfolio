@@ -1,3 +1,5 @@
+const version = '9.2'
+
 export const site = {
   url: 'https://tompiarulli.com',
   name: 'Tom Piarulli',
@@ -27,9 +29,10 @@ export const site = {
     'A paragraph or two per role, most recent first.',
   ],
   workLink: 'Full work history on LinkedIn',
-  os: 'TomOS 9.2',
+  os: `TomOS ${version}`,
+  version,
   builtWith: 'React 19, TanStack Start, Tailwind 4',
-  /** Status lines the splash card walks through at shut down and start up. */
+  /** Status lines the splash card walks through at shut down. */
   shutdown: {
     down: [
       'Saving the desktop',
@@ -37,13 +40,6 @@ export const site = {
       'Flushing the cache',
       'Parking the heads',
       'Powering off',
-    ],
-    up: [
-      'Checking memory',
-      'Loading extensions',
-      'Mounting the desktop',
-      'Setting the clock',
-      'Welcome back',
     ],
   },
 }
@@ -89,15 +85,23 @@ export const credits: { group: string; items: Credit[] }[] = [
         url: 'https://github.com/arrowtype/recursive',
         license: 'OFL 1.1',
       },
-    ],
-  },
-  {
-    group: 'Photo',
-    items: [
       {
-        name: 'Grass',
-        by: 'Bruno Aguirre',
-        url: 'https://unsplash.com/photos/green-field-YRfaG3JVwkU',
+        name: 'Righteous',
+        by: 'Astigmatic',
+        url: 'https://github.com/google/fonts/tree/main/ofl/righteous',
+        license: 'OFL 1.1',
+      },
+      {
+        name: 'Exo 2',
+        by: 'the Exo 2 Project Authors',
+        url: 'https://github.com/google/fonts/tree/main/ofl/exo2',
+        license: 'OFL 1.1',
+      },
+      {
+        name: 'Permanent Marker',
+        by: 'Font Diner',
+        url: 'https://github.com/google/fonts/tree/main/apache/permanentmarker',
+        license: 'Apache 2.0',
       },
     ],
   },

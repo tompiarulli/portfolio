@@ -43,7 +43,7 @@ describe('system menu', () => {
   it('opens at the last item with Up', async () => {
     const { user } = await withTrigger()
     await user.keyboard('{ArrowUp}')
-    expect(document.activeElement).toBe(item('Shut Down…'))
+    expect(document.activeElement).toBe(item('Restart…'))
   })
 
   it('opens with Enter on the button', async () => {
@@ -56,11 +56,11 @@ describe('system menu', () => {
     const { user } = await withTrigger()
     await user.keyboard('{ArrowDown}')
     await user.keyboard('{ArrowDown}')
-    expect(document.activeElement).toBe(item('Shut Down…'))
+    expect(document.activeElement).toBe(item('Restart…'))
     await user.keyboard('{ArrowDown}')
     expect(document.activeElement).toBe(item('System Info'))
     await user.keyboard('{ArrowUp}')
-    expect(document.activeElement).toBe(item('Shut Down…'))
+    expect(document.activeElement).toBe(item('Restart…'))
     await user.keyboard('{ArrowUp}')
     expect(document.activeElement).toBe(item('System Info'))
   })
@@ -69,7 +69,7 @@ describe('system menu', () => {
     const { user } = await withTrigger()
     await user.keyboard('{ArrowDown}')
     await user.keyboard('{End}')
-    expect(document.activeElement).toBe(item('Shut Down…'))
+    expect(document.activeElement).toBe(item('Restart…'))
     await user.keyboard('{Home}')
     expect(document.activeElement).toBe(item('System Info'))
   })
@@ -77,7 +77,7 @@ describe('system menu', () => {
   it('keeps the items out of the tab order', async () => {
     const { user } = await withTrigger()
     await user.keyboard('{ArrowDown}')
-    for (const name of ['System Info', 'Shut Down…'])
+    for (const name of ['System Info', 'Restart…'])
       expect(item(name).tabIndex).toBe(-1)
   })
 
