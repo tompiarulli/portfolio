@@ -49,8 +49,8 @@ export const ORBITS = {
   center: [0.6, 0.55],
   /** Radius of the innermost and outermost rings, as fractions of the
    *  shorter screen side. */
-  inner: 0.18,
-  outer: 0.62,
+  inner: 0.22,
+  outer: 0.75,
   /** How fast the set turns, and the rings wobble and the points ride. */
   speed: 0.05,
   /** Brightness of the far half of each ring, against the near half. */
