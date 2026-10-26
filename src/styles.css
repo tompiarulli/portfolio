@@ -73,8 +73,9 @@
   font-display: swap;
   font-weight: 700;
 }
-/* Titan One, Playfair Display Bold Italic and Jost Medium (SIL OFL, see
-   public/fonts/): Steamboat's start screen. */
+/* Titan One, Playfair Display Bold Italic, and Jost Medium and SemiBold
+   (SIL OFL, see public/fonts/): Steamboat's start screen, and Jost for
+   its labels. */
 @font-face {
   font-family: 'Titan One';
   src: url('/fonts/titan-one-400.woff2') format('woff2');
@@ -93,6 +94,12 @@
   font-display: swap;
   font-weight: 500;
 }
+@font-face {
+  font-family: 'Jost';
+  src: url('/fonts/jost-600.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 600;
+}
 /* Permanent Marker (Apache 2.0, see public/fonts/PermanentMarker-LICENSE.txt):
    the brush script across the start screen's title. */
 @font-face {
@@ -101,7 +108,7 @@
   font-display: swap;
 }
 /* Recursive (SIL OFL, see public/fonts/Recursive-OFL.txt): Steamboat's mono,
-   two static Casual cuts for the terminal, titles and labels. */
+   four static Casual cuts for the terminal, titles and labels. */
 @font-face {
   font-family: 'Recursive Mono Casual';
   src: url('/fonts/recursive-mono-casual-400.woff2') format('woff2');
@@ -112,7 +119,19 @@
   font-family: 'Recursive Mono Casual';
   src: url('/fonts/recursive-mono-casual-500.woff2') format('woff2');
   font-display: swap;
-  font-weight: 500 900;
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Recursive Mono Casual';
+  src: url('/fonts/recursive-mono-casual-600.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Recursive Mono Casual';
+  src: url('/fonts/recursive-mono-casual-700.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 700 900;
 }
 
 /* Registered here so Tailwind makes font-ui and font-mono; each theme
@@ -390,6 +409,22 @@
   --icon-work-image: url('/icons/rabbit/work.svg');
   --icon-terminal-image: url('/icons/rabbit/terminal.svg');
   --icon-settings-image: url('/icons/rabbit/settings.svg');
+}
+/* Steamboat's desktop in its start screen's title-card look: labels in
+   small spaced capitals, cream paper, a hard ink shadow under windows, and
+   bold window titles. */
+[data-theme='steamboat'] {
+  --font-label: 'Jost', var(--font-ui);
+  --label-case: uppercase;
+  --label-weight: 600;
+  --label-tracking: 0.1em;
+  --dock-label-size: 11px;
+  --menu-size: 11px;
+  --bg: #f2f0e6;
+  --surface: #f2f0e6;
+  --button: #f2f0e6;
+  --window-shadow: 4px 4px 0 #141413;
+  --title-weight: 700;
 }
 [data-theme='steamboat'] {
   --logo: url('/icons/steamboat/mark.svg');
