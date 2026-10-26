@@ -54,7 +54,7 @@ function Presents() {
   return (
     <p
       aria-hidden
-      className="-mb-[4vh] pl-[0.35em] font-(family-name:--prompt-font) text-[11px] [font-weight:var(--prompt-weight)] tracking-[0.35em] text-(--prompt) uppercase [text-shadow:0.08em_0.1em_0_var(--start-title-shade)] sm:text-[13px]"
+      className="-mb-[5vh] pl-[0.35em] font-(family-name:--prompt-font) text-[11px] [font-weight:var(--prompt-weight)] tracking-[0.35em] text-(--prompt) uppercase [text-shadow:0.08em_0.1em_0_var(--start-title-shade)] sm:text-[13px]"
     >
       {site.name} {site.shutdown.presents}
     </p>
