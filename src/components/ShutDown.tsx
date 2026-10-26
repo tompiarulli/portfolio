@@ -1,30 +1,32 @@
-import { Suspense, useEffect, useRef, useState } from 'react'
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 
-import { START_SCREENS, preloadStartScreen } from '#/components/start'
+import {
+  START_EXITS,
+  START_SCREENS,
+  preloadStartScreen,
+} from '#/components/start'
 import { site } from '#/lib/site'
 import { currentTheme } from '#/lib/theme'
 
 /** Shut Down plays out in stages: the desktop chrome collapses (CSS keyed
  *  off `data-off` on <html>), a splash card counts the system down, the
- *  picture tube switches off, the room goes dark, the tube comes back on,
- *  and the theme's own start screen comes up over its backdrop (see
- *  components/start). Any click or key boots straight back in: the chrome
- *  folds open again. */
-type Phase = 'closing' | 'down' | 'tube' | 'dark' | 'on' | 'title'
+ *  picture tube switches off and the room goes dark, then the theme's own
+ *  start screen comes up over its backdrop, making its own entrance (see
+ *  components/start). Any click or key boots straight back
+ *  in: the chrome folds open again. */
+type Phase = 'closing' | 'down' | 'tube' | 'dark' | 'title'
 
-// Timed stages: how long each holds, and what follows. The splash stages
-// move on when their steps run out instead.
+// Timed stages: how long each holds, and what follows. The splash card
+// moves on when its steps run out instead.
 const HOLD: Partial<Record<Phase, number>> = {
   closing: 700,
   tube: 500,
-  dark: 900,
-  on: 600,
+  dark: 500,
 }
 const NEXT: Partial<Record<Phase, Phase>> = {
   closing: 'down',
   tube: 'dark',
-  dark: 'on',
-  on: 'title',
+  dark: 'title',
 }
 
 // Whole squares in the progress bar. It fills one square per tick, and the
@@ -92,7 +94,7 @@ function Splash({
   )
 }
 
-/** `straight` skips to the tube coming on, for `?start`. */
+/** `straight` goes straight to the start screen, for `?start`. */
 export function ShutDown({
   onBoot,
   straight = false,
@@ -101,12 +103,12 @@ export function ShutDown({
   straight?: boolean
 }) {
   const [phase, setPhase] = useState<Phase>(() =>
-    reducedMotion() ? 'title' : straight ? 'on' : 'closing',
+    reducedMotion() || straight ? 'title' : 'closing',
   )
   const dialog = useRef<HTMLDialogElement>(null)
   const button = useRef<HTMLButtonElement>(null)
   // The theme's start screen, fetched now so it's ready by the time the
-  // tube comes back on.
+  // card has counted down.
   const [theme] = useState(currentTheme)
   const Screen = START_SCREENS[theme]
   useEffect(() => preloadStartScreen(theme), [theme])
@@ -133,24 +135,25 @@ export function ShutDown({
   }, [phase])
 
   const ready = phase === 'title'
-  // Once the start screen is up, any click, tap or key boots.
+  // Once the start screen is up, any click, tap or key boots, after the
+  // screen's exit if it has one (none without motion).
+  const [leaving, setLeaving] = useState(false)
+  const leave = useCallback(
+    () =>
+      START_EXITS[theme] && !reducedMotion() ? setLeaving(true) : onBoot(),
+    [theme, onBoot],
+  )
+  useEffect(() => {
+    if (!leaving) return
+    const t = setTimeout(onBoot, START_EXITS[theme])
+    return () => clearTimeout(t)
+  }, [leaving, onBoot, theme])
   useEffect(() => {
     if (!ready) return
     button.current?.focus()
-    window.addEventListener('keydown', onBoot)
-    return () => window.removeEventListener('keydown', onBoot)
-  }, [ready, onBoot])
-
-  // Clear while the chrome folds and the card counts down, black while the
-  // tube switches off and the room is dark, then clear again so the
-  // desktop's backdrop shows behind the start screen.
-  const bg =
-    phase === 'tube' || phase === 'dark' || phase === 'on'
-      ? 'bg-(--off)'
-      : 'bg-transparent'
-  // The tube's glow, filling the screen as it comes on, fades off the
-  // start screen; reduced motion starts there with no glow.
-  const [glow, setGlow] = useState(() => !reducedMotion())
+    window.addEventListener('keydown', leave)
+    return () => window.removeEventListener('keydown', leave)
+  }, [ready, leave])
 
   return (
     <dialog
@@ -161,7 +164,9 @@ export function ShutDown({
       // browser closes it anyway, boot.
       onCancel={(e) => e.preventDefault()}
       onClose={(e) => !e.currentTarget.open && onBoot()}
-      className={`fixed inset-0 m-0 size-full max-h-none max-w-none overflow-hidden border-0 p-0 text-(--ink) transition-colors duration-200 outline-none backdrop:bg-transparent ${bg}`}
+      // Black while the tube switches off and the room is dark; clear
+      // otherwise, so the desktop's backdrop shows behind the start screen.
+      className={`fixed inset-0 m-0 size-full max-h-none max-w-none overflow-hidden border-0 p-0 text-(--ink) outline-none backdrop:bg-transparent ${phase === 'tube' || phase === 'dark' ? 'bg-(--off)' : 'bg-transparent'}`}
     >
       {phase === 'down' && (
         <Splash
@@ -173,9 +178,6 @@ export function ShutDown({
       {phase === 'tube' && (
         <div aria-hidden className="tube-off absolute inset-0 bg-(--glint)" />
       )}
-      {phase === 'on' && (
-        <div aria-hidden className="tube-on absolute inset-0 bg-(--glint)" />
-      )}
       {ready && (
         <>
           {/* The whole screen is the button; the screen over it lets
@@ -184,19 +186,17 @@ export function ShutDown({
             ref={button}
             type="button"
             aria-label="Press any key to start"
-            onClick={onBoot}
+            onClick={leave}
             className="absolute inset-0 cursor-pointer outline-none"
           />
-          <Suspense>
-            <Screen />
+          {/* Dark until the theme's screen arrives, so the backdrop never
+              shows before its entrance. */}
+          <Suspense fallback={<div className="absolute inset-0 bg-(--off)" />}>
+            {/* Never in the way of a click. */}
+            <div className="pointer-events-none absolute inset-0">
+              <Screen leaving={leaving} />
+            </div>
           </Suspense>
-          {glow && (
-            <div
-              aria-hidden
-              onAnimationEnd={() => setGlow(false)}
-              className="glow-out pointer-events-none absolute inset-0 bg-(--glint)"
-            />
-          )}
         </>
       )}
     </dialog>

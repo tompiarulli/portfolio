@@ -442,8 +442,8 @@
   --start-font: 'Jost', ui-sans-serif, sans-serif;
   --start-dim: rgb(0 0 0 / 0.45);
   --start-title-font: 'Titan One', ui-sans-serif, sans-serif;
-  /* Wide, so a size down on smaller screens, below. */
-  --start-title-scale: 1.15;
+  /* Wide, so a size down on phones, below. */
+  --start-title-scale: 1;
   --start-title-weight: 400;
   --start-title-tracking: 0.01em;
   --start-title-dither: none;
@@ -453,7 +453,7 @@
   --script-style: italic;
   --script-weight: 700;
   --script-decoration: underline;
-  --script-size: 0.2em;
+  --script-size: 0.24em;
   --script-rotate: 0deg;
   --script-tracking: 0em;
   --script-right: 0em;
@@ -503,13 +503,6 @@
   --script-glow: #ff1fa0;
   --prompt: #8ff4ff;
   --prompt-glow: #19d3ff;
-}
-
-/* Steamboat's wide title, a size down where 1.15 would overflow. */
-@media (max-width: 767px) {
-  [data-theme='steamboat'] {
-    --start-title-scale: 1;
-  }
 }
 
 /* Touch screens get a taller title bar to drag windows by and a bigger
@@ -674,32 +667,6 @@ svg {
     opacity: 0;
   }
 }
-/* And coming back on: a dot, a line, then the whole screen, whose glow
-   then fades off what's on it. */
-.tube-on {
-  animation: tube-on 600ms ease-out both;
-}
-@keyframes tube-on {
-  0% {
-    scale: 0 0.005;
-    opacity: 0;
-  }
-  40% {
-    scale: 1 0.005;
-    opacity: 1;
-  }
-  100% {
-    scale: 1 1;
-  }
-}
-.glow-out {
-  animation: glow-out 400ms ease-out both;
-}
-@keyframes glow-out {
-  to {
-    opacity: 0;
-  }
-}
 .fade-in {
   animation: fade-in 200ms ease-out both;
 }
@@ -750,6 +717,135 @@ svg {
   letter-spacing: var(--script-tracking);
   color: var(--script);
   filter: var(--script-filter);
+}
+/* An old cartoon's iris-in: black all round a circle that opens from
+   the middle until the whole screen shows. Without motion it starts open. */
+@property --iris {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+.iris-in {
+  --iris: 75vmax;
+  background: var(--off);
+  mask-image: radial-gradient(
+    circle,
+    transparent var(--iris),
+    #000 calc(var(--iris) + 1px)
+  );
+  animation: iris-in 900ms ease-in-out both;
+}
+@keyframes iris-in {
+  from {
+    --iris: 0px;
+  }
+}
+/* Projected film: brightness that never quite holds still, and a frame
+   that weaves a pixel or less in the gate. */
+.film-flicker {
+  animation: film-flicker 0.48s steps(1) infinite;
+}
+@keyframes film-flicker {
+  0% {
+    opacity: 1;
+    translate: 0 0;
+  }
+  17% {
+    opacity: 0.95;
+    translate: 0 1px;
+  }
+  33% {
+    opacity: 1;
+    translate: 0 0;
+  }
+  50% {
+    opacity: 0.97;
+    translate: 0.5px 0;
+  }
+  67% {
+    opacity: 0.93;
+    translate: 0 0.5px;
+  }
+  83% {
+    opacity: 0.99;
+    translate: 0 0;
+  }
+}
+/* Film wear: grain that jumps a few times a second (the film backdrop and
+   Steamboat's start screen), and scratches that flash down the frame now
+   and then (the start screen), hidden unless animating. */
+.film-grain {
+  opacity: var(--grain, 0.32);
+  animation: film-grain 0.36s steps(1) infinite;
+}
+@keyframes film-grain {
+  0% {
+    translate: 0 0;
+  }
+  25% {
+    translate: -63px 41px;
+  }
+  50% {
+    translate: 37px -82px;
+  }
+  75% {
+    translate: -101px -23px;
+  }
+}
+.film-scratch {
+  opacity: 0;
+  animation: film-scratch 4.7s steps(1) infinite;
+}
+@keyframes film-scratch {
+  62% {
+    opacity: 0.35;
+    translate: 0 0;
+  }
+  64% {
+    opacity: 0.2;
+    translate: 3px 0;
+  }
+  66% {
+    opacity: 0;
+  }
+  88% {
+    opacity: 0.3;
+    translate: -40px 0;
+  }
+  89% {
+    opacity: 0;
+  }
+}
+/* The projector catching up as the film starts: the frame jumps and the
+   light pulses for a second, then settles into the flicker. */
+.projector-start {
+  animation: projector-start 1.1s steps(1) 0.6s both;
+}
+@keyframes projector-start {
+  0% {
+    translate: 0 -6px;
+    opacity: 0.85;
+  }
+  12% {
+    translate: 0 4px;
+    opacity: 1;
+  }
+  24% {
+    translate: 0 -3px;
+    opacity: 0.8;
+  }
+  36% {
+    translate: 0 2px;
+    opacity: 1;
+  }
+  52% {
+    translate: 0 -1px;
+    opacity: 0.9;
+  }
+  70% {
+    translate: 0 0;
+    opacity: 1;
+  }
 }
 /* A hard cursor blink, no fade. */
 .blink {

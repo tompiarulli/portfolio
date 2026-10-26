@@ -41,6 +41,9 @@ export const site = {
       'Parking the heads',
       'Powering off',
     ],
+    /** Under the name above the title on Steamboat's start screen, like
+     *  an old cartoon's title card. */
+    presents: 'presents',
   },
 }
 
