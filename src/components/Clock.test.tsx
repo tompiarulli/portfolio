@@ -30,7 +30,7 @@ describe('Date & Time', () => {
 
     await user.click(dockLink('settings'))
     const accurate = await screen.findByRole('radio', { name: 'Accurate' })
-    expect(screen.getByRole('radio', { name: 'Theme' })).toHaveProperty(
+    expect(screen.getByRole('radio', { name: 'Themed' })).toHaveProperty(
       'checked',
       true,
     )
@@ -40,7 +40,7 @@ describe('Date & Time', () => {
     expect(localStorage.getItem('clock')).toBe('accurate')
     await showsYear(thisYear)
 
-    await user.click(screen.getByRole('radio', { name: 'Theme' }))
+    await user.click(screen.getByRole('radio', { name: 'Themed' }))
     expect(localStorage.getItem('clock')).toBe('theme')
     await showsYear('1908')
   })

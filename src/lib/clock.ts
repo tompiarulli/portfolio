@@ -3,7 +3,7 @@
 export type ClockMode = 'theme' | 'accurate'
 
 export const CLOCK_MODES: { id: ClockMode; label: string }[] = [
-  { id: 'theme', label: 'Theme' },
+  { id: 'theme', label: 'Themed' },
   { id: 'accurate', label: 'Accurate' },
 ]
 
