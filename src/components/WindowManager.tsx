@@ -24,7 +24,7 @@ type Windows = {
   close: (id: WindowId) => void
   /** Open windows hidden in the dock. They stay mounted, keeping their place. */
   minimized: WindowId[]
-  /** Hide a window into its dock icon; the next window takes focus. */
+  /** Hide a window into its dock key; the next window takes focus. */
   minimize: (id: WindowId) => void
   /** The window keyboard focus should move into, bumped each time it is
    *  asked for, so the same window can be asked for twice. */
@@ -78,8 +78,8 @@ const holdsFocus = (id: WindowId) => {
   )
 }
 
-/** With no window left to take it, focus goes to the window's dock icon,
- *  or the first one for windows without an icon, once the window is gone. */
+/** With no window left to take it, focus goes to the window's dock key,
+ *  or the first one for windows without a key, once the window is gone. */
 const focusDock = (id: WindowId) =>
   setTimeout(() =>
     (

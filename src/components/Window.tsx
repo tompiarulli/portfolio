@@ -14,18 +14,15 @@ import {
   useWindows,
 } from '#/components/WindowManager'
 
-/** Shrinks a window into its dock icon, or back out with `restore`; into
- *  the whole dock button where a theme hides the icons. The individual
- *  translate and scale properties compose with the window's position
- *  transform, so dragging and minimizing never fight. */
-function flyToDock(el: HTMLElement, iconId: string, restore: boolean) {
-  const icon = document.querySelector(`[data-dock-icon="${iconId}"]`)
-  const button = document.querySelector(`[data-dock-link="${iconId}"]`)
-  const target = icon?.getClientRects().length ? icon : button
-  if (!target || matchMedia('(prefers-reduced-motion: reduce)').matches)
+/** Shrinks a window into its dock key, or back out with `restore`. The
+ *  individual translate and scale properties compose with the window's
+ *  position transform, so dragging and minimizing never fight. */
+function flyToDock(el: HTMLElement, id: string, restore: boolean) {
+  const key = document.querySelector(`[data-dock-link="${id}"]`)
+  if (!key || matchMedia('(prefers-reduced-motion: reduce)').matches)
     return null
   const r = el.getBoundingClientRect()
-  const i = target.getBoundingClientRect()
+  const i = key.getBoundingClientRect()
   const o = el.offsetParent?.getBoundingClientRect() ?? { left: 0, top: 0 }
   const sx = i.width / r.width
   const sy = i.height / r.height

@@ -54,6 +54,6 @@ export const windowEl = (id: WindowId) => {
 
 export const dockLink = (id: WindowId) => {
   const el = document.querySelector<HTMLElement>(`[data-dock-link="${id}"]`)
-  if (!el) throw new Error(`No ${id} dock icon`)
+  if (!el) throw new Error(`No ${id} dock key`)
   return el
 }

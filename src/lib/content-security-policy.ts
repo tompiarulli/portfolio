@@ -6,7 +6,7 @@
 //   __root.tsx are stable and could be hashed, but CSP ignores
 //   'unsafe-inline' as soon as a hash is listed, which would block the
 //   hydration script.
-// - Windows, dock icons and backdrops position and paint themselves with
+// - Windows and backdrops position and paint themselves with
 //   inline style attributes.
 // The site renders no user content, so inline scripts can only be its own.
 const DIRECTIVES: Record<string, string> = {

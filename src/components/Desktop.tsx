@@ -18,7 +18,7 @@ export function Desktop() {
           click-through except on the windows themselves. */}
       <main
         data-shutdown="windows"
-        className="pointer-events-none absolute inset-x-0 top-0 bottom-[88px] z-60"
+        className="pointer-events-none absolute inset-x-0 top-0 bottom-[55px] z-60"
       >
         <h1 className="sr-only">
           {isHome(pathname) ? site.headings.home : site.headings.notFound}

@@ -37,7 +37,7 @@ Renovate opens dependency updates weekly. TanStack packages are pinned exactly a
 ## Layout
 
 - `src/routes/` file-based routes: the home page, which sets `head()` only. The root route renders `<Desktop>` (menu bar, dock, open windows) and the head for unknown URLs.
-- `src/components/` desktop chrome: `Desktop`, `MenuBar`, `Clock`, `Dock`, `DockIcon`, `Window`, `WindowManager` and `ShutDown`, plus `Backdrop`, which lazy-loads the current theme's desktop background (`CodeRain`, `Orbits`, `Film` or `Streaks`).
+- `src/components/` desktop chrome: `Desktop`, `MenuBar`, `Clock`, `Dock`, `Window`, `WindowManager` and `ShutDown`, plus `Backdrop`, which lazy-loads the current theme's desktop background (`CodeRain`, `Orbits`, `Film` or `Streaks`).
 - `src/components/apps/` window contents, one component per app, registered in `apps/index.tsx`.
 - `src/components/start/` each theme's start screen, the one Restart ends on, one component per theme, registered in `start/index.tsx`, with the pieces they share in `start/parts.tsx`. `ShutDown` runs the sequence around it.
 - `src/lib/windows.ts` window ids and the windows open on first paint. The desktop has one URL; windows are state in `WindowManager`, and any other URL opens File Not Found.
@@ -48,7 +48,7 @@ Renovate opens dependency updates weekly. TanStack packages are pinned exactly a
 - `src/lib/terminal.ts` the Terminal app's commands.
 - `src/styles.css` design tokens per theme, and the retro desktop chrome utilities.
 - `public/fonts/` self-hosted fonts.
-- `public/icons/` each theme's menu mark and dock icons, one folder per theme; see `public/icons/README.md`.
+- `public/icons/` each theme's menu mark, one folder per theme; see `public/icons/README.md`.
 - `scripts/` `serve-prod.mjs`, which serves the Vercel build as Vercel does; see `scripts/README.md`.
 
 ## Workflow

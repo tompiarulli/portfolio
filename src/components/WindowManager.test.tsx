@@ -189,7 +189,7 @@ describe('window manager', () => {
   })
 
   describe('minimizing', () => {
-    it("hides the front window into its dock icon when the icon's pressed", async () => {
+    it("hides the front window into its dock key when the key's pressed", async () => {
       const { user } = await renderDesktop('/')
       await user.click(dockLink('contact'))
       // Still mounted, keeping its place, but out of sight and at the back.
@@ -199,7 +199,7 @@ describe('window manager', () => {
       expect(windowOrder()).toEqual(['about', 'contact'])
       expect(dockLink('contact').textContent).toContain('minimized')
       expect(dockLink('about').getAttribute('aria-current')).toBe('true')
-      // Focus stays on the icon that was pressed, so the dock can be worked
+      // Focus stays on the key that was pressed, so the dock can be worked
       // from the keyboard without being thrown into a window.
       expect(document.activeElement).toBe(dockLink('contact'))
     })

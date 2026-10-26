@@ -292,18 +292,9 @@
   --start-ground: var(--desk);
   /* Quieter text, for a screen that sets some (Orbital's build). */
   --start-muted: #8ff5a8;
-  /* The menu mark's size; the mark itself is set per theme, with the
-     dock icons, under "Menu marks and dock icons" below. */
+  /* The menu mark's size; the mark itself is set per theme, under "Menu
+     marks" below. */
   --logo-size: 16px;
-  /* Dock icons are shown as drawn. A theme can paint one in the dock's
-     text colour instead with --icon-<id>-mask and --icon-fill. */
-  --icon-fill: transparent;
-  /* 36px on phones, below. */
-  --icon-size: 40px;
-  /* Smooth for vector and drawn icons; pixelated keeps pixel art crisp. */
-  --icon-rendering: auto;
-  /* A filter over the drawn icons, e.g. greyscale; none keeps them as is. */
-  --icon-filter: none;
   color-scheme: dark;
 }
 
@@ -435,26 +426,15 @@
   color-scheme: light;
 }
 
-/* ---------- Menu marks and dock icons ----------
-   Each theme's own art, in public/icons/<theme>/: mark.svg for the menu,
-   a mask painted in the menu bar's text colour, and about, contact,
-   work, terminal and settings for the dock, shown as drawn. Swap a file to
-   change one; see public/icons/README.md. */
+/* ---------- Menu marks ----------
+   Each theme's own art, public/icons/<theme>/mark.svg, a mask painted in
+   the menu bar's text colour. Swap the file to change one; see
+   public/icons/README.md. */
 [data-theme='orbital'] {
   --logo: url('/icons/orbital/mark.svg');
-  --icon-about-image: url('/icons/orbital/about.svg');
-  --icon-contact-image: url('/icons/orbital/contact.svg');
-  --icon-work-image: url('/icons/orbital/work.svg');
-  --icon-terminal-image: url('/icons/orbital/terminal.svg');
-  --icon-settings-image: url('/icons/orbital/settings.svg');
 }
 [data-theme='rabbit'] {
   --logo: url('/icons/rabbit/mark.svg');
-  --icon-about-image: url('/icons/rabbit/about.svg');
-  --icon-contact-image: url('/icons/rabbit/contact.svg');
-  --icon-work-image: url('/icons/rabbit/work.svg');
-  --icon-terminal-image: url('/icons/rabbit/terminal.svg');
-  --icon-settings-image: url('/icons/rabbit/settings.svg');
 }
 /* Steamboat's desktop in its start screen's title-card look: labels in
    small spaced capitals, cream paper, a hard ink shadow under windows, and
@@ -473,19 +453,9 @@
 }
 [data-theme='steamboat'] {
   --logo: url('/icons/steamboat/mark.svg');
-  --icon-about-image: url('/icons/steamboat/about.svg');
-  --icon-contact-image: url('/icons/steamboat/contact.svg');
-  --icon-work-image: url('/icons/steamboat/work.svg');
-  --icon-terminal-image: url('/icons/steamboat/terminal.svg');
-  --icon-settings-image: url('/icons/steamboat/settings.svg');
 }
 [data-theme='traveler'] {
   --logo: url('/icons/traveler/mark.svg');
-  --icon-about-image: url('/icons/traveler/about.svg');
-  --icon-contact-image: url('/icons/traveler/contact.svg');
-  --icon-work-image: url('/icons/traveler/work.svg');
-  --icon-terminal-image: url('/icons/traveler/terminal.svg');
-  --icon-settings-image: url('/icons/traveler/settings.svg');
 }
 
 /* ---------- Start screen ----------
@@ -612,10 +582,6 @@
    windows behind stay clear to tap, whatever order they open in. Dragging
    still moves them anywhere. */
 @media (max-width: 639px) {
-  :root,
-  [data-theme] {
-    --icon-size: 36px;
-  }
   [data-theme='steamboat'] {
     --start-title-scale: 0.85;
   }
@@ -682,64 +648,6 @@ svg {
   height: var(--logo-size);
   background: currentColor;
   mask: var(--logo) center / contain no-repeat;
-}
-
-.dock-icon {
-  width: var(--icon-size);
-  height: var(--icon-size);
-  background: var(--icon-fill) var(--icon-image) center / contain no-repeat;
-  mask-image: var(--icon-mask);
-  mask-position: center;
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  image-rendering: var(--icon-rendering);
-  filter: var(--icon-filter);
-}
-
-/* Orbital's dock has no icons: each app is a ruled soft key, like the keys
-   along the foot of a flight console, marked when open as in the other
-   themes. */
-[data-theme='orbital'] .dock {
-  gap: 6px;
-  padding: 6px;
-}
-[data-theme='orbital'] .dock-key {
-  width: 96px;
-  height: 42px;
-  border: 1px solid var(--ink);
-}
-[data-theme='orbital'] .dock-icon {
-  display: none;
-}
-/* Its open-window mark is a lamp in the key's top left corner: lit for
-   the focused app, an outline for one open behind it. */
-[data-theme='orbital'] .dock-mark {
-  top: 5px;
-  bottom: auto;
-  left: 5px;
-  width: 5px;
-  height: 5px;
-  translate: none;
-  scale: none;
-  opacity: 1;
-}
-[data-theme='orbital'] .dock-mark[data-state='open'] {
-  background: transparent;
-  border: 1px solid var(--ink);
-}
-[data-theme='orbital'] .dock-mark[data-state='closed'] {
-  opacity: 0;
-}
-@media (max-width: 639px) {
-  [data-theme='orbital'] .dock {
-    gap: 4px;
-    padding: 4px;
-  }
-  [data-theme='orbital'] .dock-key {
-    width: auto;
-    padding-inline: 0;
-    --label-tracking: 0.04em;
-  }
 }
 
 .os-scroll {

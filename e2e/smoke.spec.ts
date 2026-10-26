@@ -172,15 +172,15 @@ test('the dock minimizes the front window and brings it back', async ({
   await page.goto('/')
   await page.waitForLoadState('networkidle')
   const contact = page.getByRole('region', { name: 'Contact' })
-  const icon = page
+  const key = page
     .getByRole('navigation', { name: 'Applications' })
     .getByRole('button', { name: /^Contact/ })
-  await icon.click()
+  await key.click()
   // It flies into the dock, then hides; About comes to the front.
   await expect(contact).toBeHidden()
-  await expect(icon).toContainText('minimized')
+  await expect(key).toContainText('minimized')
   expect((await windowOrder(page))[0]).toBe('about')
-  await icon.click()
+  await key.click()
   await expect(contact).toBeVisible()
   expect((await windowOrder(page))[0]).toBe('contact')
 })
