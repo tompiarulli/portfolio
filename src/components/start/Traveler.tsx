@@ -18,7 +18,7 @@ export default function TravelerStart() {
         </div>
         <p
           aria-hidden
-          className="drop-in border-2 border-(--start-title-edge) bg-(--off) px-[16px] py-[8px] pl-[calc(16px+0.25em)] font-(family-name:--start-title-font) text-[12px] tracking-[0.25em] text-(--start-title-1) uppercase sm:text-[14px]"
+          className="drop-in border-2 border-(--start-title-edge) bg-(--start-title-shade) px-[16px] py-[8px] pl-[calc(16px+0.25em)] font-(family-name:--start-title-font) text-[12px] tracking-[0.25em] text-(--start-title-1) uppercase sm:text-[14px]"
         >
           Press Any Key to Start
         </p>
