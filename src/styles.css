@@ -59,6 +59,14 @@
   descent-override: 16%;
   line-gap-override: 0%;
 }
+/* Geist SemiBold (SIL OFL, see public/fonts/Geist-OFL.txt): the title on
+   Orbital's start screen, Geist Mono's proportional sibling. */
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/geist-600.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 600;
+}
 /* Righteous (SIL OFL, see public/fonts/Righteous-OFL.txt) and Space Mono
    Bold (SIL OFL, see public/fonts/SpaceMono-OFL.txt): the start screen's
    title and prompt, so they load only at shut down. */
@@ -452,14 +460,14 @@
 /* ---------- Start screen ----------
    Each theme's type and colours for it, over its own backdrop; White
    Rabbit's, a phosphor terminal, are the base values above. */
-/* Orbital: clean and flat, in its own mono, white and greys, set in one
-   ruled panel without the shared title or prompt; only its type and
-   colours come from here. */
+/* Orbital: clean and flat, in its own mono with the title in its
+   proportional sibling, white and greys, set in one ruled panel without
+   the shared title or prompt; only its type and colours come from here. */
 [data-theme='orbital'] {
   --start-font: 'Geist Mono', ui-monospace, monospace;
-  --start-title-font: 'Geist Mono', ui-monospace, monospace;
+  --start-title-font: 'Geist', ui-sans-serif, sans-serif;
   --start-title-weight: 600;
-  --start-title-tracking: -0.04em;
+  --start-title-tracking: -0.03em;
   --start-title-dither: none;
   --start-title-depth: 0em;
   --script-font: 'Geist Mono', ui-monospace, monospace;

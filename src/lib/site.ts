@@ -71,7 +71,7 @@ export const credits: { group: string; items: Credit[] }[] = [
         license: 'OFL 1.1',
       },
       {
-        name: 'Geist Mono',
+        name: 'Geist and Geist Mono',
         by: 'the Geist Project Authors',
         url: 'https://github.com/vercel/geist-font',
         license: 'OFL 1.1',
