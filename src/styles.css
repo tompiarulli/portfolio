@@ -500,8 +500,8 @@
   --start-font: 'Jost', ui-sans-serif, sans-serif;
   --start-dim: rgb(0 0 0 / 0.45);
   --start-title-font: 'Titan One', ui-sans-serif, sans-serif;
-  /* Wide, so a size down on phones, below. */
-  --start-title-scale: 1;
+  /* Wide, so a size down on smaller screens, below. */
+  --start-title-scale: 1.2;
   --start-title-weight: 400;
   --start-title-tracking: 0.01em;
   --start-title-dither: none;
@@ -532,6 +532,13 @@
   --prompt-glow: transparent;
   /* The film, dimmed. */
   --start-ground: #434341;
+}
+/* Steamboat's wide title, a size down where 1.2 would overflow (and
+   again on phones, below). */
+@media (max-width: 767px) {
+  [data-theme='steamboat'] {
+    --start-title-scale: 1;
+  }
 }
 /* OUTATIME: an 80s arcade logo, lavender and dithered on a pink and purple
    drop, the version in pink brush script and a cyan prompt. */
