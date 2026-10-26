@@ -265,6 +265,8 @@
   --prompt: #d8ffe0;
   --prompt-glow: #41e07a;
   --start-ground: var(--desk);
+  /* Quieter text, for a screen that sets some (Orbital's build). */
+  --start-muted: #8ff5a8;
   /* The menu mark's size; the mark itself is set per theme, with the
      dock icons, under "Menu marks and dock icons" below. */
   --logo-size: 16px;
@@ -450,8 +452,9 @@
 /* ---------- Start screen ----------
    Each theme's type and colours for it, over its own backdrop; White
    Rabbit's, a phosphor terminal, are the base values above. */
-/* Orbital: clean and flat, in its own mono, white to greys, the version
-   small and spaced out. */
+/* Orbital: clean and flat, in its own mono, white and greys, set in one
+   ruled panel without the shared title or prompt; only its type and
+   colours come from here. */
 [data-theme='orbital'] {
   --start-font: 'Geist Mono', ui-monospace, monospace;
   --start-title-font: 'Geist Mono', ui-monospace, monospace;
@@ -478,6 +481,7 @@
   --script-glow: #9c9c9c;
   --prompt: #ededed;
   --prompt-glow: #8a8a8a;
+  --start-muted: #9c9c9c;
 }
 /* Steamboat: a cartoon title card, the film dimmed under cream lettering
    with a dark drop shadow: chunky capitals for the title, the version in
@@ -891,6 +895,41 @@ svg {
   }
   70% {
     translate: 0 0;
+    opacity: 1;
+  }
+}
+/* Chevrons that fill in one at a time, from the text outward, then clear:
+   each shows from its step of the cycle to the end. */
+.chevron-1 {
+  animation: chevron-1 2s steps(1) infinite;
+}
+.chevron-2 {
+  animation: chevron-2 2s steps(1) infinite;
+}
+.chevron-3 {
+  animation: chevron-3 2s steps(1) infinite;
+}
+@keyframes chevron-1 {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+}
+@keyframes chevron-2 {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes chevron-3 {
+  0% {
+    opacity: 0;
+  }
+  75% {
     opacity: 1;
   }
 }
