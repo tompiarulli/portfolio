@@ -9,7 +9,7 @@ const APPS = [
 ] as const
 
 export function Dock() {
-  const { stack, raise, minimized, minimize } = useWindows()
+  const { stack, raise } = useWindows()
   return (
     <nav
       aria-label="Applications"
@@ -19,8 +19,7 @@ export function Dock() {
     >
       {APPS.map((app) => {
         const open = stack.includes(app.id)
-        const hidden = minimized.includes(app.id)
-        const front = stack.at(-1) === app.id && !hidden
+        const front = stack.at(-1) === app.id
         return (
           // A ruled key with the app's name, like a console's soft keys.
           <button
@@ -28,26 +27,23 @@ export function Dock() {
             type="button"
             data-dock-link={app.id}
             aria-current={front ? 'true' : undefined}
-            onClick={() =>
-              // Clicking the focused window's key minimizes it into the dock.
-              front ? minimize(app.id) : raise(app.id)
-            }
+            // The focused window's key does nothing, as on a Mac.
+            onClick={() => front || raise(app.id)}
             className="group relative flex h-[42px] w-[96px] min-w-0 cursor-pointer items-center justify-center rounded-(--close-radius) border border-(--ink) px-1 -outline-offset-4 outline-current outline-dotted not-focus-visible:outline-none focus-visible:bg-(--tertiary) focus-visible:text-(--on-tertiary) max-sm:w-auto max-sm:flex-1 max-sm:px-0"
           >
             {/* Spaced a little tighter on a phone, so the longest name fits. */}
             <span className="font-(family-name:--font-label) text-(length:--label-size) [font-weight:var(--label-weight)] tracking-(--label-tracking) [text-transform:var(--label-case)] group-active:translate-y-px max-sm:tracking-[min(var(--label-tracking),0.04em)]">
               {app.label}
               {/* The lamp says this by sight. */}
-              <span className="sr-only">
-                {hidden ? ', minimized' : open ? ', open' : ''}
-              </span>
+              <span className="sr-only">{open ? ', open' : ''}</span>
             </span>
             {/* A lamp in the corner: lit for the front window, an outline
-                for one open behind it or minimized. */}
+                for one open behind it. */}
             <span
               aria-hidden
+              data-lamp
               className={`absolute top-[5px] left-[5px] size-[5px] transition-opacity duration-150 ${
-                stack.at(-1) === app.id
+                front
                   ? 'bg-(--indicator)'
                   : open
                     ? 'border border-(--ink)'

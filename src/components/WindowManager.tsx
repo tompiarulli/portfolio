@@ -22,10 +22,6 @@ type Windows = {
    *  keyboard focus into it. */
   raise: (id: WindowId) => void
   close: (id: WindowId) => void
-  /** Open windows hidden in the dock. They stay mounted, keeping their place. */
-  minimized: WindowId[]
-  /** Hide a window into its dock key; the next window takes focus. */
-  minimize: (id: WindowId) => void
   /** The window keyboard focus should move into, bumped each time it is
    *  asked for, so the same window can be asked for twice. */
   focusRequest: { id: WindowId | null; seq: number }
@@ -100,7 +96,6 @@ export function WindowManager({ children }: { children: ReactNode }) {
   const [slots, setSlots] = useState<Partial<Record<WindowId, number>>>(() =>
     Object.fromEntries(initialStack(pathname).map((id, i) => [id, i])),
   )
-  const [minimized, setMinimized] = useState<WindowId[]>([])
   const [focusRequest, setFocusRequest] = useState<{
     id: WindowId | null
     seq: number
@@ -110,19 +105,15 @@ export function WindowManager({ children }: { children: ReactNode }) {
     setFocusRequest((r) => ({ id, seq: r.seq + 1 }))
     setPeek(null)
   }, [])
-  const unminimize = useCallback((id: WindowId) => {
-    setMinimized((m) => (m.includes(id) ? m.filter((w) => w !== id) : m))
-  }, [])
 
   const raise = useCallback(
     (id: WindowId) => {
       keepScroll()
       setStack((s) => toFront(s, id))
       setSlots((s) => (id in s ? s : { ...s, [id]: nextSlot(s) }))
-      unminimize(id)
       requestFocus(id)
     },
-    [unminimize, requestFocus],
+    [requestFocus],
   )
 
   const close = useCallback(
@@ -135,8 +126,7 @@ export function WindowManager({ children }: { children: ReactNode }) {
         delete rest[id]
         return rest
       })
-      unminimize(id)
-      const top = next.filter((w) => !minimized.includes(w)).at(-1)
+      const top = next.at(-1)
       // Focus moves on to the next window, as on a desktop OS.
       if (holdsFocus(id)) {
         if (top) requestFocus(top)
@@ -146,24 +136,7 @@ export function WindowManager({ children }: { children: ReactNode }) {
       // a reload doesn't bring it back.
       if (id === 'notfound') navigate({ to: '/', replace: true })
     },
-    [stack, minimized, navigate, unminimize, requestFocus],
-  )
-
-  const minimize = useCallback(
-    (id: WindowId) => {
-      const hidden = [...minimized.filter((w) => w !== id), id]
-      setMinimized(hidden)
-      // Send it to the back so the next visible window becomes the top.
-      const next = [id, ...stack.filter((w) => w !== id)]
-      keepScroll()
-      setStack(next)
-      const top = next.filter((w) => !hidden.includes(w)).at(-1)
-      if (holdsFocus(id)) {
-        if (top) requestFocus(top)
-        else focusDock(id)
-      }
-    },
-    [stack, minimized, requestFocus],
+    [stack, navigate, requestFocus],
   )
 
   const value = useMemo(
@@ -172,13 +145,11 @@ export function WindowManager({ children }: { children: ReactNode }) {
       slots,
       raise,
       close,
-      minimized,
-      minimize,
       focusRequest,
       peek,
       setPeek,
     }),
-    [stack, slots, raise, close, minimized, minimize, focusRequest, peek],
+    [stack, slots, raise, close, focusRequest, peek],
   )
 
   return (

@@ -166,21 +166,16 @@ test.describe('themes', () => {
   })
 })
 
-test('the dock minimizes the front window and brings it back', async ({
+test("the front window's dock key leaves it open and in front", async ({
   page,
 }) => {
   await page.goto('/')
   await page.waitForLoadState('networkidle')
   const contact = page.getByRole('region', { name: 'Contact' })
-  const key = page
+  await page
     .getByRole('navigation', { name: 'Applications' })
     .getByRole('button', { name: /^Contact/ })
-  await key.click()
-  // It flies into the dock, then hides; About comes to the front.
-  await expect(contact).toBeHidden()
-  await expect(key).toContainText('minimized')
-  expect((await windowOrder(page))[0]).toBe('about')
-  await key.click()
+    .click()
   await expect(contact).toBeVisible()
   expect((await windowOrder(page))[0]).toBe('contact')
 })

@@ -188,47 +188,18 @@ describe('window manager', () => {
     })
   })
 
-  describe('minimizing', () => {
-    it("hides the front window into its dock key when the key's pressed", async () => {
+  describe("the front window's dock key", () => {
+    it('leaves the window open and in front', async () => {
       const { user } = await renderDesktop('/')
       await user.click(dockLink('contact'))
-      // Still mounted, keeping its place, but out of sight and at the back.
-      await waitFor(() =>
-        expect(windowEl('contact').style.visibility).toBe('hidden'),
-      )
-      expect(windowOrder()).toEqual(['about', 'contact'])
-      expect(dockLink('contact').textContent).toContain('minimized')
-      expect(dockLink('about').getAttribute('aria-current')).toBe('true')
-      // Focus stays on the key that was pressed, so the dock can be worked
-      // from the keyboard without being thrown into a window.
-      expect(document.activeElement).toBe(dockLink('contact'))
-    })
-
-    it('brings a minimized window back from the dock', async () => {
-      const { user } = await renderDesktop('/')
-      await user.click(dockLink('contact'))
-      await waitFor(() =>
-        expect(windowEl('contact').style.visibility).toBe('hidden'),
-      )
-      await user.click(dockLink('contact'))
-      await waitFor(() => expect(windowOrder()).toEqual(['contact', 'about']))
       expect(windowEl('contact').style.visibility).toBe('')
-      expect(dockLink('contact').textContent).not.toContain('minimized')
-    })
-
-    it('keeps the last visible window mounted when it is minimized', async () => {
-      const { user } = await renderDesktop('/')
-      await user.click(closeBox('About'))
-      await user.click(dockLink('contact'))
-      await waitFor(() =>
-        expect(windowEl('contact').style.visibility).toBe('hidden'),
-      )
-      expect(windowOrder()).toEqual(['contact'])
+      expect(windowOrder()).toEqual(['contact', 'about'])
+      expect(dockLink('contact').getAttribute('aria-current')).toBe('true')
     })
   })
 
   describe('URL', () => {
-    it('stays on / and adds no history as windows open, close and minimize', async () => {
+    it('stays on / and adds no history as windows open and close', async () => {
       const { user, router, pathname } = await renderDesktop('/')
       const length = router.history.length
       await user.click(dockLink('terminal'))

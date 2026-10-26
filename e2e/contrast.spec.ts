@@ -4,8 +4,7 @@ import type { Page } from '@playwright/test'
 import { THEMES } from '../src/lib/theme'
 import { expect, test } from './fixtures'
 
-// Colours are measured at rest: no transitions, and the minimize animation
-// (which fades a window to 30%) is skipped.
+// Colours are measured at rest: no transitions or animations.
 test.use({ reducedMotion: 'reduce' })
 
 /** Waits for every finite animation on the page to finish, so nothing is
@@ -40,11 +39,10 @@ async function open(page: Page, name: string) {
     await page.getByRole('button', { name: 'System menu' }).click()
     await page.getByRole('menuitem', { name }).click()
   } else {
-    const icon = page
+    await page
       .getByRole('navigation', { name: 'Applications' })
       .getByRole('button', { name: new RegExp(`^${name}`) })
-    // Pressing the front window's icon would minimize it instead.
-    if ((await icon.getAttribute('aria-current')) !== 'true') await icon.click()
+      .click()
   }
   const window = page.getByRole('region', { name })
   await expect(window).toBeVisible()

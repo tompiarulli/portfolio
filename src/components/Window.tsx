@@ -14,40 +14,6 @@ import {
   useWindows,
 } from '#/components/WindowManager'
 
-/** Shrinks a window into its dock key, or back out with `restore`. The
- *  individual translate and scale properties compose with the window's
- *  position transform, so dragging and minimizing never fight. */
-function flyToDock(el: HTMLElement, id: string, restore: boolean) {
-  const key = document.querySelector(`[data-dock-link="${id}"]`)
-  if (!key || matchMedia('(prefers-reduced-motion: reduce)').matches)
-    return null
-  const r = el.getBoundingClientRect()
-  const i = key.getBoundingClientRect()
-  const o = el.offsetParent?.getBoundingClientRect() ?? { left: 0, top: 0 }
-  const sx = i.width / r.width
-  const sy = i.height / r.height
-  // With the origin at the layout box's corner, a point lands at
-  // origin + translate + scale * (position), so solve for the translate.
-  const tx = i.left - o.left - sx * (r.left - o.left)
-  const ty = i.top - o.top - sy * (r.top - o.top)
-  return el.animate(
-    [
-      { transformOrigin: '0 0', translate: '0 0', scale: '1', opacity: 1 },
-      {
-        transformOrigin: '0 0',
-        translate: `${tx}px ${ty}px`,
-        scale: `${sx} ${sy}`,
-        opacity: 0.3,
-      },
-    ],
-    {
-      duration: 200,
-      easing: restore ? 'ease-out' : 'ease-in',
-      direction: restore ? 'reverse' : 'normal',
-    },
-  )
-}
-
 /** Puts the window's top-left corner at (`vx`, `vy`) in the viewport, kept
  *  wholly on screen on every side; it may cover the menu bar and dock. */
 function moveTo(el: HTMLElement, vx: number, vy: number) {
@@ -104,13 +70,11 @@ export function Window({
     slots,
     raise,
     close: closeWindow,
-    minimized,
     focusRequest,
     peek,
     setPeek,
   } = useWindows()
   const active = peek ? peek === id : stack.at(-1) === id
-  const hidden = minimized.includes(id)
   const close = () => closeWindow(id)
   // Restacking moves windows in the DOM, which resets their scroll; put
   // it back.
@@ -139,24 +103,6 @@ export function Window({
     const target = el.querySelector<HTMLElement>('[data-autofocus]') ?? el
     target.focus({ preventScroll: true })
   }, [focusRequest, id])
-
-  // Hidden windows stay mounted, keeping their place and state.
-  const wasHidden = useRef(hidden)
-  useLayoutEffect(() => {
-    const el = ref.current
-    if (!el || wasHidden.current === hidden) return
-    wasHidden.current = hidden
-    for (const a of el.getAnimations()) a.cancel()
-    if (hidden) {
-      const anim = flyToDock(el, id, false)
-      const hide = () => (el.style.visibility = 'hidden')
-      if (!anim) return void hide()
-      anim.finished.then(hide, () => {})
-    } else {
-      el.style.visibility = ''
-      flyToDock(el, id, true)
-    }
-  }, [hidden, id])
 
   const onPointerDown = useCallback((e: PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0 || !ref.current) return
