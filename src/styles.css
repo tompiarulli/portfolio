@@ -791,7 +791,7 @@ svg {
 }
 [data-theme='traveler'] [data-dock-link] {
   width: 104px;
-  height: 45px;
+  height: 47px;
   border-color: var(--prompt);
   background: var(--surface);
   color: var(--ink);
