@@ -7,7 +7,7 @@ export function SystemInfo() {
     <Window title="System Info" x={-80} y={-10} width={340} height={420}>
       <p className="font-mono text-base">{site.os}</p>
       <dl className="mt-1 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
-        <dt className="heading">Build</dt>
+        <dt className="font-mono">Build</dt>
         <dd>
           {build.commit}
           {build.date && ` (${build.date})`}
