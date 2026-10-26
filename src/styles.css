@@ -1124,6 +1124,99 @@ svg {
   }
 }
 
+/* ---------- Start screen entrances ----------
+   Each theme's start screen comes up its own way (Steamboat's irises in,
+   above). Without motion each shows as it settles. */
+
+/* Orbital: the panel powers on like a display, a line opening out from
+   the middle and then to its full height, and its rows come up in turn
+   (each with its --row delay). */
+.power-on {
+  animation: power-on 500ms ease-out 100ms both;
+}
+@keyframes power-on {
+  0% {
+    clip-path: inset(50% 50% 50% 50%);
+  }
+  45% {
+    clip-path: inset(calc(50% - 1px) 0 calc(50% - 1px) 0);
+  }
+  100% {
+    clip-path: inset(0);
+  }
+}
+.power-on-row {
+  animation: fade-in 200ms ease-out both;
+  animation-delay: calc(550ms + var(--row) * 120ms);
+}
+
+/* White Rabbit: the title drawn top to bottom in hard steps, as a
+   terminal paints its screen, then the prompt typed across its box before
+   it blinks. */
+.draw-down {
+  animation: draw-down 600ms steps(8) 150ms both;
+}
+/* Clipped a little past the title's edges, so its extrusion and the
+   version hanging below it are drawn too. */
+@keyframes draw-down {
+  from {
+    clip-path: inset(-10% -20% 110% -20%);
+  }
+  to {
+    clip-path: inset(-10% -20% -60% -20%);
+  }
+}
+.type-on {
+  animation:
+    type-on 700ms steps(22) 850ms both,
+    blink 1.6s steps(1) 1.55s infinite;
+}
+@keyframes type-on {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
+/* OUTATIME: the title flies in from the distance and settles, the version
+   writes itself in, then the prompt drops into place and blinks. */
+.fly-in {
+  animation: fly-in 700ms cubic-bezier(0.2, 0.8, 0.3, 1.15) 100ms both;
+}
+@keyframes fly-in {
+  from {
+    opacity: 0;
+    scale: 0.15;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+.fly-in .script {
+  animation: write-on 450ms ease-out 750ms both;
+}
+@keyframes write-on {
+  from {
+    clip-path: inset(-50% 100% -50% -50%);
+  }
+  to {
+    clip-path: inset(-50%);
+  }
+}
+.drop-in {
+  animation:
+    drop-in 300ms ease-out 1.1s both,
+    blink 1.6s steps(1) 1.4s infinite;
+}
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    translate: 0 -12px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
