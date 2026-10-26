@@ -13,3 +13,5 @@ pyftsubset font.ttf --flavor=woff2 --unicodes="U+0020-007E,U+2600-26FF" --output
 - `righteous-400.woff2`: Righteous Regular by Astigmatic, SIL Open Font License 1.1 (`Righteous-OFL.txt`). The start screen's title. Fontsource's Latin file.
 - `permanent-marker-400.woff2`: Permanent Marker Regular by Font Diner, Apache License 2.0 (`PermanentMarker-LICENSE.txt`). The brush script on the start screen. Fontsource's Latin file.
 - `space-mono-700.woff2`: Space Mono Bold by the Space Mono Project Authors, SIL Open Font License 1.1 (`SpaceMono-OFL.txt`). The start screen's prompt. Fontsource's Latin file.
+- `titan-one-400.woff2`: Titan One by Rodrigo Fuenzalida, SIL Open Font License 1.1 (`TitanOne-OFL.txt`). Steamboat's start screen title. Fontsource's Latin file.
+- `playfair-display-700-italic.woff2`, `jost-500.woff2`: Playfair Display Bold Italic by the Playfair Display Project Authors and Jost Medium by the Jost Project Authors, SIL Open Font License 1.1 (`PlayfairDisplay-OFL.txt`, `Jost-OFL.txt`). Steamboat's start screen version and prompt. Fontsource's Latin files.

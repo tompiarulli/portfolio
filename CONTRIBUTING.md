@@ -43,7 +43,7 @@ Renovate opens dependency updates weekly. TanStack packages are pinned exactly a
 - `src/lib/site.ts` all copy and project data, including the descriptions and headings of the home page and the 404.
 - `src/lib/seo.ts` the head tags a page sets: title, description, canonical URL and link preview.
 - `src/lib/security-headers.ts` and `src/lib/content-security-policy.ts` the headers every response gets, applied through Nitro route rules in `vite.config.ts`.
-- `src/lib/theme.ts` the theme list (Orbital, the default, White Rabbit, Steamboat and OUTATIME) and the inline script that applies the theme before first paint: the one named by `?theme=` (an id or the label as a slug, like `?theme=white-rabbit`), for that visit only, else the saved one.
+- `src/lib/theme.ts` the theme list (Orbital, the default, White Rabbit, Steamboat and OUTATIME) and the inline script that applies the theme before first paint: the one named by `?theme=` (an id or the label as a slug, like `?theme=white-rabbit`), for that visit only, else the saved one. `?start` opens the site on the start screen that Restart ends on; with `?theme=` it shows that theme's.
 - `src/lib/terminal.ts` the Terminal app's commands.
 - `src/styles.css` design tokens per theme, and the retro desktop chrome utilities.
 - `public/fonts/` self-hosted fonts.

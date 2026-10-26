@@ -98,6 +98,24 @@ export const credits: { group: string; items: Credit[] }[] = [
         license: 'OFL 1.1',
       },
       {
+        name: 'Titan One',
+        by: 'Rodrigo Fuenzalida',
+        url: 'https://github.com/google/fonts/tree/main/ofl/titanone',
+        license: 'OFL 1.1',
+      },
+      {
+        name: 'Playfair Display',
+        by: 'the Playfair Display Project Authors',
+        url: 'https://github.com/google/fonts/tree/main/ofl/playfairdisplay',
+        license: 'OFL 1.1',
+      },
+      {
+        name: 'Jost',
+        by: 'the Jost Project Authors',
+        url: 'https://github.com/google/fonts/tree/main/ofl/jost',
+        license: 'OFL 1.1',
+      },
+      {
         name: 'Permanent Marker',
         by: 'Font Diner',
         url: 'https://github.com/google/fonts/tree/main/apache/permanentmarker',

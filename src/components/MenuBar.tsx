@@ -1,4 +1,12 @@
-import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react'
 import type { KeyboardEvent, RefObject } from 'react'
 
 import { Clock } from '#/components/Clock'
@@ -162,10 +170,25 @@ function SystemMenu({
   )
 }
 
+const noChange = () => () => {}
+
 export function MenuBar() {
-  const [off, setOff] = useState(false)
+  const [shutDown, setShutDown] = useState(false)
+  // `?start` opens on the start screen, straight from the tube coming on,
+  // until the first boot. Only known in the browser.
+  const start = useSyncExternalStore(
+    noChange,
+    () => new URLSearchParams(location.search).has('start'),
+    () => false,
+  )
+  const [booted, setBooted] = useState(false)
+  const straight = start && !booted && !shutDown
+  const off = shutDown || straight
   const trigger = useRef<HTMLButtonElement>(null)
-  const boot = useCallback(() => setOff(false), [])
+  const boot = useCallback(() => {
+    setShutDown(false)
+    setBooted(true)
+  }, [])
   // Back on, focus lands where Shut Down was chosen from, once the shut
   // down screen has gone and the bar is no longer inert.
   const wasOff = useRef(false)
@@ -177,7 +200,7 @@ export function MenuBar() {
     <>
       {off && (
         <Suspense>
-          <ShutDown onBoot={boot} />
+          <ShutDown onBoot={boot} straight={straight} />
         </Suspense>
       )}
       {/* One banner for both halves of the bar: the menu at the left, the
@@ -187,7 +210,7 @@ export function MenuBar() {
           data-shutdown="bar"
           className={`${BAR} left-0 border-r has-aria-expanded:z-70`}
         >
-          <SystemMenu trigger={trigger} onShutDown={() => setOff(true)} />
+          <SystemMenu trigger={trigger} onShutDown={() => setShutDown(true)} />
         </div>
         <div
           data-shutdown="bar"

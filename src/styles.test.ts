@@ -68,12 +68,15 @@ const PAIRS: [string, string, number, string][] = [
   ['--terminal-text', '--terminal', 4.5, "the terminal's output"],
   ['--terminal-prompt', '--terminal', 4.5, "the terminal's prompt and input"],
   ['--indicator', '--surface', 3, "the dock's open-window mark"],
-  ['--start-text', '--off', 4.5, "the start screen's title and prompt"],
-  ['--start-text', '--start-sky-glow', 4.5, "the start screen's build line"],
-  ['--script', '--off', 3, "the start screen's brush script"],
-  ['--prompt', '--off', 4.5, "the start screen's prompt"],
-  ['--prompt', '--start-sky-glow', 4.5, "the start screen's prompt, low down"],
-  ['--start-title-4', '--off', 3, "the start screen title's lowest band"],
+  ['--start-text', '--start-ground', 4.5, "the start screen's build line"],
+  [
+    '--start-title-4',
+    '--start-ground',
+    3,
+    "the start screen title's lowest band",
+  ],
+  ['--script', '--start-ground', 3, "the start screen's brush script"],
+  ['--prompt', '--start-ground', 4.5, "the start screen's prompt"],
 ]
 
 describe.each(THEMES)('$label', ({ id }) => {

@@ -73,6 +73,26 @@
   font-display: swap;
   font-weight: 700;
 }
+/* Titan One, Playfair Display Bold Italic and Jost Medium (SIL OFL, see
+   public/fonts/): Steamboat's start screen. */
+@font-face {
+  font-family: 'Titan One';
+  src: url('/fonts/titan-one-400.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('/fonts/playfair-display-700-italic.woff2') format('woff2');
+  font-display: swap;
+  font-style: italic;
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Jost';
+  src: url('/fonts/jost-500.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 500;
+}
 /* Permanent Marker (Apache 2.0, see public/fonts/PermanentMarker-LICENSE.txt):
    the brush script across the start screen's title. */
 @font-face {
@@ -174,38 +194,52 @@
   --terminal-prompt: var(--glint);
   /* The screen with the power off; the same on every theme. */
   --off: #000;
-  /* The start screen shown with the power off, the same on every theme:
-     its text and face; a night sky glowing pink at the horizon; the
-     title's face, its lavenders stepping down from the text's white, and
-     its extrusion, a pink edge over purple depth; and the greens of the
-     grass. */
-  --start-text: #fff;
-  --start-font: 'Geist Mono', ui-monospace, monospace;
-  --start-sky-top: #0a0820;
-  --start-sky-mid: #2a0d4a;
-  --start-sky-glow: #b0186f;
-  --start-title-font: 'Righteous', var(--start-font);
-  --start-title-2: #f3ecfc;
-  --start-title-3: #ddcdf3;
-  --start-title-4: #bfa8e6;
-  --start-title-edge: #ff4fb0;
-  --start-title-shade: #3d0f55;
-  /* The prompt under the grass: its face, its cyan, and its glow. */
-  --prompt-font: 'Space Mono', var(--start-font);
-  --prompt: #8ff4ff;
-  --prompt-glow: #19d3ff;
-  /* The brush script across the title: its face, its paint, and a faint
-     glow. */
-  --script-font: 'Permanent Marker', cursive;
-  --script: #ff3fc8;
-  --script-glow: #ff1fa0;
-  /* The grid scrolling behind it: its lines, and the size of a square. */
-  --grid-line: #7a2a8c;
-  --grid-cell: 48px;
-  --grass-tip: #e4f58a;
-  --grass-light: #9be15d;
-  --grass: #4caf3a;
-  --grass-dark: #2b7a2e;
+  /* The start screen shown with the power off, over the theme's backdrop;
+     each theme styles it under "Start screen" below, and these base
+     values are White Rabbit's, a phosphor terminal. Its build line's face;
+     a wash dimming the backdrop; the title's face, scale (for wide faces),
+     weight and spacing, its
+     dither (none for a flat fill), and how far its extrusion drops and
+     drifts right (0 for none); the version's face, style, weight,
+     decoration, size against the title, tilt, spacing, offset from the
+     title's lower right, and filter; the prompt's face and weight. */
+  --start-font: 'Iosevka', ui-monospace, monospace;
+  --start-dim: transparent;
+  --start-title-font: 'Iosevka', ui-monospace, monospace;
+  --start-title-scale: 1;
+  --start-title-weight: 700;
+  --start-title-tracking: 0em;
+  --start-title-dither: url(#title-dither);
+  --start-title-depth: 0.08em;
+  --start-title-drift: 0em;
+  --script-font: 'Iosevka', ui-monospace, monospace;
+  --script-style: normal;
+  --script-weight: 600;
+  --script-decoration: none;
+  --script-size: 0.18em;
+  --script-rotate: 0deg;
+  --script-tracking: 0.2em;
+  --script-right: 0em;
+  --script-bottom: -1.2em;
+  --script-filter: drop-shadow(0 0 0.3em var(--script-glow));
+  --prompt-font: 'Iosevka', ui-monospace, monospace;
+  --prompt-weight: 600;
+  /* Its colours: its text; the title's four bands, top to bottom, and its
+     extrusion, an edge over the depth; the version and its glow; the
+     prompt and its glow; and the colour the backdrop mostly shows behind
+     it all, which the contrast tests read against. */
+  --start-text: #d8ffe0;
+  --start-title-1: #ffffff;
+  --start-title-2: #d8ffe0;
+  --start-title-3: #8ff5a8;
+  --start-title-4: #41e07a;
+  --start-title-edge: #1f8a45;
+  --start-title-shade: #04361a;
+  --script: #7dffa0;
+  --script-glow: #41e07a;
+  --prompt: #d8ffe0;
+  --prompt-glow: #41e07a;
+  --start-ground: var(--desk);
   /* The menu mark's size; the mark itself is set per theme, with the
      dock icons, under "Menu marks and dock icons" below. */
   --logo-size: 16px;
@@ -368,6 +402,116 @@
   --icon-settings-image: url('/icons/traveler/settings.svg');
 }
 
+/* ---------- Start screen ----------
+   Each theme's type and colours for it, over its own backdrop; White
+   Rabbit's, a phosphor terminal, are the base values above. */
+/* Orbital: clean and flat, in its own mono, white to greys, the version
+   small and spaced out. */
+[data-theme='orbital'] {
+  --start-font: 'Geist Mono', ui-monospace, monospace;
+  --start-title-font: 'Geist Mono', ui-monospace, monospace;
+  --start-title-weight: 600;
+  --start-title-tracking: -0.04em;
+  --start-title-dither: none;
+  --start-title-depth: 0em;
+  --script-font: 'Geist Mono', ui-monospace, monospace;
+  --script-weight: 400;
+  --script-size: 0.14em;
+  --script-tracking: 0.5em;
+  --script-bottom: -1.6em;
+  --script-filter: none;
+  --prompt-font: 'Geist Mono', ui-monospace, monospace;
+  --prompt-weight: 600;
+  --start-text: #ededed;
+  --start-title-1: #ffffff;
+  --start-title-2: #e4e4e4;
+  --start-title-3: #c2c2c2;
+  --start-title-4: #9c9c9c;
+  --start-title-edge: #6e6e6e;
+  --start-title-shade: #262626;
+  --script: #ffffff;
+  --script-glow: #9c9c9c;
+  --prompt: #ededed;
+  --prompt-glow: #8a8a8a;
+}
+/* Steamboat: a cartoon title card, the film dimmed under cream lettering
+   with a dark drop shadow: chunky capitals for the title, the version in
+   an underlined italic serif, and the prompt in spaced geometric
+   capitals. */
+[data-theme='steamboat'] {
+  --start-font: 'Jost', ui-sans-serif, sans-serif;
+  --start-dim: rgb(0 0 0 / 0.45);
+  --start-title-font: 'Titan One', ui-sans-serif, sans-serif;
+  /* Wide, so a size down on smaller screens, below. */
+  --start-title-scale: 1.15;
+  --start-title-weight: 400;
+  --start-title-tracking: 0.01em;
+  --start-title-dither: none;
+  --start-title-depth: 0.1em;
+  --start-title-drift: 0.08em;
+  --script-font: 'Playfair Display', ui-serif, serif;
+  --script-style: italic;
+  --script-weight: 700;
+  --script-decoration: underline;
+  --script-size: 0.2em;
+  --script-rotate: 0deg;
+  --script-tracking: 0em;
+  --script-right: 0em;
+  --script-bottom: -1em;
+  --script-filter: drop-shadow(0.08em 0.1em 0 var(--script-glow));
+  --prompt-font: 'Jost', ui-sans-serif, sans-serif;
+  --prompt-weight: 500;
+  --start-text: #f2f0e6;
+  --start-title-1: #f7f5ec;
+  --start-title-2: #f2f0e6;
+  --start-title-3: #e8e5d8;
+  --start-title-4: #dcd9ca;
+  --start-title-edge: #141413;
+  --start-title-shade: #141413;
+  --script: #f2f0e6;
+  --script-glow: #141413;
+  --prompt: #f2f0e6;
+  --prompt-glow: transparent;
+  /* The film, dimmed. */
+  --start-ground: #434341;
+}
+/* OUTATIME: an 80s arcade logo, lavender and dithered on a pink and purple
+   drop, the version in pink brush script and a cyan prompt. */
+[data-theme='traveler'] {
+  --start-font: 'Geist Mono', ui-monospace, monospace;
+  --start-title-font: 'Righteous', ui-sans-serif, sans-serif;
+  --start-title-weight: 400;
+  --start-title-depth: 0.1em;
+  --script-font: 'Permanent Marker', cursive;
+  --script-weight: 400;
+  --script-size: 0.45em;
+  --script-rotate: -8deg;
+  --script-tracking: 0em;
+  --script-right: -0.3em;
+  --script-bottom: -0.26em;
+  --script-filter: url(#script-thin) drop-shadow(0 0 0.08em var(--script-glow));
+  --prompt-font: 'Space Mono', ui-monospace, monospace;
+  --prompt-weight: 700;
+  --start-text: #ffffff;
+  --start-title-1: #ffffff;
+  --start-title-2: #f3ecfc;
+  --start-title-3: #ddcdf3;
+  --start-title-4: #bfa8e6;
+  --start-title-edge: #ff4fb0;
+  --start-title-shade: #3d0f55;
+  --script: #ff3fc8;
+  --script-glow: #ff1fa0;
+  --prompt: #8ff4ff;
+  --prompt-glow: #19d3ff;
+}
+
+/* Steamboat's wide title, a size down where 1.15 would overflow. */
+@media (max-width: 767px) {
+  [data-theme='steamboat'] {
+    --start-title-scale: 1;
+  }
+}
+
 /* Touch screens get a taller title bar to drag windows by and a bigger
    close box; the layout is otherwise the same as with a mouse. */
 @media (pointer: coarse) {
@@ -388,6 +532,9 @@
   :root,
   [data-theme] {
     --icon-size: 36px;
+  }
+  [data-theme='steamboat'] {
+    --start-title-scale: 0.85;
   }
   section[data-window] {
     --open-y: calc(40px + var(--slot) * (var(--title-height) + 8px));
@@ -527,6 +674,32 @@ svg {
     opacity: 0;
   }
 }
+/* And coming back on: a dot, a line, then the whole screen, whose glow
+   then fades off what's on it. */
+.tube-on {
+  animation: tube-on 600ms ease-out both;
+}
+@keyframes tube-on {
+  0% {
+    scale: 0 0.005;
+    opacity: 0;
+  }
+  40% {
+    scale: 1 0.005;
+    opacity: 1;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+.glow-out {
+  animation: glow-out 400ms ease-out both;
+}
+@keyframes glow-out {
+  to {
+    opacity: 0;
+  }
+}
 .fade-in {
   animation: fade-in 200ms ease-out both;
 }
@@ -535,16 +708,16 @@ svg {
     opacity: 0;
   }
 }
-/* The start screen's title: white fading to grey down the capitals, which
-   fill about 15% to 86% of the line, dithered (see Dither in ShutDown.tsx),
-   over a copy dropped straight down for depth. */
+/* The start screen's title: its bands fading down the capitals, which
+   fill roughly 15% to 86% of the line, dithered if the theme says so (see
+   Dither in ShutDown.tsx), over a copy dropped straight down for depth. */
 .title-bands {
   /* Positioned, so it paints over the translated copy behind it. */
   position: relative;
-  filter: url(#title-dither);
+  filter: var(--start-title-dither);
   color: transparent;
   background: linear-gradient(
-      var(--start-text) 0.2em,
+      var(--start-title-1) 0.2em,
       var(--start-title-2) 0.45em,
       var(--start-title-3) 0.65em,
       var(--start-title-4) 0.86em
@@ -553,69 +726,30 @@ svg {
 }
 .title-extrude {
   color: var(--start-title-shade);
-  translate: 0 0.1em;
-  text-shadow: 0 -0.05em 0 var(--start-title-edge);
+  translate: var(--start-title-drift) var(--start-title-depth);
+  text-shadow: 0 calc(var(--start-title-depth) / -2) 0 var(--start-title-edge);
 }
-/* The start screen's night sky, dithered (see Dither in ShutDown.tsx). */
-.start-sky {
-  filter: url(#sky-dither);
-  background: linear-gradient(
-    var(--start-sky-top),
-    var(--start-sky-mid) 55%,
-    var(--start-sky-glow)
-  );
-}
-/* Its grid, on the lower half like ground under the sky: one square
-   taller than its frame and sliding down a square at a time, so it
-   scrolls forever. */
-.grid-fade {
-  overflow: hidden;
-  mask-image: linear-gradient(transparent 40%, #000);
-}
-.scroll-grid {
-  position: absolute;
-  inset: calc(-1 * var(--grid-cell)) 0 0;
-  background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 0),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 0);
-  background-size: var(--grid-cell) var(--grid-cell);
-  background-position: center top;
-  animation: scroll-grid 2s linear infinite;
-}
-@keyframes scroll-grid {
-  to {
-    translate: 0 var(--grid-cell);
-  }
-}
-/* The prompt: cyan, glowing like the sign's second tube. */
+/* The prompt, glowing. */
 .prompt-glow {
   color: var(--prompt);
   text-shadow: 0 0 0.4em var(--prompt-glow);
 }
-/* Brush script: hot pink paint, its strokes shaved thinner (see
-   ShutDown.tsx), with a faint glow. */
+/* The version across the title's lower right, styled by the theme. */
 .script {
+  position: absolute;
+  right: var(--script-right);
+  bottom: var(--script-bottom);
+  rotate: var(--script-rotate);
+  font-family: var(--script-font);
+  font-size: var(--script-size);
+  font-style: var(--script-style);
+  font-weight: var(--script-weight);
+  text-decoration: var(--script-decoration);
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.2em;
+  letter-spacing: var(--script-tracking);
   color: var(--script);
-  filter: url(#script-thin) drop-shadow(0 0 0.08em var(--script-glow));
-}
-/* The grass's two frames taking turns, like a sprite. The second is
-   hidden unless animating, so without motion the first stands still. */
-.sway-a {
-  animation: sway-a 1.2s steps(1) infinite;
-}
-.sway-b {
-  opacity: 0;
-  animation: sway-b 1.2s steps(1) infinite;
-}
-@keyframes sway-a {
-  50% {
-    opacity: 0;
-  }
-}
-@keyframes sway-b {
-  50% {
-    opacity: 1;
-  }
+  filter: var(--script-filter);
 }
 /* A hard cursor blink, no fade. */
 .blink {
