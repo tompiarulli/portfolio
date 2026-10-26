@@ -109,12 +109,17 @@
   --label-case: uppercase;
   --label-weight: 600;
   --menu-size: 12px;
-  --dock-label-size: 13px;
+  --dock-label-size: 12px;
   --text-size: 12px;
   --title-case: uppercase;
   --title-weight: 700;
   --title-size: 12px;
   --window-shadow: none;
+  /* Corner rounding of windows, the dock's top corners and the close
+     boxes; square unless a theme softens them. */
+  --window-radius: 0px;
+  --dock-radius: 0px;
+  --close-radius: 0px;
   --title-height: 23px;
   --title-open: '';
   --title-close: '';
@@ -122,10 +127,10 @@
   --close-shadow: none;
   --box-size: 15px;
   --glyph-size: 9px;
+  /* Lines between dock keys. */
+  --dock-divider: var(--ink);
   /* Open-window marks in the dock. */
   --indicator: #aef5c0;
-  /* Lines between dock slots; transparent leaves one outer border. */
-  --dock-divider: transparent;
   /* Strength of the desktop background under the windows. */
   --backdrop-opacity: 0.9;
   /* The desktop's backdrop, all glyphs: --warp ones, the leading or
@@ -144,6 +149,8 @@
   /* The terminal's output text: the backdrop's colour, unless that is too
      faint to read on the screen. */
   --terminal-text: var(--warp);
+  /* The prompt and what's typed: the backdrop's bright colour. */
+  --terminal-prompt: var(--glint);
   /* The screen with the power off; the same on every theme. */
   --off: #000;
   /* The 16x16 menu mark, here a rabbit's head in sunglasses. --logo-size
@@ -200,7 +207,6 @@
   --title-case: none;
   --title-weight: 600;
   --indicator: #ededed;
-  --dock-divider: #2e2e2e;
   --backdrop-opacity: 1;
   --desk: #000000;
   --warp: #6e6e6e;
@@ -218,6 +224,14 @@
   --font-ui: 'Grandstander', ui-sans-serif, sans-serif;
   --font-mono: 'Recursive Mono Casual', ui-monospace, monospace;
   --text-size: 13px;
+  /* A paper terminal: dark ink on the windows' own grey-white. */
+  --terminal: var(--surface);
+  --terminal-text: var(--ink);
+  --terminal-prompt: var(--ink);
+  /* Soft, cartoonish corners. */
+  --window-radius: 7px;
+  --dock-radius: 12px;
+  --close-radius: 4px;
   --bg: #e8e8e4;
   --surface: #e8e8e4;
   --surface-dark: #8c8c88;
@@ -236,7 +250,6 @@
   --title-case: none;
   --title-weight: 500;
   --indicator: #111111;
-  --dock-divider: #111111;
   --backdrop-opacity: 1;
   --desk: #0c0c0c;
   --warp: #a8a8a4;
@@ -249,25 +262,28 @@
   color-scheme: light;
 }
 
-/* OUTATIME: deep violet panes, magenta title bars, and the four streak
-   colours as accents. */
+/* OUTATIME: pale lavender panes outlined in deep violet, purple title
+   bars, and the four streak colours as accents. */
 [data-theme='traveler'] {
-  --bg: #16122a;
-  --surface: #16122a;
-  --surface-dark: #07060d;
+  --bg: #f3edff;
+  --surface: #f3edff;
+  --surface-dark: #b9a6ef;
   /* A shade deeper than --streak-3, for white text. */
   --tertiary: #9845fa;
   --on-tertiary: #ffffff;
   /* Lettered in violet: white on this magenta is too faint. */
   --accent: #ff3d9a;
-  --on-accent: #16122a;
-  --button: #16122a;
-  --ink: #ece8ff;
-  --highlight: #2c2550;
-  --well: #0d0b1a;
-  --title: #ff3d9a;
-  --on-title: #16122a;
-  --indicator: #2f9bff;
+  --on-accent: #2b1055;
+  --button: #f3edff;
+  --ink: #2b1055;
+  --highlight: #ffffff;
+  --well: #ffffff;
+  --title: #9845fa;
+  --on-title: #ffffff;
+  /* A deeper magenta than the accent, to stand out from the lavender. */
+  --indicator: #e0207f;
+  --window-radius: 4px;
+  --close-radius: 2px;
   /* Softened, so the dense stripes don't run at full contrast. */
   --backdrop-opacity: 0.7;
   --desk: #07060d;
@@ -280,7 +296,7 @@
   /* Menu mark: a flux capacitor, drawn in scripts/traveler_logo.py. */
   --logo-size: 16px;
   --logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill-opacity='.7' d='M2 2h2v1H2zM12 2h2v1H12zM2 3h3v1H2zM11 3h3v1H11zM3 4h1v1H3zM5 4h1v1H5zM10 4h1v1H10zM12 4h1v1H12zM4 5h3v1H4zM9 5h3v1H9zM5 6h1v1H5zM7 6h2v1H7zM10 6h1v1H10zM6 7h1v1H6zM9 7h1v1H9zM7 9h2v1H7zM8 10h1v1H8zM7 11h2v1H7zM8 12h1v1H8zM7 13h2v1H7zM7 14h2v1H7z'/%3E%3Cpath d='M0 0h16v1H0zM0 1h1v1H0zM15 1h1v1H15zM0 2h1v1H0zM15 2h1v1H15zM0 3h1v1H0zM15 3h1v1H15zM0 4h1v1H0zM4 4h1v1H4zM11 4h1v1H11zM15 4h1v1H15zM0 5h1v1H0zM15 5h1v1H15zM0 6h1v1H0zM6 6h1v1H6zM9 6h1v1H9zM15 6h1v1H15zM0 7h1v1H0zM7 7h2v1H7zM15 7h1v1H15zM0 8h1v1H0zM7 8h2v1H7zM15 8h1v1H15zM0 9h1v1H0zM15 9h1v1H15zM0 10h1v1H0zM7 10h1v1H7zM15 10h1v1H15zM0 11h1v1H0zM15 11h1v1H15zM0 12h1v1H0zM7 12h1v1H7zM15 12h1v1H15zM0 13h1v1H0zM15 13h1v1H15zM0 14h1v1H0zM15 14h1v1H15zM0 15h16v1H0z'/%3E%3C/svg%3E");
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 /* Touch screens get a taller title bar to drag windows by and a bigger

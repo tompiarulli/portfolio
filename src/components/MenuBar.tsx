@@ -116,7 +116,7 @@ function SystemMenu({
         aria-expanded={open}
         onClick={() => (open ? close() : openAt('first'))}
         onKeyDown={onTriggerKeyDown}
-        className={`flex h-full items-center px-3 -outline-offset-4 outline-current outline-dotted not-focus-visible:outline-none ${open ? 'bg-(--accent) text-(--on-accent)' : ''}`}
+        className={`flex h-full items-center px-[10px] -outline-offset-4 outline-current outline-dotted not-focus-visible:outline-none ${open ? 'bg-(--accent) text-(--on-accent)' : ''}`}
       >
         <span aria-hidden className="logo" />
       </button>
@@ -191,7 +191,7 @@ export function MenuBar() {
         </div>
         <div
           data-shutdown="bar"
-          className={`${BAR} right-0 gap-3 border-l px-3`}
+          className={`${BAR} right-0 gap-3 border-l px-[10px]`}
         >
           <Clock />
         </div>

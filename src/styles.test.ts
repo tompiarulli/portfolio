@@ -63,10 +63,10 @@ const PAIRS: [string, string, number, string][] = [
   ['--ink', '--surface', 4.5, 'window, menu and dock text and icons'],
   ['--ink', '--well', 4.5, 'text in wells'],
   ['--on-title', '--title', 4.5, "the focused window's title and close box"],
-  ['--on-accent', '--accent', 4.5, 'the picked theme, pressed and menu items'],
-  ['--on-tertiary', '--tertiary', 4.5, 'a hovered or focused dock button'],
+  ['--on-accent', '--accent', 4.5, 'the picked theme and menu items'],
+  ['--on-tertiary', '--tertiary', 4.5, 'a focused dock button'],
   ['--terminal-text', '--terminal', 4.5, "the terminal's output"],
-  ['--glint', '--terminal', 4.5, "the terminal's prompt and input"],
+  ['--terminal-prompt', '--terminal', 4.5, "the terminal's prompt and input"],
   ['--indicator', '--surface', 3, "the dock's open-window mark"],
 ]
 

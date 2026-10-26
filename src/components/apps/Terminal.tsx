@@ -93,13 +93,17 @@ export function Terminal() {
         <div role="log" aria-label="Terminal output">
           {lines.map((line, i) => (
             <p key={i} className="break-words whitespace-pre-wrap">
-              {line.prompt && <span className="text-(--glint)">{PROMPT} </span>}
+              {line.prompt && (
+                <span className="text-(--terminal-prompt)">{PROMPT} </span>
+              )}
               {line.text}
             </p>
           ))}
         </div>
         <label className="flex">
-          <span className="shrink-0 text-(--glint)">{PROMPT}&nbsp;</span>
+          <span className="shrink-0 text-(--terminal-prompt)">
+            {PROMPT}&nbsp;
+          </span>
           <input
             ref={field}
             value={input}
@@ -112,7 +116,7 @@ export function Terminal() {
             autoCapitalize="off"
             autoCorrect="off"
             spellCheck={false}
-            className="min-w-0 flex-1 bg-transparent text-(--glint) caret-(--glint) outline-none"
+            className="min-w-0 flex-1 bg-transparent text-(--terminal-prompt) caret-(--terminal-prompt) outline-none"
           />
         </label>
       </div>

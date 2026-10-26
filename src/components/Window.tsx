@@ -237,7 +237,7 @@ export function Window({
         ['--slot' as string]: slots[id] ?? 0,
         zIndex: peek === id ? stack.length + 1 : stack.indexOf(id) + 1,
       }}
-      className={`pointer-events-auto absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col border border-(--ink) bg-(--surface) shadow-(--window-shadow) outline-none ${className}`}
+      className={`pointer-events-auto absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col overflow-clip rounded-(--window-radius) border border-(--ink) bg-(--surface) shadow-(--window-shadow) outline-none ${className}`}
     >
       <div
         onPointerDown={onPointerDown}
@@ -245,7 +245,7 @@ export function Window({
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         onDoubleClick={shade}
-        className={`grid h-(--title-height) shrink-0 cursor-grab touch-none grid-cols-[1fr_auto_1fr] items-center gap-2 px-1.5 active:cursor-grabbing ${shaded ? '' : 'border-b border-(--ink)'} ${active ? 'bg-(--title) text-(--on-title)' : 'bg-(--surface)'}`}
+        className={`grid h-(--title-height) shrink-0 cursor-grab touch-none grid-cols-[1fr_auto_1fr] items-center gap-2 px-1.5 active:cursor-grabbing ${shaded ? '' : 'border-b border-(--ink)'} ${active ? 'bg-(--title) text-(--on-title) [--bar:var(--title)]' : 'bg-(--surface) [--bar:var(--surface)]'}`}
       >
         {/* Equal side columns keep the title centred on the whole bar, not
             on the space left over after the buttons. */}
@@ -256,9 +256,15 @@ export function Window({
             onPointerDown={(e) => e.stopPropagation()}
             data-close
             aria-label={`Close ${title}`}
-            className="relative flex size-(--box-size) shrink-0 cursor-pointer items-center justify-center border border-current bg-(--close-bg) shadow-(--close-shadow) outline-offset-2 outline-current outline-dotted not-focus-visible:outline-none after:absolute after:-inset-x-[2px] after:-inset-y-[5px] after:content-[''] active:bg-(--ink) active:text-(--surface) pointer-coarse:after:-inset-[11px]"
+            className="group/close relative flex size-(--box-size) shrink-0 cursor-pointer items-center justify-center rounded-(--close-radius) border border-current bg-(--close-bg) shadow-(--close-shadow) outline-offset-2 outline-current outline-dotted not-focus-visible:outline-none after:absolute after:-inset-x-[2px] after:-inset-y-[5px] after:content-[''] hover:bg-current active:bg-(--ink) active:text-(--surface) pointer-coarse:after:-inset-[11px]"
           >
-            <svg aria-hidden viewBox="0 0 8 8" className="size-(--glyph-size)">
+            {/* Hovered, the box fills with its colour and the cross takes the
+                bar's, inverting it. */}
+            <svg
+              aria-hidden
+              viewBox="0 0 8 8"
+              className="size-(--glyph-size) group-hover/close:text-(--bar)"
+            >
               <path
                 d="M1 1l6 6M7 1L1 7"
                 fill="none"

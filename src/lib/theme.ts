@@ -1,8 +1,8 @@
 export type Backdrop = 'rain' | 'streaks' | 'orbits' | 'film'
 
-/** A theme sets only its colour tokens and font (styles.css), the menu
- *  mark, the backdrop and the clock's date; the rest of the chrome is
- *  shared. */
+/** A theme sets its colour tokens and font (styles.css), the menu mark,
+ *  the backdrop and the clock's date, and may restyle the chrome through
+ *  tokens; the layout and behaviour are shared. */
 export const THEMES = [
   { id: 'orbital', label: 'Orbital', backdrop: 'orbits', date: undefined },
   { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
