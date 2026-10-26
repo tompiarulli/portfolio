@@ -26,6 +26,7 @@ export function Dock() {
             key={app.id}
             type="button"
             data-dock-link={app.id}
+            data-open={open || undefined}
             aria-current={front ? 'true' : undefined}
             // The focused window's key does nothing, as on a Mac.
             onClick={() => front || raise(app.id)}

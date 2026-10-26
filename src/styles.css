@@ -721,19 +721,22 @@ svg {
   background: var(--surface);
 }
 [data-theme='steamboat'] [data-dock-link] {
-  height: 36px;
+  height: 32px;
   border-bottom: 0;
   border-radius: 10px 10px 0 0;
   background: var(--surface);
 }
 [data-theme='steamboat'] [data-dock-link][aria-current='true'] {
   z-index: 1;
-  height: 42px;
+  height: 44px;
 }
-/* The raised tab marks the front window and the others are in sight, so
-   there are no lamps. */
+/* The raised tab marks the front window, so no lamps: a window open
+   behind gets its tab raised halfway, like a file pulled partly out. */
 [data-theme='steamboat'] [data-lamp] {
   display: none;
+}
+[data-theme='steamboat'] [data-dock-link][data-open]:not([aria-current]) {
+  height: 38px;
 }
 [data-off] [data-shutdown='bar'] {
   transition-delay: 400ms;
