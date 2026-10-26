@@ -403,8 +403,9 @@
   --surface-dark: #0b0619;
   --tertiary: #2fb8ff;
   --on-tertiary: #120a2a;
-  --accent: #ff3d9a;
-  --on-accent: #120a2a;
+  /* A shade deeper than the streaks' hot pink, for white lettering. */
+  --accent: #d01c78;
+  --on-accent: #ffffff;
   --button: #120a2a;
   --ink: #ece6ff;
   --highlight: #1f1240;
