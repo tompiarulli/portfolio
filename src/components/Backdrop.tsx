@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
 
+import { ORBITS } from '#/lib/orbits'
 import { RAIN_CHARACTERS, THEMES, currentTheme } from '#/lib/theme'
 import type { Backdrop } from '#/lib/theme'
 
@@ -40,26 +41,6 @@ const STREAKS = {
   thickness: 2,
   /** Drawn pixel size in CSS pixels. */
   pixelSize: 1,
-} as const
-
-/** For `backdrop: 'orbits'`; the Settings preview starts from it too. */
-export const ORBITS = {
-  count: 7,
-  /** Centre of the set, as fractions of the width and height. */
-  center: [0.6, 0.55],
-  /** Radius of the innermost and outermost rings, as fractions of the
-   *  shorter screen side. */
-  inner: 0.22,
-  outer: 0.75,
-  /** How fast the set turns, and the rings wobble and the points ride. */
-  speed: 0.05,
-  /** Brightness of the far half of each ring, against the near half. */
-  far: 0.3,
-  /** Line width in pixels. */
-  lineWidth: 1,
-  /** Radius of the riding points in pixels; 0 is none. */
-  point: 2,
-  fps: 30,
 } as const
 
 /** For `backdrop: 'film'`. */

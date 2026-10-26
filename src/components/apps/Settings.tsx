@@ -1,14 +1,5 @@
-import {
-  Suspense,
-  lazy,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from 'react'
+import { useId, useSyncExternalStore } from 'react'
 
-import { ORBITS } from '#/components/Backdrop'
 import { Window } from '#/components/Window'
 import {
   CLOCK_MODES,
@@ -16,12 +7,9 @@ import {
   setClockMode,
   subscribeClockMode,
 } from '#/lib/clock'
+import { ORBITS, brightness, rider, ring } from '#/lib/orbits'
 import { DEFAULT_THEME, THEMES, applyTheme, currentTheme } from '#/lib/theme'
 import type { Backdrop, Theme } from '#/lib/theme'
-
-// The same chunk the backdrop loads, so the preview never pulls the rings
-// into the shell.
-const Orbits = lazy(() => import('#/components/Orbits'))
 
 /** The terminal can switch theme too, so follow <html>. */
 function subscribeTheme(onChange: () => void) {
@@ -158,38 +146,78 @@ function streaks(seed: number) {
 
 const STREAKS_PREVIEW = streaks(88)
 
-/** A still of the orbital rings, drawn by the backdrop's own code once
- *  the tile's --desk, --warp and --glint can be read. */
+/** A still of the orbital rings, baked into SVG paths from the backdrop's
+ *  own geometry, in units of the tile's height around the set's centre:
+ *  one path per step of brightness, and the riding points. Blown up past
+ *  the tile's edges, so it shows a close crop of the rings like the other
+ *  tiles, not the whole set shrunk down. */
+function orbits() {
+  const t = 20 * ORBITS.speed
+  const steps = 8
+  const segments = 160
+  const shades = Array.from({ length: steps }, () => '')
+  const riders: { d: string; opacity: number }[] = []
+  const at = ([x, y]: readonly number[]) => `${x!.toFixed(3)} ${y!.toFixed(3)}`
+  for (let k = 0; k < ORBITS.count; k++) {
+    const around = ring(k, ORBITS.count, 0.6, 2.4, t)
+    let prev = around(0)
+    let shade = -1
+    for (let i = 1; i <= segments; i++) {
+      const next = around((i / segments) * Math.PI * 2)
+      const level = Math.round(
+        brightness((prev[2] + next[2]) / 2, ORBITS.far) * (steps - 1),
+      )
+      // Each run of one shade continues its path; a new run starts anew.
+      shades[level] += `${level === shade ? 'L' : `M${at(prev)}L`}${at(next)}`
+      shade = level
+      prev = next
+    }
+    const [x, y, depth] = around(rider(k, t))
+    riders.push({
+      d: `M${at([x, y])}h0`,
+      opacity: brightness(depth, ORBITS.far),
+    })
+  }
+  return {
+    shades: shades.map((d, i) => ({ d, opacity: i / (steps - 1) })),
+    riders,
+  }
+}
+
+const ORBITS_PREVIEW = orbits()
+
+/** The orbital rings' tile. The SVG is a square the tile's height, its
+ *  origin at the set's centre, placed where the backdrop would put it. */
 function OrbitsPreview() {
-  const ref = useRef<HTMLSpanElement>(null)
-  const [colors, setColors] = useState<[string, string, string] | null>(null)
-  useEffect(() => {
-    const style = getComputedStyle(ref.current!)
-    const token = (name: string) => style.getPropertyValue(name).trim()
-    setColors([token('--desk'), token('--warp'), token('--glint')])
-  }, [])
   return (
-    <span ref={ref} className="absolute inset-0">
-      {/* Its own boundary, so only the tile waits for the chunk, not the
-          whole window. */}
-      <Suspense>
-        {colors && (
-          <Orbits
-            {...ORBITS}
-            // Blown up past the tile's edges, so it shows a close crop of the
-            // rings like the other tiles, not the whole set shrunk down.
-            center={[0.65, 0.6]}
-            inner={0.6}
-            outer={2.4}
-            point={1.5}
-            background={colors[0]}
-            color={colors[1]}
-            highlight={colors[2]}
-            still
-            stillTime={20}
+    <span className="absolute top-0 left-[65%] aspect-square h-full -translate-x-[60%]">
+      <svg
+        viewBox="-0.6 -0.6 1 1"
+        className="size-full overflow-visible"
+        fill="none"
+      >
+        {ORBITS_PREVIEW.shades.map(({ d, opacity }, i) => (
+          <path
+            key={i}
+            d={d}
+            stroke="var(--warp)"
+            strokeOpacity={opacity}
+            strokeWidth={ORBITS.lineWidth}
+            vectorEffect="non-scaling-stroke"
           />
-        )}
-      </Suspense>
+        ))}
+        {ORBITS_PREVIEW.riders.map(({ d, opacity }, i) => (
+          <path
+            key={i}
+            d={d}
+            stroke="var(--glint)"
+            strokeOpacity={opacity}
+            strokeWidth={3}
+            strokeLinecap="round"
+            vectorEffect="non-scaling-stroke"
+          />
+        ))}
+      </svg>
     </span>
   )
 }
