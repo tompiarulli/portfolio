@@ -949,13 +949,13 @@ svg {
 /* Chevrons that fill in one at a time, from the text outward, then clear:
    each shows from its step of the cycle to the end. */
 .chevron-1 {
-  animation: chevron-1 2s steps(1) infinite;
+  animation: chevron-1 1.2s steps(1) infinite;
 }
 .chevron-2 {
-  animation: chevron-2 2s steps(1) infinite;
+  animation: chevron-2 1.2s steps(1) infinite;
 }
 .chevron-3 {
-  animation: chevron-3 2s steps(1) infinite;
+  animation: chevron-3 1.2s steps(1) infinite;
 }
 @keyframes chevron-1 {
   0% {
