@@ -390,42 +390,50 @@
   color-scheme: light;
 }
 
-/* OUTATIME: pale lavender panes outlined in deep violet, purple title
-   bars, and the four streak colours as accents. */
+/* OUTATIME: 80s neon. Violet-navy panes from the same night as the sky,
+   lettered near white, the focused title bar filled in electric blue,
+   with hot pink for selections and the odd highlight, as in the sky and
+   streaks behind. */
 [data-theme='traveler'] {
-  --bg: #f3edff;
-  --surface: #f3edff;
-  --surface-dark: #b9a6ef;
-  /* A shade deeper than --streak-3, for white text. */
-  --tertiary: #9845fa;
-  --on-tertiary: #ffffff;
-  /* Lettered in violet: white on this magenta is too faint. */
+  --bg: #120a2a;
+  --surface: #120a2a;
+  --surface-dark: #0b0619;
+  --tertiary: #2fb8ff;
+  --on-tertiary: #120a2a;
   --accent: #ff3d9a;
-  --on-accent: #2b1055;
-  --button: #f3edff;
-  --ink: #2b1055;
-  --highlight: #ffffff;
-  --well: #ffffff;
-  --title: #9845fa;
-  --on-title: #ffffff;
-  /* A deeper magenta than the accent, to stand out from the lavender. */
-  --indicator: #e0207f;
+  --on-accent: #120a2a;
+  --button: #120a2a;
+  --ink: #ece6ff;
+  --highlight: #1f1240;
+  --well: #0b0619;
+  --title: #2fb8ff;
+  --on-title: #120a2a;
+  --indicator: #ff3d9a;
   --window-radius: 4px;
   --close-radius: 2px;
+  /* Lettered like its start screen: titles in its title's rounded retro
+     face, the dock, menu and clock in its prompt's bold mono capitals. */
+  --font-title: 'Righteous', var(--font-ui);
+  --title-weight: 400;
+  --title-tracking: 0.04em;
+  --font-label: 'Space Mono', var(--font-ui);
+  --label-weight: 700;
+  --label-tracking: 0.1em;
+  --label-size: 12px;
   /* Softened, so the dense stripes don't run at full contrast. */
   --backdrop-opacity: 0.7;
   --desk: #07060d;
-  /* A night sky behind the streaks, deep navy glowing hot pink at the
-     horizon. */
+  /* A night sky, deep navy glowing hot pink at the horizon. */
   --desk-sky: linear-gradient(#0a0820, #2a0d4a 59%, #7f155d);
-  --warp: #ff3d9a;
-  --glint: #ffd6ee;
-  --streak-1: #ff8fd0;
-  /* Sunset orange. */
+  --warp: #2fb8ff;
+  --glint: #bfe9ff;
+  /* The streaks: the chrome's electric blue, a sunset orange, violet and
+     hot pink. */
+  --streak-1: #2fb8ff;
   --streak-2: #ff7a3d;
   --streak-3: #a24bff;
   --streak-4: #ff3d9a;
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 /* ---------- Menu marks ----------
@@ -763,6 +771,63 @@ svg {
     height: 44px;
     padding-inline: 0;
   }
+}
+
+/* OUTATIME's dock: each app boxed in electric blue on violet-navy,
+   standing straight on the backdrop and leaning forward like an 80s logo,
+   its name upright inside and near white like the windows' text. A pink
+   bar under a name marks the window in front; a shorter, dim blue one
+   marks a window open behind it. */
+[data-theme='traveler'] [data-shutdown='dock'] {
+  border-color: transparent;
+  background: transparent;
+}
+[data-theme='traveler'] [data-dock-link] {
+  width: 104px;
+  height: 45px;
+  border-color: var(--prompt);
+  background: var(--surface);
+  color: var(--ink);
+  transform: skewX(-14deg);
+}
+@media (max-width: 639px) {
+  [data-theme='traveler'] [data-dock-link] {
+    width: auto;
+  }
+}
+[data-theme='traveler'] [data-dock-link] > span:first-child {
+  position: relative;
+  transform: skewX(14deg);
+}
+[data-theme='traveler'] [data-dock-link] > span:first-child::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  translate: -50% 0;
+  /* The bar grows out from the middle, and widens as its window comes to
+     the front. */
+  transition:
+    width 150ms,
+    opacity 150ms,
+    background-color 150ms;
+}
+[data-theme='traveler'] [data-dock-link][data-open] > span:first-child::after {
+  width: 8px;
+  background: var(--prompt);
+  opacity: 0.6;
+}
+[data-theme='traveler']
+  [data-dock-link][aria-current]
+  > span:first-child::after {
+  width: 20px;
+  background: var(--script);
+  opacity: 1;
+}
+[data-theme='traveler'] [data-lamp] {
+  display: none;
 }
 
 /* Steamboat's dock is a row of folder tabs standing on a folder's edge:
