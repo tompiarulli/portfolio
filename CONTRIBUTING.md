@@ -39,6 +39,7 @@ Renovate opens dependency updates weekly. TanStack packages are pinned exactly a
 - `src/routes/` file-based routes: the home page, which sets `head()` only. The root route renders `<Desktop>` (menu bar, dock, open windows) and the head for unknown URLs.
 - `src/components/` desktop chrome: `Desktop`, `MenuBar`, `Clock`, `Dock`, `DockIcon`, `Window`, `WindowManager` and `ShutDown`, plus `Backdrop`, which lazy-loads the current theme's desktop background (`CodeRain`, `Orbits`, `Film` or `Streaks`).
 - `src/components/apps/` window contents, one component per app, registered in `apps/index.tsx`.
+- `src/components/start/` each theme's start screen, the one Restart ends on, one component per theme, registered in `start/index.tsx`, with the pieces they share in `start/parts.tsx`. `ShutDown` runs the sequence around it.
 - `src/lib/windows.ts` window ids and the windows open on first paint. The desktop has one URL; windows are state in `WindowManager`, and any other URL opens File Not Found.
 - `src/lib/site.ts` all copy and project data, including the descriptions and headings of the home page and the 404.
 - `src/lib/seo.ts` the head tags a page sets: title, description, canonical URL and link preview.
