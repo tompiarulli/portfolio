@@ -567,12 +567,12 @@
   --start-title-depth: 0.05em;
   --script-font: 'Permanent Marker', cursive;
   --script-weight: 400;
-  --script-size: 0.45em;
+  --script-size: 0.4em;
   --script-rotate: -8deg;
   --script-tracking: 0em;
   --script-right: -0.3em;
   --script-bottom: -0.26em;
-  --script-filter: url(#script-thin) drop-shadow(0 0 0.08em var(--script-glow));
+  --script-filter: url(#script-thin);
   --prompt-font: 'Space Mono', ui-monospace, monospace;
   --prompt-weight: 700;
   --start-text: #bfe9ff;
