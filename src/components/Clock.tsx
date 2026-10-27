@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { useWindows } from '#/components/WindowManager'
 import { clockMode, subscribeClockMode } from '#/lib/clock'
 import { THEMES } from '#/lib/theme'
 
@@ -66,8 +67,11 @@ function useFlip(text: string) {
   return shown
 }
 
-/** Renders empty on the server so prerendered HTML never bakes in a stale time. */
+/** Renders empty on the server so prerendered HTML never bakes in a stale
+ *  time. Pressing it opens Settings, where its date is chosen, as a 90s
+ *  desktop's clock opened its date and time panel. */
 export function Clock() {
+  const { raise } = useWindows()
   const [now, setNow] = useState<Date | null>(null)
   const [date, setDate] = useState('')
   useEffect(() => {
@@ -99,11 +103,17 @@ export function Clock() {
     }
   }, [])
   const shown = useFlip(date)
-  if (!now) return <span className="inline-block w-40" />
+  if (!now) return <span className="mx-[10px] inline-block w-40" />
   return (
-    <span className="flex items-center gap-3 py-[3px] font-(family-name:--font-label) [font-weight:var(--label-weight)] tracking-(--label-tracking) [text-transform:var(--label-case)]">
+    <button
+      type="button"
+      onClick={() => raise('settings')}
+      // Named by the settled date, not the letters flicking through.
+      aria-label={`${date} ${fmtTime(now)}, Date & Time settings`}
+      className="flex h-full cursor-pointer items-center gap-3 px-[10px] font-(family-name:--font-label) [font-weight:var(--label-weight)] tracking-(--label-tracking) [text-transform:var(--label-case)] -outline-offset-4 outline-current outline-dotted not-focus-visible:outline-none active:bg-(--accent) active:text-(--on-accent)"
+    >
       <span className="whitespace-pre tabular-nums">{shown}</span>
       <span className="tabular-nums">{fmtTime(now)}</span>
-    </span>
+    </button>
   )
 }

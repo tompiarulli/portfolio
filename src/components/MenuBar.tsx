@@ -212,10 +212,7 @@ export function MenuBar() {
         >
           <SystemMenu trigger={trigger} onShutDown={() => setShutDown(true)} />
         </div>
-        <div
-          data-shutdown="bar"
-          className={`${BAR} right-0 gap-3 border-l px-[10px]`}
-        >
+        <div data-shutdown="bar" className={`${BAR} right-0 border-l`}>
           <Clock />
         </div>
       </header>

@@ -1,7 +1,7 @@
 import { screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { dockLink, renderDesktop } from '#/test/desktop'
+import { dockLink, renderDesktop, windowOrder } from '#/test/desktop'
 
 vi.mock('#/components/Backdrop', () => ({ Backdrop: () => null, ORBITS: {} }))
 
@@ -43,6 +43,16 @@ describe('Date & Time', () => {
     await user.click(screen.getByRole('radio', { name: 'Themed' }))
     expect(localStorage.getItem('clock')).toBe('theme')
     await showsYear('1908')
+  })
+
+  it('opens Settings when the clock is pressed', async () => {
+    const { user } = await renderDesktop('/')
+    await showsYear('1908')
+    await user.click(
+      screen.getByRole('button', { name: /Date & Time settings$/ }),
+    )
+    expect(await screen.findByRole('radio', { name: 'Themed' })).toBeTruthy()
+    expect(windowOrder()[0]).toBe('settings')
   })
 
   it('opens on a saved choice of Current', async () => {
