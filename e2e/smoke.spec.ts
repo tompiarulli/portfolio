@@ -12,7 +12,7 @@ async function openApp(page: Page, name: string) {
     .click()
 }
 
-test('/ loads with Contact in front of About', async ({ page }) => {
+test('/ loads with About in front of Contact', async ({ page }) => {
   const response = await page.goto('/')
   expect(response?.status()).toBe(200)
   expect(response?.headers()['content-security-policy']).toContain(
@@ -24,7 +24,7 @@ test('/ loads with Contact in front of About', async ({ page }) => {
   expect(html).toContain('data-window="contact"')
   await expect(page.getByRole('region', { name: 'About' })).toBeVisible()
   await page.waitForLoadState('networkidle')
-  expect(await windowOrder(page)).toEqual(['contact', 'about'])
+  expect(await windowOrder(page)).toEqual(['about', 'contact'])
   await expect(page.locator('meta[name="robots"]')).toHaveCount(0)
   await expect(
     page.getByRole('navigation', { name: 'Applications' }),
@@ -171,11 +171,11 @@ test("the front window's dock key leaves it open and in front", async ({
 }) => {
   await page.goto('/')
   await page.waitForLoadState('networkidle')
-  const contact = page.getByRole('region', { name: 'Contact' })
+  const about = page.getByRole('region', { name: 'About' })
   await page
     .getByRole('navigation', { name: 'Applications' })
-    .getByRole('button', { name: /^Contact/ })
+    .getByRole('button', { name: /^About/ })
     .click()
-  await expect(contact).toBeVisible()
-  expect((await windowOrder(page))[0]).toBe('contact')
+  await expect(about).toBeVisible()
+  expect((await windowOrder(page))[0]).toBe('about')
 })
