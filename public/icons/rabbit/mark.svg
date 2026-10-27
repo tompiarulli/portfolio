@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" fill="none" stroke="#000" stroke-width="2"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0.55 0.2 14.9 14.9">
+  <mask id="face">
+    <rect width="16" height="16" fill="#000"/>
+    <ellipse cx="5.1" cy="4.2" rx="1.9" ry="3.9" fill="#fff" transform="rotate(-12 5.1 4.2)"/>
+    <ellipse cx="10.9" cy="4.2" rx="1.9" ry="3.9" fill="#fff" transform="rotate(12 10.9 4.2)"/>
+    <ellipse cx="8" cy="10.4" rx="5.3" ry="4.6" fill="#fff"/>
+    <g id="shades">
+      <path d="M1.6 8.8H14.4V10.8Q14.2 13 11.8 13H10.6Q8.8 13 8.6 11V10.6H7.4V11Q7.2 13 5.4 13H4.2Q1.8 13 1.6 10.8Z"/>
+    </g>
+    <use href="#shades" fill="none" stroke="#000" stroke-width="1.8" stroke-linejoin="round"/>
+    <use href="#shades" fill="#fff"/>
+  </mask>
+  <rect width="16" height="16" mask="url(#face)"/>
+</svg>

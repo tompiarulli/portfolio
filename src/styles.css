@@ -459,7 +459,8 @@
 
 /* ---------- Menu marks ----------
    Each theme's own art, public/icons/<theme>/mark.svg, a mask painted in
-   the menu bar's text colour. Swap the file to change one; see
+   the menu bar's text colour. Each file's viewBox is a square fitted to its
+   shape, so every mark fills the same box. Swap the file to change one; see
    public/icons/README.md. */
 [data-theme='orbital'] {
   --logo: url('/icons/orbital/mark.svg');
@@ -655,17 +656,10 @@ body {
      otherwise draw their curves as stair-steps. */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  image-rendering: pixelated;
   user-select: none;
   /* No double-tap zoom, so quick taps never zoom the desktop and a
      double-tap on a title bar rolls the window up; pinching still zooms. */
   touch-action: manipulation;
-}
-
-img,
-canvas,
-svg {
-  image-rendering: pixelated;
 }
 
 ::selection {

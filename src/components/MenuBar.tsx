@@ -124,8 +124,10 @@ function SystemMenu({
         aria-expanded={open}
         onClick={() => (open ? close() : openAt('first'))}
         onKeyDown={onTriggerKeyDown}
-        className={`flex h-full items-center px-[10px] -outline-offset-4 outline-current outline-dotted not-focus-visible:outline-none ${open ? 'bg-(--accent) text-(--on-accent)' : ''}`}
+        className={`flex aspect-square h-full items-center justify-center pr-px pb-px -outline-offset-4 outline-current outline-dotted not-focus-visible:outline-none ${open ? 'bg-(--accent) text-(--on-accent)' : ''}`}
       >
+        {/* The bar's rule leaves the button an odd 31px; the padding keeps
+            the mark on whole pixels, so it draws sharp. */}
         <span aria-hidden className="logo" />
       </button>
       {open && (
