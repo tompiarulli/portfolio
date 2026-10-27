@@ -786,16 +786,17 @@ svg {
 }
 [data-theme='rabbit'] [data-dock-link] > span:first-child {
   padding-inline: 0.5ch;
+  text-decoration: underline transparent;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 150ms;
 }
 [data-theme='rabbit'] [data-dock-link][aria-current] > span:first-child {
   text-decoration: underline;
-  text-underline-offset: 3px;
 }
 [data-theme='rabbit']
   [data-dock-link][data-open]:not([aria-current])
   > span:first-child {
   text-decoration: underline dotted;
-  text-underline-offset: 3px;
 }
 [data-theme='rabbit'] [data-lamp] {
   display: none;
@@ -893,6 +894,8 @@ svg {
   border-bottom: 0;
   border-radius: 10px 10px 0 0;
   background: var(--surface);
+  /* Tabs spring up and settle, like a cartoon's. */
+  transition: height 200ms cubic-bezier(0.3, 1.6, 0.5, 1);
 }
 [data-theme='steamboat'] [data-dock-link][aria-current='true'] {
   z-index: 1;

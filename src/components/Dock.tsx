@@ -39,16 +39,17 @@ export function Dock() {
               <span className="sr-only">{open ? ', open' : ''}</span>
             </span>
             {/* A lamp in the corner: lit for the front window, an outline
-                for one open behind it. */}
+                for one open behind it. It grows in as its window opens,
+                and fills as the window comes to the front. */}
             <span
               aria-hidden
               data-lamp
-              className={`absolute top-[5px] left-[5px] size-[5px] transition-opacity duration-150 ${
+              className={`absolute top-[5px] left-[5px] size-[5px] border transition-[opacity,scale,background-color,border-color] duration-150 ${
                 front
-                  ? 'bg-(--indicator)'
+                  ? 'border-(--indicator) bg-(--indicator)'
                   : open
-                    ? 'border border-(--ink)'
-                    : 'opacity-0'
+                    ? 'border-(--ink)'
+                    : 'scale-0 border-(--ink) opacity-0'
               }`}
             />
           </button>
