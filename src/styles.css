@@ -231,6 +231,8 @@
   --glyph-size: 9px;
   /* Open-window marks in the dock. */
   --indicator: #aef5c0;
+  /* The panel behind the dock's keys, where a theme draws one. */
+  --console: var(--surface);
   /* Strength of the desktop background under the windows. */
   --backdrop-opacity: 0.9;
   /* The desktop's backdrop, all glyphs: --warp ones, the leading or
@@ -401,24 +403,26 @@
 
 /* OUTATIME: 80s neon. Violet-navy panes from the same night as the sky,
    lettered near white, the focused title bar filled in electric blue,
-   with hot pink for selections and the odd highlight, as in the sky and
-   streaks behind. */
+   with an amber lightning yellow for menus, picks and the odd highlight, against
+   the hot pink and orange of the sky and streaks behind. */
 [data-theme='traveler'] {
   --bg: #120a2a;
   --surface: #120a2a;
   --surface-dark: #0b0619;
   --tertiary: #2fb8ff;
   --on-tertiary: #120a2a;
-  /* A shade deeper than the streaks' hot pink, for white lettering. */
-  --accent: #d01c78;
-  --on-accent: #ffffff;
+  /* An amber lightning yellow, lettered in the panes' violet-navy. */
+  --accent: #ffb31a;
+  --on-accent: #120a2a;
   --button: #120a2a;
   --ink: #ece6ff;
   --highlight: #1f1240;
   --well: #0b0619;
   --title: #2fb8ff;
   --on-title: #120a2a;
-  --indicator: #ff3d9a;
+  --indicator: #ffb31a;
+  /* The dock's panel, smoked black over the sky. */
+  --console: rgb(0 0 0 / 0.55);
   /* Windows and bars framed in the dock's electric blue. */
   --frame: #2fb8ff;
   --window-radius: 4px;
@@ -818,13 +822,43 @@ svg {
 }
 
 /* OUTATIME's dock: each app boxed in electric blue on violet-navy,
-   standing straight on the backdrop and leaning forward like an 80s logo,
-   its name upright inside and near white like the windows' text. A pink
-   bar under a name marks the window in front; a shorter, dim blue one
-   marks a window open behind it. */
+   leaning forward like an 80s logo, its name upright inside and near
+   white like the windows' text, the row set in a smoked panel framed
+   like the keys and leaning with them. A yellow bar under a name marks the
+   window in front; a shorter, dim blue one marks a window open behind
+   it. */
 [data-theme='traveler'] [data-shutdown='dock'] {
+  gap: 8px;
+  padding: 12px 26px 8px;
   border-color: transparent;
   background: transparent;
+}
+/* The panel, drawn behind the keys so they aren't slanted twice, and
+   inset far enough that its slanted corners stay inside the dock. */
+[data-theme='traveler'] [data-shutdown='dock']::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline: 10px;
+  border: 1px solid var(--prompt);
+  border-bottom: 0;
+  border-radius: var(--close-radius) var(--close-radius) 0 0;
+  background: var(--console);
+  transform: skewX(-14deg);
+}
+/* On a phone the dock spans the screen, so the panel runs straight
+   across it. */
+@media (max-width: 639px) {
+  [data-theme='traveler'] [data-shutdown='dock'] {
+    gap: 4px;
+    padding: 10px 10px 6px;
+  }
+  [data-theme='traveler'] [data-shutdown='dock']::before {
+    inset-inline: 0;
+    border-inline: 0;
+    border-radius: 0;
+    transform: none;
+  }
 }
 [data-theme='traveler'] [data-dock-link] {
   width: 104px;
