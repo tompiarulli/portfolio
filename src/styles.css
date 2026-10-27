@@ -306,6 +306,11 @@
   /* The menu mark's size; the mark itself is set per theme, under "Menu
      marks" below. */
   --logo-size: 16px;
+  /* How the windows come back as the desktop boots after Shut Down: an
+     animation, or none to be simply there, and one for an outline drawn
+     over each as it does. */
+  --window-boot: none;
+  --window-boot-edge: none;
   color-scheme: dark;
 }
 
@@ -491,6 +496,12 @@
    proportional sibling, white and greys, set in one ruled panel without
    the shared title or prompt; only its type and colours come from here. */
 [data-theme='orbital'] {
+  /* Its windows power on as its start screen's panel does, once the bar
+     and dock have folded open: a white point stretches into a line, which
+     splits into the top and bottom edges as the window opens between
+     them. */
+  --window-boot: window-on 340ms linear 120ms both;
+  --window-boot-edge: window-on-edge 340ms linear 120ms both;
   --start-font: 'Geist Mono', ui-monospace, monospace;
   --start-title-font: 'Geist', ui-sans-serif, sans-serif;
   --start-title-weight: 600;
@@ -733,19 +744,25 @@ svg {
 }
 
 /* ---------- Shut Down ---------- */
-/* With data-off on <html>, the chrome folds shut top to bottom: windows
-   first, then the dock, then the menu bar. Booting folds it back open. */
+/* With data-off on <html>, the chrome shuts down top to bottom: the
+   windows fly into their dock keys (WindowManager's dockAll), then the
+   dock folds down and the menu bar up. Booting folds those two back open,
+   easing out, and the windows come back as the theme's --window-boot
+   says, simply there for most. */
+/* Booting, they take about as long as Orbital's windows (--window-boot)
+   and settle the same way. */
 [data-shutdown] {
   transition:
-    scale 200ms ease-in,
-    opacity 200ms ease-in;
+    scale 420ms cubic-bezier(0.2, 0, 0, 1),
+    opacity 420ms cubic-bezier(0.2, 0, 0, 1);
 }
 [data-off] [data-shutdown] {
   scale: 1 0;
   opacity: 0;
   pointer-events: none;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in;
 }
-[data-shutdown='windows'],
 [data-shutdown='bar'] {
   transform-origin: top;
 }
@@ -753,7 +770,34 @@ svg {
   transform-origin: bottom;
 }
 [data-off] [data-shutdown='dock'] {
-  transition-delay: 200ms;
+  transition-delay: 300ms;
+}
+/* The windows never fold: each flies into the dock on its own, and the
+   layer only drops out once they're all in, or at once without motion;
+   booting, it's back at once. */
+[data-shutdown='windows'] {
+  transition: none;
+}
+[data-off] [data-shutdown='windows'] {
+  scale: none;
+  transition: opacity 0s 300ms;
+}
+/* data-booting is on <html> for a moment as the desktop boots (see
+   MenuBar). */
+[data-booting] [data-window] {
+  animation: var(--window-boot);
+}
+/* An outline drawn over each window as it boots, played by
+   --window-boot-edge: the line it opens out of, then its edges. */
+[data-booting] [data-window]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border: 1px solid var(--frame);
+  opacity: 0;
+  pointer-events: none;
+  animation: var(--window-boot-edge);
 }
 
 /* White Rabbit's dock is a terminal program's shortcut bar: each app's
@@ -951,7 +995,7 @@ svg {
   height: 32px;
 }
 [data-off] [data-shutdown='bar'] {
-  transition-delay: 400ms;
+  transition-delay: 500ms;
 }
 
 /* The picture tube collapsing to a line, then a dot. */
@@ -1246,6 +1290,42 @@ svg {
   }
   100% {
     clip-path: inset(0);
+  }
+}
+/* A window powering on as the desktop boots (Orbital's --window-boot):
+   power-on's line, then its opening, each with its own ease. The line
+   stretches out quickly and evenly; the window opens fast and settles
+   into place. --window-boot-edge's outline keeps to the edge of what's
+   open, then goes. */
+@keyframes window-on {
+  0% {
+    clip-path: inset(50% 50% 50% 50%);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  35% {
+    clip-path: inset(calc(50% - 1px) 0 calc(50% - 1px) 0);
+    animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+  100% {
+    clip-path: inset(0);
+  }
+}
+@keyframes window-on-edge {
+  0% {
+    inset: 50% 50%;
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  35% {
+    inset: calc(50% - 1px) 0;
+    animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+  99.9% {
+    opacity: 1;
+  }
+  100% {
+    inset: 0;
+    opacity: 0;
   }
 }
 .power-on-row {

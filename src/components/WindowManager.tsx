@@ -22,6 +22,10 @@ type Windows = {
   /** Fly a window into its dock key and hide it; the next window takes
    *  focus. Pressing the key again, even mid-flight, brings it back. */
   minimize: (id: WindowId) => void
+  /** For Shut Down: flies every window not minimized into its dock key,
+   *  front to back. Undone at once with `docked` false, on boot, so the
+   *  windows are simply there again. */
+  dockAll: (docked: boolean) => void
   /** Where each open window opened, in order: on a phone, each opens one
    *  title bar below the one before (styles.css), so the close boxes of
    *  the windows behind stay clear. */
@@ -125,6 +129,9 @@ function flyToDock(id: WindowId, restore: boolean) {
   return anim
 }
 
+// Shutting down, the windows leave for the dock one after another.
+const STAGGER = 60
+
 const toFront = (stack: WindowId[], id: WindowId) =>
   stack.at(-1) === id ? stack : [...stack.filter((w) => w !== id), id]
 
@@ -206,6 +213,24 @@ export function WindowManager({ children }: { children: ReactNode }) {
     [stack, minimized, requestFocus],
   )
 
+  const dockAll = useCallback(
+    (docked: boolean) => {
+      const shown = stack.filter((w) => !minimized.includes(w))
+      shown.reverse().forEach((id, i) => {
+        const el = windowEl(id)
+        if (!el) return
+        if (!docked) {
+          el.style.visibility = ''
+          return
+        }
+        setTimeout(() => {
+          if (!flyToDock(id, false)) el.style.visibility = 'hidden'
+        }, i * STAGGER)
+      })
+    },
+    [stack, minimized],
+  )
+
   const close = useCallback(
     (id: WindowId) => {
       const next = stack.filter((w) => w !== id)
@@ -236,6 +261,7 @@ export function WindowManager({ children }: { children: ReactNode }) {
       front,
       minimized,
       minimize,
+      dockAll,
       slots,
       raise,
       close,
@@ -248,6 +274,7 @@ export function WindowManager({ children }: { children: ReactNode }) {
       front,
       minimized,
       minimize,
+      dockAll,
       slots,
       raise,
       close,

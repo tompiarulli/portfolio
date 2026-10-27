@@ -172,6 +172,9 @@ function SystemMenu({
 
 const noChange = () => () => {}
 
+// Long enough for any theme's --window-boot to play out.
+const BOOTING = 1000
+
 export function MenuBar() {
   const [shutDown, setShutDown] = useState(false)
   // `?start` opens on the start screen, straight from the tube coming on,
@@ -185,17 +188,34 @@ export function MenuBar() {
   const straight = start && !booted && !shutDown
   const off = shutDown || straight
   const trigger = useRef<HTMLButtonElement>(null)
+  const { dockAll, front, raise } = useWindows()
+  // The windows fly into the dock as the rest shuts down; booting, they
+  // come back as the theme says while the bar and dock fold open.
+  const shutDownNow = useCallback(() => {
+    dockAll(true)
+    setShutDown(true)
+  }, [dockAll])
   const boot = useCallback(() => {
+    dockAll(false)
     setShutDown(false)
     setBooted(true)
-  }, [])
-  // Back on, focus lands where Shut Down was chosen from, once the shut
-  // down screen has gone and the bar is no longer inert.
+    // Marks the boot for a moment, for themes whose windows come back with
+    // an animation (--window-boot in styles.css).
+    const html = document.documentElement
+    html.dataset.booting = ''
+    setTimeout(() => delete html.dataset.booting, BOOTING)
+  }, [dockAll])
+  // Back on, once the shut down screen has gone and the desktop is no
+  // longer inert, focus goes into the front window, as on a fresh start;
+  // with none open, to where Shut Down was chosen from.
   const wasOff = useRef(false)
   useEffect(() => {
-    if (wasOff.current && !off) trigger.current?.focus()
+    if (wasOff.current && !off) {
+      if (front) raise(front)
+      else trigger.current?.focus()
+    }
     wasOff.current = off
-  }, [off])
+  }, [off, front, raise])
   return (
     <>
       {off && (
@@ -210,7 +230,7 @@ export function MenuBar() {
           data-shutdown="bar"
           className={`${BAR} left-0 border-r has-aria-expanded:z-70`}
         >
-          <SystemMenu trigger={trigger} onShutDown={() => setShutDown(true)} />
+          <SystemMenu trigger={trigger} onShutDown={shutDownNow} />
         </div>
         <div data-shutdown="bar" className={`${BAR} right-0 border-l`}>
           <Clock />
