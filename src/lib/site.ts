@@ -44,6 +44,18 @@ export const site = {
     /** Under the name above the title on Steamboat's start screen, like
      *  an old cartoon's title card. */
     presents: 'presents',
+    /** White Rabbit's start screen: the login banner in its top left, the
+     *  session printed in its boot pane, the prompt the cursor waits
+     *  after, and what its alert box says. */
+    banner: [
+      `* Welcome to TomOS ${version} *`,
+      'Authorised users only.',
+      '',
+      'login:',
+    ],
+    session: ['syncing disks... done', 'all processes stopped', ''],
+    prompt: 'press any key to wake up...',
+    halted: 'System halted',
   },
 }
 

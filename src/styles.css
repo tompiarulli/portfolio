@@ -251,9 +251,8 @@
      each theme styles it under "Start screen" below, and these base
      values are White Rabbit's, a phosphor terminal. Its build line's face;
      a wash dimming the backdrop; the title's face, scale (for wide faces),
-     weight and spacing, its
-     dither (none for a flat fill), and how far its extrusion drops and
-     drifts right (0 for none); the version's face, style, weight,
+     weight and spacing, and how far its extrusion drops and drifts right
+     (0 for none); the version's face, style, weight,
      decoration, size against the title, tilt, spacing, offset from the
      title's lower right, and filter; the prompt's face and weight. */
   --start-font: 'Iosevka', ui-monospace, monospace;
@@ -262,7 +261,6 @@
   --start-title-scale: 1;
   --start-title-weight: 700;
   --start-title-tracking: 0em;
-  --start-title-dither: url(#title-dither);
   --start-title-depth: 0.08em;
   --start-title-drift: 0em;
   --script-font: 'Iosevka', ui-monospace, monospace;
@@ -485,7 +483,6 @@
   --start-title-font: 'Geist', ui-sans-serif, sans-serif;
   --start-title-weight: 600;
   --start-title-tracking: -0.03em;
-  --start-title-dither: none;
   --start-title-depth: 0em;
   --script-font: 'Geist Mono', ui-monospace, monospace;
   --script-weight: 400;
@@ -520,7 +517,6 @@
   --start-title-scale: 1.2;
   --start-title-weight: 400;
   --start-title-tracking: 0.01em;
-  --start-title-dither: none;
   --start-title-depth: 0.1em;
   --start-title-drift: 0.08em;
   --script-font: 'Playfair Display', ui-serif, serif;
@@ -939,12 +935,11 @@ svg {
   }
 }
 /* The start screen's title: its bands fading down the capitals, which
-   fill roughly 15% to 86% of the line, dithered if the theme says so (see
-   Dither in ShutDown.tsx), over a copy dropped straight down for depth. */
+   fill roughly 15% to 86% of the line, over a copy dropped straight down
+   for depth. */
 .title-bands {
   /* Positioned, so it paints over the translated copy behind it. */
   position: relative;
-  filter: var(--start-title-dither);
   color: transparent;
   background: linear-gradient(
       var(--start-title-1) 0.2em,
@@ -1188,34 +1183,40 @@ svg {
   animation-delay: calc(550ms + var(--row) * 120ms);
 }
 
-/* White Rabbit: the title drawn top to bottom in hard steps, as a
-   terminal paints its screen, then the prompt typed across its box before
-   it blinks. */
-.draw-down {
-  animation: draw-down 600ms steps(8) 150ms both;
+/* White Rabbit: its console prints output a line at a time and panes
+   whole, each showing at its --at; commands type their --chars one at a
+   time over --type; and the cursor blinks in after the prompt. */
+.print-line {
+  animation: fade-in 1ms var(--at) both;
 }
-/* Clipped a little past the title's edges, so its extrusion and the
-   version hanging below it are drawn too. */
-@keyframes draw-down {
-  from {
-    clip-path: inset(-10% -20% 110% -20%);
-  }
-  to {
-    clip-path: inset(-10% -20% -60% -20%);
-  }
+.type-line {
+  animation: type-line var(--type) steps(var(--chars)) var(--at) both;
 }
-.type-on {
-  animation:
-    type-on 700ms steps(22) 850ms both,
-    blink 1.6s steps(1) 1.55s infinite;
-}
-@keyframes type-on {
+@keyframes type-line {
   from {
     clip-path: inset(0 100% 0 0);
   }
   to {
     clip-path: inset(0);
   }
+}
+/* Leaving, its ground steps away top to bottom, as the panes on it have
+   closed (their delays are in Rabbit.tsx). */
+.console-wipe {
+  animation: console-wipe 240ms steps(6) 280ms forwards;
+}
+@keyframes console-wipe {
+  from {
+    clip-path: inset(0);
+  }
+  to {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+.cursor-on {
+  animation:
+    fade-in 1ms var(--at) both,
+    blink 1.06s steps(1) var(--at) infinite;
 }
 
 /* OUTATIME: the title flies in from the distance and settles, the version

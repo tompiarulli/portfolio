@@ -27,6 +27,7 @@ export const START_SCREENS: Record<Theme, StartScreen> = {
 /** How long a screen's exit plays, in ms; screens without one leave at
  *  once. */
 export const START_EXITS: Partial<Record<Theme, number>> = {
+  rabbit: 520,
   steamboat: 400,
 }
 
