@@ -871,7 +871,7 @@ svg {
    the focused app's tab raised and joined to the folder, the rest behind
    the edge. The dock keeps one height, whichever tab is up. */
 [data-theme='steamboat'] [data-shutdown='dock'] {
-  height: 55px;
+  height: 49px;
   align-items: flex-end;
   gap: 4px;
   padding-block: 0 7px;
@@ -890,7 +890,7 @@ svg {
   background: var(--surface);
 }
 [data-theme='steamboat'] [data-dock-link] {
-  height: 32px;
+  height: 26px;
   border-bottom: 0;
   border-radius: 10px 10px 0 0;
   background: var(--surface);
@@ -899,7 +899,7 @@ svg {
 }
 [data-theme='steamboat'] [data-dock-link][aria-current='true'] {
   z-index: 1;
-  height: 44px;
+  height: 38px;
 }
 /* The raised tab marks the front window, so no lamps: a window open
    behind gets its tab raised halfway, like a file pulled partly out. */
@@ -907,7 +907,7 @@ svg {
   display: none;
 }
 [data-theme='steamboat'] [data-dock-link][data-open]:not([aria-current]) {
-  height: 38px;
+  height: 32px;
 }
 [data-off] [data-shutdown='bar'] {
   transition-delay: 400ms;
