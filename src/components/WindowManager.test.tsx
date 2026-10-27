@@ -188,18 +188,60 @@ describe('window manager', () => {
     })
   })
 
-  describe("the front window's dock key", () => {
-    it('leaves the window open and in front', async () => {
+  describe('minimizing', () => {
+    it("hides the front window into its dock key when the key's pressed", async () => {
       const { user } = await renderDesktop('/')
       await user.click(dockLink('about'))
-      expect(windowEl('about').style.visibility).toBe('')
+      // Still mounted and in its place, so nothing moves in the DOM, but
+      // out of sight, with the next window focused.
+      await waitFor(() =>
+        expect(windowEl('about').style.visibility).toBe('hidden'),
+      )
       expect(windowOrder()).toEqual(['about', 'contact'])
+      expect(dockLink('about').textContent).toContain('minimized')
+      expect(dockLink('about').getAttribute('aria-current')).toBeNull()
+      expect(dockLink('contact').getAttribute('aria-current')).toBe('true')
+      // Focus stays on the key that was pressed, so the dock can be worked
+      // from the keyboard without being thrown into a window.
+      expect(document.activeElement).toBe(dockLink('about'))
+    })
+
+    it('brings a minimized window back from the dock', async () => {
+      const { user } = await renderDesktop('/')
+      await user.click(dockLink('about'))
+      await user.click(dockLink('contact'))
+      await user.click(dockLink('about'))
+      await waitFor(() => expect(windowOrder()).toEqual(['about', 'contact']))
+      expect(windowEl('about').style.visibility).toBe('')
+      expect(dockLink('about').textContent).not.toContain('minimized')
       expect(dockLink('about').getAttribute('aria-current')).toBe('true')
+    })
+
+    it('keeps the last visible window mounted when it is minimized', async () => {
+      const { user } = await renderDesktop('/')
+      await user.click(closeBox('Contact'))
+      await user.click(dockLink('about'))
+      await waitFor(() =>
+        expect(windowEl('about').style.visibility).toBe('hidden'),
+      )
+      expect(windowOrder()).toEqual(['about'])
+      expect(dockLink('about').getAttribute('aria-current')).toBeNull()
+    })
+
+    it('closes a window behind and focuses the one in front, skipping minimized ones', async () => {
+      const { user } = await renderDesktop('/')
+      await user.click(dockLink('terminal'))
+      await screen.findByRole('region', { name: 'Terminal' })
+      await user.click(dockLink('terminal'))
+      await user.click(closeBox('About'))
+      await waitFor(() =>
+        expect(document.activeElement).toBe(windowEl('contact')),
+      )
     })
   })
 
   describe('URL', () => {
-    it('stays on / and adds no history as windows open and close', async () => {
+    it('stays on / and adds no history as windows open, close and minimize', async () => {
       const { user, router, pathname } = await renderDesktop('/')
       const length = router.history.length
       await user.click(dockLink('terminal'))
@@ -207,6 +249,7 @@ describe('window manager', () => {
       fireEvent.pointerDown(windowEl('contact'))
       await user.click(dockLink('contact'))
       await user.click(closeBox('About'))
+      await user.click(dockLink('contact'))
       expect(pathname()).toBe('/')
       expect(router.history.length).toBe(length)
     })
@@ -248,9 +291,7 @@ describe('window manager', () => {
       )
       // Kept on screen.
       await user.keyboard('{ArrowLeft}')
-      expect(windowEl('about').style.transform).toBe(
-        'translate3d(0px, 0px, 0)',
-      )
+      expect(windowEl('about').style.transform).toBe('translate3d(0px, 0px, 0)')
     })
 
     it('rolls a window up with Enter on its title', async () => {

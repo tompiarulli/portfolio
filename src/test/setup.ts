@@ -41,5 +41,9 @@ Object.defineProperty(globalThis, 'ResizeObserver', {
 window.scrollTo = () => {}
 Element.prototype.getAnimations ??= () => []
 Element.prototype.animate ??= () =>
-  ({ finished: Promise.resolve(), cancel: () => {} }) as unknown as Animation
+  ({
+    finished: Promise.resolve(),
+    playbackRate: 1,
+    cancel: () => {},
+  }) as unknown as Animation
 Element.prototype.scrollIntoView ??= () => {}

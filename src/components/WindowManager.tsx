@@ -12,8 +12,16 @@ import { initialStack } from '#/lib/windows'
 import type { WindowId } from '#/lib/windows'
 
 type Windows = {
-  /** Open windows, back to front. The last one is focused. */
+  /** Open windows, back to front, minimized ones included. */
   stack: WindowId[]
+  /** The focused window: the frontmost one not minimized. */
+  front: WindowId | undefined
+  /** Open windows hidden in the dock. They stay mounted, in their place in
+   *  the stack, so minimizing never moves a window in the DOM. */
+  minimized: WindowId[]
+  /** Fly a window into its dock key and hide it; the next window takes
+   *  focus. Pressing the key again, even mid-flight, brings it back. */
+  minimize: (id: WindowId) => void
   /** Where each open window opened, in order: on a phone, each opens one
    *  title bar below the one before (styles.css), so the close boxes of
    *  the windows behind stay clear. */
@@ -61,6 +69,62 @@ const LAST_SLOT = 5
 const nextSlot = (slots: Partial<Record<WindowId, number>>) =>
   Math.min(LAST_SLOT, Math.max(-1, ...Object.values(slots)) + 1)
 
+const windowEl = (id: WindowId) =>
+  document.querySelector<HTMLElement>(`[data-window="${id}"]`)
+
+/** Flies window `id` into its dock key, or back out of it with `restore`.
+ *  Measured before React renders, while layout is still clean, and drawn
+ *  with the individual translate, scale and opacity properties only, so
+ *  the compositor runs it and it composes with the transform that places
+ *  the window. Returns null when there's nothing to animate. */
+function flyToDock(id: WindowId, restore: boolean) {
+  const el = windowEl(id)
+  const key = document.querySelector(`[data-dock-link="${id}"]`)
+  if (!el || !key || typeof el.animate !== 'function') return null
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return null
+  // Pressed again mid-flight: turn the running flight around.
+  const flying = el.getAnimations().find((a) => a.id === 'dock')
+  if (flying?.playState === 'running') {
+    flying.reverse()
+    return flying
+  }
+  el.style.visibility = ''
+  const r = el.getBoundingClientRect()
+  const k = key.getBoundingClientRect()
+  const o = el.offsetParent?.getBoundingClientRect() ?? { left: 0, top: 0 }
+  const sx = k.width / r.width
+  const sy = k.height / r.height
+  // With the origin at the layout box's corner, a point lands at
+  // origin + translate + scale * position, so solve for the translate.
+  const tx = k.left - o.left - sx * (r.left - o.left)
+  const ty = k.top - o.top - sy * (r.top - o.top)
+  const out = { translate: '0 0', scale: '1', opacity: 1 }
+  const docked = {
+    translate: `${tx}px ${ty}px`,
+    scale: `${sx} ${sy}`,
+    opacity: 0,
+  }
+  el.style.transformOrigin = '0 0'
+  const anim = el.animate(restore ? [docked, out] : [out, docked], {
+    id: 'dock',
+    duration: 220,
+    // Quick off the mark, settling as it lands.
+    easing: 'cubic-bezier(0.2, 0, 0, 1)',
+    fill: 'forwards',
+  })
+  anim.finished.then(
+    () => {
+      // Hidden if it ended in the dock, whichever way it set off.
+      const docked = restore === anim.playbackRate < 0
+      el.style.visibility = docked ? 'hidden' : ''
+      el.style.transformOrigin = ''
+      anim.cancel()
+    },
+    () => {},
+  )
+  return anim
+}
+
 const toFront = (stack: WindowId[], id: WindowId) =>
   stack.at(-1) === id ? stack : [...stack.filter((w) => w !== id), id]
 
@@ -101,6 +165,8 @@ export function WindowManager({ children }: { children: ReactNode }) {
     seq: number
   }>({ id: null, seq: 0 })
   const [peek, setPeek] = useState<WindowId | null>(null)
+  const [minimized, setMinimized] = useState<WindowId[]>([])
+  const front = stack.filter((w) => !minimized.includes(w)).at(-1)
   const requestFocus = useCallback((id: WindowId) => {
     setFocusRequest((r) => ({ id, seq: r.seq + 1 }))
     setPeek(null)
@@ -108,12 +174,36 @@ export function WindowManager({ children }: { children: ReactNode }) {
 
   const raise = useCallback(
     (id: WindowId) => {
+      if (minimized.includes(id)) {
+        if (!flyToDock(id, true)) {
+          const el = windowEl(id)
+          if (el) el.style.visibility = ''
+        }
+        setMinimized((m) => m.filter((w) => w !== id))
+      }
       keepScroll()
       setStack((s) => toFront(s, id))
       setSlots((s) => (id in s ? s : { ...s, [id]: nextSlot(s) }))
       requestFocus(id)
     },
-    [requestFocus],
+    [minimized, requestFocus],
+  )
+
+  const minimize = useCallback(
+    (id: WindowId) => {
+      if (!flyToDock(id, false)) {
+        const el = windowEl(id)
+        if (el) el.style.visibility = 'hidden'
+      }
+      const hidden = [...minimized, id]
+      setMinimized(hidden)
+      const top = stack.filter((w) => !hidden.includes(w)).at(-1)
+      if (holdsFocus(id)) {
+        if (top) requestFocus(top)
+        else focusDock(id)
+      }
+    },
+    [stack, minimized, requestFocus],
   )
 
   const close = useCallback(
@@ -126,7 +216,8 @@ export function WindowManager({ children }: { children: ReactNode }) {
         delete rest[id]
         return rest
       })
-      const top = next.at(-1)
+      setMinimized((m) => m.filter((w) => w !== id))
+      const top = next.filter((w) => !minimized.includes(w)).at(-1)
       // Focus moves on to the next window, as on a desktop OS.
       if (holdsFocus(id)) {
         if (top) requestFocus(top)
@@ -136,12 +227,15 @@ export function WindowManager({ children }: { children: ReactNode }) {
       // a reload doesn't bring it back.
       if (id === 'notfound') navigate({ to: '/', replace: true })
     },
-    [stack, navigate, requestFocus],
+    [stack, minimized, navigate, requestFocus],
   )
 
   const value = useMemo(
     () => ({
       stack,
+      front,
+      minimized,
+      minimize,
       slots,
       raise,
       close,
@@ -149,7 +243,17 @@ export function WindowManager({ children }: { children: ReactNode }) {
       peek,
       setPeek,
     }),
-    [stack, slots, raise, close, focusRequest, peek],
+    [
+      stack,
+      front,
+      minimized,
+      minimize,
+      slots,
+      raise,
+      close,
+      focusRequest,
+      peek,
+    ],
   )
 
   return (

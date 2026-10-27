@@ -67,6 +67,7 @@ export function Window({
   const hintId = useId()
   const {
     stack,
+    front,
     slots,
     raise,
     close: closeWindow,
@@ -74,7 +75,7 @@ export function Window({
     peek,
     setPeek,
   } = useWindows()
-  const active = peek ? peek === id : stack.at(-1) === id
+  const active = peek ? peek === id : front === id
   const close = () => closeWindow(id)
   // Restacking moves windows in the DOM, which resets their scroll; put
   // it back.
@@ -135,7 +136,7 @@ export function Window({
   // Window management, listened for on the window rather than making it a
   // control: pressing anywhere in it raises it, Escape anywhere in it
   // closes it, and focus inside it brings it to the top while it stays.
-  const top = stack.at(-1)
+  const top = front
   useEffect(() => {
     const el = ref.current
     if (!el) return
