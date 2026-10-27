@@ -1,24 +1,20 @@
-import { BuildLine, Thin, Title } from '#/components/start/parts'
+import { BuildLine, Title } from '#/components/start/parts'
 
 /** OUTATIME's start screen: a game's heads-up display over the grid. The
- *  title in electric blue with the version in pink brush script, and the
- *  prompt boxed in a royal blue rule in the title's wide capitals. The
- *  title flies in, the version writes itself in, and the prompt drops into
- *  place. */
+ *  title in orange capitals rushing into the distance, with the version in
+ *  yellow glitched type, and the prompt glowing cyan in the title's face,
+ *  like an arcade cabinet's attract screen. The title flies in, the
+ *  version strikes on like lightning, and the prompt drops into place. */
 export default function TravelerStart() {
   return (
     <>
-      {/* The filter the version's tokens point at. */}
-      <svg aria-hidden className="absolute size-0">
-        <Thin id="script-thin" radius={1.6} />
-      </svg>
-      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-[7vh] px-4">
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-[11vh] px-4">
         <div className="fly-in">
-          <Title />
+          <Title taper />
         </div>
         <p
           aria-hidden
-          className="drop-in border-2 border-(--start-title-edge) bg-(--start-title-shade) px-[16px] py-[8px] pl-[calc(16px+0.25em)] font-(family-name:--start-title-font) text-[12px] tracking-[0.25em] text-(--start-title-1) uppercase sm:text-[14px]"
+          className="drop-in prompt-glow pl-[0.25em] font-(family-name:--start-title-font) text-[15px] tracking-[0.25em] uppercase sm:text-[18px]"
         >
           Press Any Key to Start
         </p>

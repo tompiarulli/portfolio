@@ -73,9 +73,10 @@
   font-display: swap;
   font-weight: 600;
 }
-/* Righteous (SIL OFL, see public/fonts/Righteous-OFL.txt) and Space Mono
-   Bold (SIL OFL, see public/fonts/SpaceMono-OFL.txt): the start screen's
-   title and prompt, so they load only at shut down. */
+/* Righteous (SIL OFL, see public/fonts/Righteous-OFL.txt): OUTATIME's
+   window titles. Space Mono Bold (SIL OFL, see
+   public/fonts/SpaceMono-OFL.txt): the start screen's prompt, so it loads
+   only at shut down. */
 @font-face {
   font-family: 'Righteous';
   src: url('/fonts/righteous-400.woff2') format('woff2');
@@ -114,11 +115,18 @@
   font-display: swap;
   font-weight: 600;
 }
-/* Permanent Marker (Apache 2.0, see public/fonts/PermanentMarker-LICENSE.txt):
-   the brush script across the start screen's title. */
+/* Saira Semi Condensed Black and Rubik Glitch (SIL OFL, see
+   public/fonts/): OUTATIME's start screen title and version. Rubik Glitch
+   is cut down to the version's characters. */
 @font-face {
-  font-family: 'Permanent Marker';
-  src: url('/fonts/permanent-marker-400.woff2') format('woff2');
+  font-family: 'Saira Semi Condensed';
+  src: url('/fonts/saira-semi-condensed-900.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 900;
+}
+@font-face {
+  font-family: 'Rubik Glitch';
+  src: url('/fonts/rubik-glitch-400.woff2') format('woff2');
   font-display: swap;
 }
 /* Recursive (SIL OFL, see public/fonts/Recursive-OFL.txt): Steamboat's mono,
@@ -552,36 +560,39 @@
     --start-title-scale: 1;
   }
 }
-/* OUTATIME: a game's heads-up display. The title in smooth bands, white
-   to electric blue on a deep blue edge, the version in pink brush script
-   across its corner, and the prompt in the title's face. */
+/* OUTATIME: a game's heads-up display. The title in heavy capitals
+   tapering into the distance (Traveler.tsx), in smooth bands, red-orange
+   to yellow outlined in light blue on a deep blue edge, the version in
+   yellow glitched type across its corner, and the prompt in the title's
+   face. */
 [data-theme='traveler'] {
   --start-font: 'Geist Mono', ui-monospace, monospace;
-  --start-title-font: 'Righteous', ui-sans-serif, sans-serif;
-  --start-title-weight: 400;
-  --start-title-dither: none;
+  --start-title-font: 'Saira Semi Condensed', ui-sans-serif, sans-serif;
+  --start-title-weight: 900;
+  --start-title-scale: 1.2;
   --start-title-depth: 0.05em;
-  --script-font: 'Permanent Marker', cursive;
+  --script-font: 'Rubik Glitch', ui-sans-serif, sans-serif;
   --script-weight: 400;
   --script-size: 0.4em;
   --script-rotate: -8deg;
   --script-tracking: 0em;
   --script-right: -0.3em;
   --script-bottom: -0.26em;
-  --script-filter: url(#script-thin);
+  --script-filter: drop-shadow(0 0 0.12em var(--script-glow));
   --prompt-font: 'Space Mono', ui-monospace, monospace;
   --prompt-weight: 700;
   --start-text: #bfe9ff;
-  --start-title-1: #ffffff;
-  --start-title-2: #d6f3ff;
-  --start-title-3: #8fdcff;
-  --start-title-4: #2fb8ff;
+  --start-title-1: #ff4a1c;
+  --start-title-2: #ff7a1a;
+  --start-title-3: #ffa81a;
+  --start-title-4: #ffd23a;
   --start-title-edge: #3d6bff;
   --start-title-shade: #0a1640;
-  --script: #ff3d9a;
-  --script-glow: #ff1fa0;
-  --prompt: #2fb8ff;
-  --prompt-glow: #3d6bff;
+  --start-title-outline: #1e9be8;
+  --script: #ffe52e;
+  --script-glow: #ffa905;
+  --prompt: #2fe9ff;
+  --prompt-glow: #2f7bff;
   /* The sky's middle, where the lettering sits. */
   --start-ground: #050a1f;
 }
@@ -954,6 +965,31 @@ svg {
   translate: var(--start-title-drift) var(--start-title-depth);
   text-shadow: 0 calc(var(--start-title-depth) / -2) 0 var(--start-title-edge);
 }
+/* A title rushing into the distance: capitals leaning forward, each
+   letter (its --i) smaller than the last, centred on one line. */
+.title-taper .title-extrude,
+.title-taper .title-bands {
+  text-transform: uppercase;
+  transform: skewX(-10deg);
+}
+/* Outlined, as lettering on a poster is, in the theme's
+   --start-title-outline. */
+.title-taper .title-bands {
+  --outline: 0.018em;
+  filter: drop-shadow(var(--outline) 0 0 var(--start-title-outline))
+    drop-shadow(calc(var(--outline) * -1) 0 0 var(--start-title-outline))
+    drop-shadow(0 var(--outline) 0 var(--start-title-outline))
+    drop-shadow(0 calc(var(--outline) * -1) 0 var(--start-title-outline));
+}
+.title-taper :is(.title-extrude, .title-bands) > span {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: calc(1.12em - var(--i) * 0.085em);
+}
+/* The OS, a step smaller again than the Tom. */
+.title-taper :is(.title-extrude, .title-bands) > span:nth-child(n + 4) {
+  font-size: calc((1.12em - var(--i) * 0.085em) * 0.85);
+}
 /* A heading or label in a window, styled by the theme. */
 .heading {
   font-family: var(--font-mono);
@@ -1220,7 +1256,8 @@ svg {
 }
 
 /* OUTATIME: the title flies in from the distance and settles, the version
-   writes itself in, then the prompt drops into place and blinks. */
+   strikes on like lightning, flashing bright a few times before it holds,
+   then the prompt drops into place and blinks. */
 .fly-in {
   animation: fly-in 700ms cubic-bezier(0.2, 0.8, 0.3, 1.15) 100ms both;
 }
@@ -1234,14 +1271,36 @@ svg {
   }
 }
 .fly-in .script {
-  animation: write-on 450ms ease-out 750ms both;
+  animation: strike 600ms linear 750ms both;
 }
-@keyframes write-on {
-  from {
-    clip-path: inset(-50% 100% -50% -50%);
+@keyframes strike {
+  0% {
+    opacity: 0;
   }
-  to {
-    clip-path: inset(-50%);
+  6% {
+    opacity: 1;
+    filter: var(--script-filter) brightness(2.6);
+    translate: 0.04em 0;
+  }
+  12% {
+    opacity: 0.15;
+  }
+  20% {
+    opacity: 1;
+    filter: var(--script-filter) brightness(2);
+    translate: -0.03em 0;
+  }
+  27% {
+    opacity: 0.3;
+  }
+  36% {
+    opacity: 1;
+    filter: var(--script-filter) brightness(1.6);
+    translate: 0;
+  }
+  100% {
+    opacity: 1;
+    filter: var(--script-filter);
   }
 }
 .drop-in {
