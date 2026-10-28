@@ -8,11 +8,23 @@ vi.mock('#/components/Backdrop', () => ({ Backdrop: () => null }))
 const closeBox = (title: string) =>
   screen.getByRole('button', { name: `Close ${title}` })
 
+type User = Awaited<ReturnType<typeof renderDesktop>>['user']
+
+/** Opens System Info or Terminal from the system menu. */
+async function fromMenu(user: User, name: 'System Info' | 'Terminal') {
+  await user.click(screen.getByRole('button', { name: 'System menu' }))
+  await user.click(screen.getByRole('menuitem', { name }))
+  return screen.findByRole('region', { name })
+}
+
 describe('window manager', () => {
   describe('on load', () => {
-    it('opens About in front of Contact at /', async () => {
+    it('opens About in front of Contact and Travel at /', async () => {
       await renderDesktop('/')
-      expect(windowOrder()).toEqual(['about', 'contact'])
+      // Travel is a chunk of its own, so it shows once that has loaded.
+      await waitFor(() =>
+        expect(windowOrder()).toEqual(['about', 'contact', 'player']),
+      )
       expect(dockLink('about').getAttribute('aria-current')).toBe('true')
       expect(dockLink('contact').getAttribute('aria-current')).toBeNull()
     })
@@ -21,7 +33,7 @@ describe('window manager', () => {
       // It reads the path from the page's own address.
       history.replaceState(null, '', '/nope')
       await renderDesktop('/nope')
-      expect(windowOrder()).toEqual(['notfound', 'about', 'contact'])
+      expect(windowOrder()).toEqual(['notfound', 'about', 'contact', 'player'])
       expect(windowEl('notfound').textContent).toContain('/nope')
       history.replaceState(null, '', '/')
     })
@@ -33,8 +45,9 @@ describe('window manager', () => {
 
     it('stacks windows by z-index, front highest', async () => {
       await renderDesktop('/')
-      expect(windowEl('about').style.zIndex).toBe('2')
-      expect(windowEl('contact').style.zIndex).toBe('1')
+      expect(windowEl('about').style.zIndex).toBe('3')
+      expect(windowEl('contact').style.zIndex).toBe('2')
+      expect(windowEl('player').style.zIndex).toBe('1')
     })
   })
 
@@ -43,25 +56,24 @@ describe('window manager', () => {
       const { user } = await renderDesktop('/')
       const slot = (id: Parameters<typeof windowEl>[0]) =>
         windowEl(id).style.getPropertyValue('--slot')
-      const openSystemInfo = async () => {
-        await user.click(screen.getByRole('button', { name: 'System menu' }))
-        await user.click(screen.getByRole('menuitem', { name: 'System Info' }))
-        await screen.findByRole('region', { name: 'System Info' })
-      }
-      expect([slot('contact'), slot('about')]).toEqual(['0', '1'])
-      // Out of the usual order: System Info before Terminal.
+      const openSystemInfo = () => fromMenu(user, 'System Info')
+      expect([slot('player'), slot('contact'), slot('about')]).toEqual([
+        '0',
+        '1',
+        '2',
+      ])
+      // Out of the menu's order: System Info before Terminal.
       await openSystemInfo()
-      await user.click(dockLink('terminal'))
-      await screen.findByRole('region', { name: 'Terminal' })
-      expect([slot('system'), slot('terminal')]).toEqual(['2', '3'])
+      await fromMenu(user, 'Terminal')
+      expect([slot('system'), slot('terminal')]).toEqual(['3', '4'])
       // Raising keeps a window's slot; reopening takes the next one.
       await openSystemInfo()
-      expect(slot('system')).toBe('2')
+      expect(slot('system')).toBe('3')
       await user.click(
         screen.getByRole('button', { name: 'Close System Info' }),
       )
       await openSystemInfo()
-      expect(slot('system')).toBe('4')
+      expect(slot('system')).toBe('5')
     })
 
     it('opens Work from the dock, with its link to LinkedIn', async () => {
@@ -70,19 +82,17 @@ describe('window manager', () => {
       const link = await screen.findByRole('link', {
         name: 'Full work history on LinkedIn',
       })
-      expect(windowOrder()).toEqual(['work', 'about', 'contact'])
+      expect(windowOrder()).toEqual(['work', 'about', 'contact', 'player'])
       expect(link.getAttribute('href')).toBe(
         'https://www.linkedin.com/in/tompiarulli/',
       )
     })
 
-    it('opens a closed window from the dock, focused', async () => {
+    it('opens a closed window from the system menu, focused', async () => {
       const { user, pathname } = await renderDesktop('/')
-      await user.click(dockLink('terminal'))
-      const input = await screen.findByRole('textbox', {
-        name: 'Terminal input',
-      })
-      expect(windowOrder()).toEqual(['terminal', 'about', 'contact'])
+      await fromMenu(user, 'Terminal')
+      const input = screen.getByRole('textbox', { name: 'Terminal input' })
+      expect(windowOrder()).toEqual(['terminal', 'about', 'contact', 'player'])
       expect(pathname()).toBe('/')
       // The prompt is marked to take focus over the window itself.
       await waitFor(() => expect(document.activeElement).toBe(input))
@@ -91,7 +101,9 @@ describe('window manager', () => {
     it('raises a window behind when it is pressed', async () => {
       await renderDesktop('/')
       fireEvent.pointerDown(windowEl('contact'))
-      await waitFor(() => expect(windowOrder()).toEqual(['contact', 'about']))
+      await waitFor(() =>
+        expect(windowOrder()).toEqual(['contact', 'about', 'player']),
+      )
       expect(document.activeElement).toBe(windowEl('contact'))
       expect(dockLink('contact').getAttribute('aria-current')).toBe('true')
     })
@@ -99,7 +111,9 @@ describe('window manager', () => {
     it('raises a window behind from the dock', async () => {
       const { user } = await renderDesktop('/')
       await user.click(dockLink('contact'))
-      await waitFor(() => expect(windowOrder()).toEqual(['contact', 'about']))
+      await waitFor(() =>
+        expect(windowOrder()).toEqual(['contact', 'about', 'player']),
+      )
       expect(document.activeElement).toBe(windowEl('contact'))
     })
 
@@ -108,7 +122,7 @@ describe('window manager', () => {
       await user.click(dockLink('contact'))
       await user.click(dockLink('about'))
       await user.click(dockLink('contact'))
-      expect(windowOrder()).toEqual(['contact', 'about'])
+      expect(windowOrder()).toEqual(['contact', 'about', 'player'])
     })
   })
 
@@ -116,7 +130,7 @@ describe('window manager', () => {
     it('closes the front window and hands focus to the next', async () => {
       const { user } = await renderDesktop('/')
       await user.click(closeBox('About'))
-      expect(windowOrder()).toEqual(['contact'])
+      expect(windowOrder()).toEqual(['contact', 'player'])
       await waitFor(() =>
         expect(document.activeElement).toBe(windowEl('contact')),
       )
@@ -125,11 +139,12 @@ describe('window manager', () => {
     it('closes a window behind without raising it', async () => {
       const { user } = await renderDesktop('/')
       await user.click(closeBox('Contact'))
-      expect(windowOrder()).toEqual(['about'])
+      expect(windowOrder()).toEqual(['about', 'player'])
     })
 
     it('leaves the desktop empty after the last window closes', async () => {
       const { user } = await renderDesktop('/')
+      await user.click(closeBox('Travel'))
       await user.click(closeBox('Contact'))
       await user.click(closeBox('About'))
       expect(windowOrder()).toEqual([])
@@ -137,6 +152,7 @@ describe('window manager', () => {
 
     it('moves focus to the dock once no window is left', async () => {
       const { user } = await renderDesktop('/')
+      await user.click(closeBox('Travel'))
       await user.click(closeBox('Contact'))
       await user.click(closeBox('About'))
       await waitFor(() =>
@@ -149,19 +165,17 @@ describe('window manager', () => {
       // Contact's title, the handle that moves it.
       act(() => screen.getByRole('button', { name: 'Contact' }).focus())
       await user.keyboard('{Escape}')
-      expect(windowOrder()).toEqual(['about'])
+      expect(windowOrder()).toEqual(['about', 'player'])
       expect(document.activeElement).toBe(windowEl('about'))
     })
 
     it('closes only the innermost window on Escape', async () => {
       const { user } = await renderDesktop('/')
-      await user.click(dockLink('terminal'))
-      const input = await screen.findByRole('textbox', {
-        name: 'Terminal input',
-      })
+      await fromMenu(user, 'Terminal')
+      const input = screen.getByRole('textbox', { name: 'Terminal input' })
       act(() => input.focus())
       await user.keyboard('{Escape}')
-      expect(windowOrder()).toEqual(['about', 'contact'])
+      expect(windowOrder()).toEqual(['about', 'contact', 'player'])
     })
 
     it('ignores an Escape something inside already handled', async () => {
@@ -174,14 +188,14 @@ describe('window manager', () => {
       })
       event.preventDefault()
       act(() => void link.dispatchEvent(event))
-      expect(windowOrder()).toEqual(['about', 'contact'])
+      expect(windowOrder()).toEqual(['about', 'contact', 'player'])
     })
 
     it('closes File Not Found with OK and moves the URL home', async () => {
       const { user, router, pathname } = await renderDesktop('/nope')
       const length = router.history.length
       await user.click(screen.getByRole('link', { name: 'OK' }))
-      expect(windowOrder()).toEqual(['about', 'contact'])
+      expect(windowOrder()).toEqual(['about', 'contact', 'player'])
       await waitFor(() => expect(pathname()).toBe('/'))
       // Replaced, so Back doesn't return to the bad URL.
       expect(router.history.length).toBe(length)
@@ -197,7 +211,7 @@ describe('window manager', () => {
       await waitFor(() =>
         expect(windowEl('about').style.visibility).toBe('hidden'),
       )
-      expect(windowOrder()).toEqual(['about', 'contact'])
+      expect(windowOrder()).toEqual(['about', 'contact', 'player'])
       expect(dockLink('about').textContent).toContain('minimized')
       expect(dockLink('about').getAttribute('aria-current')).toBeNull()
       expect(dockLink('contact').getAttribute('aria-current')).toBe('true')
@@ -211,7 +225,9 @@ describe('window manager', () => {
       await user.click(dockLink('about'))
       await user.click(dockLink('contact'))
       await user.click(dockLink('about'))
-      await waitFor(() => expect(windowOrder()).toEqual(['about', 'contact']))
+      await waitFor(() =>
+        expect(windowOrder()).toEqual(['about', 'contact', 'player']),
+      )
       expect(windowEl('about').style.visibility).toBe('')
       expect(dockLink('about').textContent).not.toContain('minimized')
       expect(dockLink('about').getAttribute('aria-current')).toBe('true')
@@ -219,6 +235,7 @@ describe('window manager', () => {
 
     it('keeps the last visible window mounted when it is minimized', async () => {
       const { user } = await renderDesktop('/')
+      await user.click(closeBox('Travel'))
       await user.click(closeBox('Contact'))
       await user.click(dockLink('about'))
       await waitFor(() =>
@@ -230,9 +247,9 @@ describe('window manager', () => {
 
     it('closes a window behind and focuses the one in front, skipping minimized ones', async () => {
       const { user } = await renderDesktop('/')
-      await user.click(dockLink('terminal'))
-      await screen.findByRole('region', { name: 'Terminal' })
-      await user.click(dockLink('terminal'))
+      await user.click(dockLink('work'))
+      await screen.findByRole('region', { name: 'Work' })
+      await user.click(dockLink('work'))
       await user.click(closeBox('About'))
       await waitFor(() =>
         expect(document.activeElement).toBe(windowEl('contact')),
@@ -244,8 +261,7 @@ describe('window manager', () => {
     it('stays on / and adds no history as windows open, close and minimize', async () => {
       const { user, router, pathname } = await renderDesktop('/')
       const length = router.history.length
-      await user.click(dockLink('terminal'))
-      await screen.findByRole('region', { name: 'Terminal' })
+      await fromMenu(user, 'Terminal')
       fireEvent.pointerDown(windowEl('contact'))
       await user.click(dockLink('contact'))
       await user.click(closeBox('About'))
@@ -270,10 +286,10 @@ describe('window manager', () => {
       await renderDesktop('/')
       // Contact's title, the handle that moves it.
       act(() => screen.getByRole('button', { name: 'Contact' }).focus())
-      expect(windowEl('contact').style.zIndex).toBe('3')
-      expect(windowOrder()).toEqual(['about', 'contact'])
+      expect(windowEl('contact').style.zIndex).toBe('4')
+      expect(windowOrder()).toEqual(['about', 'contact', 'player'])
       act(() => windowEl('about').focus())
-      expect(windowEl('contact').style.zIndex).toBe('1')
+      expect(windowEl('contact').style.zIndex).toBe('2')
     })
 
     it('moves a window with the arrow keys on its title', async () => {

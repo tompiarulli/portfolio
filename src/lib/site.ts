@@ -179,3 +179,40 @@ export const profiles: Profile[] = [
     url: 'https://github.com/tompiarulli',
   },
 ]
+
+export type Clip = {
+  /** The clip on Vercel Blob, an MP4 with no sound track. */
+  src: string
+  /** A still to show while it loads. */
+  poster?: string
+  /** What the player's strip calls it, like `sardegna_1993.mp4`; else
+   *  the file's own name, which Blob may have suffixed. */
+  name?: string
+}
+
+export type Channel = {
+  /** The place, as the screen and the channel list name it. */
+  place: string
+  country: string
+  /** Where it was shot, in degrees, for the readouts some themes put on
+   *  screen: north and east positive. */
+  lat: number
+  lon: number
+  /** Its clips, played in turn and round again. With none, the channel
+   *  shows a test card. */
+  clips: Clip[]
+}
+
+/** The Player's channels, one per place, in the order they're tuned.
+ *  Placeholders until the footage is uploaded. */
+export const channels: Channel[] = [
+  { place: 'Lisbon', country: 'Portugal', lat: 38.72, lon: -9.14, clips: [] },
+  { place: 'Kyoto', country: 'Japan', lat: 35.01, lon: 135.77, clips: [] },
+  {
+    place: 'Mexico City',
+    country: 'Mexico',
+    lat: 19.43,
+    lon: -99.13,
+    clips: [],
+  },
+]

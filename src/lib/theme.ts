@@ -63,6 +63,17 @@ export function currentTheme(): Theme {
   return THEMES.find((x) => x.id === t)?.id ?? DEFAULT_THEME
 }
 
+/** Calls `onChange` when the theme on <html> changes, from Settings or
+ *  the terminal. */
+export function subscribeTheme(onChange: () => void) {
+  const observer = new MutationObserver(onChange)
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  })
+  return () => observer.disconnect()
+}
+
 /** Inline in <head> so the first paint already has the theme: the one named
  *  by `?theme=` if it names one, else the saved one, else the default. The
  *  router runs it again on every navigation, so it only writes when the

@@ -33,10 +33,10 @@ async function contrastViolations(page: Page, selector: string) {
   )
 }
 
-/** Opens an app from the dock, or System Info from the system menu, and
- *  returns its window's selector once it's in front. */
+/** Opens an app from the dock, or System Info or Terminal from the system
+ *  menu, and returns its window's selector once it's in front. */
 async function open(page: Page, name: string) {
-  if (name === 'System Info') {
+  if (name === 'System Info' || name === 'Terminal') {
     await page.getByRole('button', { name: 'System menu' }).click()
     await page.getByRole('menuitem', { name }).click()
   } else {
@@ -69,6 +69,7 @@ for (const { id, label } of THEMES) {
     for (const name of [
       'About',
       'Contact',
+      'Travel',
       'Work',
       'Terminal',
       'Settings',

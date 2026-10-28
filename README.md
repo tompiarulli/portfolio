@@ -9,7 +9,7 @@
 Lighthouse performance, accessibility, best practices and SEO badges go here.
 -->
 
-My personal site, dressed up as a late-90s desktop and inspired by [Poolsuite](https://poolsuite.net). Windows, a dock, a terminal with a few easter eggs, and a handful of themes.
+My personal site, dressed up as a late-90s desktop and inspired by [Poolsuite](https://poolsuite.net). Windows, a dock, a channel of travel videos per place, a terminal with a few easter eggs, and a handful of themes.
 
 ## Built with
 

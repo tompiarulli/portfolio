@@ -16,6 +16,8 @@ import type { WindowId } from '#/lib/windows'
 const load = {
   work: () =>
     import('#/components/apps/Work').then((m) => ({ default: m.Work })),
+  player: () =>
+    import('#/components/apps/Player').then((m) => ({ default: m.Player })),
   terminal: () =>
     import('#/components/apps/Terminal').then((m) => ({ default: m.Terminal })),
   settings: () =>
@@ -41,6 +43,7 @@ const APPS: Record<WindowId, ComponentType> = {
   about: About,
   contact: Contact,
   work: lazy(load.work),
+  player: lazy(load.player),
   terminal: lazy(load.terminal),
   settings: lazy(load.settings),
   system: lazy(load.system),

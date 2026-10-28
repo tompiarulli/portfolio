@@ -56,13 +56,15 @@ describe('system menu', () => {
     const { user } = await withTrigger()
     await user.keyboard('{ArrowDown}')
     await user.keyboard('{ArrowDown}')
+    expect(document.activeElement).toBe(item('Terminal'))
+    await user.keyboard('{ArrowDown}')
     expect(document.activeElement).toBe(item('Restart…'))
     await user.keyboard('{ArrowDown}')
     expect(document.activeElement).toBe(item('System Info'))
     await user.keyboard('{ArrowUp}')
     expect(document.activeElement).toBe(item('Restart…'))
     await user.keyboard('{ArrowUp}')
-    expect(document.activeElement).toBe(item('System Info'))
+    expect(document.activeElement).toBe(item('Terminal'))
   })
 
   it('jumps to the ends with Home and End', async () => {
@@ -77,7 +79,7 @@ describe('system menu', () => {
   it('keeps the items out of the tab order', async () => {
     const { user } = await withTrigger()
     await user.keyboard('{ArrowDown}')
-    for (const name of ['System Info', 'Restart…'])
+    for (const name of ['System Info', 'Terminal', 'Restart…'])
       expect(item(name).tabIndex).toBe(-1)
   })
 
@@ -125,9 +127,19 @@ describe('system menu', () => {
     await waitFor(() => expect(document.activeElement).toBe(system))
   })
 
+  it('opens Terminal from the menu, focused at its prompt', async () => {
+    const { user } = await renderDesktop('/')
+    await user.click(trigger())
+    await user.click(item('Terminal'))
+    expect(menu()).toBeNull()
+    const input = await screen.findByRole('textbox', { name: 'Terminal input' })
+    expect(windowOrder()[0]).toBe('terminal')
+    await waitFor(() => expect(document.activeElement).toBe(input))
+  })
+
   it('does not close the window behind it on Escape', async () => {
     const { user } = await withTrigger()
     await user.keyboard('{ArrowDown}{Escape}')
-    expect(windowOrder()).toEqual(['about', 'contact'])
+    expect(windowOrder()).toEqual(['about', 'contact', 'player'])
   })
 })

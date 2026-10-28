@@ -47,3 +47,8 @@ Element.prototype.animate ??= () =>
     cancel: () => {},
   }) as unknown as Animation
 Element.prototype.scrollIntoView ??= () => {}
+
+// Nor video playback. The Travel player plays and pauses its clips; a
+// play that starts at once and a pause that does nothing are enough.
+HTMLMediaElement.prototype.play = () => Promise.resolve()
+HTMLMediaElement.prototype.pause = () => {}

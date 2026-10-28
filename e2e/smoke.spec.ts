@@ -12,6 +12,13 @@ async function openApp(page: Page, name: string) {
     .click()
 }
 
+/** Opens the terminal from the system menu, once hydrated. */
+async function openTerminal(page: Page) {
+  await page.waitForLoadState('networkidle')
+  await page.getByRole('button', { name: 'System menu' }).click()
+  await page.getByRole('menuitem', { name: 'Terminal' }).click()
+}
+
 test('/ loads with About in front of Contact', async ({ page }) => {
   const response = await page.goto('/')
   expect(response?.status()).toBe(200)
@@ -22,9 +29,10 @@ test('/ loads with About in front of Contact', async ({ page }) => {
   const html = await response?.text()
   expect(html).toContain('data-window="about"')
   expect(html).toContain('data-window="contact"')
+  expect(html).toContain('data-window="player"')
   await expect(page.getByRole('region', { name: 'About' })).toBeVisible()
   await page.waitForLoadState('networkidle')
-  expect(await windowOrder(page)).toEqual(['about', 'contact'])
+  expect(await windowOrder(page)).toEqual(['about', 'contact', 'player'])
   await expect(page.locator('meta[name="robots"]')).toHaveCount(0)
   await expect(
     page.getByRole('navigation', { name: 'Applications' }),
@@ -81,12 +89,30 @@ test.describe('not found', () => {
 
 test('the dock opens a window without changing the URL', async ({ page }) => {
   await page.goto('/')
-  await openApp(page, 'Terminal')
-  await expect(
-    page.getByRole('textbox', { name: 'Terminal input' }),
-  ).toBeFocused()
-  expect((await windowOrder(page))[0]).toBe('terminal')
+  await openApp(page, 'Work')
+  const work = page.getByRole('region', { name: 'Work' })
+  await expect(work).toBeFocused()
+  expect((await windowOrder(page))[0]).toBe('work')
   await expect(page).toHaveURL('/')
+})
+
+test('Travel puts its screen full screen and back', async ({ page }) => {
+  await page.goto('/')
+  await page.waitForLoadState('networkidle')
+  const travel = page.getByRole('region', { name: 'Travel' })
+  await travel.getByRole('button', { name: 'Full screen' }).click()
+  // The screen itself, so the theme's look goes with it.
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        document.fullscreenElement?.classList.contains('tv-screen'),
+      ),
+    )
+    .toBe(true)
+  await page.evaluate(() => document.exitFullscreen())
+  await expect(
+    travel.getByRole('button', { name: 'Full screen' }),
+  ).toBeVisible()
 })
 
 test('the system menu opens System Info', async ({ page }) => {
@@ -155,7 +181,7 @@ test.describe('themes', () => {
 
   test('the terminal switches theme', async ({ page }) => {
     await page.goto('/')
-    await openApp(page, 'Terminal')
+    await openTerminal(page)
     const input = page.getByRole('textbox', { name: 'Terminal input' })
     await input.fill('theme  white   rabbit')
     await input.press('Enter')

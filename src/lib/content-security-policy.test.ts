@@ -13,12 +13,24 @@ function parse(policy: string): Record<string, string[]> {
 }
 
 describe('contentSecurityPolicy', () => {
-  it('only allows the site itself', () => {
+  it('otherwise only allows the site itself', () => {
     const policy = parse(contentSecurityPolicy())
     expect(policy['default-src']).toEqual(["'self'"])
     expect(policy['font-src']).toEqual(["'self'"])
     expect(policy['connect-src']).toEqual(["'self'"])
-    expect(policy['img-src']).toEqual(["'self'", 'data:'])
+    expect(policy['img-src']).toEqual([
+      "'self'",
+      'data:',
+      'https://*.public.blob.vercel-storage.com',
+    ])
+  })
+
+  it("allows the Player's videos from Vercel Blob", () => {
+    const policy = parse(contentSecurityPolicy())
+    expect(policy['media-src']).toEqual([
+      "'self'",
+      'https://*.public.blob.vercel-storage.com',
+    ])
   })
 
   it('cannot be framed and has no plugins', () => {
@@ -35,7 +47,7 @@ describe('contentSecurityPolicy', () => {
   })
 
   it('lists no Vercel sources by default', () => {
-    expect(contentSecurityPolicy()).not.toContain('vercel')
+    expect(contentSecurityPolicy()).not.toContain('vercel.live')
     expect(parse(contentSecurityPolicy())).not.toHaveProperty('frame-src')
   })
 

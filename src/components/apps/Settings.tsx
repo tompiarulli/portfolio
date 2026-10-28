@@ -8,18 +8,14 @@ import {
   subscribeClockMode,
 } from '#/lib/clock'
 import { ORBITS, brightness, rider, ring } from '#/lib/orbits'
-import { DEFAULT_THEME, THEMES, applyTheme, currentTheme } from '#/lib/theme'
+import {
+  DEFAULT_THEME,
+  THEMES,
+  applyTheme,
+  currentTheme,
+  subscribeTheme,
+} from '#/lib/theme'
 import type { Backdrop, Theme } from '#/lib/theme'
-
-/** The terminal can switch theme too, so follow <html>. */
-function subscribeTheme(onChange: () => void) {
-  const observer = new MutationObserver(onChange)
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['data-theme'],
-  })
-  return () => observer.disconnect()
-}
 
 export function Settings() {
   // The prerendered page can't know the saved theme, so it shows the

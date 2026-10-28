@@ -37,13 +37,13 @@ test('tapping the dock opens a window', async ({ page }) => {
   await page.waitForLoadState('networkidle')
   await page
     .getByRole('navigation', { name: 'Applications' })
-    .getByRole('button', { name: /^Terminal/ })
+    .getByRole('button', { name: /^Work/ })
     .tap()
-  const terminal = page.getByRole('region', { name: 'Terminal' })
-  await expect(terminal).toBeVisible()
-  expect((await windowOrder(page))[0]).toBe('terminal')
-  await terminal.getByRole('button', { name: 'Close Terminal' }).tap()
-  await expect(terminal).toHaveCount(0)
+  const work = page.getByRole('region', { name: 'Work' })
+  await expect(work).toBeVisible()
+  expect((await windowOrder(page))[0]).toBe('work')
+  await work.getByRole('button', { name: 'Close Work' }).tap()
+  await expect(work).toHaveCount(0)
   await expect(page).toHaveURL('/')
 })
 
@@ -63,9 +63,9 @@ test('every tap target meets WCAG 2.2 target size', async ({ page }) => {
   }
   expect(await check()).toEqual([])
   // Windows open stepped down a title bar each on a phone, so opening
-  // Terminal leaves the close boxes behind it clear.
-  await dockIcon(page, 'Terminal').tap()
-  await expect(page.getByRole('region', { name: 'Terminal' })).toBeVisible()
+  // Work leaves the close boxes behind it clear.
+  await dockIcon(page, 'Work').tap()
+  await expect(page.getByRole('region', { name: 'Work' })).toBeVisible()
   expect(await check()).toEqual([])
 })
 
@@ -74,8 +74,8 @@ test('windows opened in any order keep the close boxes behind them clear', async
 }) => {
   await page.goto('/')
   await page.waitForLoadState('networkidle')
-  // Settings, then Terminal: the reverse of the usual order.
-  for (const name of ['Settings', 'Terminal']) {
+  // Settings, then Work: the reverse of the dock's order.
+  for (const name of ['Settings', 'Work']) {
     await dockIcon(page, name).tap()
     await expect(page.getByRole('region', { name })).toBeVisible()
   }

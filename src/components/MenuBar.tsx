@@ -30,6 +30,12 @@ const BAR =
 const ITEM =
   'block w-full px-4 py-[3px] pointer-coarse:py-3 text-left whitespace-nowrap outline-none hover:bg-(--accent) hover:text-(--on-accent) focus-visible:bg-(--accent) focus-visible:text-(--on-accent)'
 
+/** Windows the system menu opens, rather than the dock. */
+const APPS = [
+  { id: 'system', label: 'System Info' },
+  { id: 'terminal', label: 'Terminal' },
+] as const
+
 /** The theme logo menu, opened like the system menu on a 90s desktop. */
 function SystemMenu({
   trigger,
@@ -139,18 +145,21 @@ function SystemMenu({
           onKeyDown={onMenuKeyDown}
           className="absolute top-full left-0 min-w-44 border border-(--frame) bg-(--surface) py-1 font-(family-name:--font-label) tracking-(--label-tracking) shadow-(--window-shadow)"
         >
-          <button
-            type="button"
-            role="menuitem"
-            tabIndex={-1}
-            onClick={() => {
-              raise('system')
-              close()
-            }}
-            className={ITEM}
-          >
-            System Info
-          </button>
+          {APPS.map((a) => (
+            <button
+              key={a.id}
+              type="button"
+              role="menuitem"
+              tabIndex={-1}
+              onClick={() => {
+                raise(a.id)
+                close()
+              }}
+              className={ITEM}
+            >
+              {a.label}
+            </button>
+          ))}
           <hr className="my-1 border-(--frame)" />
           {actions.map((a) => (
             <button

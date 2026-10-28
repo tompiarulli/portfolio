@@ -1,5 +1,6 @@
 // Everything the site loads comes from its own origin, so the policy is
-// 'self' throughout. Scripts and styles also need 'unsafe-inline':
+// 'self' throughout, but for the Player's videos and their posters, which
+// live on Vercel Blob. Scripts and styles also need 'unsafe-inline':
 // - TanStack's hydration script is inline and carries a timestamp, so its
 //   hash changes with every build and every page, and the headers are fixed
 //   before the prerender writes the pages. The theme boot scripts in
@@ -9,12 +10,15 @@
 // - Windows and backdrops position and paint themselves with
 //   inline style attributes.
 // The site renders no user content, so inline scripts can only be its own.
+const VIDEOS = 'https://*.public.blob.vercel-storage.com'
+
 const DIRECTIVES: Record<string, string> = {
   'default-src': "'self'",
   'script-src': "'self' 'unsafe-inline'",
   'style-src': "'self' 'unsafe-inline'",
   // data: for the menu marks, which are inline SVGs in styles.css.
-  'img-src': "'self' data:",
+  'img-src': `'self' data: ${VIDEOS}`,
+  'media-src': `'self' ${VIDEOS}`,
   'font-src': "'self'",
   'connect-src': "'self'",
   'manifest-src': "'self'",

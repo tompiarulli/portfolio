@@ -23,13 +23,19 @@ describe('isHome', () => {
 })
 
 describe('initialStack', () => {
-  it('opens About in front of Contact on the home page', () => {
-    expect(initialStack('/')).toEqual(['contact', 'about'])
+  it('opens About in front of Contact and Travel on the home page', () => {
+    expect(initialStack('/')).toEqual(['player', 'contact', 'about'])
   })
 
   it('puts File Not Found in front for any other URL', () => {
-    expect(initialStack('/nope')).toEqual(['contact', 'about', 'notfound'])
+    expect(initialStack('/nope')).toEqual([
+      'player',
+      'contact',
+      'about',
+      'notfound',
+    ])
     expect(initialStack(NOT_FOUND_PATH)).toEqual([
+      'player',
       'contact',
       'about',
       'notfound',
