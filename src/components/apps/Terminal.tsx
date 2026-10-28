@@ -12,6 +12,17 @@ const bootedAt = Date.now()
 
 type Line = { text: string; prompt?: boolean }
 
+// A real shell's limits, so holding Enter or pasting a novel can't bog the
+// window down: the lines kept on screen, the commands kept for Up and
+// `history`, and the characters one command can take.
+const SCROLLBACK = 500
+const HISTSIZE = 500
+const LINE_MAX = 256
+
+/** The lines on screen with more added, the oldest dropping off the top. */
+const append = (lines: Line[], more: Line[]) =>
+  [...lines, ...more].slice(-SCROLLBACK)
+
 const banner = (): Line[] => BANNER.map((text) => ({ text }))
 
 /** A small shell full of easter eggs. Commands live in lib/terminal. */
@@ -30,7 +41,7 @@ export function Terminal() {
 
   const submit = () => {
     const typed = input
-    const next = typed.trim() ? [...history, typed] : history
+    const next = typed.trim() ? [...history, typed].slice(-HISTSIZE) : history
     const { out, effect } = run(typed, {
       theme: currentTheme(),
       clock: clockMode(),
@@ -41,11 +52,12 @@ export function Terminal() {
     setCursor(next.length)
     setInput('')
     if (effect?.type === 'clear') return setLines([])
-    setLines((l) => [
-      ...l,
-      { text: typed, prompt: true },
-      ...out.map((text) => ({ text })),
-    ])
+    setLines((l) =>
+      append(l, [
+        { text: typed, prompt: true },
+        ...out.map((text) => ({ text })),
+      ]),
+    )
     if (effect?.type === 'exit') close('terminal')
     if (effect?.type === 'open') raise(effect.id)
     if (effect?.type === 'theme') applyTheme(effect.id)
@@ -72,7 +84,7 @@ export function Terminal() {
       return setLines([])
     }
     if (e.ctrlKey && e.key === 'c') {
-      setLines((l) => [...l, { text: `${input}^C`, prompt: true }])
+      setLines((l) => append(l, [{ text: `${input}^C`, prompt: true }]))
       setInput('')
     }
   }
@@ -109,6 +121,7 @@ export function Terminal() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={onKeyDown}
+            maxLength={LINE_MAX}
             aria-label="Terminal input"
             // Focused when the window opens or comes to the front.
             data-autofocus
