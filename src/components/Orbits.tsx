@@ -5,6 +5,7 @@ import { useEffect, useLayoutEffect, useRef } from 'react'
 import { rgb } from '#/lib/color'
 import { brightness, rider, ring } from '#/lib/orbits'
 import type { RingPoint } from '#/lib/orbits'
+import { stage } from '#/lib/power'
 
 type OrbitsProps = {
   count?: number
@@ -36,6 +37,9 @@ type OrbitsProps = {
 const SEGMENTS = 160
 /** Steps of brightness from the far side of a ring to the near side. */
 const SHADES = 32
+/** How quickly the rings wind in and out at Restart: the share of the way
+ *  left they cover each second. */
+const WIND = 2.4
 
 export default function Orbits(props: OrbitsProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -50,12 +54,20 @@ export default function Orbits(props: OrbitsProps) {
     const ctx = canvas?.getContext('2d', { alpha: false })
     if (!canvas || !ctx) return
 
-    const start = performance.now()
-    const draw = (now: number) => {
+    // Restart winds the rings in to their centre, slowing as they go, and
+    // they hold there under the start screen until it leaves, then spin
+    // back out (lib/power). `size` is how far out they are, and `time`
+    // runs slower as they wind in.
+    const wound = () => {
+      const s = stage()
+      return s === 'down' || s === 'title'
+    }
+    let size = wound() ? 0 : 1
+    let time = 0
+    let prev = performance.now()
+    const draw = () => {
       const p = live.current
-      const t =
-        (p.still ? (p.stillTime ?? 0) : (now - start) / 1000) *
-        (p.speed ?? 0.05)
+      const t = (p.still ? (p.stillTime ?? 0) : time) * (p.speed ?? 0.05)
       const dpr = devicePixelRatio
       const w = canvas.width
       const h = canvas.height
@@ -64,8 +76,10 @@ export default function Orbits(props: OrbitsProps) {
       const cy = fy * h
       const unit = Math.min(w, h)
       const count = p.count ?? 7
-      const inner = (p.inner ?? 0.18) * unit
-      const outer = (p.outer ?? 0.62) * unit
+      // Never quite nothing, or the projection divides by zero.
+      const wind = Math.max(size, 0.002)
+      const inner = (p.inner ?? 0.18) * unit * wind
+      const outer = (p.outer ?? 0.62) * unit * wind
       const far = p.far ?? 0.3
 
       ctx.fillStyle = p.background
@@ -144,7 +158,7 @@ export default function Orbits(props: OrbitsProps) {
       const dpr = devicePixelRatio
       canvas.width = Math.max(1, Math.round(canvas.clientWidth * dpr))
       canvas.height = Math.max(1, Math.round(canvas.clientHeight * dpr))
-      draw(performance.now())
+      draw()
     }
     const resizeObserver = new ResizeObserver(resize)
     resizeObserver.observe(canvas)
@@ -158,7 +172,12 @@ export default function Orbits(props: OrbitsProps) {
       const interval = 1000 / Math.max(1, live.current.fps ?? 30)
       if (now - last < interval) return
       last = now - ((now - last) % interval)
-      draw(now)
+      // Cap the step so a background tab doesn't lurch when it returns.
+      const dt = Math.min(now - prev, 100) / 1000
+      prev = now
+      size += ((wound() ? 0 : 1) - size) * Math.min(1, dt * WIND)
+      time += dt * (0.2 + 0.8 * size)
+      draw()
     }
     frame = requestAnimationFrame(render)
 

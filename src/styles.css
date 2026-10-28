@@ -1583,6 +1583,28 @@ body {
   animation: fade-in 200ms ease-out both;
   animation-delay: calc(550ms + var(--row) * 120ms);
 }
+/* Switching off, the reverse: its rows go from the bottom up (each with
+   its --row-out delay), then it closes to a line and the line to a
+   point. */
+.power-off {
+  animation: power-off 300ms ease-in 360ms forwards;
+}
+@keyframes power-off {
+  55% {
+    clip-path: inset(calc(50% - 1px) 0 calc(50% - 1px) 0);
+  }
+  100% {
+    clip-path: inset(50% 50% 50% 50%);
+  }
+}
+.power-off-row {
+  animation: fade-out 1ms calc(var(--row-out) * 110ms) forwards;
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
 
 /* White Rabbit: its console prints output a line at a time and panes
    whole, each showing at its --at; commands type their --chars one at a

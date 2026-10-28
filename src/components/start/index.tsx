@@ -50,6 +50,7 @@ export const SEQUENCES: Record<Theme, ComponentType<SequenceProps>> = {
 
 /** How long each start screen's exit plays, in ms; none without motion. */
 export const START_EXITS: Partial<Record<Theme, number>> = {
+  orbital: 700,
   rabbit: 520,
   steamboat: 400,
 }
