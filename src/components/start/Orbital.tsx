@@ -7,7 +7,7 @@ import { site } from '#/lib/site'
  *  with the version and build along its top, the title, and the prompt
  *  along its foot. The panel powers on like a display, its rows coming up
  *  in turn. */
-export default function OrbitalStart() {
+export function Start() {
   return (
     <div
       aria-hidden
@@ -63,3 +63,5 @@ function Chevrons({ mark }: { mark: '‹' | '›' }) {
     </>
   )
 }
+
+export { ShutDownCard as Down } from '#/components/start/parts'

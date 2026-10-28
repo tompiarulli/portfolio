@@ -14,7 +14,7 @@ import { site } from '#/lib/site'
  *  prints a line at a time. Leaving, the panes close front to back, the
  *  banner and status line clear, and the ground steps away top to bottom
  *  onto the desktop. */
-export default function RabbitStart({ leaving }: StartScreenProps) {
+export function Start({ leaving }: StartScreenProps) {
   // Leaving, each piece vanishes after its delay, in ms.
   const out = (ms: number) => ({
     style: { '--out': `${ms}ms` } as CSSProperties,
@@ -253,3 +253,5 @@ const PANE = 300
 const CHAR = 30
 const ROW = 50
 const LINE = 220
+
+export { ShutDownCard as Down } from '#/components/start/parts'

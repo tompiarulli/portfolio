@@ -5,7 +5,7 @@ import { BuildLine, Title } from '#/components/start/parts'
  *  yellow glitched type, and the prompt glowing cyan in the title's face,
  *  like an arcade cabinet's attract screen. The title flies in, the
  *  version strikes on like lightning, and the prompt drops into place. */
-export default function TravelerStart() {
+export function Start() {
   return (
     <>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-[11vh] px-4">
@@ -23,3 +23,5 @@ export default function TravelerStart() {
     </>
   )
 }
+
+export { ShutDownCard as Down } from '#/components/start/parts'

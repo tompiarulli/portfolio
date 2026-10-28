@@ -7,7 +7,7 @@ import { site } from '#/lib/site'
  *  like a projected print. It irises in, jumps as the projector
  *  catches up, then flickers, with grain and the odd scratch; its prompt
  *  is held still. Starting fades it into the desktop. */
-export default function SteamboatStart({ leaving }: StartScreenProps) {
+export function Start({ leaving }: StartScreenProps) {
   return (
     <>
       {/* Leaving fades the card and its dimming away, leaving the film as
@@ -94,3 +94,5 @@ function Credit() {
     </p>
   )
 }
+
+export { ShutDownCard as Down } from '#/components/start/parts'

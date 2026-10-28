@@ -13,13 +13,16 @@ import { Clock } from '#/components/Clock'
 import { useWindows } from '#/components/WindowManager'
 
 // Only needed once someone shuts down, so it is a chunk of its own, fetched
-// while the browser is idle after load so choosing it is still instant.
+// while the browser is idle after load, with the current theme's sequence,
+// so choosing it is still instant.
 const loadShutDown = () =>
   import('#/components/ShutDown').then((m) => ({ default: m.ShutDown }))
 const ShutDown = lazy(loadShutDown)
 if (typeof window !== 'undefined') {
   const prefetch = () =>
-    (window.requestIdleCallback ?? setTimeout)(() => void loadShutDown())
+    (window.requestIdleCallback ?? setTimeout)(
+      () => void import('#/components/ShutDown').then((m) => m.prefetch()),
+    )
   if (document.readyState === 'complete') prefetch()
   else addEventListener('load', prefetch, { once: true })
 }
