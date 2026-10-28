@@ -1,6 +1,10 @@
 import { useEffect, useRef } from 'react'
 
+import { stage } from '#/lib/power'
 import { random } from '#/lib/random'
+
+/** How much faster the rain falls as it drains at Restart. */
+const DRAIN = 4
 
 type Props = {
   background: string
@@ -119,6 +123,15 @@ export default function CodeRain({
       })
     }
 
+    // Restart drains the rain: from the shut down on, it falls faster,
+    // drops yet to enter never do, and none fall again once they're
+    // through. Booting, it all falls again from the top (lib/power).
+    const draining = () => {
+      const s = stage()
+      return s !== undefined && s !== 'closing'
+    }
+    let drained = draining()
+
     let frame = 0
     let last = performance.now()
     let pending = 0
@@ -126,9 +139,13 @@ export default function CodeRain({
       // Cap the step so a background tab doesn't lurch when it returns.
       const dt = Math.min(now - last, 100) / 1000
       last = now
+      const drain = draining()
+      if (drained && !drain) drops = drops.map(() => spawn())
+      drained = drain
       drops.forEach((d, i) => {
-        d.y += d.speed * dt
-        if (d.y - d.trail > length) drops[i] = spawn()
+        if (drain && d.y < 0) d.y = Infinity
+        d.y += d.speed * dt * (drain ? DRAIN : 1)
+        if (d.y - d.trail > length && !drain) drops[i] = spawn()
       })
       pending += cells.length * mutation * dt
       for (; pending >= 1; pending--)

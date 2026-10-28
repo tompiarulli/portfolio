@@ -1,8 +1,50 @@
+import { useEffect } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 
-import type { StartScreenProps } from '#/components/start'
+import type { ShutDownProps, StartScreenProps } from '#/components/start'
 import { build } from '#/lib/build'
 import { site } from '#/lib/site'
+
+/** White Rabbit's shut down: no card, a shell pane over the rain, where
+ *  the start screen's boot pane will be. Root types the halt and the
+ *  system's messages print a line at a time, as the rain speeds up and
+ *  drains off the foot of the screen (CodeRain). Then the whole screen
+ *  dims into the console's ground, slowly, like phosphor letting go, and
+ *  the start screen prints over it. */
+export function Down({ onDone }: ShutDownProps) {
+  const next = clock(PANE)
+  const paneAt = next(LINE)
+  const commandAt = next(HALT.length * CHAR + LINE)
+  const lines = site.shutdown.halt.map((text) => ({ text, at: next(LINE) }))
+  const glowAt = next(HOLD)
+  useEffect(() => {
+    const t = setTimeout(onDone, glowAt + GLOW)
+    return () => clearTimeout(t)
+  }, [glowAt, onDone])
+  return (
+    <div className="pointer-events-none absolute inset-0 font-mono text-[12px] leading-[1.35] whitespace-pre text-(--ink) sm:text-[14px]">
+      <Pane
+        title="tty1"
+        at={paneAt}
+        out={{ style: {}, className: '' }}
+        className="inset-x-2 top-[20%] sm:inset-x-auto sm:top-[28%] sm:left-[10%] sm:w-[min(760px,70%)]"
+      >
+        <Command at={commandAt} command={HALT} />
+        {lines.map(({ text, at }, i) => (
+          <Out key={i} at={at}>
+            {text || ' '}
+          </Out>
+        ))}
+      </Pane>
+      <div
+        style={
+          { '--at': `${glowAt}ms`, '--glow': `${GLOW}ms` } as CSSProperties
+        }
+        className="afterglow absolute inset-0 bg-(--terminal)"
+      />
+    </div>
+  )
+}
 
 /** White Rabbit's start screen: a whole screen of plain console, in the
  *  theme's one green on its near-black, flat and unlit, like an old Unix
@@ -254,4 +296,8 @@ const CHAR = 30
 const ROW = 50
 const LINE = 220
 
-export { ShutDownCard as Down } from '#/components/start/parts'
+const HALT = 'shutdown -h now'
+// The shut down's pace: the hold after its last line, and how long the
+// screen takes to dim.
+const HOLD = 500
+const GLOW = 1100

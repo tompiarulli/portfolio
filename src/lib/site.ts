@@ -32,7 +32,7 @@ export const site = {
   os: `TomOS ${version}`,
   version,
   builtWith: 'React 19, TanStack Start, Tailwind 4',
-  /** Status lines the splash card walks through at shut down. */
+  /** Status lines Orbital's shut down panel walks through. */
   shutdown: {
     down: [
       'Saving the desktop',
@@ -44,6 +44,17 @@ export const site = {
     /** Under the name above the title on Steamboat's start screen, like
      *  an old cartoon's title card. */
     presents: 'presents',
+    /** What White Rabbit's console prints as it halts, after root types
+     *  the command. */
+    halt: [
+      'Broadcast message from root@tomos (tty1):',
+      'The system is going down for halt NOW!',
+      '',
+      'Sending SIGTERM to all processes... done',
+      'Sending SIGKILL to all processes... done',
+      'Unmounting file systems... done',
+      'Power down.',
+    ],
     /** White Rabbit's start screen: the login banner in its top left, the
      *  session printed in its boot pane, the prompt the cursor waits
      *  after, and what its alert box says. */

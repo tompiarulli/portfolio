@@ -1050,6 +1050,30 @@ body {
   pointer-events: none;
   animation: var(--window-boot-edge);
 }
+/* White Rabbit boots like a terminal redrawing, as the rain falls again
+   (CodeRain): the menu bar and then the dock type themselves in left to
+   right, and the windows draw in a few lines at a time, top to bottom. */
+[data-theme='rabbit'] {
+  --window-boot: draw-down 360ms steps(12) 280ms both;
+}
+[data-theme='rabbit'][data-booting]
+  [data-shutdown]:not([data-shutdown='windows']) {
+  transition: none;
+  animation: type-in 280ms steps(14) both;
+}
+[data-theme='rabbit'][data-booting] [data-shutdown='dock'] {
+  animation-delay: 140ms;
+}
+@keyframes type-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+@keyframes draw-down {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+}
 
 /* White Rabbit's dock is a terminal program's shortcut bar: each app's
    name after one of the code rain's glyphs in an inverted block, the
@@ -1635,6 +1659,11 @@ body {
   to {
     clip-path: inset(100% 0 0 0);
   }
+}
+/* Its shut down's end: the screen dims into the console's ground over
+   --glow, like phosphor letting go. */
+.afterglow {
+  animation: fade-in var(--glow) cubic-bezier(0.3, 0, 0.6, 1) var(--at) both;
 }
 .cursor-on {
   animation:
