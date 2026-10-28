@@ -114,7 +114,7 @@ export default function RabbitStart({ leaving }: StartScreenProps) {
           <Typed at={promptAt} text={site.shutdown.prompt} />
           <span
             style={{ '--at': `${typedAt}ms` } as CSSProperties}
-            className="cursor-on inline-block h-[1.1em] w-[1ch] translate-y-[0.2em] bg-current"
+            className="cursor-on ml-[1ch] inline-block h-[1.1em] w-[1ch] translate-y-[0.2em] bg-current"
           />
         </Out>
       </Pane>
