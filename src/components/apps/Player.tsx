@@ -87,8 +87,12 @@ function Osd({
     return (
       <>
         <span className={`${corner} top-2 left-3`}>CAM {number(index)}</span>
-        <span className={`${corner} top-2 right-3`}>
-          <span className="blink">●</span> REC
+        <span className={`${corner} top-2 right-3 items-center`}>
+          <span
+            aria-hidden
+            className="blink mr-[calc(4px-1ch)] size-[0.6em] rounded-full bg-current"
+          />
+          REC
         </span>
         <span className={`${corner} bottom-2 left-3 uppercase`}>
           {channel.place}
@@ -129,16 +133,20 @@ function Osd({
   return (
     <>
       <span aria-hidden className="tv-reticle absolute inset-2" />
-      <span className={`${corner} top-3 left-4 uppercase`}>
+      <span className={`${corner} top-[10px] left-[13px] uppercase`}>
         Feed {number(index)} · {channel.place}
       </span>
-      <span className={`${corner} top-3 right-4`}>
-        <span className="blink">●</span> Live
+      <span className={`${corner} top-[10px] right-[13px] items-center`}>
+        <span
+          aria-hidden
+          className="blink mr-[calc(4px-1ch)] size-[0.6em] rounded-full bg-current"
+        />
+        Live
       </span>
-      <span className={`${corner} bottom-3 left-4 tabular-nums`}>
+      <span className={`${corner} bottom-[10px] left-[13px] tabular-nums`}>
         {coords(channel)}
       </span>
-      <span className={`${corner} right-4 bottom-3`}>Sig ▮▮▮▮▯</span>
+      <span className={`${corner} right-[13px] bottom-[10px]`}>Sig ▮▮▮▮▯</span>
     </>
   )
 }
@@ -468,7 +476,7 @@ export function Player() {
   const on = clips[clip] ?? clips[0]
   const src = ready ? on?.src : undefined
   return (
-    <Window title="Travel" right x={-159} y={189} width={400} flush>
+    <Window title="Travel" right x={-143} y={189} width={416} flush>
       <div className="tv" data-tv={theme}>
         {/* The VCR's colour fringing, used by OUTATIME's filter: red pulled
             one way and the rest the other, smeared along the line. */}
@@ -565,7 +573,7 @@ export function Player() {
           >
             <Glyph d={GLYPHS.next} size={8} />
           </StripKey>
-          <p className="flex min-w-0 flex-1 items-center justify-between gap-3 px-2 font-mono text-[11px] leading-none whitespace-nowrap tabular-nums">
+          <p className="flex min-w-0 flex-1 items-center justify-between gap-3 px-2 font-mono text-[11px] leading-[15px] whitespace-nowrap tabular-nums">
             <span className="truncate">
               {on ? (on.name ?? on.src.split('/').pop()) : 'No signal'}
             </span>
@@ -585,7 +593,7 @@ export function Player() {
         </div>
         {/* Play, then the channel: picked from the list, stepped, or left
             to chance. Relative, so the list opens across the line. */}
-        <div className="relative flex gap-[7px] p-[8px]">
+        <div className="relative flex gap-[6px] p-[6px]">
           <Key
             className="w-[34px] px-0"
             onClick={() => setPlaying((p) => !p)}

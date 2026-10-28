@@ -744,7 +744,7 @@
   }
 }
 .tv-osd {
-  font-size: max(12px, 1.8cqw);
+  font-size: max(11px, 1.8cqw);
   letter-spacing: 0.06em;
   text-shadow: 0 0 4px var(--tv-osd-glow);
 }
