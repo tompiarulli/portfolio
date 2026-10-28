@@ -736,6 +736,68 @@ body {
 .os-scroll::-webkit-scrollbar-corner {
   background: var(--surface);
 }
+/* An arrow button at each end of the channel, a solid triangle of ink in
+   a ruled box, inverting while it's pressed. Only one button per end:
+   Chrome draws none without the bare rule, and a pair at each without
+   the last two. */
+.os-scroll::-webkit-scrollbar-button {
+  --arrow: var(--ink);
+  display: block;
+  width: 16px;
+  height: 16px;
+  border: 0 solid var(--ink);
+  background: var(--surface);
+}
+.os-scroll::-webkit-scrollbar-button:active {
+  --arrow: var(--surface);
+  background-color: var(--ink);
+}
+.os-scroll::-webkit-scrollbar-button:start:increment,
+.os-scroll::-webkit-scrollbar-button:end:decrement {
+  display: none;
+}
+.os-scroll::-webkit-scrollbar-button:vertical:decrement {
+  border-width: 0 0 1px 1px;
+  background-image: conic-gradient(
+    from 135deg at 50% 0,
+    var(--arrow) 0 90deg,
+    transparent 0
+  );
+}
+.os-scroll::-webkit-scrollbar-button:vertical:increment {
+  border-width: 1px 0 0 1px;
+  background-image: conic-gradient(
+    from -45deg at 50% 100%,
+    var(--arrow) 0 90deg,
+    transparent 0
+  );
+}
+.os-scroll::-webkit-scrollbar-button:horizontal:decrement {
+  border-width: 1px 1px 0 0;
+  background-image: conic-gradient(
+    from 45deg at 0 50%,
+    var(--arrow) 0 90deg,
+    transparent 0
+  );
+}
+.os-scroll::-webkit-scrollbar-button:horizontal:increment {
+  border-width: 1px 0 0 1px;
+  background-image: conic-gradient(
+    from 225deg at 100% 50%,
+    var(--arrow) 0 90deg,
+    transparent 0
+  );
+}
+.os-scroll::-webkit-scrollbar-button:vertical {
+  background-position: center;
+  background-size: 8px 4px;
+  background-repeat: no-repeat;
+}
+.os-scroll::-webkit-scrollbar-button:horizontal {
+  background-position: center;
+  background-size: 4px 8px;
+  background-repeat: no-repeat;
+}
 
 /* ---------- Shut Down ---------- */
 /* With data-off on <html>, the chrome shuts down top to bottom: the
