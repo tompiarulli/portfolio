@@ -10,6 +10,7 @@ export type Effect =
   | { type: 'clear' }
   | { type: 'exit' }
   | { type: 'open'; id: WindowId }
+  | { type: 'restart' }
   | { type: 'theme'; id: Theme }
 
 export type Result = { out: string[]; effect?: Effect }
@@ -175,6 +176,7 @@ export const COMMANDS = [
   'history',
   'echo',
   'clear',
+  'restart',
   'exit',
 ]
 
@@ -295,6 +297,9 @@ export function run(line: string, env: Env): Result {
     case 'clear':
     case 'cls':
       return { out: [], effect: { type: 'clear' } }
+    case 'restart':
+    case 'reboot':
+      return { out: [], effect: { type: 'restart' } }
     case 'exit':
     case 'logout':
     case 'quit':

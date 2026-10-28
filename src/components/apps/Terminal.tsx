@@ -4,6 +4,7 @@ import type { KeyboardEvent } from 'react'
 import { Window } from '#/components/Window'
 import { useWindows } from '#/components/WindowManager'
 import { clockMode } from '#/lib/clock'
+import { restart } from '#/lib/power'
 import { BANNER, PROMPT, complete, run } from '#/lib/terminal'
 import { applyTheme, currentTheme } from '#/lib/theme'
 
@@ -61,6 +62,7 @@ export function Terminal() {
     if (effect?.type === 'exit') close('terminal')
     if (effect?.type === 'open') raise(effect.id)
     if (effect?.type === 'theme') applyTheme(effect.id)
+    if (effect?.type === 'restart') restart()
   }
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {

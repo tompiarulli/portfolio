@@ -7,3 +7,15 @@ export type Stage = 'closing' | 'down' | 'title' | 'leaving'
 
 export const stage = () =>
   document.documentElement.dataset.off as Stage | undefined
+
+const RESTART = 'tomos:restart'
+
+/** Restarts the desktop as the system menu's Restart does, from anywhere
+ *  (the terminal's `restart`). MenuBar runs it. */
+export const restart = () => window.dispatchEvent(new Event(RESTART))
+
+/** Calls `onRestart` when something asks to restart. */
+export function subscribeRestart(onRestart: () => void) {
+  window.addEventListener(RESTART, onRestart)
+  return () => window.removeEventListener(RESTART, onRestart)
+}

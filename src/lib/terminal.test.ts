@@ -250,6 +250,10 @@ describe('run', () => {
     expect(run(cmd, env())).toEqual({ out: [], effect: { type: 'exit' } })
   })
 
+  it.each(['restart', 'reboot'])('%s restarts the desktop', (cmd) => {
+    expect(run(cmd, env())).toEqual({ out: [], effect: { type: 'restart' } })
+  })
+
   describe('easter eggs', () => {
     // Behaviour only: the replies are free to change.
     it.each([

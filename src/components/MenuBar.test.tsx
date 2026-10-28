@@ -1,9 +1,16 @@
 import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
+import { restart } from '#/lib/power'
 import { renderDesktop, windowOrder } from '#/test/desktop'
 
 vi.mock('#/components/Backdrop', () => ({ Backdrop: () => null }))
+// The real one needs a modal dialog, which jsdom lacks; this stands in for
+// it being up.
+vi.mock('#/components/ShutDown', () => ({
+  ShutDown: () => <p>Shutting down</p>,
+  prefetch: () => {},
+}))
 
 const trigger = () => screen.getByRole('button', { name: 'System menu' })
 const menu = () => screen.queryByRole('menu', { name: 'System' })
@@ -141,5 +148,21 @@ describe('system menu', () => {
     const { user } = await withTrigger()
     await user.keyboard('{ArrowDown}{Escape}')
     expect(windowOrder()).toEqual(['about', 'contact', 'player'])
+  })
+})
+
+describe('restart', () => {
+  it('runs from the menu', async () => {
+    const { user } = await renderDesktop('/')
+    await user.click(trigger())
+    await user.click(item('Restart…'))
+    expect(await screen.findByText('Shutting down')).toBeTruthy()
+  })
+
+  it('runs when the terminal asks', async () => {
+    await renderDesktop('/')
+    expect(screen.queryByText('Shutting down')).toBeNull()
+    act(() => void restart())
+    expect(await screen.findByText('Shutting down')).toBeTruthy()
   })
 })

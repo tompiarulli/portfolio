@@ -11,6 +11,7 @@ import type { KeyboardEvent, RefObject } from 'react'
 
 import { Clock } from '#/components/Clock'
 import { useWindows } from '#/components/WindowManager'
+import { subscribeRestart } from '#/lib/power'
 
 // Only needed once someone shuts down, so it is a chunk of its own, fetched
 // while the browser is idle after load, with the current theme's sequence,
@@ -210,6 +211,12 @@ export function MenuBar() {
     dockAll(true)
     setShutDown(true)
   }, [dockAll])
+  // The terminal's `restart` asks for the same; once off, there's nothing
+  // left to restart.
+  useEffect(
+    () => (off ? undefined : subscribeRestart(shutDownNow)),
+    [off, shutDownNow],
+  )
   const boot = useCallback(() => {
     dockAll(false)
     setShutDown(false)
