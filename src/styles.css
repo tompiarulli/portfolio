@@ -997,9 +997,11 @@ body {
 /* ---------- Shut Down ---------- */
 /* With data-off on <html>, the chrome shuts down top to bottom: the
    windows fly into their dock keys (WindowManager's dockAll), then the
-   dock folds down and the menu bar up. Booting folds those two back open,
-   easing out, and the windows come back as the theme's --window-boot
-   says, simply there for most. */
+   dock folds down and the menu bar up. Then the theme's own sequence
+   plays (components/start). Booting folds those two back open, easing
+   out, unless the theme brings them back its own way, and the windows
+   come back as the theme's --window-boot says. Each theme's boot follows
+   below. */
 /* Booting, they take about as long as Orbital's windows (--window-boot)
    and settle the same way. */
 [data-shutdown] {
@@ -1075,14 +1077,42 @@ body {
   }
 }
 /* Steamboat boots as its start screen ends, on film: the desktop irises
-   in, and the chrome and windows jump as the projector catches up. */
+   in, and the chrome and windows jump as the projector catches up. The
+   windows are placed with transform, so they jump with translate; the
+   dock is centred with translate, so the chrome jumps with transform. */
 [data-theme='steamboat'] {
   --window-boot: projector-start 700ms steps(1) 450ms both;
 }
 [data-theme='steamboat'][data-booting]
   [data-shutdown]:not([data-shutdown='windows']) {
   transition: none;
-  animation: projector-start 700ms steps(1) 450ms both;
+  animation: chrome-jump 700ms steps(1) 450ms both;
+}
+@keyframes chrome-jump {
+  0% {
+    transform: translateY(-6px);
+    opacity: 0.85;
+  }
+  12% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
+  24% {
+    transform: translateY(-3px);
+    opacity: 0.8;
+  }
+  36% {
+    transform: translateY(2px);
+    opacity: 1;
+  }
+  52% {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+  70% {
+    transform: none;
+    opacity: 1;
+  }
 }
 @media (prefers-reduced-motion: no-preference) {
   [data-theme='steamboat'][data-booting]::after {
@@ -1099,6 +1129,49 @@ body {
       #000 calc(var(--iris) + 1px)
     );
     animation: iris-in 800ms ease-in-out both;
+  }
+}
+/* OUTATIME boots at speed, out of the flash its start screen leaves on:
+   the flash fades, the menu bar and dock slide in from their edges, and
+   the windows drop into place. The chrome slides with transform, since
+   the dock is centred with translate; the windows drop with translate,
+   since they're placed with transform. */
+[data-theme='traveler'] {
+  --window-boot: window-drop 360ms cubic-bezier(0.2, 0.8, 0.3, 1.15) 250ms both;
+}
+[data-theme='traveler'][data-booting] [data-shutdown='bar'] {
+  transition: none;
+  animation: slide-down 380ms cubic-bezier(0.2, 0.8, 0.3, 1.1) 120ms both;
+}
+[data-theme='traveler'][data-booting] [data-shutdown='dock'] {
+  transition: none;
+  animation: slide-up 380ms cubic-bezier(0.2, 0.8, 0.3, 1.1) 120ms both;
+}
+@keyframes slide-down {
+  from {
+    transform: translateY(-100%);
+  }
+}
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes window-drop {
+  from {
+    opacity: 0;
+    translate: 0 -28px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme='traveler'][data-booting]::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    pointer-events: none;
+    background: var(--glint);
+    animation: fade-out 500ms ease-out both;
   }
 }
 
@@ -1823,6 +1896,41 @@ body {
   100% {
     opacity: 1;
     filter: var(--script-filter);
+  }
+}
+/* Up out of the dark its shut down left on; shown as settled without
+   motion. */
+.from-dark {
+  opacity: 0;
+  animation: from-dark 400ms ease-out both;
+}
+@keyframes from-dark {
+  from {
+    opacity: 1;
+  }
+}
+/* Leaving, the title rushes past and the screen flashes white as the
+   streaks hit full speed (Streaks). */
+.fly-past {
+  animation: fly-past 500ms cubic-bezier(0.5, 0, 0.9, 0.4) forwards;
+}
+@keyframes fly-past {
+  to {
+    opacity: 0;
+    scale: 3;
+  }
+}
+.flash-in {
+  animation: fade-in 150ms ease-in 400ms both;
+}
+/* Its shut down's countdown: each number strikes on bright and settles. */
+.count-tick {
+  animation: count-tick 200ms ease-out both;
+}
+@keyframes count-tick {
+  from {
+    scale: 1.4;
+    filter: brightness(2);
   }
 }
 .drop-in {

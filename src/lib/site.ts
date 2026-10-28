@@ -46,6 +46,9 @@ export const site = {
     presents: 'presents',
     /** Steamboat's end card, as it shuts down. */
     end: 'The End',
+    /** OUTATIME's game over, and the prompt that counts down under it. */
+    gameOver: 'Game Over',
+    continue: 'Continue?',
     /** What White Rabbit's console prints as it halts, after root types
      *  the command. */
     halt: [

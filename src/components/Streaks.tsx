@@ -1,6 +1,10 @@
 import { useEffect, useRef } from 'react'
 
+import { stage } from '#/lib/power'
 import { random } from '#/lib/random'
+
+/** How many times its usual speed the field runs at Restart's exit. */
+const WARP = 10
 
 type Props = {
   background: string
@@ -60,6 +64,10 @@ export default function Streaks({
     let width = 0
     let height = 0
     let streaks: Streak[] = []
+    // How many times its usual speed the field runs, and how many times
+    // their usual length the tails stretch with it.
+    let pace = 1
+    let stretch = 1
 
     // Starts a streak off the left edge, or anywhere along its run.
     const spawn = (depth: number, anywhere = false): Streak => {
@@ -90,7 +98,7 @@ export default function Streaks({
       ctx.globalCompositeOperation = 'lighter'
       for (const s of streaks) {
         const headX = Math.floor(s.x)
-        const tailX = Math.floor(s.x - s.length)
+        const tailX = Math.floor(s.x - s.length * stretch)
         const gradient = ctx.createLinearGradient(tailX, 0, headX, 0)
         gradient.addColorStop(0, 'transparent')
         gradient.addColorStop(1, s.color)
@@ -122,9 +130,15 @@ export default function Streaks({
       const dt = Math.min(now - last, 100) / 1000
       last = now
       if (document.hidden) return
+      // As Restart's start screen leaves, the streaks run up to full speed,
+      // their tails stretching, and ease back once the desktop is on
+      // (lib/power).
+      const target = stage() === 'leaving' ? WARP : 1
+      pace += (target - pace) * Math.min(1, dt * 4)
+      stretch = 1 + (pace - 1) * 0.3
       streaks.forEach((s, i) => {
-        s.x += s.speed * dt
-        if (s.x - s.length > width) streaks[i] = spawn(s.depth)
+        s.x += s.speed * pace * dt
+        if (s.x - s.length * stretch > width) streaks[i] = spawn(s.depth)
       })
       draw()
     }
