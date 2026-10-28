@@ -1,8 +1,8 @@
-import { screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { channels } from '#/lib/site'
-import { renderDesktop } from '#/test/desktop'
+import { renderDesktop, windowEl } from '#/test/desktop'
 
 vi.mock('#/components/Backdrop', () => ({ Backdrop: () => null }))
 
@@ -100,6 +100,27 @@ describe('Travel', () => {
     expect(screen.getByText('No signal')).toBeTruthy()
     await user.click(key('Previous channel'))
     expect(await clip()).toMatch(/a\.mp4$/)
+  })
+
+  it('plays and pauses with Space while the window has the focus', async () => {
+    const { user } = await renderDesktop('/')
+    // It starts playing once the page has loaded.
+    await screen.findByRole('button', { name: 'Pause' })
+    act(() => windowEl('player').focus())
+    await user.keyboard(' ')
+    expect(key('Play')).toBeTruthy()
+    await user.keyboard(' ')
+    expect(key('Pause')).toBeTruthy()
+  })
+
+  it('leaves Space to the control that has the focus', async () => {
+    const { user } = await renderDesktop('/')
+    await screen.findByRole('button', { name: 'Pause' })
+    const before = await on()
+    act(() => key('Shuffle').focus())
+    await user.keyboard(' ')
+    expect(await on()).not.toBe(before)
+    expect(key('Pause')).toBeTruthy()
   })
 
   it('shuffles to any channel but the one on', async () => {

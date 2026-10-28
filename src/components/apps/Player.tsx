@@ -438,6 +438,23 @@ export function Player() {
     return () => removeEventListener('load', attach)
   }, [])
 
+  // Space plays and pauses anywhere in the window, as in any player,
+  // unless a control has the focus and Space is its own. Listened for on
+  // the window, which takes the focus itself when raised.
+  const tv = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const win = tv.current?.closest('section')
+    if (!win) return
+    const onKeyDown = (e: globalThis.KeyboardEvent) => {
+      if (e.key !== ' ' || e.defaultPrevented || e.repeat) return
+      if ((e.target as Element).closest('button, a, input, [role=menu]')) return
+      e.preventDefault()
+      setPlaying((p) => !p)
+    }
+    win.addEventListener('keydown', onKeyDown)
+    return () => win.removeEventListener('keydown', onKeyDown)
+  }, [])
+
   // Paused while minimized, so it costs nothing in the dock.
   const hidden = minimized.includes('player')
   useEffect(() => {
@@ -477,7 +494,7 @@ export function Player() {
   const src = ready ? on?.src : undefined
   return (
     <Window title="Travel" right x={-143} y={189} width={416} flush>
-      <div className="tv" data-tv={theme}>
+      <div ref={tv} className="tv" data-tv={theme}>
         {/* The VCR's colour fringing, used by OUTATIME's filter: red pulled
             one way and the rest the other, smeared along the line. */}
         <svg aria-hidden className="absolute size-0">
