@@ -1074,6 +1074,33 @@ body {
     clip-path: inset(0 0 100% 0);
   }
 }
+/* Steamboat boots as its start screen ends, on film: the desktop irises
+   in, and the chrome and windows jump as the projector catches up. */
+[data-theme='steamboat'] {
+  --window-boot: projector-start 700ms steps(1) 450ms both;
+}
+[data-theme='steamboat'][data-booting]
+  [data-shutdown]:not([data-shutdown='windows']) {
+  transition: none;
+  animation: projector-start 700ms steps(1) 450ms both;
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme='steamboat'][data-booting]::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    pointer-events: none;
+    --iris: 75vmax;
+    background: var(--off);
+    mask-image: radial-gradient(
+      circle,
+      transparent var(--iris),
+      #000 calc(var(--iris) + 1px)
+    );
+    animation: iris-in 800ms ease-in-out both;
+  }
+}
 
 /* White Rabbit's dock is a terminal program's shortcut bar: each app's
    name after one of the code rain's glyphs in an inverted block, the
@@ -1392,6 +1419,85 @@ body {
 @keyframes iris-in {
   from {
     --iris: 0px;
+  }
+}
+/* And its iris-out, closing on the middle over --iris-time. */
+.iris-out {
+  --iris: 0px;
+  background: var(--off);
+  mask-image: radial-gradient(
+    circle,
+    transparent var(--iris),
+    #000 calc(var(--iris) + 1px)
+  );
+  animation: iris-out var(--iris-time, 900ms) ease-in-out both;
+}
+@keyframes iris-out {
+  from {
+    --iris: 75vmax;
+  }
+}
+/* The film running out of the gate: frames flap through, bright then
+   dark, as frame lines roll down the screen, and it ends dark. */
+.run-out {
+  background: var(--glint);
+  animation: run-out 700ms steps(1) both;
+}
+@keyframes run-out {
+  0% {
+    opacity: 0.85;
+  }
+  10% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  30% {
+    opacity: 0.35;
+  }
+  45% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.15;
+  }
+  75% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.run-out-band {
+  background: var(--off);
+  animation: run-out-band 140ms linear 5 both;
+}
+@keyframes run-out-band {
+  from {
+    translate: 0 -100%;
+  }
+  to {
+    translate: 0 100vh;
+  }
+}
+/* A countdown leader's sweep, round once a --beat. */
+@property --sweep {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+.leader-sweep {
+  background: conic-gradient(var(--off) var(--sweep), transparent 0);
+  opacity: 0.35;
+  animation: leader-sweep var(--beat) linear both;
+}
+@keyframes leader-sweep {
+  to {
+    --sweep: 360deg;
   }
 }
 /* Projected film: brightness that never quite holds still, and a frame

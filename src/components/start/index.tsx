@@ -52,7 +52,7 @@ export const SEQUENCES: Record<Theme, ComponentType<SequenceProps>> = {
 export const START_EXITS: Partial<Record<Theme, number>> = {
   orbital: 700,
   rabbit: 520,
-  steamboat: 400,
+  steamboat: 450,
 }
 
 /** Starts fetching a theme's sequence ahead of time. */

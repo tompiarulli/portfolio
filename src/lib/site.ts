@@ -44,6 +44,8 @@ export const site = {
     /** Under the name above the title on Steamboat's start screen, like
      *  an old cartoon's title card. */
     presents: 'presents',
+    /** Steamboat's end card, as it shuts down. */
+    end: 'The End',
     /** What White Rabbit's console prints as it halts, after root types
      *  the command. */
     halt: [
