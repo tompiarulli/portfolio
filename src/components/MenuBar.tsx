@@ -151,6 +151,7 @@ function SystemMenu({
           >
             System Info
           </button>
+          <hr className="my-1 border-(--frame)" />
           {actions.map((a) => (
             <button
               key={a.label}
