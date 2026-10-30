@@ -8,7 +8,7 @@ export const Route = createFileRoute('/')({
   head: () =>
     pageHead({
       path: '/',
-      title: `${site.tagline} - ${site.title}`,
+      title: `${site.name}, ${site.tagline}`,
       description: site.descriptions.home,
     }),
 })

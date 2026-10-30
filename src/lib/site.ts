@@ -4,7 +4,7 @@ export const site = {
   url: 'https://tompiarulli.com',
   name: 'Tom Piarulli',
   title: 'Tom Piarulli ☼',
-  tagline: 'Software engineer',
+  tagline: 'Software Engineer',
   /** What search results and link previews say about the site's two pages. */
   descriptions: {
     home: 'Portfolio of Tom Piarulli, a software engineer with 15+ years across engineering, product and design, most recently CTO at Nerd Street. Built as a small late-90s desktop.',
