@@ -129,6 +129,7 @@ export default defineConfig({
           '/apple-touch-icon.png': oneDay,
           '/icon-192.png': oneDay,
           '/icon-512.png': oneDay,
+          '/icon-maskable-512.png': oneDay,
           '/og.png': oneDay,
           '/manifest.webmanifest': oneDay,
           '/robots.txt': oneDay,
