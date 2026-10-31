@@ -23,8 +23,9 @@ type Windows = {
    *  focus. Pressing the key again, even mid-flight, brings it back. */
   minimize: (id: WindowId) => void
   /** For Shut Down: flies every window not minimized into its dock key,
-   *  front to back. Undone at once with `docked` false, on boot, so the
-   *  windows are simply there again. */
+   *  front to back, unless the theme shuts them down its own way
+   *  (--window-down in styles.css). Undone at once with `docked` false,
+   *  on boot, so the windows are simply there again. */
   dockAll: (docked: boolean) => void
   /** Where each open window opened, in order: on a phone, each opens one
    *  title bar below the one before (styles.css), so the close boxes of
@@ -75,6 +76,13 @@ const nextSlot = (slots: Partial<Record<WindowId, number>>) =>
 
 const windowEl = (id: WindowId) =>
   document.querySelector<HTMLElement>(`[data-window="${id}"]`)
+
+/** Whether the theme shuts its windows down its own way, not into the
+ *  dock. */
+const ownWayDown = () =>
+  getComputedStyle(document.documentElement)
+    .getPropertyValue('--window-down')
+    .trim() !== 'none'
 
 /** Flies window `id` into its dock key, or back out of it with `restore`.
  *  Measured before React renders, while layout is still clean, and drawn
@@ -223,6 +231,8 @@ export function WindowManager({ children }: { children: ReactNode }) {
           el.style.visibility = ''
           return
         }
+        // A theme with its own way out plays it in CSS (--window-down).
+        if (ownWayDown()) return
         setTimeout(() => {
           if (!flyToDock(id, false)) el.style.visibility = 'hidden'
         }, i * STAGGER)

@@ -355,6 +355,10 @@
      over each as it does. */
   --window-boot: none;
   --window-boot-edge: none;
+  /* How the windows go as the desktop shuts down: an animation, and one
+     for the outline, or none to fly them into their dock keys. */
+  --window-down: none;
+  --window-down-edge: none;
   color-scheme: dark;
 }
 
@@ -544,9 +548,12 @@
   /* Its windows power on as its start screen's panel does, once the bar
      and dock have folded open: a white point stretches into a line, which
      splits into the top and bottom edges as the window opens between
-     them. */
+     them. Shutting down, they play it backwards: each closes to its line,
+     and the line to a point. */
   --window-boot: window-on 340ms linear 120ms both;
   --window-boot-edge: window-on-edge 340ms linear 120ms both;
+  --window-down: window-off 340ms linear both;
+  --window-down-edge: window-off-edge 340ms linear both;
   --start-font: 'Geist Mono', ui-monospace, monospace;
   --start-title-font: 'Geist', ui-sans-serif, sans-serif;
   --start-title-weight: 600;
@@ -996,12 +1003,12 @@ body {
 
 /* ---------- Shut Down ---------- */
 /* With data-off on <html>, the chrome shuts down top to bottom: the
-   windows fly into their dock keys (WindowManager's dockAll), then the
-   dock folds down and the menu bar up. Then the theme's own sequence
-   plays (components/start). Booting folds those two back open, easing
-   out, unless the theme brings them back its own way, and the windows
-   come back as the theme's --window-boot says. Each theme's boot follows
-   below. */
+   windows fly into their dock keys (WindowManager's dockAll), or go as
+   the theme's --window-down says, then the dock folds down and the menu
+   bar up. Then the theme's own sequence plays (components/start).
+   Booting folds those two back open, easing out, unless the theme brings
+   them back its own way, and the windows come back as the theme's
+   --window-boot says. Each theme's boot follows below. */
 /* Booting, they take about as long as Orbital's windows (--window-boot)
    and settle the same way. */
 [data-shutdown] {
@@ -1035,14 +1042,22 @@ body {
   scale: none;
   transition: opacity 0s 300ms;
 }
+[data-theme='orbital'][data-off] [data-shutdown='windows'] {
+  transition-delay: 340ms;
+}
+[data-off] [data-window] {
+  animation: var(--window-down);
+}
 /* data-booting is on <html> for a moment as the desktop boots (see
    MenuBar). */
 [data-booting] [data-window] {
   animation: var(--window-boot);
 }
 /* An outline drawn over each window as it boots, played by
-   --window-boot-edge: the line it opens out of, then its edges. */
-[data-booting] [data-window]::after {
+   --window-boot-edge: the line it opens out of, then its edges; and as it
+   shuts down, by --window-down-edge. */
+[data-booting] [data-window]::after,
+[data-off] [data-window]::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -1051,6 +1066,9 @@ body {
   opacity: 0;
   pointer-events: none;
   animation: var(--window-boot-edge);
+}
+[data-off] [data-window]::after {
+  animation: var(--window-down-edge);
 }
 /* White Rabbit boots like a terminal redrawing, as the rain falls again
    (CodeRain): the menu bar and then the dock type themselves in left to
@@ -1779,6 +1797,41 @@ body {
   }
   100% {
     inset: 0;
+    opacity: 0;
+  }
+}
+/* A window powering off as the desktop shuts down (Orbital's
+   --window-down): window-on backwards, each ease reversed. It closes
+   quickly to the line, gathering pace, then the line draws in to a
+   point. */
+@keyframes window-off {
+  0% {
+    clip-path: inset(0);
+    animation-timing-function: cubic-bezier(1, 0, 0.8, 1);
+  }
+  65% {
+    clip-path: inset(calc(50% - 1px) 0 calc(50% - 1px) 0);
+    animation-timing-function: cubic-bezier(0.7, 0, 0.7, 1);
+  }
+  100% {
+    clip-path: inset(50% 50% 50% 50%);
+  }
+}
+@keyframes window-off-edge {
+  0% {
+    inset: 0;
+    opacity: 1;
+    animation-timing-function: cubic-bezier(1, 0, 0.8, 1);
+  }
+  65% {
+    inset: calc(50% - 1px) 0;
+    animation-timing-function: cubic-bezier(0.7, 0, 0.7, 1);
+  }
+  99.9% {
+    opacity: 1;
+  }
+  100% {
+    inset: 50% 50%;
     opacity: 0;
   }
 }
