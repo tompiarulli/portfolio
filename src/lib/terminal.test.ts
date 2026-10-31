@@ -5,6 +5,7 @@ import { site } from '#/lib/site'
 import { COMMANDS, complete, run } from '#/lib/terminal'
 import type { Env } from '#/lib/terminal'
 import { DEFAULT_THEME, THEMES } from '#/lib/theme'
+import { dates } from '#/lib/work'
 
 const env = (over: Partial<Env> = {}): Env => ({
   theme: DEFAULT_THEME,
@@ -68,7 +69,11 @@ describe('run', () => {
   describe('cat', () => {
     it('prints a file', () => {
       expect(out('cat about.txt')).toEqual([...site.letter, site.signoff])
-      expect(out('cat work.txt')).toEqual(site.work)
+      const work = out('cat work.txt')
+      for (const w of site.work) {
+        expect(work).toContain(`${w.role}, ${w.company} (${dates(w)})`)
+        expect(work).toContain(w.summary)
+      }
       expect(out('cat .plan').length).toBeGreaterThan(0)
     })
 

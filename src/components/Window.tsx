@@ -78,13 +78,14 @@ export function Window({
   const active = peek ? peek === id : front === id
   const close = () => closeWindow(id)
   // Restacking moves windows in the DOM, which resets their scroll; put
-  // it back.
-  const body = useRef<HTMLDivElement>(null)
+  // it back, the body's and any pane of an app's marked as one.
   const place = stack.indexOf(id)
   useLayoutEffect(() => {
-    const el = body.current
-    const y = el && scrollBefore.get(el)
-    if (el && y) el.scrollTop = y
+    for (const el of ref.current?.querySelectorAll('[data-window-body]') ??
+      []) {
+      const y = scrollBefore.get(el)
+      if (y) el.scrollTop = y
+    }
   }, [place])
 
   // Rolled up to its title bar, like a windowshade.
@@ -247,7 +248,6 @@ export function Window({
         </span>
       </div>
       <div
-        ref={body}
         data-window-body
         hidden={shaded}
         className={`os-scroll min-h-0 flex-1 select-text ${flush ? '' : 'p-5'}`}

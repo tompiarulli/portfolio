@@ -1,5 +1,25 @@
 const version = '9.2'
 
+export type WorkEntry = {
+  company: string
+  role: string
+  /** Where the Work list files it: under Career, unless one of these. */
+  section?: 'Volunteering' | 'Education'
+  /** What the company does, in a line. */
+  about?: string
+  /** First and last month, as `YYYY-MM`, or year as `YYYY` where the
+   *  month isn't known. */
+  start: string
+  end: string
+  /** The role in a sentence or two. */
+  summary: string
+  /** What I did there, a line each. */
+  highlights: string[]
+}
+
+const NERD_STREET =
+  'Esports venues, events, and camps, funded by Founders Fund, Comcast, and Five Below'
+
 export const site = {
   url: 'https://tompiarulli.com',
   name: 'Tom Piarulli',
@@ -22,13 +42,223 @@ export const site = {
     "I'm also a former digital nomad and 90s kid with a deep love of travel, movies, and pop culture.",
   ],
   signoff: '- Tom',
-  /** The Work window: a write-up of work history, then a link to the full
-   *  history on LinkedIn. Placeholder until written. */
+  /** The Work window: every role, most recent first, volunteering and
+   *  school among them, listed by company and read alongside, with a link
+   *  under the list to the full history on LinkedIn. Roles in a row at
+   *  one company share a line. */
   work: [
-    'A short write-up of my work history goes here: the companies, the teams and what we built.',
-    'A paragraph or two per role, most recent first.',
-  ],
-  workLink: 'Full work history on LinkedIn',
+    {
+      company: 'Nerd Street',
+      role: 'Chief Technology Officer',
+      about: NERD_STREET,
+      start: '2023-07',
+      end: '2026-09',
+      summary:
+        'Hands-on CTO who led architecture and development of the consumer platform, payments, and data infrastructure. The platform has powered 3,700+ events, including tournaments with Riot Games, Ubisoft, and BLAST.',
+      highlights: [
+        "Established a strategic plan spanning infrastructure consolidation, a new admin and CMS, BI, and a product roadmap, mapped to the company's annual priorities",
+        'Rebuilt business intelligence from the ground up: Snowflake warehouse, Fivetran ETL, a custom connector for the venue PC-management system, and Hex dashboards for all-hands, board, and investor reporting',
+        'Ran successive rounds of vendor and infrastructure consolidation, reducing recurring spend by $50K+ a year with no loss of product capability',
+        'Built the foundation for Lobby, a multi-tenant events and ticketing platform: architecture, shared component library, draft/publish versioning, and WorkOS authentication on Next.js and Cloudflare',
+        'Led an AI adoption initiative, building custom Slack agents integrated with company tools using Mastra',
+      ],
+    },
+    {
+      company: 'Nerd Street',
+      role: 'Head of Platform',
+      about: NERD_STREET,
+      start: '2023-01',
+      end: '2023-06',
+      summary:
+        'Took over the platform after a company restructuring and owned it end to end, running product, engineering, and DevOps across two websites, a CMS, an events platform, a mobile app, and venue integrations.',
+      highlights: [
+        'Audited ~30 SaaS and cloud services, took over core accounts and infrastructure, and fixed a broken CI/CD pipeline in week one',
+        'Stood up a Turborepo/tRPC monorepo with shared packages and GitHub Actions deployments alongside the legacy platform, cutting deploys from 25 minutes to 40 seconds',
+        'Led the move to a new support platform, re-engineering its integrations and triage process while cutting costs by over 80%',
+        'Designed and launched a private-event booking funnel, bringing in 220+ requests in its first year',
+        'Ran the platform through the restructuring with no downtime or significant incidents while shipping product work',
+      ],
+    },
+    {
+      company: 'Nerd Street',
+      role: 'Development Lead',
+      about: NERD_STREET,
+      start: '2021-01',
+      end: '2022-12',
+      summary:
+        "One of the technical leads on the web platform while Nerd Street ran Riot Games' North American VALORANT Challengers, with ~6,000 players competing across its tournaments in 2021.",
+      highlights: [
+        'Built tournament hubs end to end in three weeks: GraphQL schema, data model, admin with live preview, and frontend',
+        'Launched the consumer app on both app stores, moving it to bare React Native and adding component, unit, and Detox end-to-end tests',
+        'Optimized event page images, cutting background image sizes by 80%+ and the image CDN bill by 70%',
+        "Audited the GraphQL API's access control and redesigned it around separate public and admin queries, enforced in the data layer",
+        'Mentored three engineers through pairing and wrote 10 design docs on topics including data modeling and API access control',
+      ],
+    },
+    {
+      company: 'Nerd Street',
+      role: 'Mobile Developer',
+      about: NERD_STREET,
+      start: '2020-01',
+      end: '2020-12',
+      summary:
+        "Built the consumer mobile app for the company's gaming venues from scratch in React Native as lead mobile engineer, with a Node.js API, Stripe payments, and PC-session integration.",
+      highlights: [
+        'Shipped the paid-session flow to TestFlight within 8 weeks of kickoff: signup, saved cards via Stripe, time-bundle checkout, and PC unlock through the venue management system',
+        "Designed the app's data layer behind custom React hooks, so a later move from REST to GraphQL needed no UI changes",
+        'Built a cross-platform design system in Storybook rendering every screen on web, iOS, and Android',
+        'Designed a PCI-conscious payment flow: client-side tokenization only, with all card operations server-side',
+      ],
+    },
+    {
+      company: 'III Tech',
+      role: 'Senior Product Manager',
+      about: 'Omnichannel delivery platform startup',
+      start: '2019-07',
+      end: '2020-01',
+      summary:
+        'Ran product and managed engineering for III Tech, a startup building a delivery platform in partnership with STIIIZY, the best-selling cannabis brand in the US.',
+      highlights: [
+        'Established the product process for a five-person team across two native iOS apps, an SMS ordering bot, a React web store, and a call-center CRM',
+        'Ran field research with retail, hub, and delivery staff to define ordering and delivery workflows',
+        'Managed pilot scope directly with the client, including data-integration boundaries and delivery and cancellation rules',
+        'Owned QA and acceptance through beta: TestFlight build testing, sprint-card sign-off, and user-facing copy and flow decisions',
+      ],
+    },
+    {
+      company: 'Travel Break',
+      role: 'Travel break',
+      start: '2018-04',
+      end: '2019-06',
+      summary:
+        'Traveled around the world while prototyping independent product ideas.',
+      highlights: [],
+    },
+    {
+      company: 'FS Investments',
+      role: 'UX Designer, Software Consultant',
+      about: 'Alternative asset manager, now Future Standard',
+      start: '2017-04',
+      end: '2018-03',
+      summary:
+        'Lead design contractor on a new alternatives trading platform at FS Investments, a $20B asset manager, from wireframes to pilots with two national broker-dealers.',
+      highlights: [
+        "Built coded React prototypes for the order workflow, account performance, and fund onboarding, used to debut the platform at a broker-dealer's home office",
+        'Designed the UI for a ~300-screen platform, producing the phased mockups the engineering teams built from',
+        "Designed and ran the team's design-sprint process, facilitating five sprints with 20+ expert interviews",
+        'Co-authored the product roadmap with the digital strategy director and the CIO',
+      ],
+    },
+    {
+      company: 'Sinq Technologies',
+      role: 'Lead Software Architect',
+      about: 'Home care visit and caregiver management startup',
+      start: '2015-04',
+      end: '2017-04',
+      summary:
+        "Built Sinq's platform from prototype to a live pilot with BAYADA, one of the world's largest home health providers. Sinq later became part of CareBridge, which Elevance Health bought for a reported $2.7B.",
+      highlights: [
+        'Shipped the HIPAA-compliant pilot end to end in 5 months: native iOS app, Ruby on Rails API on PostgreSQL, and admin portal, with offline support, GPS-verified check-ins, and Spanish localization',
+        'Owned data integrations and security reviews with BAYADA and Horizon BCBS NJ, and presented the platform to NJ Medicaid leadership',
+        "Led the platform's expansion beyond the pilot: multi-tenant backend, React Native, a React web portal, Node/GraphQL services, and a phone-based fallback for caregivers without smartphones",
+        'Recruited and led a five-person distributed engineering team',
+      ],
+    },
+    {
+      company: 'AMMO',
+      role: 'Full Stack Developer, UX Designer',
+      start: '2015-01',
+      end: '2015-06',
+      summary:
+        "Sole designer and developer on the redesign of The World Bank's WDR 2015 iPad app, covering client collaboration, research, UX design, and Objective-C development.",
+      highlights: [
+        'Refreshed the UI to modern iOS standards with targeted improvements to navigation and browsing',
+        'Overhauled the legacy Objective-C codebase for performance and maintainability; later editions of the app were built on it',
+        "Ran the client loop directly with the World Bank's product owner through beta, QA, and App Store submission",
+      ],
+    },
+    {
+      company: 'CocoaLove',
+      role: 'Co-Organizer',
+      section: 'Volunteering',
+      about: 'An indie Apple developer conference in Philadelphia',
+      start: '2014',
+      end: '2016',
+      summary:
+        'Co-organized three annual conferences, volunteer-run and homegrown out of the Philly CocoaHeads meetup. Our 2014 tagline was "A conference about people, not tech."',
+      highlights: [
+        'Built the conference website each year',
+        'Organized six conference "adventures" in 2016: hand-picked group activities that let attendees explore Philadelphia together in the off-hours',
+      ],
+    },
+    {
+      company: 'Philly CocoaHeads',
+      role: 'Co-Organizer',
+      section: 'Volunteering',
+      about: "Philadelphia's Apple developer meetup",
+      start: '2014',
+      end: '2016',
+      summary:
+        "Ran the meetup's monthly side project sessions, mentoring developers on their own apps.",
+      highlights: [],
+    },
+    {
+      company: 'THON',
+      role: 'Volunteer',
+      section: 'Volunteering',
+      about: "Penn State's student-run dance marathon for children with cancer",
+      start: '2006',
+      end: '2011',
+      summary:
+        'Raised money for children with cancer on canning trips throughout college, and was elected a THON dancer.',
+      highlights: [],
+    },
+    {
+      company: 'Freelance',
+      role: 'Software Consultant',
+      start: '2013-03',
+      end: '2015-01',
+      summary:
+        'Ran an independent design and development practice for startups and small businesses, handling UX, design, and engineering as a one-person product team.',
+      highlights: [
+        'Designed and built responsive web apps and marketing sites in HTML, CSS, JavaScript, and AngularJS',
+        'Built custom Ruby on Rails applications with third-party API integrations, including Instagram video ingestion and public voting',
+        'Developed native iOS apps, both greenfield and overhauls of inherited codebases',
+        'Led UX and UI design across onboarding, billing, e-commerce, and map-based search flows',
+      ],
+    },
+    {
+      company: 'KPMG',
+      role: 'Associate, IT Advisory',
+      about: 'Big Four professional services firm',
+      start: '2011-07',
+      end: '2013-03',
+      summary:
+        'Ran security testing and IT controls reviews across 16 engagements for a dozen clients in energy, financial services, healthcare, and real estate, earning multiple Encore awards.',
+      highlights: [
+        'Ran penetration tests and phishing simulations for clients including a nuclear energy company and a Federal Home Loan Bank',
+        'Delivered IT controls reviews, including two SOX audits, an access-control assessment, and a disaster recovery planning review',
+        "Selected and set up Dradis Pro as the team's penetration-test collaboration and reporting platform",
+      ],
+    },
+    {
+      company: 'Penn State',
+      role: 'B.S., Security and Risk Analysis',
+      section: 'Education',
+      about: 'Minors in Political Science and Global Security',
+      start: '2006',
+      end: '2011',
+      summary:
+        'Bachelor of Science in Security and Risk Analysis, with minors in Political Science and Global Security.',
+      highlights: [
+        'Man of the Year, Penn State Greek Life (2011), awarded each year to one of 5,000+ members; the citation recognized student safety reforms and community leadership',
+        'President of Phi Kappa Tau and of the Order of Omega honor society, and VP of Risk Management for the Interfraternity Council',
+        'Member of the Skull & Bones honor society',
+      ],
+    },
+  ] satisfies WorkEntry[],
+  /** Before the link to LinkedIn under the Work list. */
+  workLink: 'Connect on',
   os: `TomOS ${version}`,
   version,
   builtWith: 'React 19, TanStack Start, Tailwind 4',

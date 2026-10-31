@@ -1,6 +1,7 @@
-import { act, fireEvent, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
+import { site } from '#/lib/site'
 import { dockLink, renderDesktop, windowEl, windowOrder } from '#/test/desktop'
 
 vi.mock('#/components/Backdrop', () => ({ Backdrop: () => null }))
@@ -79,12 +80,42 @@ describe('window manager', () => {
     it('opens Work from the dock, with its link to LinkedIn', async () => {
       const { user } = await renderDesktop('/')
       await user.click(dockLink('work'))
-      const link = await screen.findByRole('link', {
-        name: 'Full work history on LinkedIn',
+      await screen.findByRole('tablist', { name: 'Companies' })
+      const link = within(windowEl('work')!).getByRole('link', {
+        name: 'LinkedIn',
       })
+      expect(link.parentElement?.textContent).toMatch(/^Connect on LinkedIn/)
       expect(windowOrder()).toEqual(['work', 'about', 'contact', 'player'])
       expect(link.getAttribute('href')).toBe(
         'https://www.linkedin.com/in/tompiarulli/',
+      )
+    })
+
+    it('reads Work one company at a time, picked from its list', async () => {
+      const { user } = await renderDesktop('/')
+      await user.click(dockLink('work'))
+      const tab = (name: string) =>
+        // A line's name is the company, then its years.
+        screen.getByRole('tab', { name: new RegExp(`^${name}\\s*\\d`) })
+      const panel = () => screen.getByRole('tabpanel')
+      await screen.findByRole('tablist', { name: 'Companies' })
+      const [latest] = site.work
+      const earliest = site.work.at(-1)!
+
+      // It opens on the most recent company, every role there in the panel.
+      expect(tab(latest!.company).getAttribute('aria-selected')).toBe('true')
+      for (const w of site.work.filter((w) => w.company === latest!.company))
+        expect(panel().textContent).toContain(w.role)
+
+      await user.click(tab(earliest.company))
+      expect(panel().textContent).toContain(earliest.summary)
+
+      // Arrow keys walk the list, taking focus with them.
+      await user.keyboard('{Home}')
+      expect(document.activeElement).toBe(tab(latest!.company))
+      await user.keyboard('{ArrowDown}')
+      expect(screen.getAllByRole('tab')[1]?.getAttribute('aria-selected')).toBe(
+        'true',
       )
     })
 

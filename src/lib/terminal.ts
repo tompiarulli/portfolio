@@ -4,6 +4,7 @@ import { email, profiles, site } from '#/lib/site'
 import { THEMES } from '#/lib/theme'
 import type { Theme } from '#/lib/theme'
 import type { WindowId } from '#/lib/windows'
+import { dates } from '#/lib/work'
 
 /** What a command asks the terminal to do besides print. */
 export type Effect =
@@ -34,7 +35,13 @@ export const BANNER = [
 const FILES: Partial<Record<string, string[]>> = {
   'about.txt': [...site.letter, site.signoff],
   'contact.txt': profiles.map((p) => `${p.label.padEnd(10)}${p.handle}`),
-  'work.txt': site.work,
+  // Each role, its write-up under it, a blank line between them.
+  'work.txt': site.work.flatMap((w, i) => [
+    ...(i ? [''] : []),
+    `${w.role}, ${w.company} (${dates(w)})`,
+    w.summary,
+    ...w.highlights.map((h) => `- ${h}`),
+  ]),
   '.plan': ['Build something small and fast.', 'Ship it.'],
 }
 
