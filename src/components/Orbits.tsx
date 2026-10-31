@@ -5,7 +5,6 @@ import { useEffect, useLayoutEffect, useRef } from 'react'
 import { rgb } from '#/lib/color'
 import { brightness, rider, ring } from '#/lib/orbits'
 import type { RingPoint } from '#/lib/orbits'
-import { stage } from '#/lib/power'
 
 type OrbitsProps = {
   count?: number
@@ -37,9 +36,6 @@ type OrbitsProps = {
 const SEGMENTS = 160
 /** Steps of brightness from the far side of a ring to the near side. */
 const SHADES = 32
-/** How quickly the rings wind in and out at Restart: the share of the way
- *  left they cover each second. */
-const WIND = 2.4
 
 export default function Orbits(props: OrbitsProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -54,15 +50,6 @@ export default function Orbits(props: OrbitsProps) {
     const ctx = canvas?.getContext('2d', { alpha: false })
     if (!canvas || !ctx) return
 
-    // Restart winds the rings in to their centre, slowing as they go, and
-    // they hold there under the start screen until it leaves, then spin
-    // back out (lib/power). `size` is how far out they are, and `time`
-    // runs slower as they wind in.
-    const wound = () => {
-      const s = stage()
-      return s === 'down' || s === 'title'
-    }
-    let size = wound() ? 0 : 1
     let time = 0
     let prev = performance.now()
     const draw = () => {
@@ -76,10 +63,8 @@ export default function Orbits(props: OrbitsProps) {
       const cy = fy * h
       const unit = Math.min(w, h)
       const count = p.count ?? 7
-      // Never quite nothing, or the projection divides by zero.
-      const wind = Math.max(size, 0.002)
-      const inner = (p.inner ?? 0.18) * unit * wind
-      const outer = (p.outer ?? 0.62) * unit * wind
+      const inner = (p.inner ?? 0.18) * unit
+      const outer = (p.outer ?? 0.62) * unit
       const far = p.far ?? 0.3
 
       ctx.fillStyle = p.background
@@ -175,8 +160,7 @@ export default function Orbits(props: OrbitsProps) {
       // Cap the step so a background tab doesn't lurch when it returns.
       const dt = Math.min(now - prev, 100) / 1000
       prev = now
-      size += ((wound() ? 0 : 1) - size) * Math.min(1, dt * WIND)
-      time += dt * (0.2 + 0.8 * size)
+      time += dt
       draw()
     }
     frame = requestAnimationFrame(render)

@@ -8,8 +8,7 @@ import { site } from '#/lib/site'
 /** Orbital's shut down: a ruled panel like its start screen's powers on
  *  over the rings, the version along its top, a status line walking
  *  through the steps and a bar of squares filling under it. Then its rows
- *  switch off from the bottom up and it closes to a line, then a point,
- *  as the rings wind in to their centre (Orbits). */
+ *  switch off from the bottom up and it closes to a line, then a point. */
 export function Down({ onDone }: ShutDownProps) {
   const steps = site.shutdown.down
   const [filled, setFilled] = useState(0)
@@ -54,12 +53,11 @@ export function Down({ onDone }: ShutDownProps) {
   )
 }
 
-/** Orbital's start screen: clean and flat over the point the rings wound
- *  into, one ruled panel with the version and build along its top, the
- *  title, and the prompt along its foot. The panel powers on like a
- *  display, its rows coming up in turn; leaving, it switches off as the
- *  shut down's did while the rings spin back out, and the desktop's
- *  windows power on after it. */
+/** Orbital's start screen: clean and flat over the rings, one ruled panel
+ *  with the version and build along its top, the title, and the prompt
+ *  along its foot. The panel powers on like a display, its rows coming up
+ *  in turn; leaving, it switches off as the shut down's did, and the
+ *  desktop's windows power on after it. */
 export function Start({ leaving }: StartScreenProps) {
   return (
     <Panel off={leaving} hidden>
