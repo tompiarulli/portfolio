@@ -273,9 +273,6 @@
   --tv-osd: #aef5c0;
   --tv-osd-glow: #41e07a;
   --tv-osd-font: var(--font-mono);
-  /* Steamboat's title card, shown as the channel changes. */
-  --tv-card: #141413;
-  --tv-card-ink: #f2f0e6;
   /* The rolling band of a mistracked tape (OUTATIME). */
   --tv-tracking: transparent;
   /* The test card a channel shows until it has footage: colour bars over
@@ -679,8 +676,7 @@
   --tv-osd-glow: transparent;
 }
 /* Steamboat: an old cartoon's film, black and white and hard, flickering
-   in the gate under grain, irised dark at the edges, with a title card
-   for each place. */
+   in the gate under grain, irised dark at the edges. */
 [data-theme='steamboat'] {
   --tv-filter: grayscale(1) contrast(1.55) brightness(1.08);
   --tv-scan: transparent;
@@ -702,8 +698,7 @@
   --tv-tracking: rgb(255 255 255 / 0.14);
 }
 
-/* Sized by its own width, so the display and title cards grow with it
-   full screen. */
+/* Sized by its own width, so the display grows with it full screen. */
 .tv-screen {
   container-type: inline-size;
 }
@@ -773,7 +768,7 @@
   background-repeat: no-repeat;
 }
 /* Snow between channels, gone once it has played, so it never shows
-   without motion. Steamboat's title card takes its place. */
+   without motion. Steamboat's film just cuts. */
 .tv-static {
   opacity: 0;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
@@ -804,15 +799,6 @@
 }
 [data-tv='steamboat'] .tv-picture {
   animation: film-flicker 0.48s steps(1) infinite;
-}
-.tv-title-card {
-  opacity: 0;
-  animation: tv-title-card 2.4s steps(1);
-}
-@keyframes tv-title-card {
-  0% {
-    opacity: 1;
-  }
 }
 
 /* Touch screens get a taller title bar to drag windows by and a bigger
@@ -1344,7 +1330,6 @@ body {
 [data-theme='traveler'] [data-lamp] {
   display: none;
 }
-
 /* Steamboat's dock is a row of folder tabs standing on a folder's edge:
    the focused app's tab raised and joined to the folder, the rest behind
    the edge. The dock keeps one height, whichever tab is up. */
@@ -1749,9 +1734,10 @@ body {
 
 /* Orbital: the panel powers on like a display, a line opening out from
    the middle and then to its full height, and its rows come up in turn
-   (each with its --row delay). */
+   (each with its --row delay), all held back by --after while the start
+   screen waits for the screen to open. */
 .power-on {
-  animation: power-on 500ms ease-out 100ms both;
+  animation: power-on 500ms ease-out calc(100ms + var(--after, 0ms)) both;
 }
 @keyframes power-on {
   0% {
@@ -1837,20 +1823,167 @@ body {
 }
 .power-on-row {
   animation: fade-in 200ms ease-out both;
-  animation-delay: calc(550ms + var(--row) * 120ms);
+  animation-delay: calc(550ms + var(--after, 0ms) + var(--row) * 120ms);
 }
 /* Switching off, the reverse: its rows go from the bottom up (each with
-   its --row-out delay), then it closes to a line and the line to a
-   point. */
+   its --row-out delay), then it closes to a line and the line to a point
+   as the windows do (window-off), its outline running down to the line
+   with it. */
 .power-off {
-  animation: power-off 300ms ease-in 360ms forwards;
+  animation: window-off 340ms linear 360ms forwards;
 }
-@keyframes power-off {
-  55% {
-    clip-path: inset(calc(50% - 1px) 0 calc(50% - 1px) 0);
+.power-off::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid currentColor;
+  opacity: 0;
+  pointer-events: none;
+  animation: window-off-edge 340ms linear 360ms forwards;
+}
+/* Orbital's whole screen switching off once its shut down is done and
+   its panel has closed (a beat after .power-off), as its windows did: the picture closes to a bright line across the middle,
+   and the line to a point, leaving black. A frame of --off with a hole
+   in it (even-odd) closes in, and an outline runs down its edge. Its
+   start screen opens the screen again, the same way round as the windows
+   boot. Still, the frame's hole is the whole screen, so without motion
+   there's nothing to see. */
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: var(--off);
+  clip-path: polygon(
+    evenodd,
+    0 0,
+    100% 0,
+    100% 100%,
+    0 100%,
+    0 0,
+    0 0,
+    100% 0,
+    100% 100%,
+    0 100%,
+    0 0
+  );
+}
+.screen-edge {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border: 1px solid var(--start-text);
+  opacity: 0;
+}
+.screen-off {
+  animation: screen-off 600ms linear 900ms forwards;
+}
+.screen-off + .screen-edge {
+  animation: window-off-edge 600ms linear 900ms forwards;
+}
+.screen-on {
+  animation: screen-on 600ms linear both;
+}
+.screen-on + .screen-edge {
+  animation: window-on-edge 600ms linear both;
+}
+@keyframes screen-off {
+  0% {
+    clip-path: polygon(
+      evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0
+    );
+    animation-timing-function: cubic-bezier(1, 0, 0.8, 1);
+  }
+  65% {
+    clip-path: polygon(
+      evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      0 calc(50% - 1px),
+      100% calc(50% - 1px),
+      100% calc(50% + 1px),
+      0 calc(50% + 1px),
+      0 calc(50% - 1px)
+    );
+    animation-timing-function: cubic-bezier(0.7, 0, 0.7, 1);
   }
   100% {
-    clip-path: inset(50% 50% 50% 50%);
+    clip-path: polygon(
+      evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      50% 50%,
+      50% 50%,
+      50% 50%,
+      50% 50%,
+      50% 50%
+    );
+  }
+}
+@keyframes screen-on {
+  0% {
+    clip-path: polygon(
+      evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      50% 50%,
+      50% 50%,
+      50% 50%,
+      50% 50%,
+      50% 50%
+    );
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  35% {
+    clip-path: polygon(
+      evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      0 calc(50% - 1px),
+      100% calc(50% - 1px),
+      100% calc(50% + 1px),
+      0 calc(50% + 1px),
+      0 calc(50% - 1px)
+    );
+    animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+  100% {
+    clip-path: polygon(
+      evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0
+    );
   }
 }
 .power-off-row {
