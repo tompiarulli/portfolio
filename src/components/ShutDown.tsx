@@ -12,7 +12,7 @@ import { currentTheme } from '#/lib/theme'
 type Phase = Exclude<Stage, 'leaving'>
 
 // How long the chrome takes to close before the theme's shut down.
-const CLOSING = 700
+const CLOSING = 500
 
 const reducedMotion = () =>
   matchMedia('(prefers-reduced-motion: reduce)').matches

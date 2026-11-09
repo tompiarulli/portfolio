@@ -990,8 +990,8 @@ body {
 /* ---------- Shut Down ---------- */
 /* With data-off on <html>, the chrome shuts down top to bottom: the
    windows fly into their dock keys (WindowManager's dockAll), or go as
-   the theme's --window-down says, then the dock folds down and the menu
-   bar up. Then the theme's own sequence plays (components/start).
+   the theme's --window-down says, then the dock folds down as the menu
+   bar folds up. Then the theme's own sequence plays (components/start).
    Booting folds those two back open, easing out, unless the theme brings
    them back its own way, and the windows come back as the theme's
    --window-boot says. Each theme's boot follows below. */
@@ -1006,7 +1006,7 @@ body {
   scale: 1 0;
   opacity: 0;
   pointer-events: none;
-  transition-duration: 200ms;
+  transition-duration: 250ms;
   transition-timing-function: ease-in;
 }
 [data-shutdown='bar'] {
@@ -1015,8 +1015,10 @@ body {
 [data-shutdown='dock'] {
   transform-origin: bottom;
 }
+/* The dock and the menu bar fold together, once the windows are in. */
+[data-off] [data-shutdown='bar'],
 [data-off] [data-shutdown='dock'] {
-  transition-delay: 300ms;
+  transition-delay: 250ms;
 }
 /* The windows never fold: each flies into the dock on its own, and the
    layer only drops out once they're all in, or at once without motion;
@@ -1026,7 +1028,7 @@ body {
 }
 [data-off] [data-shutdown='windows'] {
   scale: none;
-  transition: opacity 0s 300ms;
+  transition: opacity 0s 450ms;
 }
 [data-theme='orbital'][data-off] [data-shutdown='windows'] {
   transition-delay: 340ms;
@@ -1371,9 +1373,6 @@ body {
 }
 [data-theme='steamboat'] [data-dock-link][data-open]:not([aria-current]) {
   height: 32px;
-}
-[data-off] [data-shutdown='bar'] {
-  transition-delay: 500ms;
 }
 
 /* The picture tube collapsing to a line, then a dot. */

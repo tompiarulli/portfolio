@@ -138,7 +138,7 @@ function flyToDock(id: WindowId, restore: boolean) {
 }
 
 // Shutting down, the windows leave for the dock one after another.
-const STAGGER = 60
+const STAGGER = 90
 
 const toFront = (stack: WindowId[], id: WindowId) =>
   stack.at(-1) === id ? stack : [...stack.filter((w) => w !== id), id]
