@@ -15,14 +15,20 @@ import { subscribeRestart } from '#/lib/power'
 
 // Only needed once someone shuts down, so it is a chunk of its own, fetched
 // while the browser is idle after load, with the current theme's sequence,
-// so choosing it is still instant.
+// so choosing it is still instant. Once it's in, it renders as it is: a
+// lazy component suspends on its first render even with its code in, and
+// React holds a boundary's reveal back up to 300 ms, which would hold the
+// whole shut down back with it while the windows were already leaving.
+let shutDownModule: typeof import('#/components/ShutDown') | undefined
 const loadShutDown = () =>
-  import('#/components/ShutDown').then((m) => ({ default: m.ShutDown }))
-const ShutDown = lazy(loadShutDown)
+  import('#/components/ShutDown').then((m) => (shutDownModule = m))
+const LazyShutDown = lazy(() =>
+  loadShutDown().then((m) => ({ default: m.ShutDown })),
+)
 if (typeof window !== 'undefined') {
   const prefetch = () =>
     (window.requestIdleCallback ?? setTimeout)(
-      () => void import('#/components/ShutDown').then((m) => m.prefetch()),
+      () => void loadShutDown().then((m) => m.prefetch()),
     )
   if (document.readyState === 'complete') prefetch()
   else addEventListener('load', prefetch, { once: true })
@@ -238,6 +244,7 @@ export function MenuBar() {
     }
     wasOff.current = off
   }, [off, front, raise])
+  const ShutDown = shutDownModule?.ShutDown ?? LazyShutDown
   return (
     <>
       {off && (
