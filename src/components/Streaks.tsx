@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import { stage } from '#/lib/power'
+import { powerLeft, stage } from '#/lib/power'
 import { random } from '#/lib/random'
 
 /** How many times its usual speed the field runs at Restart's exit. */
@@ -130,10 +130,17 @@ export default function Streaks({
       const dt = Math.min(now - last, 100) / 1000
       last = now
       if (document.hidden) return
-      // As Restart's start screen leaves, the streaks run up to full speed,
-      // their tails stretching, and ease back once the desktop is on
-      // (lib/power).
-      const target = stage() === 'leaving' ? WARP : 1
+      // As Restart shuts down, the streaks slow with the power left and
+      // coast to a stop as it runs out; as its start screen leaves, they
+      // run up to full speed, their tails stretching, and ease back once
+      // the desktop is on (lib/power).
+      const s = stage()
+      const target =
+        s === 'closing' || s === 'down'
+          ? (powerLeft() ?? 1)
+          : s === 'leaving'
+            ? WARP
+            : 1
       pace += (target - pace) * Math.min(1, dt * 4)
       stretch = 1 + (pace - 1) * 0.3
       streaks.forEach((s, i) => {

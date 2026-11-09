@@ -8,6 +8,20 @@ export type Stage = 'closing' | 'down' | 'title' | 'leaving'
 export const stage = () =>
   document.documentElement.dataset.off as Stage | undefined
 
+// The power left as a theme's shut down runs out of it (OUTATIME's fuel),
+// 0 to 1; unset while nothing is running it down.
+let power: number | undefined
+
+/** Sets the power left, for the backdrop to slow with it (the streaks
+ *  coast to a stop as the fuel drains); `undefined` once it's done. */
+export const setPower = (p: number | undefined) => {
+  power = p
+}
+
+/** The power left, read every frame by the backdrop; unset unless a shut
+ *  down is running it down. */
+export const powerLeft = () => power
+
 const RESTART = 'tomos:restart'
 
 /** Restarts the desktop as the system menu's Restart does, from anywhere

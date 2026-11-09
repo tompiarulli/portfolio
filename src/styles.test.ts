@@ -81,6 +81,9 @@ const PAIRS: [string, string, number, string][] = [
   ['--script', '--start-ground', 3, "the start screen's brush script"],
   ['--prompt', '--start-ground', 4.5, "the start screen's prompt"],
   ['--start-muted', '--start-ground', 4.5, "the start screen's quieter text"],
+  ['--gauge', '--gauge-panel', 3, "the fuel gauge's cells"],
+  ['--gauge-low', '--gauge-panel', 3, "the fuel gauge's cells running low"],
+  ['--gauge-label', '--gauge-panel', 4.5, "the fuel gauge's labels"],
 ]
 
 describe.each(THEMES)('$label', ({ id }) => {

@@ -1,6 +1,12 @@
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 
-import { SEQUENCES, START_EXITS, preloadSequence } from '#/components/start'
+import {
+  CLOSING,
+  DOWN_AT,
+  SEQUENCES,
+  START_EXITS,
+  preloadSequence,
+} from '#/components/start'
 import type { Stage } from '#/lib/power'
 import { currentTheme } from '#/lib/theme'
 
@@ -10,9 +16,6 @@ import { currentTheme } from '#/lib/theme'
  *  components/start). Any click or key then boots back in, after the
  *  screen's exit, and the chrome comes back as the theme says. */
 type Phase = Exclude<Stage, 'leaving'>
-
-// How long the chrome takes to close before the theme's shut down.
-const CLOSING = 500
 
 const reducedMotion = () =>
   matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -44,11 +47,18 @@ export function ShutDown({
     return () => d?.close()
   }, [])
 
+  // The theme's shut down starts once the chrome has closed, or partway
+  // through closing for a theme that overlaps the two (DOWN_AT).
+  const [begun, setBegun] = useState(false)
   useEffect(() => {
     if (phase !== 'closing') return
+    const at = setTimeout(() => setBegun(true), DOWN_AT[theme] ?? CLOSING)
     const t = setTimeout(() => setPhase('down'), CLOSING)
-    return () => clearTimeout(t)
-  }, [phase])
+    return () => {
+      clearTimeout(at)
+      clearTimeout(t)
+    }
+  }, [phase, theme])
   const toTitle = useCallback(() => setPhase('title'), [])
 
   const ready = phase === 'title'
@@ -107,6 +117,12 @@ export function ShutDown({
           className="absolute inset-0 cursor-pointer outline-none"
         />
       )}
+      {/* Dims as the chrome closes, in a theme that says so (styles.css). */}
+      <div
+        aria-hidden
+        data-dim
+        className="pointer-events-none absolute inset-0"
+      />
       {/* Dark if the sequence is still on its way once the chrome has
           closed, so the backdrop never shows before it. */}
       <Suspense
@@ -117,7 +133,7 @@ export function ShutDown({
         }
       >
         <div className="pointer-events-none absolute inset-0">
-          <Sequence stage={stage} onDone={toTitle} />
+          <Sequence stage={stage} begun={begun} onDone={toTitle} />
         </div>
       </Suspense>
     </dialog>

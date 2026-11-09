@@ -294,9 +294,9 @@ export const site = {
     presents: 'presents',
     /** Steamboat's end card, as it shuts down. */
     end: 'The End',
-    /** OUTATIME's game over, and the prompt that counts down under it. */
-    gameOver: 'Game Over',
-    continue: 'Continue?',
+    /** OUTATIME's fuel gauge, running dry as it shuts down: its label,
+     *  its warning lamp, and the marks at either end. */
+    fuel: { label: 'Fuel', empty: 'Empty', low: 'E', high: 'F' },
     /** What White Rabbit's console prints as it halts, after root types
      *  the command. */
     halt: [
