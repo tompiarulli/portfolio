@@ -78,10 +78,6 @@ export function Work() {
         <CompanyPicker index={index} pick={pick} />
         {/* Under the reading on a phone, with only the link. */}
         <div className="flex flex-col max-sm:order-last">
-          {/* The count, where the old file managers put it. */}
-          <p className="border-b border-(--ink) px-3 py-1 text-center opacity-70 max-sm:hidden">
-            {COMPANIES.length} items
-          </p>
           <div
             aria-hidden
             className={`${COLUMNS} border-b border-(--ink) *:px-2 *:py-1 *:not-first:border-l *:not-first:border-(--ink) max-sm:hidden`}
