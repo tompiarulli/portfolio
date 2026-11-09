@@ -4,7 +4,7 @@ This is a personal site, so contributions are not expected, but the setup is doc
 
 ## Setup
 
-Requires Node 24 (pinned in `.nvmrc`) and pnpm 12.14.0 (pinned in `package.json`'s `packageManager`; `corepack enable` picks it up).
+Requires Node 26 (pinned in `.nvmrc`, and in `package.json`'s `engines` for Vercel) and pnpm 12.14.0 (pinned in `package.json`'s `packageManager`; Node no longer ships Corepack, so `npm i -g corepack && corepack enable` picks it up, or install that pnpm version directly).
 
 ```bash
 pnpm install
