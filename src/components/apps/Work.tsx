@@ -10,14 +10,14 @@ const linkedIn = profiles.find((p) => p.label === 'LinkedIn')
 const COMPANIES = companies(site.work)
 
 // The list's groups, in order, each company filed by its latest role.
-const SECTIONS = (['Career', 'Volunteering', 'Education'] as const).map(
-  (name) => ({
-    name,
-    companies: COMPANIES.flatMap((c, i) =>
-      (site.work[c.roles[0]!]!.section ?? 'Career') === name ? [i] : [],
-    ),
-  }),
-)
+const SECTIONS = (
+  ['Career', 'Side Projects', 'Volunteering', 'Education'] as const
+).map((name) => ({
+  name,
+  companies: COMPANIES.flatMap((c, i) =>
+    (site.work[c.roles[0]!]!.section ?? 'Career') === name ? [i] : [],
+  ),
+}))
 // Top to bottom, for the arrow keys.
 const ORDER = SECTIONS.flatMap((s) => s.companies)
 
@@ -30,8 +30,8 @@ const OPTION =
   'flex w-full cursor-pointer items-center gap-2 px-3 py-[5px] text-left whitespace-nowrap outline-none pointer-coarse:py-3 hover:bg-(--accent) hover:text-(--on-accent) focus-visible:bg-(--accent) focus-visible:text-(--on-accent)'
 
 /** Work history as a file manager's list view: a line per company, most
- *  recent first, with its years, grouped under Career, Volunteering and
- *  Education, and a way out to LinkedIn at the foot. The company picked reads alongside, every role there in
+ *  recent first, with its years, grouped under Career, Side Projects,
+ *  Volunteering and Education, and a way out to LinkedIn at the foot. The company picked reads alongside, every role there in
  *  turn, each pane scrolling on its own. The lines are tabs, so the arrow
  *  keys walk them and Home and End jump to the ends. A phone has no room
  *  for the list: a key at the top opens the companies as a menu, like

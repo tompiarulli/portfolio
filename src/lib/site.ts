@@ -6,7 +6,7 @@ export type WorkEntry = {
   company: string
   role: string
   /** Where the Work list files it: under Career, unless one of these. */
-  section?: 'Volunteering' | 'Education'
+  section?: 'Side Projects' | 'Volunteering' | 'Education'
   /** What the company does, in a line. */
   about?: string
   /** First and last month, as `YYYY-MM`, or year as `YYYY` where the
@@ -44,8 +44,8 @@ export const site = {
     "I'm also a former digital nomad and 90s kid with a deep love of travel, movies, and pop culture.",
   ],
   signoff: '- Tom',
-  /** The Work window: every role, most recent first, volunteering and
-   *  school among them, listed by company and read alongside, with a link
+  /** The Work window: every role, most recent first, side projects,
+   *  volunteering and school among them, listed by company and read alongside, with a link
    *  under the list to the full history on LinkedIn. Roles in a row at
    *  one company share a line. */
   work: [
@@ -110,6 +110,22 @@ export const site = {
         "Designed the app's data layer behind custom React hooks, so a later move from REST to GraphQL needed no UI changes",
         'Built a cross-platform design system in Storybook rendering every screen on web, iOS, and Android',
         'Designed a PCI-conscious payment flow: client-side tokenization only, with all card operations server-side',
+      ],
+    },
+    {
+      company: '2028 Games Guide',
+      role: 'Creator',
+      section: 'Side Projects',
+      about:
+        'A searchable guide to every session of the 2028 Summer Games in Los Angeles',
+      start: '2026-04',
+      end: '2026-11',
+      summary:
+        'Built a guide to all 800+ sessions of the 2028 Summer Games to pick tickets in the local presale, then open-sourced it for Olympics planning communities on Reddit and Facebook.',
+      highlights: [
+        'Filters by sport, round, venue, and rating, with a shortlist of saved sessions and a page for each one',
+        'An AI pipeline grounds each session in current news and Paris 2024 results, writes its summary, and scores it across five weighted dimensions',
+        'Connects to Claude and ChatGPT, so people can ask about sessions in their own words and get linked back to the guide',
       ],
     },
     {
