@@ -6,7 +6,8 @@ import { renderDesktop, windowEl } from '#/test/desktop'
 
 vi.mock('#/components/Backdrop', () => ({ Backdrop: () => null }))
 
-// Footage for the first channel, so there are clips to skip through.
+// Footage for the first channel, so there are clips to skip through: two
+// videos with a photo between them.
 vi.mock('#/lib/site', async (load) => {
   const site = await load<typeof import('#/lib/site')>()
   const [first, ...rest] = site.channels
@@ -15,8 +16,9 @@ vi.mock('#/lib/site', async (load) => {
     channels: [
       {
         ...first!,
-        clips: ['a', 'b', 'c'].map((n) => ({
-          src: `https://x.public.blob.vercel-storage.com/${n}.mp4`,
+        clips: ['a.mp4', 'b.webp', 'c.mp4'].map((n) => ({
+          src: n,
+          still: n.endsWith('.webp'),
         })),
       },
       ...rest,
@@ -24,9 +26,14 @@ vi.mock('#/lib/site', async (load) => {
   }
 })
 
-/** The clip on screen, once the page has loaded and clips are attached. */
-const clip = async () =>
-  (await screen.findByLabelText(/^Lisbon/)).getAttribute('src')
+/** The clip on screen, once the page has loaded and clips are attached:
+ *  a video, labelled with its place, or a photo, described by it. */
+const clip = () =>
+  waitFor(() => {
+    const place = new RegExp(`^${channels[0]!.place}`)
+    const el = screen.queryByLabelText(place) ?? screen.getByAltText(place)
+    return el.getAttribute('src')
+  })
 
 /** The key naming the channel on, which opens the list. */
 const picker = () => screen.findByRole('button', { name: /^Channel: / })
@@ -34,7 +41,10 @@ const key = (name: string) => screen.getByRole('button', { name })
 const on = async () => (await picker()).getAttribute('aria-label')
 
 describe('Travel', () => {
-  afterEach(() => vi.restoreAllMocks())
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.restoreAllMocks()
+  })
 
   it('opens on the first channel, with a list of every place', async () => {
     const { user } = await renderDesktop('/')
@@ -83,10 +93,28 @@ describe('Travel', () => {
     expect(screen.getByText('a.mp4')).toBeTruthy()
     expect(screen.getByText('1/3')).toBeTruthy()
     await user.click(key('Next clip'))
-    expect(await clip()).toMatch(/b\.mp4$/)
+    expect(await clip()).toMatch(/b\.webp$/)
     expect(screen.getByText('2/3')).toBeTruthy()
     await user.click(key('Previous clip'))
     await user.click(key('Previous clip'))
+    expect(await clip()).toMatch(/c\.mp4$/)
+  })
+
+  it('holds a photo for a few seconds of play, then moves on', async () => {
+    const { user } = await renderDesktop('/')
+    await screen.findByRole('button', { name: 'Pause' })
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    await user.click(key('Next clip'))
+    const place = new RegExp(`^${channels[0]!.place}`)
+    expect((await screen.findByRole('img', { name: place })).tagName).toBe(
+      'IMG',
+    )
+    // Paused, it stays.
+    await user.click(key('Pause'))
+    act(() => vi.advanceTimersByTime(10_000))
+    expect(await clip()).toMatch(/b\.webp$/)
+    await user.click(key('Play'))
+    act(() => vi.advanceTimersByTime(5000))
     expect(await clip()).toMatch(/c\.mp4$/)
   })
 
@@ -117,7 +145,7 @@ describe('Travel', () => {
     const { user } = await renderDesktop('/')
     await screen.findByRole('button', { name: 'Pause' })
     const before = await on()
-    act(() => key('Shuffle').focus())
+    act(() => key('Next channel').focus())
     await user.keyboard(' ')
     expect(await on()).not.toBe(before)
     expect(key('Pause')).toBeTruthy()

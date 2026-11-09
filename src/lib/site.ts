@@ -427,12 +427,16 @@ export const profiles: Profile[] = [
 ]
 
 export type Clip = {
-  /** The clip on Vercel Blob, an MP4 with no sound track. */
+  /** The clip, an MP4 with no sound track, or a photo: its path under
+   *  `travel/`, like `stanley/stanley-01.mp4`. */
   src: string
-  /** A still to show while it loads. */
+  /** A photo, not a video: it holds the screen for a few seconds of play,
+   *  like a brief clip of the feed. */
+  still?: boolean
+  /** A still to show while a video loads. */
   poster?: string
   /** What the player's strip calls it, like `sardegna_1993.mp4`; else
-   *  the file's own name, which Blob may have suffixed. */
+   *  the file's own name. */
   name?: string
 }
 
@@ -444,13 +448,14 @@ export type Channel = {
    *  screen: north and east positive. */
   lat: number
   lon: number
-  /** Its clips, played in turn and round again. With none, the channel
-   *  shows a test card. */
+  /** Its clips, played in turn and round again: the ones
+   *  `scripts/travel.mjs` made, from `travel` by the channel's folder
+   *  name. With none, the channel shows a test card. */
   clips: Clip[]
 }
 
 /** The Player's channels, one per place, in the order they're tuned.
- *  Placeholders until the footage is uploaded. */
+ *  Placeholders until their footage is in. */
 export const channels: Channel[] = [
   { place: 'Lisbon', country: 'Portugal', lat: 38.72, lon: -9.14, clips: [] },
   { place: 'Kyoto', country: 'Japan', lat: 35.01, lon: 135.77, clips: [] },

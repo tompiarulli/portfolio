@@ -1,3 +1,5 @@
 * text=auto eol=lf
 *.woff2 binary
 *.png binary
+# The Travel channels' encoded clips and photos; see scripts/travel.mjs.
+public/travel/** filter=lfs diff=lfs merge=lfs -text

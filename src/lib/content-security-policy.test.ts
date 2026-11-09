@@ -18,19 +18,8 @@ describe('contentSecurityPolicy', () => {
     expect(policy['default-src']).toEqual(["'self'"])
     expect(policy['font-src']).toEqual(["'self'"])
     expect(policy['connect-src']).toEqual(["'self'"])
-    expect(policy['img-src']).toEqual([
-      "'self'",
-      'data:',
-      'https://*.public.blob.vercel-storage.com',
-    ])
-  })
-
-  it("allows the Player's videos from Vercel Blob", () => {
-    const policy = parse(contentSecurityPolicy())
-    expect(policy['media-src']).toEqual([
-      "'self'",
-      'https://*.public.blob.vercel-storage.com',
-    ])
+    expect(policy['img-src']).toEqual(["'self'", 'data:'])
+    expect(policy['media-src']).toEqual(["'self'"])
   })
 
   it('cannot be framed and has no plugins', () => {

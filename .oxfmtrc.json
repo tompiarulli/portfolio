@@ -9,5 +9,9 @@
   "insertFinalNewline": true,
   "sortImports": true,
   "sortTailwindcss": true,
-  "ignorePatterns": ["src/routeTree.gen.ts", "pnpm-lock.yaml"]
+  "ignorePatterns": [
+    "src/routeTree.gen.ts",
+    "src/lib/travel.gen.ts",
+    "pnpm-lock.yaml"
+  ]
 }

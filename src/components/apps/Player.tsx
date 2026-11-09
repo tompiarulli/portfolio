@@ -18,6 +18,9 @@ import type { Theme } from '#/lib/theme'
 // Module load is near enough to page load for the tape counter.
 const loadedAt = Date.now()
 
+// How long a photo holds the screen, in play.
+const STILL_MS = 5000
+
 const MONTHS = 'JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC'.split(' ')
 
 const pad = (n: number) => String(n).padStart(2, '0')
@@ -407,8 +410,8 @@ export function Player() {
   const [index, setIndex] = useState(0)
   // The clip playing on the channel.
   const [clip, setClip] = useState(0)
-  // When the picture last changed, by channel or clip; 0 until it first
-  // does.
+  // When the channel last changed, for the snow between channels and
+  // the tape counter; 0 until it first does. Clips cut straight on.
   const [tunedAt, setTunedAt] = useState(0)
   const [playing, setPlaying] = useState(false)
   // Clips are attached once the page has loaded, so they never hold up
@@ -455,14 +458,44 @@ export function Player() {
     return () => win.removeEventListener('keydown', onKeyDown)
   }, [])
 
-  // Paused while minimized, so it costs nothing in the dock.
+  const on = clips[clip] ?? clips[0]
+  const media = (path?: string) => (path ? `/travel/${path}` : undefined)
+  const src = ready ? media(on?.src) : undefined
+
+  // Paused while minimized, so it costs nothing in the dock. Follows the
+  // clip itself, as each one gets a video element of its own.
   const hidden = minimized.includes('player')
   useEffect(() => {
     const v = video.current
     if (!v) return
-    if (playing && !hidden) void v.play().catch(() => setPlaying(false))
+    // Blocked from playing on its own, it waits for Play; a play cut short
+    // by the next clip coming on is no reason to stop.
+    if (playing && !hidden)
+      void v.play().catch((e: DOMException) => {
+        if (e.name === 'NotAllowedError') setPlaying(false)
+      })
     else v.pause()
-  }, [playing, hidden, ready, index, clip])
+  }, [playing, hidden, src])
+
+  // A photo counts down while it plays, then the next clip comes on; a
+  // pause holds the count where it is.
+  const still = !!on?.still
+  const left = useRef(STILL_MS)
+  useEffect(() => {
+    left.current = STILL_MS
+  }, [index, clip])
+  useEffect(() => {
+    if (!still || !ready || !playing || hidden || clips.length < 2) return
+    const from = Date.now()
+    const id = setTimeout(
+      () => setClip((c) => (c + 1) % clips.length),
+      left.current,
+    )
+    return () => {
+      clearTimeout(id)
+      left.current -= Date.now() - from
+    }
+  }, [still, ready, playing, hidden, clips.length, index, clip])
 
   const tune = (i: number) => {
     setIndex((i + channels.length) % channels.length)
@@ -470,10 +503,8 @@ export function Player() {
     setTunedAt(Date.now())
   }
   // The clip before or after, round the channel's list.
-  const skip = (by: number) => {
+  const skip = (by: number) =>
     setClip((c) => (c + by + clips.length) % clips.length)
-    setTunedAt(Date.now())
-  }
   // The screen itself goes full screen, so its look goes with it; where
   // only a video can (an iPhone), the bare clip does.
   const fullScreen = () => {
@@ -490,8 +521,6 @@ export function Player() {
   const shuffle = () =>
     tune(index + 1 + Math.floor(Math.random() * (channels.length - 1)))
 
-  const on = clips[clip] ?? clips[0]
-  const src = ready ? on?.src : undefined
   return (
     <Window title="Travel" right x={-143} y={189} width={416} flush>
       <div ref={tv} className="tv" data-tv={theme}>
@@ -524,14 +553,22 @@ export function Player() {
           className="tv-screen relative aspect-video overflow-hidden border-b border-(--frame) bg-(--tv-off)"
         >
           <div className="tv-picture absolute inset-0">
-            {src ? (
+            {src && on?.still ? (
+              <img
+                key={src}
+                src={src}
+                alt={`${channel.place}, ${channel.country}`}
+                decoding="async"
+                className="size-full object-cover"
+              />
+            ) : src ? (
               // Ambient footage with no speech, so nothing to caption.
               // oxlint-disable-next-line jsx-a11y/media-has-caption
               <video
                 ref={video}
                 key={src}
                 src={src}
-                poster={on?.poster}
+                poster={media(on?.poster)}
                 // The clips have no sound.
                 muted
                 // One clip goes round on its own; more play in turn.

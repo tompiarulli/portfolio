@@ -26,6 +26,7 @@
   },
   "ignorePatterns": [
     "src/routeTree.gen.ts",
+    "src/lib/travel.gen.ts",
     ".output",
     ".nitro",
     ".tanstack",
