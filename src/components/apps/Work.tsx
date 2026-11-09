@@ -73,7 +73,7 @@ export function Work() {
   }
 
   return (
-    <Window title="Work" x={-20} y={20} width={780} height={520} flush>
+    <Window title="Work" x={-20} y={20} width={780} height={544} flush>
       <div className="grid sm:h-full sm:grid-cols-[280px_1fr] sm:grid-rows-[minmax(0,1fr)]">
         <CompanyPicker index={index} pick={pick} />
         {/* Under the reading on a phone, with only the link. */}
