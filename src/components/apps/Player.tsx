@@ -53,8 +53,8 @@ function useNow() {
 }
 
 /** Each theme's on-screen display, over the picture: a ship's feed with
- *  its telemetry, a security camera's stamp, a VCR's readout, or an old
- *  film's title card each time the channel changes. */
+ *  its telemetry, a security camera's stamp or a VCR's readout. An old
+ *  film has none. */
 function Osd({
   theme,
   channel,
@@ -70,21 +70,7 @@ function Osd({
 }) {
   const now = useNow()
   const corner = 'absolute flex gap-[1ch] whitespace-nowrap'
-  if (theme === 'steamboat')
-    return (
-      // Keyed, so the card plays again on every channel.
-      <div
-        key={index}
-        className="tv-title-card absolute inset-0 flex flex-col items-center justify-center gap-1 bg-(--tv-card) text-(--tv-card-ink)"
-      >
-        <span className="font-(family-name:--start-title-font) text-[max(34px,6cqw)] leading-none">
-          {channel.place}
-        </span>
-        <span className="font-(family-name:--script-font) text-[max(15px,2.6cqw)] italic underline">
-          {channel.region}
-        </span>
-      </div>
-    )
+  if (theme === 'steamboat') return null
   if (theme === 'rabbit') {
     const d = now && themedNow(theme, now)
     return (
