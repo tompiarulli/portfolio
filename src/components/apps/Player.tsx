@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
-import type { KeyboardEvent, ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react'
+import type { KeyboardEvent, ReactNode, Ref } from 'react'
 
 import { FilmGrain } from '#/components/FilmGrain'
 import { Window } from '#/components/Window'
@@ -81,7 +81,7 @@ function Osd({
           {channel.place}
         </span>
         <span className="font-(family-name:--script-font) text-[max(15px,2.6cqw)] italic underline">
-          {channel.country}
+          {channel.region}
         </span>
       </div>
     )
@@ -165,8 +165,11 @@ function Key({
   children: ReactNode
   onClick: () => void
   'aria-label'?: string
+  'aria-expanded'?: boolean
+  'aria-controls'?: string
   disabled?: boolean
   className?: string
+  ref?: Ref<HTMLButtonElement>
 }) {
   return (
     <button type="button" className={`${KEY} ${className}`} {...props}>
@@ -246,6 +249,8 @@ const GLYPHS = {
   // Two lines crossing to arrowheads at the right.
   shuffle: 'M1 2h1.5l3 4H7M1 6h1.5l3-4H7M6 1l1 1-1 1M6 5l1 1-1 1',
   window: 'M3 1v2H1M5 1v2h2M7 5H5v2M1 5h2v2',
+  // A dot over a stem with its foot and cap.
+  info: 'M3.3 1h1.4v1.4H3.3zM2.6 3h2.1v3h.7v1H2.6V6h.7V4h-.7z',
 }
 
 const OPTION =
@@ -349,7 +354,7 @@ function ChannelPicker({
           aria-label="Channels"
           tabIndex={-1}
           onKeyDown={onListKeyDown}
-          className="os-scroll absolute bottom-full left-0 z-10 mb-[6px] max-h-[180px] w-full rounded-(--close-radius) border border-(--frame) bg-(--surface) py-1 shadow-(--window-shadow)"
+          className="os-scroll absolute bottom-full left-0 z-10 max-h-[180px] w-full rounded-(--close-radius) border border-(--frame) bg-(--surface) py-1 shadow-(--window-shadow)"
         >
           {channels.map((c, i) => (
             <button
@@ -363,7 +368,7 @@ function ChannelPicker({
             >
               <span className="tabular-nums">{number(i)}</span>
               <span className="min-w-0 flex-1 truncate">{c.place}</span>
-              <span className="truncate opacity-70">{c.country}</span>
+              <span className="truncate opacity-70">{c.region}</span>
               {/* A lamp for the channel on, like the dock's. */}
               <span
                 aria-hidden
@@ -382,7 +387,7 @@ function ChannelPicker({
         aria-label={`Channel: ${channel?.place}`}
         onClick={() => (open ? setOpen(false) : openAt(index))}
         onKeyDown={onButtonKeyDown}
-        className={`${KEY.replace('justify-center', 'justify-between').replace('px-2', 'px-3')} w-full gap-2 ${open ? 'bg-(--accent) text-(--on-accent)' : ''}`}
+        className={`${KEY.replace('justify-center', 'justify-between')} w-full gap-2 ${open ? 'bg-(--accent) text-(--on-accent)' : ''}`}
       >
         <span className="min-w-0 truncate">{channel?.place}</span>
         <svg
@@ -422,6 +427,12 @@ export function Player() {
   const channel = channels[index] ?? channels[0]!
   const clips = channel.clips
   const [full, setFull] = useState(false)
+  // The Info panel over the screen, saying what the place is; it stays
+  // open across channels, so they can be read through in turn.
+  const [info, setInfo] = useState(false)
+  const infoKey = useRef<HTMLButtonElement>(null)
+  const infoId = useId()
+  const about = channel.about
   useEffect(() => {
     const onChange = () =>
       setFull(!!screen.current && document.fullscreenElement === screen.current)
@@ -522,8 +533,20 @@ export function Player() {
     tune(index + 1 + Math.floor(Math.random() * (channels.length - 1)))
 
   return (
-    <Window title="Travel" right x={-143} y={189} width={416} flush>
-      <div ref={tv} className="tv" data-tv={theme}>
+    <Window title="Travel" right x={-143} y={189} width={448} flush>
+      <div
+        ref={tv}
+        className="tv"
+        data-tv={theme}
+        // Escape closes Info, not the window: caught on the way down, as
+        // the window listens for it before React's handlers run.
+        onKeyDownCapture={(e) => {
+          if (!info || e.key !== 'Escape') return
+          e.preventDefault()
+          setInfo(false)
+          infoKey.current?.focus()
+        }}
+      >
         {/* The VCR's colour fringing, used by OUTATIME's filter: red pulled
             one way and the rest the other, smeared along the line. */}
         <svg aria-hidden className="absolute size-0">
@@ -557,7 +580,7 @@ export function Player() {
               <img
                 key={src}
                 src={src}
-                alt={`${channel.place}, ${channel.country}`}
+                alt={`${channel.place}, ${channel.region}`}
                 decoding="async"
                 className="size-full object-cover"
               />
@@ -576,7 +599,7 @@ export function Player() {
                 onEnded={() => skip(1)}
                 playsInline
                 preload="auto"
-                aria-label={`${channel.place}, ${channel.country}`}
+                aria-label={`${channel.place}, ${channel.region}`}
                 className="size-full object-cover"
               />
             ) : (
@@ -605,6 +628,23 @@ export function Player() {
               aria-hidden
               className="tv-static absolute inset-0"
             />
+          )}
+          {info && about && (
+            <section
+              id={infoId}
+              aria-label={`About ${channel.place}`}
+              className="os-scroll absolute inset-0 overflow-y-auto bg-[color-mix(in_srgb,var(--surface)_92%,transparent)] px-4 py-3"
+            >
+              <p className="font-(family-name:--font-label) text-(length:--label-size) [font-weight:var(--label-weight)] tracking-(--label-tracking) [text-transform:var(--label-case)]">
+                {channel.place}
+              </p>
+              <p className="opacity-70">{channel.region}</p>
+              <div className="mt-3 space-y-3">
+                {about.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+            </section>
           )}
         </div>
         {/* The clip's strip, under the screen like a viewer's file bar:
@@ -649,13 +689,24 @@ export function Player() {
             to chance. Relative, so the list opens across the line. */}
         <div className="relative flex gap-[6px] p-[6px]">
           <Key
-            className="w-[34px] px-0"
+            className="w-[26px] px-0"
             onClick={() => setPlaying((p) => !p)}
             aria-label={playing ? 'Pause' : 'Play'}
           >
             <Glyph d={playing ? GLYPHS.pause : GLYPHS.play} />
           </Key>
           <ChannelPicker index={index} tune={tune} />
+          <Key
+            ref={infoKey}
+            className={`w-[26px] px-0 ${info && about ? 'bg-(--accent) text-(--on-accent)' : ''}`}
+            onClick={() => setInfo((i) => !i)}
+            disabled={!about}
+            aria-label="Info"
+            aria-expanded={!!(info && about)}
+            aria-controls={info && about ? infoId : undefined}
+          >
+            <Glyph d={GLYPHS.info} />
+          </Key>
           <Joined>
             <Key onClick={() => tune(index - 1)} aria-label="Previous channel">
               Ch −
@@ -664,7 +715,7 @@ export function Player() {
               Ch +
             </Key>
           </Joined>
-          <Key className="w-[34px] px-0" onClick={shuffle} aria-label="Shuffle">
+          <Key className="w-[26px] px-0" onClick={shuffle} aria-label="Shuffle">
             <Glyph d={GLYPHS.shuffle} ruled />
           </Key>
         </div>

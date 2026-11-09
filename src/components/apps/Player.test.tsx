@@ -7,7 +7,7 @@ import { renderDesktop, windowEl } from '#/test/desktop'
 vi.mock('#/components/Backdrop', () => ({ Backdrop: () => null }))
 
 // Footage for the first channel, so there are clips to skip through: two
-// videos with a photo between them.
+// videos with a photo between them. It has something to say under Info.
 vi.mock('#/lib/site', async (load) => {
   const site = await load<typeof import('#/lib/site')>()
   const [first, ...rest] = site.channels
@@ -16,6 +16,7 @@ vi.mock('#/lib/site', async (load) => {
     channels: [
       {
         ...first!,
+        about: ['A place worth the trip.'],
         clips: ['a.mp4', 'b.webp', 'c.mp4'].map((n) => ({
           src: n,
           still: n.endsWith('.webp'),
@@ -53,7 +54,7 @@ describe('Travel', () => {
     const items = screen.getAllByRole('menuitemradio')
     expect(items.map((i) => i.textContent)).toEqual(
       channels.map(
-        (c, i) => `${String(i + 1).padStart(2, '0')}${c.place}${c.country}`,
+        (c, i) => `${String(i + 1).padStart(2, '0')}${c.place}${c.region}`,
       ),
     )
     expect(items[0]!.getAttribute('aria-checked')).toBe('true')
@@ -77,6 +78,29 @@ describe('Travel', () => {
     expect(screen.queryByRole('menu', { name: 'Channels' })).toBeNull()
     expect(await on()).toBe(`Channel: ${channels[2]!.place}`)
     expect(document.activeElement).toBe(button)
+  })
+
+  it('says what the place is under Info, closing on Escape', async () => {
+    const { user } = await renderDesktop('/')
+    const info = await screen.findByRole('button', { name: 'Info' })
+    await user.click(info)
+    const panel = screen.getByRole('region', {
+      name: `About ${channels[0]!.place}`,
+    })
+    expect(panel.textContent).toContain(channels[0]!.about![0])
+    expect(info.getAttribute('aria-expanded')).toBe('true')
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('region', { name: /^About / })).toBeNull()
+    expect(screen.getByRole('region', { name: 'Travel' })).toBeTruthy()
+    expect(document.activeElement).toBe(info)
+  })
+
+  it('turns Info off for a place with nothing to say', async () => {
+    const { user } = await renderDesktop('/')
+    await user.click(await screen.findByRole('button', { name: 'Info' }))
+    await user.click(key('Next channel'))
+    expect(key('Info')).toHaveProperty('disabled', true)
+    expect(screen.queryByRole('region', { name: /^About / })).toBeNull()
   })
 
   it('closes the list on Escape without closing the window', async () => {

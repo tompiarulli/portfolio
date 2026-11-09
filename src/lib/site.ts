@@ -443,7 +443,11 @@ export type Clip = {
 export type Channel = {
   /** The place, as the screen and the channel list name it. */
   place: string
-  country: string
+  /** Where it is, freeform: a town and state, a country. */
+  region: string
+  /** What the place is, a paragraph per string, for the player's Info
+   *  panel; without it, Info is off. */
+  about?: string[]
   /** Where it was shot, in degrees, for the readouts some themes put on
    *  screen: north and east positive. */
   lat: number
@@ -457,11 +461,11 @@ export type Channel = {
 /** The Player's channels, one per place, in the order they're tuned.
  *  Placeholders until their footage is in. */
 export const channels: Channel[] = [
-  { place: 'Lisbon', country: 'Portugal', lat: 38.72, lon: -9.14, clips: [] },
-  { place: 'Kyoto', country: 'Japan', lat: 35.01, lon: 135.77, clips: [] },
+  { place: 'Lisbon', region: 'Portugal', lat: 38.72, lon: -9.14, clips: [] },
+  { place: 'Kyoto', region: 'Japan', lat: 35.01, lon: 135.77, clips: [] },
   {
     place: 'Mexico City',
-    country: 'Mexico',
+    region: 'Mexico',
     lat: 19.43,
     lon: -99.13,
     clips: [],
