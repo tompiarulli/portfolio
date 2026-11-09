@@ -1,3 +1,5 @@
+import { travel } from '#/lib/travel.gen'
+
 const version = '9.2'
 
 export type WorkEntry = {
@@ -459,8 +461,19 @@ export type Channel = {
 }
 
 /** The Player's channels, one per place, in the order they're tuned.
- *  Placeholders until their footage is in. */
+ *  Placeholders, but for the first, until their footage is in. */
 export const channels: Channel[] = [
+  {
+    place: 'The Stanley Hotel',
+    region: 'Estes Park, CO',
+    about: [
+      'A Colonial Revival hotel opened in 1909 by Freelan Oscar Stanley, of the Stanley Steamer, at the edge of the Rockies above Estes Park.',
+      'Stephen King spent a night in room 217 in 1974, with the hotel all but empty at the end of the season, and left with the idea for The Shining. It leans into that now, ghost tours and all.',
+    ],
+    lat: 40.38,
+    lon: -105.52,
+    clips: travel.stanley ?? [],
+  },
   { place: 'Lisbon', region: 'Portugal', lat: 38.72, lon: -9.14, clips: [] },
   { place: 'Kyoto', region: 'Japan', lat: 35.01, lon: 135.77, clips: [] },
   {
