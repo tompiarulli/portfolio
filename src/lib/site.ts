@@ -452,7 +452,7 @@ export type Channel = {
    *  screen: north and east positive. */
   lat: number
   lon: number
-  /** Its clips, played in turn and round again: the ones
+  /** Its clips, dealt in a random order and round again: the ones
    *  `scripts/travel.mjs` made, from `travel` by the channel's folder
    *  name. With none, the channel shows a test card. */
   clips: Clip[]

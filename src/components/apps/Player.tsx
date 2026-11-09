@@ -21,6 +21,25 @@ const loadedAt = Date.now()
 // How long a photo holds the screen, in play.
 const STILL_MS = 5000
 
+/** 0 to n - 1 in a random order. */
+function deal(n: number) {
+  const order = [...Array(n).keys()]
+  for (let i = n - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[order[i], order[j]] = [order[j]!, order[i]!]
+  }
+  return order
+}
+
+/** A channel to come on at, at random: any with footage, since a test card
+ *  is no way to open, unless none has any yet. */
+function anyChannel() {
+  const all = [...channels.keys()]
+  const shot = all.filter((i) => channels[i]!.clips.length)
+  const from = shot.length ? shot : all
+  return from[Math.floor(Math.random() * from.length)] ?? 0
+}
+
 const MONTHS = 'JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC'.split(' ')
 
 const pad = (n: number) => String(n).padStart(2, '0')
@@ -398,9 +417,16 @@ export function Player() {
     currentTheme,
     () => DEFAULT_THEME,
   )
+  // The channel on: a random one, picked once the page has loaded, so the
+  // prerendered page keeps the first.
   const [index, setIndex] = useState(0)
-  // The clip playing on the channel.
+  // The clip playing on the channel: a place in its running order, which
+  // is dealt afresh each time the channel is tuned. The prerendered page
+  // keeps the channel's own order, dealt along with the channel.
   const [clip, setClip] = useState(0)
+  const [order, setOrder] = useState(() => [
+    ...Array(channels[0]?.clips.length ?? 0).keys(),
+  ])
   // When the channel last changed, for the snow between channels and
   // the tape counter; 0 until it first does. Clips cut straight on.
   const [tunedAt, setTunedAt] = useState(0)
@@ -428,14 +454,22 @@ export function Player() {
 
   useEffect(() => {
     // Then plays on its own, unless motion is unwelcome.
+    let idle = 0
     const attach = () =>
-      (window.requestIdleCallback ?? setTimeout)(() => {
+      (idle = (window.requestIdleCallback ?? window.setTimeout)(() => {
+        const first = anyChannel()
         setReady(true)
+        setIndex(first)
+        setOrder(deal(channels[first]?.clips.length ?? 0))
         setPlaying(!matchMedia('(prefers-reduced-motion: reduce)').matches)
-      })
+      }))
     if (document.readyState === 'complete') attach()
     else addEventListener('load', attach, { once: true })
-    return () => removeEventListener('load', attach)
+    // Called off on the way out, so the channel is only ever picked once.
+    return () => {
+      removeEventListener('load', attach)
+      ;(window.cancelIdleCallback ?? window.clearTimeout)(idle)
+    }
   }, [])
 
   // Space plays and pauses anywhere in the window, as in any player,
@@ -455,7 +489,7 @@ export function Player() {
     return () => win.removeEventListener('keydown', onKeyDown)
   }, [])
 
-  const on = clips[clip] ?? clips[0]
+  const on = clips[order[clip] ?? 0]
   const media = (path?: string) => (path ? `/travel/${path}` : undefined)
   const src = ready ? media(on?.src) : undefined
 
@@ -495,8 +529,10 @@ export function Player() {
   }, [still, ready, playing, hidden, clips.length, index, clip])
 
   const tune = (i: number) => {
-    setIndex((i + channels.length) % channels.length)
+    const next = (i + channels.length) % channels.length
+    setIndex(next)
     setClip(0)
+    setOrder(deal(channels[next]?.clips.length ?? 0))
     setTunedAt(Date.now())
   }
   // The clip before or after, round the channel's list.

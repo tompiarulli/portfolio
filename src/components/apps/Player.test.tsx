@@ -1,5 +1,5 @@
 import { act, screen, waitFor } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { channels } from '#/lib/site'
 import { renderDesktop, windowEl } from '#/test/desktop'
@@ -42,12 +42,15 @@ const key = (name: string) => screen.getByRole('button', { name })
 const on = async () => (await picker()).getAttribute('aria-label')
 
 describe('Travel', () => {
+  // Clips are dealt in a random order; near 1, the deal leaves them as
+  // they are.
+  beforeEach(() => vi.spyOn(Math, 'random').mockReturnValue(0.9999))
   afterEach(() => {
     vi.useRealTimers()
     vi.restoreAllMocks()
   })
 
-  it('opens on the first channel, with a list of every place', async () => {
+  it('opens on the one channel with footage, with a list of every place', async () => {
     const { user } = await renderDesktop('/')
     expect(await on()).toBe(`Channel: ${channels[0]!.place}`)
     await user.click(await picker())
@@ -59,6 +62,21 @@ describe('Travel', () => {
     )
     expect(items[0]!.getAttribute('aria-checked')).toBe('true')
     await waitFor(() => expect(document.activeElement).toBe(items[0]))
+  })
+
+  it('comes on at a random channel with footage', async () => {
+    // Footage on the third as well, which a pick near 1 lands on.
+    const third = channels[2]!
+    const empty = third.clips
+    third.clips = [{ src: 'd.mp4' }]
+    try {
+      await renderDesktop('/')
+      await waitFor(async () =>
+        expect(await on()).toBe(`Channel: ${third.place}`),
+      )
+    } finally {
+      third.clips = empty
+    }
   })
 
   it('steps through the channels, wrapping at the ends', async () => {
@@ -122,6 +140,20 @@ describe('Travel', () => {
     await user.click(key('Previous clip'))
     await user.click(key('Previous clip'))
     expect(await clip()).toMatch(/c\.mp4$/)
+  })
+
+  it('deals the clips in a new order each time the channel is tuned', async () => {
+    vi.spyOn(Math, 'random').mockReturnValue(0)
+    const { user } = await renderDesktop('/')
+    // At 0, each clip swaps with the first: b, c, a.
+    expect(await clip()).toMatch(/b\.webp$/)
+    expect(screen.getByText('1/3')).toBeTruthy()
+    await user.click(key('Next clip'))
+    expect(await clip()).toMatch(/c\.mp4$/)
+    await user.click(key('Next channel'))
+    vi.spyOn(Math, 'random').mockReturnValue(0.9999)
+    await user.click(key('Previous channel'))
+    expect(await clip()).toMatch(/a\.mp4$/)
   })
 
   it('holds a photo for a few seconds of play, then moves on', async () => {
