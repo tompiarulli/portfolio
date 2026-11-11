@@ -1118,12 +1118,12 @@ body {
    windows are placed with transform, so they jump with translate; the
    dock is centred with translate, so the chrome jumps with transform. */
 [data-theme='steamboat'] {
-  --window-boot: projector-start 700ms steps(1) 450ms both;
+  --window-boot: projector-start 900ms steps(1) 550ms both;
 }
 [data-theme='steamboat'][data-booting]
   [data-shutdown]:not([data-shutdown='windows']) {
   transition: none;
-  animation: chrome-jump 700ms steps(1) 450ms both;
+  animation: chrome-jump 900ms steps(1) 550ms both;
 }
 @keyframes chrome-jump {
   0% {
@@ -1165,7 +1165,7 @@ body {
       transparent var(--iris),
       #000 calc(var(--iris) + 1px)
     );
-    animation: iris-in 800ms ease-in-out both;
+    animation: iris-in 1100ms ease-in-out both;
   }
 }
 /* OUTATIME boots at speed, out of the flash its start screen leaves on:
@@ -1503,7 +1503,7 @@ body {
     transparent var(--iris),
     #000 calc(var(--iris) + 1px)
   );
-  animation: iris-in 900ms ease-in-out both;
+  animation: iris-in 1200ms ease-in-out both;
 }
 @keyframes iris-in {
   from {
@@ -1530,7 +1530,7 @@ body {
    dark, as frame lines roll down the screen, and it ends dark. */
 .run-out {
   background: var(--glint);
-  animation: run-out 700ms steps(1) both;
+  animation: run-out 1000ms steps(1) both;
 }
 @keyframes run-out {
   0% {
@@ -1563,7 +1563,7 @@ body {
 }
 .run-out-band {
   background: var(--off);
-  animation: run-out-band 140ms linear 5 both;
+  animation: run-out-band 200ms linear 5 both;
 }
 @keyframes run-out-band {
   from {
@@ -1668,7 +1668,7 @@ body {
 /* The projector catching up as the film starts: the frame jumps and the
    light pulses for a second, then settles into the flicker. */
 .projector-start {
-  animation: projector-start 1.1s steps(1) 0.6s both;
+  animation: projector-start 1.4s steps(1) 0.8s both;
 }
 @keyframes projector-start {
   0% {

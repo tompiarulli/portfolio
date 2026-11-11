@@ -65,7 +65,7 @@ export const DOWN_AT: Partial<Record<Theme, number>> = {
 export const START_EXITS: Record<Theme, number> = {
   orbital: 700,
   rabbit: 520,
-  steamboat: 450,
+  steamboat: 600,
   traveler: 550,
 }
 
