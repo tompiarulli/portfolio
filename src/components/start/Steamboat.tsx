@@ -6,45 +6,14 @@ import type { ShutDownProps, StartScreenProps } from '#/components/start'
 import { BuildLine, Title } from '#/components/start/parts'
 import { site } from '#/lib/site'
 
-/** Steamboat's shut down, like the end of an old cartoon: the desktop
- *  irises out to a point, then an end card comes up on the dimmed film,
- *  jumping and flickering, until the film runs out of the gate: a few
- *  frames flap through bright and dark, then nothing. */
+/** Steamboat's shut down, like the end of a reel: the film runs out of
+ *  the gate, a few frames flapping through bright and dark, then nothing,
+ *  and the leader of the next reel counts in. */
 export function Down({ onDone }: ShutDownProps) {
-  const [part, setPart] = useState<'iris' | 'end' | 'run-out'>('iris')
   useEffect(() => {
-    const t = setTimeout(
-      part === 'iris'
-        ? () => setPart('end')
-        : part === 'end'
-          ? () => setPart('run-out')
-          : onDone,
-      PARTS[part],
-    )
+    const t = setTimeout(onDone, RUN_OUT)
     return () => clearTimeout(t)
-  }, [part, onDone])
-  if (part === 'iris')
-    return (
-      <div
-        style={{ '--iris-time': `${PARTS.iris - 100}ms` } as CSSProperties}
-        className="iris-out absolute inset-0"
-      />
-    )
-  if (part === 'end')
-    return (
-      <Card>
-        <div className="flex flex-col items-center gap-[4vh]">
-          {/* Set as the title is: in bands over its extrusion. */}
-          <p className="relative grid font-(family-name:--start-title-font) text-[calc(96px*var(--start-title-scale))] leading-none [font-weight:var(--start-title-weight)] tracking-(--start-title-tracking) *:col-start-1 *:row-start-1 sm:text-[calc(144px*var(--start-title-scale))]">
-            <span aria-hidden className="title-extrude">
-              {site.shutdown.end}
-            </span>
-            <span className="title-bands">{site.shutdown.end}</span>
-          </p>
-          <Rule />
-        </div>
-      </Card>
-    )
+  }, [onDone])
   return (
     <div aria-hidden className="absolute inset-0 overflow-hidden bg-(--off)">
       <div className="run-out absolute inset-0" />
@@ -138,9 +107,9 @@ function Leader({ count }: { count: number }) {
   )
 }
 
-// How long each part of the shut down takes, in ms (the run-out's frames
-// are in .run-out in styles.css).
-const PARTS = { iris: 1000, end: 2400, 'run-out': 1100 } as const
+// How long the shut down takes, in ms: the run-out's frames (.run-out in
+// styles.css), then a moment of dark.
+const RUN_OUT = 1100
 // The leader counts from the first number, a beat each, and the card cuts
 // in after the second.
 const LEADER = [5, 2] as const

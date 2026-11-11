@@ -292,8 +292,6 @@ export const site = {
     /** Under the name above the title on Steamboat's start screen, like
      *  an old cartoon's title card. */
     presents: 'presents',
-    /** Steamboat's end card, as it shuts down. */
-    end: 'The End',
     /** OUTATIME's fuel gauge, running dry as it shuts down: its label,
      *  its warning lamp, and the marks at either end. */
     fuel: { label: 'Fuel', empty: 'Empty', low: 'E', high: 'F' },
