@@ -1249,14 +1249,14 @@ body {
    with translate; the dock is centred with translate, so the chrome
    slides with transform. */
 [data-theme='steamboat'] {
-  --window-boot: projector-start 1100ms steps(1) 550ms both;
-  --window-down: window-iris 400ms ease-in both;
+  --window-boot: projector-start 1100ms steps(1) 630ms both;
+  --window-down: window-iris 450ms ease-in both;
 }
 /* Shutting down, each window irises out on its own middle, like the end
    of a cartoon, front to back (--depth), as the menu bar and dock slide
    off their edges. */
 [data-theme='steamboat'] [data-window] {
-  --window-down: window-iris 400ms ease-in calc(min(var(--depth), 2) * 100ms)
+  --window-down: window-iris 450ms ease-in calc(min(var(--depth), 2) * 110ms)
     both;
 }
 [data-theme='steamboat'][data-off] [data-window] {
@@ -1267,7 +1267,7 @@ body {
   );
 }
 [data-theme='steamboat'][data-off] [data-shutdown='windows'] {
-  transition-delay: 600ms;
+  transition-delay: 680ms;
 }
 @keyframes window-iris {
   /* About the half-diagonal of the largest window, so it starts closing
@@ -1285,7 +1285,7 @@ body {
     scale: none;
     opacity: 1;
     transition: none;
-    animation: steamboat-bar-out 420ms both;
+    animation: steamboat-bar-out 480ms both;
   }
   [data-theme='steamboat'][data-off] [data-shutdown='dock'] {
     animation-name: steamboat-dock-out;
@@ -1294,7 +1294,7 @@ body {
 [data-theme='steamboat'][data-booting] [data-shutdown='bar'],
 [data-theme='steamboat'][data-booting] [data-shutdown='dock'] {
   transition: none;
-  animation: steamboat-bar-in 560ms 550ms both;
+  animation: steamboat-bar-in 560ms 630ms both;
 }
 [data-theme='steamboat'][data-booting] [data-shutdown='dock'] {
   animation-name: steamboat-dock-in;
@@ -1386,7 +1386,7 @@ body {
       transparent var(--iris),
       #000 calc(var(--iris) + 1px)
     );
-    animation: iris-in 1000ms ease-in-out both;
+    animation: iris-in 1150ms ease-in-out both;
   }
 }
 /* OUTATIME boots at speed, out of the flash its start screen leaves on:
@@ -1772,7 +1772,7 @@ body {
     transparent var(--iris),
     #000 calc(var(--iris) + 1px)
   );
-  animation: iris-in 1000ms ease-in-out both;
+  animation: iris-in 1200ms ease-in-out both;
 }
 @keyframes iris-in {
   from {
@@ -1799,7 +1799,7 @@ body {
    dark, as frame lines roll down the screen, and it ends dark. */
 .run-out {
   background: var(--glint);
-  animation: run-out 1300ms steps(1) both;
+  animation: run-out 1600ms steps(1) both;
 }
 @keyframes run-out {
   0% {
@@ -1832,7 +1832,7 @@ body {
 }
 .run-out-band {
   background: var(--off);
-  animation: run-out-band 260ms linear 5 both;
+  animation: run-out-band 320ms linear 5 both;
 }
 @keyframes run-out-band {
   from {

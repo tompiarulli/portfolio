@@ -55,7 +55,9 @@ export const SEQUENCES: Record<Theme, ComponentType<SequenceProps>> = {
 export const CLOSING: Record<Theme, number> = {
   orbital: 500,
   rabbit: 500,
-  steamboat: 650,
+  // Its windows and chrome are gone by about 680; it holds on the empty
+  // desktop a beat before the film runs out.
+  steamboat: 950,
   traveler: 500,
 }
 
@@ -70,7 +72,7 @@ export const DOWN_AT: Partial<Record<Theme, number>> = {
 export const START_EXITS: Record<Theme, number> = {
   orbital: 700,
   rabbit: 790,
-  steamboat: 550,
+  steamboat: 650,
   traveler: 550,
 }
 

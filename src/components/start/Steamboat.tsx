@@ -53,7 +53,7 @@ export function Start({ leaving }: StartScreenProps) {
       <div className="iris-in absolute inset-0" />
       {leaving && (
         <div
-          style={{ '--iris-time': '500ms' } as CSSProperties}
+          style={{ '--iris-time': '600ms' } as CSSProperties}
           className="iris-out absolute inset-0"
         />
       )}
@@ -109,7 +109,7 @@ function Leader({ count }: { count: number }) {
 
 // How long the shut down takes, in ms: the run-out's frames (.run-out in
 // styles.css), with the leader cutting in on the last of them.
-const RUN_OUT = 1300
+const RUN_OUT = 1600
 // The leader counts from the first number, a beat each, and the card cuts
 // in after the second.
 const LEADER = [5, 2] as const
