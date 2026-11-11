@@ -1305,6 +1305,53 @@ body {
    since they're placed with transform. */
 [data-theme='traveler'] {
   --window-boot: window-drop 360ms cubic-bezier(0.2, 0.8, 0.3, 1.15) 250ms both;
+  --window-down: window-streak 300ms cubic-bezier(0.6, 0, 1, 0.6) both;
+}
+/* Shutting down, it leaves at speed: each window stretches into a streak
+   and shoots off to the right, front to back (--depth), and the menu bar
+   and dock slide back out to their edges. */
+[data-theme='traveler'] [data-window] {
+  --window-down: window-streak 300ms cubic-bezier(0.6, 0, 1, 0.6)
+    calc(min(var(--depth), 3) * 50ms) both;
+}
+@keyframes window-streak {
+  30% {
+    translate: -12px 0;
+    scale: 1;
+    opacity: 1;
+  }
+  to {
+    translate: 110vw 0;
+    scale: 2.5 0.1;
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme='traveler'][data-off] [data-shutdown='bar'],
+  [data-theme='traveler'][data-off] [data-shutdown='dock'] {
+    scale: none;
+    opacity: 1;
+    transition: none;
+    /* The slide in played backwards: as long, its ease mirrored, so it
+       draws back a touch before it goes; at once, so it's gone before the
+       screen dims and the gauge rises. */
+    animation: slide-out-up 380ms cubic-bezier(0.7, -0.1, 0.8, 0.2) both;
+  }
+  [data-theme='traveler'][data-off] [data-shutdown='dock'] {
+    animation-name: slide-out-down;
+  }
+}
+/* Their own keyframes, not slide-down and slide-up reversed: an animation
+   that only changes direction wouldn't play again at boot. */
+@keyframes slide-out-up {
+  to {
+    transform: translateY(-100%);
+  }
+}
+@keyframes slide-out-down {
+  to {
+    transform: translateY(100%);
+  }
 }
 [data-theme='traveler'][data-booting] [data-shutdown='bar'] {
   transition: none;
