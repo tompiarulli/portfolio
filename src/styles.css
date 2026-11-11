@@ -1244,42 +1244,133 @@ body {
   }
 }
 /* Steamboat boots as its start screen ends, on film: the desktop irises
-   in, and the chrome and windows jump as the projector catches up. The
-   windows are placed with transform, so they jump with translate; the
-   dock is centred with translate, so the chrome jumps with transform. */
+   in, the windows jump as the projector catches up, and the menu bar and
+   dock slide in from their edges. The windows are placed with transform, so they jump
+   with translate; the dock is centred with translate, so the chrome
+   slides with transform. */
 [data-theme='steamboat'] {
-  --window-boot: projector-start 900ms steps(1) 550ms both;
+  --window-boot: projector-start 1100ms steps(1) 550ms both;
+  --window-down: window-iris 400ms ease-in both;
 }
-[data-theme='steamboat'][data-booting]
-  [data-shutdown]:not([data-shutdown='windows']) {
+/* Shutting down, each window irises out on its own middle, like the end
+   of a cartoon, front to back (--depth), as the menu bar and dock slide
+   off their edges. */
+[data-theme='steamboat'] [data-window] {
+  --window-down: window-iris 400ms ease-in calc(min(var(--depth), 2) * 100ms)
+    both;
+}
+[data-theme='steamboat'][data-off] [data-window] {
+  mask-image: radial-gradient(
+    circle,
+    #000 var(--iris),
+    transparent calc(var(--iris) + 1px)
+  );
+}
+[data-theme='steamboat'][data-off] [data-shutdown='windows'] {
+  transition-delay: 600ms;
+}
+@keyframes window-iris {
+  /* About the half-diagonal of the largest window, so it starts closing
+     at once. */
+  from {
+    --iris: 400px;
+  }
+  to {
+    --iris: 0px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme='steamboat'][data-off] [data-shutdown='bar'],
+  [data-theme='steamboat'][data-off] [data-shutdown='dock'] {
+    scale: none;
+    opacity: 1;
+    transition: none;
+    animation: steamboat-bar-out 420ms both;
+  }
+  [data-theme='steamboat'][data-off] [data-shutdown='dock'] {
+    animation-name: steamboat-dock-out;
+  }
+}
+[data-theme='steamboat'][data-booting] [data-shutdown='bar'],
+[data-theme='steamboat'][data-booting] [data-shutdown='dock'] {
   transition: none;
-  animation: chrome-jump 900ms steps(1) 550ms both;
+  animation: steamboat-bar-in 560ms 550ms both;
 }
-@keyframes chrome-jump {
+[data-theme='steamboat'][data-booting] [data-shutdown='dock'] {
+  animation-name: steamboat-dock-in;
+}
+/* Like a cartoon's: leaving, they wind up, pulling in from their edge,
+   then zip off it; coming in, they shoot past their place and spring
+   back into it. Each way has its own keyframes, as an animation
+   that only changes direction wouldn't play again at boot. */
+@keyframes steamboat-bar-out {
   0% {
-    transform: translateY(-6px);
-    opacity: 0.85;
-  }
-  12% {
-    transform: translateY(4px);
-    opacity: 1;
-  }
-  24% {
-    transform: translateY(-3px);
-    opacity: 0.8;
-  }
-  36% {
-    transform: translateY(2px);
-    opacity: 1;
-  }
-  52% {
-    transform: translateY(-1px);
-    opacity: 0.9;
-  }
-  70% {
     transform: none;
-    opacity: 1;
+    animation-timing-function: cubic-bezier(0.3, 0.6, 0.6, 1);
   }
+  30% {
+    transform: translateY(14px);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.5);
+  }
+  100% {
+    transform: translateY(-110%);
+  }
+}
+@keyframes steamboat-dock-out {
+  0% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0.3, 0.6, 0.6, 1);
+  }
+  30% {
+    transform: translateY(-14px);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.5);
+  }
+  100% {
+    transform: translateY(110%);
+  }
+}
+@keyframes steamboat-bar-in {
+  0% {
+    transform: translateY(-110%);
+    animation-timing-function: cubic-bezier(0.2, 0.9, 0.4, 1);
+  }
+  50% {
+    transform: translateY(7px);
+    /* Springing back, it pops a touch past its place, out over the
+       edge, and settles. */
+    animation-timing-function: cubic-bezier(0.35, 0, 0.25, 1.5);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes steamboat-dock-in {
+  0% {
+    transform: translateY(110%);
+    animation-timing-function: cubic-bezier(0.2, 0.9, 0.4, 1);
+  }
+  50% {
+    transform: translateY(-7px);
+    /* Springing back, it pops a touch past its place, out over the
+       edge, and settles. */
+    animation-timing-function: cubic-bezier(0.35, 0, 0.25, 1.5);
+  }
+  100% {
+    transform: none;
+  }
+}
+/* Pulled in from their edges, they'd show what's past them, so the menu
+   bar and the dock's folder run on 24px past the screen's edge, more than
+   they're ever pulled in by. The dock doesn't clip here, so its folder
+   can. */
+[data-theme='steamboat'] [data-shutdown='bar']::before {
+  content: '';
+  position: absolute;
+  inset-inline: -1px;
+  bottom: 100%;
+  height: 24px;
+  border-inline: inherit;
+  background: inherit;
 }
 @media (prefers-reduced-motion: no-preference) {
   [data-theme='steamboat'][data-booting]::after {
@@ -1295,7 +1386,7 @@ body {
       transparent var(--iris),
       #000 calc(var(--iris) + 1px)
     );
-    animation: iris-in 1100ms ease-in-out both;
+    animation: iris-in 1000ms ease-in-out both;
   }
 }
 /* OUTATIME boots at speed, out of the flash its start screen leaves on:
@@ -1544,6 +1635,7 @@ body {
    the focused app's tab raised and joined to the folder, the rest behind
    the edge. The dock keeps one height, whichever tab is up. */
 [data-theme='steamboat'] [data-shutdown='dock'] {
+  overflow: visible;
   height: 49px;
   align-items: flex-end;
   gap: 4px;
@@ -1556,8 +1648,8 @@ body {
   content: '';
   position: absolute;
   inset-inline: 0;
-  bottom: 0;
-  height: 8px;
+  bottom: -24px;
+  height: 32px;
   border: 1px solid var(--ink);
   border-bottom: 0;
   background: var(--surface);
@@ -1680,7 +1772,7 @@ body {
     transparent var(--iris),
     #000 calc(var(--iris) + 1px)
   );
-  animation: iris-in 1200ms ease-in-out both;
+  animation: iris-in 1000ms ease-in-out both;
 }
 @keyframes iris-in {
   from {
@@ -1707,7 +1799,7 @@ body {
    dark, as frame lines roll down the screen, and it ends dark. */
 .run-out {
   background: var(--glint);
-  animation: run-out 1000ms steps(1) both;
+  animation: run-out 1300ms steps(1) both;
 }
 @keyframes run-out {
   0% {
@@ -1740,7 +1832,7 @@ body {
 }
 .run-out-band {
   background: var(--off);
-  animation: run-out-band 200ms linear 5 both;
+  animation: run-out-band 260ms linear 5 both;
 }
 @keyframes run-out-band {
   from {

@@ -50,9 +50,14 @@ export const SEQUENCES: Record<Theme, ComponentType<SequenceProps>> = {
 }
 
 /** How long the desktop chrome takes to close at Restart, in ms: the
- *  windows fly into the dock, then the dock and menu bar fold away
- *  (styles.css, under "Shut Down"). */
-export const CLOSING = 500
+ *  windows go, then the dock and menu bar (styles.css, under "Shut
+ *  Down"). */
+export const CLOSING: Record<Theme, number> = {
+  orbital: 500,
+  rabbit: 500,
+  steamboat: 650,
+  traveler: 500,
+}
 
 /** How far into the close, in ms, a theme's shut down starts, for one that
  *  overlaps it; the rest start once the chrome has closed. */
@@ -65,7 +70,7 @@ export const DOWN_AT: Partial<Record<Theme, number>> = {
 export const START_EXITS: Record<Theme, number> = {
   orbital: 700,
   rabbit: 790,
-  steamboat: 600,
+  steamboat: 550,
   traveler: 550,
 }
 

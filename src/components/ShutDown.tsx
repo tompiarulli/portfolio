@@ -52,8 +52,11 @@ export function ShutDown({
   const [begun, setBegun] = useState(false)
   useEffect(() => {
     if (phase !== 'closing') return
-    const at = setTimeout(() => setBegun(true), DOWN_AT[theme] ?? CLOSING)
-    const t = setTimeout(() => setPhase('down'), CLOSING)
+    const at = setTimeout(
+      () => setBegun(true),
+      DOWN_AT[theme] ?? CLOSING[theme],
+    )
+    const t = setTimeout(() => setPhase('down'), CLOSING[theme])
     return () => {
       clearTimeout(at)
       clearTimeout(t)

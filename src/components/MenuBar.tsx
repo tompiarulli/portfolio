@@ -195,7 +195,7 @@ function SystemMenu({
 const noChange = () => () => {}
 
 // Long enough for any theme's boot to play out.
-const BOOTING = 1500
+const BOOTING = 1900
 
 export function MenuBar() {
   const [shutDown, setShutDown] = useState(false)
