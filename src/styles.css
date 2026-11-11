@@ -1244,12 +1244,12 @@ body {
   }
 }
 /* Steamboat boots as its start screen ends, on film: the desktop irises
-   in, the windows jump as the projector catches up, and the menu bar and
-   dock slide in from their edges. The windows are placed with transform, so they jump
-   with translate; the dock is centred with translate, so the chrome
-   slides with transform. */
+   in, and as it opens the windows jump as the projector catches up, and
+   the menu bar and dock slide in from their edges. The windows are
+   placed with transform, so they jump with translate; the dock is
+   centred with translate, so the chrome slides with transform. */
 [data-theme='steamboat'] {
-  --window-boot: projector-start 1100ms steps(1) 630ms both;
+  --window-boot: projector-start 1100ms steps(1) 200ms both;
   --window-down: window-iris 450ms ease-in both;
 }
 /* Shutting down, each window irises out on its own middle, like the end
@@ -1294,7 +1294,7 @@ body {
 [data-theme='steamboat'][data-booting] [data-shutdown='bar'],
 [data-theme='steamboat'][data-booting] [data-shutdown='dock'] {
   transition: none;
-  animation: steamboat-bar-in 560ms 630ms both;
+  animation: steamboat-bar-in 560ms 300ms both;
 }
 [data-theme='steamboat'][data-booting] [data-shutdown='dock'] {
   animation-name: steamboat-dock-in;
