@@ -64,7 +64,7 @@ export const DOWN_AT: Partial<Record<Theme, number>> = {
 /** How long each start screen's exit plays, in ms; none without motion. */
 export const START_EXITS: Record<Theme, number> = {
   orbital: 700,
-  rabbit: 520,
+  rabbit: 790,
   steamboat: 600,
   traveler: 550,
 }

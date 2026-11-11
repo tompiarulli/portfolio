@@ -7,20 +7,19 @@ import { site } from '#/lib/site'
 
 /** White Rabbit's shut down: no card, a shell pane over the rain, where
  *  the start screen's boot pane will be. Root types the halt and the
- *  system's messages print a line at a time, as the rain speeds up and
- *  drains off the foot of the screen (CodeRain). Then the whole screen
- *  dims into the console's ground, slowly, like phosphor letting go, and
- *  the start screen prints over it. */
+ *  system's messages print a line at a time, as the rain gathers speed
+ *  and drains off the foot of the screen (CodeRain). Then the screen clears
+ *  at once to the console's ground, and the start screen prints over it. */
 export function Down({ onDone }: ShutDownProps) {
   const next = clock(PANE)
   const paneAt = next(LINE)
   const commandAt = next(HALT.length * CHAR + LINE)
   const lines = site.shutdown.halt.map((text) => ({ text, at: next(LINE) }))
-  const glowAt = next(HOLD)
+  const clearAt = next(HOLD)
   useEffect(() => {
-    const t = setTimeout(onDone, glowAt + GLOW)
+    const t = setTimeout(onDone, clearAt + CLEAR)
     return () => clearTimeout(t)
-  }, [glowAt, onDone])
+  }, [clearAt, onDone])
   return (
     <div className="pointer-events-none absolute inset-0 font-mono text-[12px] leading-[1.35] whitespace-pre text-(--ink) sm:text-[14px]">
       <Pane
@@ -37,10 +36,8 @@ export function Down({ onDone }: ShutDownProps) {
         ))}
       </Pane>
       <div
-        style={
-          { '--at': `${glowAt}ms`, '--glow': `${GLOW}ms` } as CSSProperties
-        }
-        className="afterglow absolute inset-0 bg-(--terminal)"
+        style={{ '--at': `${clearAt}ms` } as CSSProperties}
+        className="print-line absolute inset-0 bg-(--terminal)"
       />
     </div>
   )
@@ -84,7 +81,7 @@ export function Start({ leaving }: StartScreenProps) {
   }))
   // The prompt types out like a command; the cursor waits once it's done.
   const promptAt = next(LINE)
-  const typedAt = promptAt + site.shutdown.prompt.length * CHAR
+  const typedAt = promptAt + site.shutdown.prompt.length * PROMPT_CHAR
 
   return (
     <div
@@ -153,10 +150,10 @@ export function Start({ leaving }: StartScreenProps) {
           </Out>
         ))}
         <Out at={promptAt}>
-          <Typed at={promptAt} text={site.shutdown.prompt} />
+          <Typed at={promptAt} text={site.shutdown.prompt} char={PROMPT_CHAR} />
           <span
             style={{ '--at': `${typedAt}ms` } as CSSProperties}
-            className="cursor-on ml-[1ch] inline-block h-[1.1em] w-[1ch] translate-y-[0.2em] bg-current"
+            className="cursor-on inline-block h-[1.1em] w-[1ch] translate-y-[0.2em] bg-current"
           />
         </Out>
       </Pane>
@@ -241,14 +238,22 @@ function Command({ at, command }: { at: number; command: string }) {
   )
 }
 
-/** Text typed out a character at a time from `at`. */
-function Typed({ at, text }: { at: number; text: string }) {
+/** Text typed out a character at a time from `at`, `char` ms each. */
+function Typed({
+  at,
+  text,
+  char = CHAR,
+}: {
+  at: number
+  text: string
+  char?: number
+}) {
   return (
     <span
       style={
         {
           '--chars': text.length,
-          '--type': `${text.length * CHAR}ms`,
+          '--type': `${text.length * char}ms`,
           '--at': `${at}ms`,
         } as CSSProperties
       }
@@ -290,14 +295,16 @@ const BANNER_AT = 200
 
 /** When each piece vanishes as the screen leaves, in ms; the ground's
  *  wipe follows the last (see .console-wipe in styles.css). */
-const OUT = { alert: 0, boot: 70, ps: 140, chrome: 210 }
+const OUT = { alert: 0, boot: 120, ps: 240, chrome: 360 }
 const PANE = 300
 const CHAR = 30
+// The prompt types quicker than the commands, being the system's.
+const PROMPT_CHAR = 22
 const ROW = 50
 const LINE = 220
 
 const HALT = 'shutdown -h now'
 // The shut down's pace: the hold after its last line, and how long the
-// screen takes to dim.
+// cleared screen stays empty before the start screen prints.
 const HOLD = 500
-const GLOW = 1100
+const CLEAR = 200

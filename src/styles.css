@@ -1089,28 +1089,158 @@ body {
 [data-off] [data-window]::after {
   animation: var(--window-down-edge);
 }
-/* White Rabbit boots like a terminal redrawing, as the rain falls again
-   (CodeRain): the menu bar and then the dock type themselves in left to
-   right, and the windows draw in a few lines at a time, top to bottom. */
+/* White Rabbit shuts down and boots like a terminal clearing and
+   redrawing. Shutting down, its windows clear one at a time, front to back
+   (--depth), each wiping up a few rows at a time under a bar of reverse
+   video riding the last row left, like a cursor, as the menu bar and dock
+   erase right to left, the cursor a block on the last cell left. Booting,
+   as the rain falls again (CodeRain), the menu bar and then the dock type
+   back in left to right under the block, and the windows play the clear
+   backwards: back to front (--layer), each drawing down under the bar,
+   then blinking once in reverse video as it's done. The reverse video is
+   the outline's overlay in --ink, by difference: ink on the ground swaps
+   to ground on ink. --window-down is set on the root too, so
+   WindowManager knows not to fly the windows into the dock. The clear has
+   keyframes of its own, as an animation that only changes direction
+   wouldn't play again at boot. */
 [data-theme='rabbit'] {
-  --window-boot: draw-down 360ms steps(12) 280ms both;
+  --window-down: clear-up 360ms steps(12) both;
+}
+[data-theme='rabbit'] [data-window] {
+  --clear: calc(min(var(--depth), 3) * 80ms);
+  --window-down: clear-up 360ms steps(12) var(--clear) both;
+  --window-down-edge: clear-cursor 360ms steps(12) var(--clear);
+  --repaint: calc(280ms + min(var(--layer), 3) * 80ms);
+  --window-boot: draw-down 360ms steps(12) var(--repaint) both;
+  --window-boot-edge:
+    repaint-cursor 360ms steps(12) var(--repaint) backwards,
+    repaint-blink 80ms steps(1) calc(var(--repaint) + 360ms);
+}
+[data-theme='rabbit']:is([data-booting], [data-off]) [data-window]::after {
+  border: 0;
+  background: var(--ink);
+  mix-blend-mode: difference;
+  opacity: 1;
+  clip-path: inset(0 0 100% 0);
 }
 [data-theme='rabbit'][data-booting]
   [data-shutdown]:not([data-shutdown='windows']) {
   transition: none;
-  animation: type-in 280ms steps(14) both;
+  animation: type-in 300ms steps(24) both;
 }
 [data-theme='rabbit'][data-booting] [data-shutdown='dock'] {
   animation-delay: 140ms;
+}
+/* Shutting down, nothing folds: whatever's left goes at once, once the
+   windows have cleared (and without motion, the menu bar and dock too). */
+[data-theme='rabbit'][data-off] [data-shutdown] {
+  transition-duration: 0s;
+  transition-delay: 600ms;
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme='rabbit'][data-off]
+    [data-shutdown]:not([data-shutdown='windows']) {
+    scale: none;
+    opacity: 1;
+    transition: none;
+    animation: type-out 300ms steps(24) 300ms both;
+  }
+}
+/* The block cursor over the menu bar and dock as they type and erase: the
+   same reverse video as the windows' bar, a twenty-fourth wide. */
+[data-theme='rabbit']:is([data-booting], [data-off])
+  [data-shutdown]:not([data-shutdown='windows'])::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--ink);
+  mix-blend-mode: difference;
+  pointer-events: none;
+  clip-path: inset(0 100% 0 0);
+}
+[data-theme='rabbit'][data-booting]
+  [data-shutdown]:not([data-shutdown='windows'])::after {
+  animation: type-cursor-in 300ms steps(24) backwards;
+  animation-delay: inherit;
+}
+[data-theme='rabbit'][data-off]
+  [data-shutdown]:not([data-shutdown='windows'])::after {
+  animation: type-cursor-out 300ms steps(24) 300ms;
 }
 @keyframes type-in {
   from {
     clip-path: inset(0 100% 0 0);
   }
+  to {
+    clip-path: inset(0);
+  }
+}
+@keyframes type-out {
+  from {
+    clip-path: inset(0);
+  }
+  to {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+@keyframes type-cursor-in {
+  from {
+    clip-path: inset(0 100% 0 -4.167%);
+  }
+  to {
+    clip-path: inset(0 0 0 95.833%);
+  }
+}
+@keyframes type-cursor-out {
+  from {
+    clip-path: inset(0 0 0 95.833%);
+  }
+  to {
+    clip-path: inset(0 100% 0 -4.167%);
+  }
+}
+@keyframes clear-up {
+  from {
+    clip-path: inset(0);
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+/* The bar on the last row left, a twelfth of the window, in step with
+   clear-up. */
+@keyframes clear-cursor {
+  from {
+    clip-path: inset(91.667% 0 0 0);
+  }
+  to {
+    clip-path: inset(-8.333% 0 100% 0);
+  }
 }
 @keyframes draw-down {
   from {
     clip-path: inset(0 0 100% 0);
+  }
+  /* Stated, since none won't step from an inset. */
+  to {
+    clip-path: inset(0);
+  }
+}
+/* The bar rides the row just drawn, a twelfth of the window, in step
+   with draw-down; the blink covers the whole window. */
+@keyframes repaint-cursor {
+  from {
+    clip-path: inset(-8.333% 0 100% 0);
+  }
+  to {
+    clip-path: inset(91.667% 0 0 0);
+  }
+}
+@keyframes repaint-blink {
+  from,
+  to {
+    clip-path: inset(0);
   }
 }
 /* Steamboat boots as its start screen ends, on film: the desktop irises
@@ -2028,7 +2158,7 @@ body {
 /* Leaving, its ground steps away top to bottom, as the panes on it have
    closed (their delays are in Rabbit.tsx). */
 .console-wipe {
-  animation: console-wipe 240ms steps(6) 280ms forwards;
+  animation: console-wipe 360ms steps(6) 430ms forwards;
 }
 @keyframes console-wipe {
   from {
@@ -2037,11 +2167,6 @@ body {
   to {
     clip-path: inset(100% 0 0 0);
   }
-}
-/* Its shut down's end: the screen dims into the console's ground over
-   --glow, like phosphor letting go. */
-.afterglow {
-  animation: fade-in var(--glow) cubic-bezier(0.3, 0, 0.6, 1) var(--at) both;
 }
 .cursor-on {
   animation:

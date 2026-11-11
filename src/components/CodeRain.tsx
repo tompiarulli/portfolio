@@ -3,8 +3,10 @@ import { useEffect, useRef } from 'react'
 import { stage } from '#/lib/power'
 import { random } from '#/lib/random'
 
-/** How much faster the rain falls as it drains at Restart. */
+/** How much faster the rain falls as it drains at Restart, and how long
+ *  it takes to get there, in seconds, speeding up evenly. */
 const DRAIN = 4
+const RAMP = 1.5
 
 type Props = {
   background: string
@@ -123,14 +125,16 @@ export default function CodeRain({
       })
     }
 
-    // Restart drains the rain: from the shut down on, it falls faster,
-    // drops yet to enter never do, and none fall again once they're
-    // through. Booting, it all falls again from the top (lib/power).
+    // Restart drains the rain: from the shut down on, it falls faster and
+    // faster (RAMP), drops yet to enter never do, and none fall again once
+    // they're through. Booting, it all falls again from the top (lib/power).
     const draining = () => {
       const s = stage()
       return s !== undefined && s !== 'closing'
     }
     let drained = draining()
+    // How long it's been draining, in seconds.
+    let drainedFor = 0
 
     let frame = 0
     let last = performance.now()
@@ -142,9 +146,11 @@ export default function CodeRain({
       const drain = draining()
       if (drained && !drain) drops = drops.map(() => spawn())
       drained = drain
+      drainedFor = drain ? drainedFor + dt : 0
+      const pace = 1 + (DRAIN - 1) * Math.min(drainedFor / RAMP, 1)
       drops.forEach((d, i) => {
         if (drain && d.y < 0) d.y = Infinity
-        d.y += d.speed * dt * (drain ? DRAIN : 1)
+        d.y += d.speed * dt * pace
         if (d.y - d.trail > length && !drain) drops[i] = spawn()
       })
       pending += cells.length * mutation * dt

@@ -183,6 +183,10 @@ export function Window({
         width,
         height: shaded ? undefined : height,
         ['--slot' as string]: slots[id] ?? 0,
+        // Its place in the stack, back to front and front to back, for a
+        // theme's boot and shut down.
+        ['--layer' as string]: stack.indexOf(id),
+        ['--depth' as string]: stack.length - 1 - stack.indexOf(id),
         zIndex: peek === id ? stack.length + 1 : stack.indexOf(id) + 1,
       }}
       className={`pointer-events-auto absolute top-0 left-0 flex max-h-full max-w-[calc(100vw-1rem)] flex-col overflow-clip rounded-(--window-radius) border border-(--frame) bg-(--surface) shadow-(--window-shadow) outline-none ${className}`}
