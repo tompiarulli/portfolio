@@ -66,7 +66,7 @@ export const ORBITS = {
   /** How fast the set turns, and the rings wobble and the points ride. */
   speed: 0.05,
   /** Brightness of the far half of each ring, against the near half. */
-  far: 0.3,
+  far: 0.15,
   /** Line width in pixels. */
   lineWidth: 1,
   /** Radius of the riding points in pixels; 0 is none. */

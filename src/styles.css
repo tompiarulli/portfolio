@@ -398,7 +398,7 @@
   --indicator: #ededed;
   --backdrop-opacity: 1;
   --desk: #000000;
-  --warp: #6e6e6e;
+  --warp: #9a9a9a;
   --glint: #ededed;
   /* The rings' grey is too faint for text on the terminal's screen. */
   --terminal-text: #949494;
@@ -1088,6 +1088,24 @@ body {
 }
 [data-off] [data-window]::after {
   animation: var(--window-down-edge);
+}
+/* Orbital's menu bar and dock power off and on as its windows do: each
+   closes to its line and the line to a point once the windows have
+   started going, and opens back out of them as the windows do. Without
+   motion they keep the shared fold, which drops them at once. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme='orbital'][data-off]
+    [data-shutdown]:not([data-shutdown='windows']) {
+    scale: none;
+    opacity: 1;
+    transition: none;
+    animation: window-off 300ms linear 160ms both;
+  }
+}
+[data-theme='orbital'][data-booting]
+  [data-shutdown]:not([data-shutdown='windows']) {
+  transition: none;
+  animation: window-on 340ms linear 120ms both;
 }
 /* White Rabbit shuts down and boots like a terminal clearing and
    redrawing. Shutting down, its windows clear one at a time, front to back
@@ -2017,9 +2035,20 @@ body {
 /* Orbital: the panel powers on like a display, a line opening out from
    the middle and then to its full height, and its rows come up in turn
    (each with its --row delay), all held back by --after while the start
-   screen waits for the screen to open. */
+   screen waits for the screen to open. Its outline keeps to the edge of
+   what's open, so the line is a bright one rather than a slit of its
+   ground, then goes. */
 .power-on {
   animation: power-on 500ms ease-out calc(100ms + var(--after, 0ms)) both;
+}
+.power-on::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid currentColor;
+  opacity: 0;
+  pointer-events: none;
+  animation: power-on-edge 500ms ease-out calc(100ms + var(--after, 0ms)) both;
 }
 @keyframes power-on {
   0% {
@@ -2030,6 +2059,22 @@ body {
   }
   100% {
     clip-path: inset(0);
+  }
+}
+@keyframes power-on-edge {
+  0% {
+    inset: 50% 50%;
+    opacity: 1;
+  }
+  45% {
+    inset: calc(50% - 1px) 0;
+  }
+  99.9% {
+    opacity: 1;
+  }
+  100% {
+    inset: 0;
+    opacity: 0;
   }
 }
 /* A window powering on as the desktop boots (Orbital's --window-boot):

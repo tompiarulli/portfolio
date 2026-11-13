@@ -196,8 +196,8 @@ const ROWS = 3
 // black after.
 const CELLS = 18
 const FIRST = 900
-const TICK = 70
-const HOLD = 300
+const TICK = 110
+const HOLD = 450
 const POWER_OFF = 1900
 // How long the start screen waits for the screen to open (.screen-on).
 const SCREEN_ON = 600

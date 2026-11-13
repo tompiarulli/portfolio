@@ -81,6 +81,9 @@ export default function Orbits(props: OrbitsProps) {
         return `rgb(${mix(0, a)},${mix(1, a)},${mix(2, a)})`
       })
 
+      // Every ring's runs, gathered by shade and drawn far to near, so a
+      // near half always crosses over a far one, whichever ring it's on.
+      const runs = Array.from({ length: SHADES }, () => new Path2D())
       /** Each ring's riding point: screen position and depth. */
       const riders: RingPoint[] = []
       for (let k = 0; k < count; k++) {
@@ -98,13 +101,10 @@ export default function Orbits(props: OrbitsProps) {
         let shade = -1
         const flush = () => {
           const [first, ...rest] = points
-          const style = ramp[shade]
-          if (!first || !rest.length || !style) return
-          ctx.strokeStyle = style
-          ctx.beginPath()
-          ctx.moveTo(first[0], first[1])
-          for (const [x, y] of rest) ctx.lineTo(x, y)
-          ctx.stroke()
+          const run = runs[shade]
+          if (!first || !rest.length || !run) return
+          run.moveTo(first[0], first[1])
+          for (const [x, y] of rest) run.lineTo(x, y)
         }
         for (let i = 1; i <= SEGMENTS; i++) {
           const next = project((i / SEGMENTS) * Math.PI * 2)
@@ -123,6 +123,10 @@ export default function Orbits(props: OrbitsProps) {
 
         riders.push(project(rider(k, t)))
       }
+      runs.forEach((run, shade) => {
+        ctx.strokeStyle = ramp[shade] ?? p.color
+        ctx.stroke(run)
+      })
 
       const point = (p.point ?? 2) * dpr
       if (point > 0) {

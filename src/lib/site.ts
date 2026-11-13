@@ -283,11 +283,10 @@ export const site = {
   /** Status lines Orbital's shut down panel walks through. */
   shutdown: {
     down: [
-      'Saving the desktop',
-      'Closing windows',
-      'Flushing the cache',
-      'Parking the heads',
-      'Powering off',
+      'Saving flight log',
+      'Retracting antennas',
+      'Sealing airlock',
+      'Entering hibernation',
     ],
     /** Under the name above the title on Steamboat's start screen, like
      *  an old cartoon's title card. */
