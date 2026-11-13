@@ -1,9 +1,10 @@
 @import 'tailwindcss';
 
 /* Every face swaps: text shows at once in the fallback and takes the font
-   when it lands. Orbital's is preloaded (see __root.tsx), so a first visit
-   rarely sees the fallback, and the monospace fallback keeps nearly the
-   same advance, so lines barely move when it does. Not `optional`: a font
+   when it lands. The faces a theme has on screen at first paint are
+   preloaded (`fonts` in src/lib/theme.ts), so a first visit rarely sees
+   the fallback, and the monospace fallback keeps nearly the same advance,
+   so lines barely move when it does. Not `optional`: a font
    that missed its first 100 ms would stay on the fallback all visit, so a
    theme picked in Settings could show without its font. Browsers only
    fetch a face once text uses it, so each theme's font loads only while
@@ -31,9 +32,8 @@
   font-weight: 700 900;
 }
 
-/* Geist Mono (SIL OFL, see public/fonts/GeistMono-OFL.txt): Orbital's font,
-   preloaded in __root.tsx. Regular for text, Medium for labels, and
-   SemiBold for titles. */
+/* Geist Mono (SIL OFL, see public/fonts/GeistMono-OFL.txt): Orbital's font.
+   Regular for text, Medium for labels, and SemiBold for titles. */
 @font-face {
   font-family: 'Geist Mono';
   src: url('/fonts/geist-mono-400.woff2') format('woff2');

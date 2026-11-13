@@ -4,14 +4,38 @@ export type Backdrop = 'rain' | 'streaks' | 'orbits' | 'film'
  *  the backdrop and the clock's date, and may restyle the chrome through
  *  tokens; the layout and behaviour are shared. */
 export const THEMES = [
-  { id: 'orbital', label: 'Orbital', backdrop: 'orbits', date: undefined },
-  { id: 'rabbit', label: 'White Rabbit', backdrop: 'rain', date: '1999-03-31' },
-  { id: 'steamboat', label: 'Steamboat', backdrop: 'film', date: '1908-08-17' },
+  {
+    id: 'orbital',
+    label: 'Orbital',
+    backdrop: 'orbits',
+    date: undefined,
+    fonts: ['geist-mono-400', 'geist-mono-500', 'geist-mono-600'],
+  },
+  {
+    id: 'rabbit',
+    label: 'White Rabbit',
+    backdrop: 'rain',
+    date: '1999-03-31',
+    fonts: ['iosevka-500', 'iosevka-600', 'iosevka-700'],
+  },
+  {
+    id: 'steamboat',
+    label: 'Steamboat',
+    backdrop: 'film',
+    date: '1908-08-17',
+    fonts: [
+      'grandstander-400',
+      'recursive-mono-casual-400',
+      'recursive-mono-casual-700',
+      'jost-600',
+    ],
+  },
   {
     id: 'traveler',
     label: 'OUTATIME',
     backdrop: 'streaks',
     date: '1985-10-26',
+    fonts: ['iosevka-500', 'righteous-400', 'space-mono-700'],
   },
 ] as const satisfies readonly {
   id: string
@@ -19,6 +43,10 @@ export const THEMES = [
   backdrop: Backdrop
   /** Day the clock shows, as YYYY-MM-DD; none means today. */
   date?: string
+  /** The faces on screen at first paint, from public/fonts/, which the boot
+   *  script preloads. Only these: a preload the page doesn't use is a
+   *  wasted download and a console warning. */
+  fonts: readonly string[]
 }[]
 export type Theme = (typeof THEMES)[number]['id']
 export const DEFAULT_THEME: Theme = 'orbital'
@@ -74,9 +102,15 @@ export function subscribeTheme(onChange: () => void) {
   return () => observer.disconnect()
 }
 
+const THEME_FONTS: Record<string, readonly string[]> = Object.fromEntries(
+  THEMES.map((t) => [t.id, t.fonts]),
+)
+
 /** Inline in <head> so the first paint already has the theme: the one named
  *  by `?theme=` if it names one, else the saved one, else the default. The
  *  router runs it again on every navigation, so it only writes when the
  *  theme differs: rewriting the same value still fires every observer of
- *  data-theme and restarts the backdrop. */
-export const themeBootScript = `(function(){var n=${JSON.stringify(THEME_NAMES)},t;try{var q=new URLSearchParams(location.search).get('${THEME_PARAM}');if(q){q=q.toLowerCase();if(Object.prototype.hasOwnProperty.call(n,q))t=n[q]}}catch(e){}if(!t){try{t=localStorage.getItem('${THEME_KEY}')}catch(e){}}t=${JSON.stringify(THEMES.map((x) => x.id))}.indexOf(t)<0?'${DEFAULT_THEME}':t;var d=document.documentElement.dataset;if(d.theme!==t)d.theme=t})()`
+ *  data-theme and restarts the backdrop. While the page is still parsing,
+ *  it also preloads that theme's fonts, so they are fetched straight away
+ *  rather than once the inlined styles are parsed. */
+export const themeBootScript = `(function(){var n=${JSON.stringify(THEME_NAMES)},f=${JSON.stringify(THEME_FONTS)},t;try{var q=new URLSearchParams(location.search).get('${THEME_PARAM}');if(q){q=q.toLowerCase();if(Object.prototype.hasOwnProperty.call(n,q))t=n[q]}}catch(e){}if(!t){try{t=localStorage.getItem('${THEME_KEY}')}catch(e){}}t=Object.prototype.hasOwnProperty.call(f,t)?t:'${DEFAULT_THEME}';var d=document.documentElement.dataset;if(d.theme!==t)d.theme=t;if(document.readyState==='loading')f[t].forEach(function(x){var l=document.createElement('link');l.rel='preload';l.as='font';l.type='font/woff2';l.crossOrigin='anonymous';l.href='/fonts/'+x+'.woff2';document.head.appendChild(l)})})()`

@@ -127,6 +127,35 @@ describe('themeBootScript', () => {
     observer.disconnect()
   })
 
+  describe('font preloads', () => {
+    const preloads = () =>
+      [...document.head.querySelectorAll('link[rel="preload"]')].map((l) =>
+        l.getAttribute('href'),
+      )
+    afterEach(() => {
+      for (const l of document.head.querySelectorAll('link')) l.remove()
+    })
+
+    it.each(THEMES)(
+      "preloads $label's fonts while parsing",
+      ({ id, fonts }) => {
+        vi.spyOn(document, 'readyState', 'get').mockReturnValue('loading')
+        localStorage.setItem('theme', id)
+        boot()
+        expect(preloads()).toEqual(fonts.map((f) => `/fonts/${f}.woff2`))
+        const link = document.head.querySelector('link')
+        expect(link?.as).toBe('font')
+        expect(link?.crossOrigin).toBe('anonymous')
+      },
+    )
+
+    // The router runs it again on every navigation, long after first paint.
+    it('adds none once the page has loaded', () => {
+      boot()
+      expect(preloads()).toEqual([])
+    })
+  })
+
   it('replaces a stale data-theme', () => {
     localStorage.setItem('theme', 'traveler')
     root.dataset.theme = 'rabbit'
