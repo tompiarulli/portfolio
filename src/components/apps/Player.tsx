@@ -555,7 +555,7 @@ export function Player() {
     tune(index + 1 + Math.floor(Math.random() * (channels.length - 1)))
 
   return (
-    <Window title="Travel" right x={-143} y={189} width={448} flush>
+    <Window title="Travel" right x={-208} y={143} width={448} flush>
       <div
         ref={tv}
         className="tv"

@@ -33,7 +33,7 @@ export function Settings() {
   )
 
   return (
-    <Window title="Settings" right x={-199} y={189} width={360}>
+    <Window title="Settings" right x={-157} y={192} width={360}>
       <fieldset className="border border-(--ink) p-3">
         <legend className="heading px-1">Date &amp; Time</legend>
         <div className="grid grid-cols-2 border border-(--ink)">

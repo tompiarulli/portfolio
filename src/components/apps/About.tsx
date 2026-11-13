@@ -3,7 +3,7 @@ import { site } from '#/lib/site'
 
 export function About() {
   return (
-    <Window title="About" x={-317} y={37} width={420}>
+    <Window title="About" x={-319} y={68} width={420}>
       <div className="space-y-3">
         {site.letter.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>

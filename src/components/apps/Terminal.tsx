@@ -92,7 +92,7 @@ export function Terminal() {
   }
 
   return (
-    <Window title="Terminal" x={-40} y={60} width={560} height={340} flush>
+    <Window title="Terminal" x={81} y={39} width={560} height={340} flush>
       {/* Clicking anywhere types at the prompt, like a real terminal. Only a
           shortcut for the pointer: the prompt is a plain, tabbable field.
           Touch screens get 16px text, or iOS zooms in on the prompt. */}
