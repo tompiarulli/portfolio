@@ -8,6 +8,7 @@ vi.mock('#/components/Backdrop', () => ({ Backdrop: () => null }))
 
 // Footage for the first channel, so there are clips to skip through: two
 // videos with a photo between them. It has something to say under Info.
+// The other channels have none.
 vi.mock('#/lib/site', async (load) => {
   const site = await load<typeof import('#/lib/site')>()
   const [first, ...rest] = site.channels
@@ -22,7 +23,8 @@ vi.mock('#/lib/site', async (load) => {
           still: n.endsWith('.webp'),
         })),
       },
-      ...rest,
+      // The rest without, whatever footage the site has.
+      ...rest.map((c) => ({ ...c, clips: [] })),
     ],
   }
 })
@@ -154,6 +156,23 @@ describe('Travel', () => {
     vi.spyOn(Math, 'random').mockReturnValue(0.9999)
     await user.click(key('Previous channel'))
     expect(await clip()).toMatch(/a\.mp4$/)
+  })
+
+  it('loads the next clip behind the one on, and brings it forward', async () => {
+    const { user } = await renderDesktop('/')
+    await clip()
+    const behind = await waitFor(() => {
+      const el = document.querySelector('.tv-picture [src$="b.webp"]')
+      if (!el) throw new Error('nothing queued')
+      return el
+    })
+    expect(behind.getAttribute('aria-hidden')).toBe('true')
+    await user.click(key('Next clip'))
+    expect(await clip()).toMatch(/b\.webp$/)
+    // The same element, now on.
+    expect(document.querySelector('.tv-picture [src$="b.webp"]')).toBe(behind)
+    expect(behind.getAttribute('aria-hidden')).toBe('false')
+    expect(document.querySelector('.tv-picture [src$="c.mp4"]')).toBeTruthy()
   })
 
   it('holds a photo for a few seconds of play, then moves on', async () => {

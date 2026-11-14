@@ -533,8 +533,23 @@ export function Player() {
   // Paused while minimized, so it costs nothing in the dock. Follows the
   // clip itself, as each one gets a video element of its own.
   const hidden = minimized.includes('player')
+  // The clip after this one loads behind it while it plays, so the cut to
+  // it is clean; not while minimized, when nothing's on.
+  const after =
+    clips.length > 1 && !hidden
+      ? clips[order[(clip + 1) % clips.length] ?? 0]
+      : undefined
+  const queued = ready ? media(after?.src) : undefined
+  const picture = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const v = video.current
+    // The one behind waits at its start, as one skipped back over may
+    // have been playing.
+    for (const other of picture.current?.querySelectorAll('video') ?? [])
+      if (other !== v) {
+        other.pause()
+        if (other.currentTime) other.currentTime = 0
+      }
     if (!v) return
     // Blocked from playing on its own, it waits for Play; a play cut short
     // by the next clip coming on is no reason to stop.
@@ -634,33 +649,51 @@ export function Player() {
           onDoubleClick={fullScreen}
           className="tv-screen relative aspect-video overflow-hidden border-b border-(--frame) bg-(--tv-off)"
         >
-          <div className="tv-picture absolute inset-0">
-            {src && on?.still ? (
-              <img
-                key={src}
-                src={src}
-                alt={`${channel.place}, ${channel.region}`}
-                decoding="async"
-                className="size-full object-cover"
-              />
-            ) : src ? (
-              // Ambient footage with no speech, so nothing to caption.
-              // oxlint-disable-next-line jsx-a11y/media-has-caption
-              <video
-                ref={video}
-                key={src}
-                src={src}
-                poster={media(on?.poster)}
-                // The clips have no sound.
-                muted
-                // One clip goes round on its own; more play in turn.
-                loop={clips.length === 1}
-                onEnded={() => skip(1)}
-                playsInline
-                preload="auto"
-                aria-label={`${channel.place}, ${channel.region}`}
-                className="size-full object-cover"
-              />
+          <div ref={picture} className="tv-picture absolute inset-0">
+            {src ? (
+              // The clip on, and the next one hidden behind it. Each keeps
+              // its element by its key, so the one loaded behind comes
+              // forward as it is, ready to play.
+              [
+                { at: on, url: src, shown: true },
+                ...(queued && queued !== src
+                  ? [{ at: after, url: queued, shown: false }]
+                  : []),
+              ].map(({ at, url, shown }) => {
+                const label = shown
+                  ? `${channel.place}, ${channel.region}`
+                  : undefined
+                const place = `absolute inset-0 size-full object-cover ${shown ? '' : 'invisible'}`
+                return at?.still ? (
+                  <img
+                    key={url}
+                    src={url}
+                    alt={label ?? ''}
+                    aria-hidden={!shown}
+                    decoding="async"
+                    className={place}
+                  />
+                ) : (
+                  // Ambient footage with no speech, so nothing to caption.
+                  // oxlint-disable-next-line jsx-a11y/media-has-caption
+                  <video
+                    ref={shown ? video : undefined}
+                    key={url}
+                    src={url}
+                    poster={media(at?.poster)}
+                    // The clips have no sound.
+                    muted
+                    // One clip goes round on its own; more play in turn.
+                    loop={clips.length === 1}
+                    onEnded={shown ? () => skip(1) : undefined}
+                    playsInline
+                    preload="auto"
+                    aria-label={label}
+                    aria-hidden={!shown}
+                    className={place}
+                  />
+                )
+              })
             ) : (
               // No footage yet: the channel's test card.
               <div aria-hidden className="tv-bars size-full" />
