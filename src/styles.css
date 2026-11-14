@@ -684,9 +684,10 @@
    The player's screen in each theme: the picture through --tv-filter, scan
    lines and a vignette over it, the theme's display on top, and a burst
    of snow between channels. */
-/* Orbital: a ship's monitor, the feed in clean greys under fine lines. */
+/* Orbital: a ship's monitor, the feed in muted, cool colour, as a
+   downlink sends it, under fine lines: the one colour on the desktop. */
 [data-theme='orbital'] {
-  --tv-filter: grayscale(1) contrast(1.15) brightness(1.05);
+  --tv-filter: saturate(0.6) contrast(1.15) brightness(1.05) hue-rotate(-8deg);
   --tv-scan: rgb(0 0 0 / 0.2);
   --tv-scan-size: 2px;
   --tv-vignette: rgb(0 0 0 / 0.5);
