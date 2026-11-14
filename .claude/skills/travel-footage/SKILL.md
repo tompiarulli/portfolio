@@ -1,6 +1,6 @@
 ---
 name: travel-footage
-description: Inspect, name and encode footage for a Travel player channel. Use when Tom drops clips or photos into assets/travel/<channel>/, asks to process or rename them, asks where they were shot, or wants a new channel set up.
+description: Inspect, name and encode footage for the Travel player's channels. Use when Tom drops clips or photos into assets/travel/<channel>/ or a batch into assets/inbox/, asks to process or rename them, asks where they were shot, or wants channels set up.
 ---
 
 # Travel footage
@@ -10,6 +10,19 @@ The pipeline itself is documented in CONTRIBUTING.md (under `src/lib/site.ts`) a
 ## Privacy
 
 The originals in `assets/travel/` carry GPS, which is why the folder is ignored by git and the encode strips all metadata. Read the coordinates locally to work out places, and keep them local: never send them, or frames from the footage, to a web search, geocoder, map or any other service. Place them from what you know of the city and from the frames; where you can't, say so and ask Tom.
+
+## A batch: sorting the inbox into channels
+
+Tom may drop footage from many places at once into `assets/inbox/` (ignored by git like the rest of `assets/`, and outside `assets/travel/`, so the script never takes it for a channel). Sort it into channels before anything else:
+
+1. Read every file's coordinates and time, as in Inspect below, into one table (`/tmp/travel-inbox.tsv`, outside the repo).
+2. Group the files into places: close together (the same city or area, roughly within 30 km) and close in time. Two visits to one place years apart are worth asking about: one channel or two. Tom decides how fine to split (a city each, or a road trip as one); if he hasn't said, propose a channel per city.
+3. Files with no coordinates (sent through a messaging app, screen recordings, some edited exports) go with the trip whose dates they fall inside; any that don't, list for Tom.
+4. Show Tom the proposal and wait for a yes: per channel, the place, region, `lat`/`lon`, folder name, how many files and the dates; then the files you couldn't place. Flag anything that's probably not travel footage (a screen recording, a photo of a receipt) rather than sorting it.
+5. Once he's agreed, make each `assets/travel/<channel>/` and move its files in with `mv -n`. What's left in the inbox stays there for Tom.
+6. Then work through the channels one at a time, each from Inspect to its own commit, so a batch is never one huge commit and each channel can be checked before the next.
+
+A batch of hundreds of clips is hundreds of megabytes in Git LFS and an hour or more of encoding. Say so before starting one that large, so Tom can check his LFS quota and trim the set first.
 
 ## 1. Inspect
 
