@@ -40,6 +40,15 @@ function anyChannel() {
   return from[Math.floor(Math.random() * from.length)] ?? 0
 }
 
+/** A display's blinking lamp, scaled with its lettering: a circle drawn,
+ *  not a rounded box, which snaps to whole pixels and comes out oval at
+ *  most sizes. */
+const Lamp = ({ className }: { className: string }) => (
+  <svg aria-hidden viewBox="0 0 2 2" className={`blink shrink-0 ${className}`}>
+    <circle cx="1" cy="1" r="1" fill="currentColor" />
+  </svg>
+)
+
 const MONTHS = 'JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC'.split(' ')
 
 const pad = (n: number) => String(n).padStart(2, '0')
@@ -71,6 +80,24 @@ function useNow() {
   return now
 }
 
+/** Seconds of play since the channel was tuned, held while paused. */
+function useElapsed(tunedAt: number, playing: boolean) {
+  const [run, setRun] = useState({ tunedAt, s: 0 })
+  useEffect(() => {
+    if (!playing) return
+    const id = setInterval(
+      () =>
+        setRun((r) => ({
+          tunedAt,
+          s: r.tunedAt === tunedAt ? r.s + 1 : 1,
+        })),
+      1000,
+    )
+    return () => clearInterval(id)
+  }, [playing, tunedAt])
+  return run.tunedAt === tunedAt ? run.s : 0
+}
+
 /** Each theme's on-screen display, over the picture: a ship's feed with
  *  its telemetry, a security camera's stamp or a VCR's readout. An old
  *  film has none. */
@@ -88,6 +115,7 @@ function Osd({
   playing: boolean
 }) {
   const now = useNow()
+  const met = useElapsed(tunedAt, playing)
   const corner = 'absolute flex gap-[1ch] whitespace-nowrap'
   if (theme === 'steamboat') return null
   if (theme === 'rabbit') {
@@ -96,10 +124,9 @@ function Osd({
       <>
         <span className={`${corner} top-2 left-3`}>CAM {number(index)}</span>
         <span className={`${corner} top-2 right-3 items-center`}>
-          <span
-            aria-hidden
-            className="blink mr-[calc(4px-1ch)] size-[0.6em] rounded-full bg-current"
-          />
+          {/* Nudged down to the capitals, whose baseline snaps to the
+              pixel below. */}
+          <Lamp className="mr-[calc(0.36em-1ch)] size-[0.6em] translate-y-[0.03em]" />
           REC
         </span>
         <span className={`${corner} bottom-2 left-3 uppercase`}>
@@ -144,17 +171,27 @@ function Osd({
       <span className={`${corner} top-[10px] left-[13px] uppercase`}>
         Feed {number(index)} · {channel.place}
       </span>
-      <span className={`${corner} top-[10px] right-[13px] items-center`}>
-        <span
-          aria-hidden
-          className="blink mr-[calc(4px-1ch)] size-[0.6em] rounded-full bg-current"
-        />
-        Live
+      {/* Mission elapsed time: the feed's time on, as it plays. */}
+      <span className={`${corner} top-[10px] right-[13px] tabular-nums`}>
+        T+{pad(Math.floor(met / 3600))}:{pad(Math.floor(met / 60) % 60)}:
+        {pad(met % 60)}
       </span>
       <span className={`${corner} bottom-[10px] left-[13px] tabular-nums`}>
         {coords(channel)}
       </span>
-      <span className={`${corner} right-[13px] bottom-[10px]`}>Sig ▮▮▮▮▯</span>
+      <span className={`${corner} right-[13px] bottom-[10px] items-center`}>
+        SIG
+        {/* Four bars of five, drawn, as the font has none: a little taller
+            than its capitals, centred on them. */}
+        <span className="flex h-[0.8em] gap-[0.13em]">
+          {[1, 1, 1, 1, 0].map((on, i) => (
+            <span
+              key={i}
+              className={`w-[0.37em] border border-current ${on ? 'bg-current' : ''}`}
+            />
+          ))}
+        </span>
+      </span>
     </>
   )
 }
