@@ -11,8 +11,8 @@ const noChange = () => () => {}
 /** Opens for any URL without a window of its own. */
 export function NotFound() {
   const { close } = useWindows()
-  // Prerendered once as 404.html and served for every unknown URL, so the
-  // path is only known in the browser.
+  // Rendered without the path, as 404.html and by the Worker alike, so the
+  // page hydrates the same at any URL; the path fills in in the browser.
   const path = useSyncExternalStore(
     noChange,
     () => location.pathname,

@@ -13,7 +13,7 @@ function parse(policy: string): Record<string, string[]> {
 }
 
 describe('contentSecurityPolicy', () => {
-  it('otherwise only allows the site itself', () => {
+  it('only allows the site itself', () => {
     const policy = parse(contentSecurityPolicy())
     expect(policy['default-src']).toEqual(["'self'"])
     expect(policy['font-src']).toEqual(["'self'"])
@@ -35,33 +35,10 @@ describe('contentSecurityPolicy', () => {
     expect(policy['style-src']).toEqual(["'self'", "'unsafe-inline'"])
   })
 
-  it('lists no Vercel sources by default', () => {
-    expect(contentSecurityPolicy()).not.toContain('vercel.live')
-    expect(parse(contentSecurityPolicy())).not.toHaveProperty('frame-src')
-  })
-
-  it('adds the Vercel Toolbar sources on top of the defaults', () => {
-    const policy = parse(contentSecurityPolicy({ vercelToolbar: true }))
-    expect(policy['script-src']).toEqual([
-      "'self'",
-      "'unsafe-inline'",
-      'https://vercel.live',
-    ])
-    expect(policy['connect-src']).toContain('wss://ws-us3.pusher.com')
-    expect(policy['frame-ancestors']).toEqual(["'none'"])
-  })
-
-  it('starts a directive the defaults lack from self', () => {
-    const policy = parse(contentSecurityPolicy({ vercelToolbar: true }))
-    expect(policy['frame-src']).toEqual(["'self'", 'https://vercel.live'])
-  })
-
   it('never repeats a directive', () => {
-    for (const vercelToolbar of [false, true]) {
-      const names = contentSecurityPolicy({ vercelToolbar })
-        .split('; ')
-        .map((directive) => directive.split(' ')[0])
-      expect(new Set(names).size).toBe(names.length)
-    }
+    const names = contentSecurityPolicy()
+      .split('; ')
+      .map((directive) => directive.split(' ')[0])
+    expect(new Set(names).size).toBe(names.length)
   })
 })

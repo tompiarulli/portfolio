@@ -2,8 +2,8 @@ import { defineConfig, devices } from '@playwright/test'
 
 const PORT = 4173
 
-// Smoke tests against the production build, served as Vercel serves it
-// (scripts/serve-prod.mjs). Build it first with `pnpm build:vercel`.
+// Smoke tests against the production build, served as Cloudflare serves it
+// (scripts/serve-prod.mjs). Build it first with `pnpm build`.
 export default defineConfig({
   testDir: 'e2e',
   fullyParallel: true,
@@ -16,9 +16,8 @@ export default defineConfig({
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: 'node scripts/serve-prod.mjs',
+    command: 'pnpm serve:prod',
     url: `http://localhost:${PORT}/`,
-    env: { PORT: String(PORT) },
     reuseExistingServer: !process.env.CI,
   },
 })

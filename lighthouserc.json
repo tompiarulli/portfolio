@@ -1,9 +1,9 @@
 {
   "ci": {
     "collect": {
-      "startServerCommand": "node scripts/serve-prod.mjs",
+      "startServerCommand": "pnpm serve:prod",
       "startServerReadyPattern": "Serving production build",
-      "url": ["http://localhost:4173/", "http://localhost:4173/404.html"],
+      "url": ["http://localhost:4173/", "http://localhost:4173/404"],
       "numberOfRuns": 3,
       "settings": {
         "chromeFlags": "--headless=new --no-sandbox"
@@ -47,7 +47,7 @@
           }
         },
         {
-          "matchingUrlPattern": "^http://localhost:4173/(404\\.html)?$",
+          "matchingUrlPattern": "^http://localhost:4173/(404)?$",
           "assertions": {
             "categories:accessibility": [
               "error",
@@ -69,7 +69,7 @@
           }
         },
         {
-          "matchingUrlPattern": "/404\\.html$",
+          "matchingUrlPattern": "/404$",
           "assertions": {
             "document-title": [
               "error",

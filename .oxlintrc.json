@@ -28,7 +28,8 @@
     "src/routeTree.gen.ts",
     "src/lib/travel.gen.ts",
     ".output",
-    ".nitro",
+    "dist",
+    ".wrangler",
     ".tanstack",
     "node_modules"
   ]

@@ -76,13 +76,12 @@ const notFoundHead = pageHead({
   noindex: true,
 })
 
-// The prerender only writes pages that answer 200, so /404 does while it is
-// rendered into 404.html. Vercel then serves that file with a 404 for every
-// unknown URL (see vite.config.ts).
+// The prerender only writes pages that answer 200, so /404 does, to be
+// rendered into 404.html. Once deployed, /404 is that static file, and the
+// Worker renders any other unknown URL with a 404 (see src/server.ts).
 const keepPrerenderedNotFound = createIsomorphicFn().server(
   (pathname: string) => {
-    if (process.env.TSS_PRERENDERING === 'true' && pathname === NOT_FOUND_PATH)
-      setResponseStatus(200)
+    if (pathname === NOT_FOUND_PATH) setResponseStatus(200)
   },
 )
 

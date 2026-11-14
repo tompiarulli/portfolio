@@ -411,7 +411,7 @@ export const credits: { group: string; items: Credit[] }[] = [
       { name: 'React', url: 'https://react.dev' },
       { name: 'TanStack Start', url: 'https://tanstack.com/start' },
       { name: 'Tailwind CSS', url: 'https://tailwindcss.com' },
-      { name: 'Vercel', url: 'https://vercel.com' },
+      { name: 'Cloudflare Workers', url: 'https://workers.cloudflare.com' },
       { name: 'Claude Code', url: 'https://claude.com/claude-code' },
     ],
   },

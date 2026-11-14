@@ -13,7 +13,7 @@ My personal site, dressed up as a late-90s desktop and inspired by [Poolsuite](h
 
 ## Built with
 
-- [TanStack Start](https://tanstack.com/start) and React 19, prerendered to static HTML on Vercel
+- [TanStack Start](https://tanstack.com/start) and React 19, prerendered to static HTML on Cloudflare Workers
 - Tailwind CSS 4, with hand-written canvas and WebGL backdrops
 - TypeScript, Vitest, Playwright, oxlint and oxfmt
 - [Claude Code](https://claude.com/claude-code)

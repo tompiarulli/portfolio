@@ -19,13 +19,10 @@ describe('securityHeaders', () => {
     }
   })
 
-  it('passes the toolbar flag through to the CSP', () => {
+  it('sends the CSP', () => {
     expect(securityHeaders()['Content-Security-Policy']).toBe(
       contentSecurityPolicy(),
     )
-    expect(
-      securityHeaders({ vercelToolbar: true })['Content-Security-Policy'],
-    ).toBe(contentSecurityPolicy({ vercelToolbar: true }))
   })
 
   it('sets no cache-control, so the cache route rules still apply', () => {

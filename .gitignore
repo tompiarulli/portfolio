@@ -3,10 +3,9 @@ node_modules
 dist
 *.local
 .env
-.nitro
 .tanstack
 .output
-.vercel
+.wrangler
 coverage
 *.log
 .lighthouseci

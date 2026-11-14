@@ -1,6 +1,6 @@
 # Portfolio
 
-Personal portfolio site styled as a fake late-90s desktop OS, inspired by poolsuite.net. React 19, TanStack Start, Tailwind 4, deployed to Vercel. Every route is prerendered to static HTML at build time; the site must feel instant.
+Personal portfolio site styled as a fake late-90s desktop OS, inspired by poolsuite.net. React 19, TanStack Start, Tailwind 4, deployed to Cloudflare Workers. Every route is prerendered to static HTML at build time; the site must feel instant.
 
 Setup, scripts, file layout, commit format, and deploy live in CONTRIBUTING.md and apply here:
 
@@ -8,7 +8,7 @@ Setup, scripts, file layout, commit format, and deploy live in CONTRIBUTING.md a
 
 ## Conventions
 
-- Performance is the point. No state libraries, no icon packs, no animation libraries: the backdrops are hand-written canvas and WebGL, lazy-loaded so the shell stays small. CSS transitions of 150 to 200 ms, `transform`-driven motion, pointer events. Keep client JS small; check gzipped size of `.output/public/assets` after adding a dependency.
+- Performance is the point. No state libraries, no icon packs, no animation libraries: the backdrops are hand-written canvas and WebGL, lazy-loaded so the shell stays small. CSS transitions of 150 to 200 ms, `transform`-driven motion, pointer events. Keep client JS small; check gzipped size of `dist/client/assets` after adding a dependency.
 - Prerender-safe components: anything reading `Date`, `localStorage`, or `window` must render a stable placeholder on the server and fill in inside `useEffect` (see `Clock.tsx`).
 - Colors come from CSS variables only (`var(--surface)`, Tailwind `bg-(--surface)`), never hard-coded hex in components. Add new tokens to the base `:root, [data-theme]` block (White Rabbit's values; Orbital is the default theme) and override them in any theme that needs a different value. There is no light/dark mode; the theme drives everything.
 - Aesthetic rules: 1 px ink borders, square corners unless a theme rounds them (Steamboat does, through `--window-radius`, `--dock-radius` and `--close-radius`), bevels via inset box-shadow, `image-rendering: pixelated` only on backdrops drawn small and scaled up (the marks and art are vectors, drawn smooth), monospace fonts, antialiased (a theme may use a sans, as Steamboat does). Outline fonts never render with `font-smoothing: none`; it makes them jagged on macOS. No drop shadows.

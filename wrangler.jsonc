@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "portfolio",
+  "compatibility_date": "2026-11-09",
+  "compatibility_flags": ["nodejs_compat"],
+  // The Worker, which wraps TanStack Start's server entry. Every page is
+  // prerendered and served as a static asset, so it only runs for URLs with
+  // no file behind them.
+  "main": "./src/server.ts",
+}
