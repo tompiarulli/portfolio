@@ -487,6 +487,13 @@ export const channels: Channel[] = [
     lon: -105.52,
     clips: travel.stanley ?? [],
   },
+  {
+    place: 'Seattle',
+    region: 'Washington',
+    lat: 47.61,
+    lon: -122.33,
+    clips: travel.seattle ?? [],
+  },
   { place: 'Lisbon', region: 'Portugal', lat: 38.72, lon: -9.14, clips: [] },
   { place: 'Kyoto', region: 'Japan', lat: 35.01, lon: 135.77, clips: [] },
   {
