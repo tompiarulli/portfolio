@@ -71,7 +71,7 @@ Conventional Commits with a required scope: `type(scope): subject`. From v1.0.0,
 
 - Types: `feat`, `fix`, `refactor`, `style`, `perf`, `docs`, `chore`, `build`, `ci`, `test`.
 - Scopes: `app`, `desktop`, `theme`, `content`, `deps`, `config`. A `docs` commit takes the scope of what it documents, e.g. `docs(theme)`, never `docs(docs)`.
-- Subject imperative, lowercase, no trailing period, under 72 characters.
+- Subject imperative, lowercase, no trailing period. Keep it short: aim for 50 characters, 72 at most. Name what changed, not how or why (`add a seattle travel channel`, not `add a seattle travel channel with 17 clips from the waterfront`); details go in the body, if anywhere.
 - Themes are homages: describe what a change looks like, never name the film, show or site behind it.
 - No AI attribution trailers (`Co-Authored-By: Claude`, "Generated with"). `Co-Authored-By` is a human-collaborator convention; AI tooling is a tool like a linter, not an author. The README already says the site is built with Claude Code.
 
