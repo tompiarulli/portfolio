@@ -31,15 +31,6 @@ function deal(n: number) {
   return order
 }
 
-/** A channel to come on at, at random: any with footage, since a test card
- *  is no way to open, unless none has any yet. */
-function anyChannel() {
-  const all = [...channels.keys()]
-  const shot = all.filter((i) => channels[i]!.clips.length)
-  const from = shot.length ? shot : all
-  return from[Math.floor(Math.random() * from.length)] ?? 0
-}
-
 /** A display's blinking lamp, scaled with its lettering: a circle drawn,
  *  not a rounded box, which snaps to whole pixels and comes out oval at
  *  most sizes. */
@@ -54,9 +45,11 @@ const MONTHS = 'JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC'.split(' ')
 const pad = (n: number) => String(n).padStart(2, '0')
 const number = (i: number) => pad(i + 1)
 
-/** "38.72°N 9.14°W" */
+/** "38.72°N 9.14°W"; a channel with no one place says so. */
 const coords = ({ lat, lon }: Channel) =>
-  `${Math.abs(lat).toFixed(2)}°${lat < 0 ? 'S' : 'N'} ${Math.abs(lon).toFixed(2)}°${lon < 0 ? 'W' : 'E'}`
+  lat === undefined || lon === undefined
+    ? 'ALL FEEDS'
+    : `${Math.abs(lat).toFixed(2)}°${lat < 0 ? 'S' : 'N'} ${Math.abs(lon).toFixed(2)}°${lon < 0 ? 'W' : 'E'}`
 
 /** The theme's day, unless Settings asks for today, at the real time. */
 function themedNow(theme: Theme, now: Date) {
@@ -382,7 +375,7 @@ function ChannelPicker({
     <div
       ref={root}
       onKeyDownCapture={onEscape}
-      // The list opens over the screen, across the whole line it sits in.
+      // The list opens over the whole player above the controls.
       className="min-w-0 flex-1"
       // Tabbing out of the list closes it, as clicking away does.
       onBlur={(e) => {
@@ -396,7 +389,7 @@ function ChannelPicker({
           aria-label="Channels"
           tabIndex={-1}
           onKeyDown={onListKeyDown}
-          className="os-scroll absolute bottom-full left-0 z-10 max-h-[180px] w-full rounded-(--close-radius) border border-(--frame) bg-(--surface) py-1 shadow-(--window-shadow)"
+          className="os-scroll absolute inset-x-0 top-0 bottom-[38px] z-10 rounded-(--close-radius) border border-(--frame) bg-(--surface) py-1 shadow-(--window-shadow)"
         >
           {channels.map((c, i) => (
             <button
@@ -454,8 +447,7 @@ export function Player() {
     currentTheme,
     () => DEFAULT_THEME,
   )
-  // The channel on: a random one, picked once the page has loaded, so the
-  // prerendered page keeps the first.
+  // The channel on: Random, the first, to begin with.
   const [index, setIndex] = useState(0)
   // The clip playing on the channel: a place in its running order, which
   // is dealt afresh each time the channel is tuned. The prerendered page
@@ -494,15 +486,13 @@ export function Player() {
     let idle = 0
     const attach = () =>
       (idle = (window.requestIdleCallback ?? window.setTimeout)(() => {
-        const first = anyChannel()
         setReady(true)
-        setIndex(first)
-        setOrder(deal(channels[first]?.clips.length ?? 0))
+        setOrder(deal(channels[0]?.clips.length ?? 0))
         setPlaying(!matchMedia('(prefers-reduced-motion: reduce)').matches)
       }))
     if (document.readyState === 'complete') attach()
     else addEventListener('load', attach, { once: true })
-    // Called off on the way out, so the channel is only ever picked once.
+    // Called off on the way out, so the clips are only ever dealt once.
     return () => {
       removeEventListener('load', attach)
       ;(window.cancelIdleCallback ?? window.clearTimeout)(idle)
@@ -610,7 +600,7 @@ export function Player() {
     <Window title="Travel" right x={-208} y={143} width={448} flush>
       <div
         ref={tv}
-        className="tv"
+        className="tv relative"
         data-tv={theme}
         // Escape closes Info, not the window: caught on the way down, as
         // the window listens for it before React's handlers run.
@@ -778,8 +768,9 @@ export function Player() {
           </StripKey>
         </div>
         {/* Play, then the channel: picked from the list, stepped, or left
-            to chance. Relative, so the list opens across the line. */}
-        <div className="relative flex gap-[6px] p-[6px]">
+            to chance. The list opens over the player above this line: 38px,
+            the key and its padding. */}
+        <div className="flex gap-[6px] p-[6px]">
           <Key
             className="w-[26px] px-0"
             onClick={() => setPlaying((p) => !p)}

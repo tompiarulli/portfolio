@@ -52,7 +52,7 @@ describe('Travel', () => {
     vi.restoreAllMocks()
   })
 
-  it('opens on the one channel with footage, with a list of every place', async () => {
+  it('opens on the first channel, with a list of every place', async () => {
     const { user } = await renderDesktop('/')
     expect(await on()).toBe(`Channel: ${channels[0]!.place}`)
     await user.click(await picker())
@@ -64,21 +64,6 @@ describe('Travel', () => {
     )
     expect(items[0]!.getAttribute('aria-checked')).toBe('true')
     await waitFor(() => expect(document.activeElement).toBe(items[0]))
-  })
-
-  it('comes on at a random channel with footage', async () => {
-    // Footage on the third as well, which a pick near 1 lands on.
-    const third = channels[2]!
-    const empty = third.clips
-    third.clips = [{ src: 'd.mp4' }]
-    try {
-      await renderDesktop('/')
-      await waitFor(async () =>
-        expect(await on()).toBe(`Channel: ${third.place}`),
-      )
-    } finally {
-      third.clips = empty
-    }
   })
 
   it('steps through the channels, wrapping at the ends', async () => {
@@ -118,7 +103,9 @@ describe('Travel', () => {
   it('turns Info off for a place with nothing to say', async () => {
     const { user } = await renderDesktop('/')
     await user.click(await screen.findByRole('button', { name: 'Info' }))
-    await user.click(key('Next channel'))
+    // On to the first place with nothing to say.
+    for (let i = channels.findIndex((c) => !c.about); i > 0; i--)
+      await user.click(key('Next channel'))
     expect(key('Info')).toHaveProperty('disabled', true)
     expect(screen.queryByRole('region', { name: /^About / })).toBeNull()
   })
