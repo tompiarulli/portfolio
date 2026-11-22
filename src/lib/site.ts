@@ -473,8 +473,7 @@ export type Channel = {
   clips: Clip[]
 }
 
-/** The Player's channels, one per place, in the order they're tuned.
- *  Placeholders, but for the first, until their footage is in. */
+/** The Player's channels, one per place, in the order they're tuned. */
 export const channels: Channel[] = [
   {
     place: 'The Stanley Hotel',
@@ -494,13 +493,32 @@ export const channels: Channel[] = [
     lon: -122.33,
     clips: travel.seattle ?? [],
   },
-  { place: 'Lisbon', region: 'Portugal', lat: 38.72, lon: -9.14, clips: [] },
-  { place: 'Kyoto', region: 'Japan', lat: 35.01, lon: 135.77, clips: [] },
   {
     place: 'Mexico City',
     region: 'Mexico',
     lat: 19.43,
     lon: -99.13,
-    clips: [],
+    clips: travel.mexico_city ?? [],
+  },
+  {
+    place: 'Kuala Lumpur',
+    region: 'Malaysia',
+    lat: 3.15,
+    lon: 101.7,
+    clips: travel.kuala_lumpur ?? [],
+  },
+  {
+    place: 'Los Cabos',
+    region: 'Baja California Sur, Mexico',
+    lat: 22.98,
+    lon: -109.76,
+    clips: travel.los_cabos ?? [],
+  },
+  {
+    place: 'Riviera Maya',
+    region: 'Quintana Roo, Mexico',
+    lat: 20.63,
+    lon: -87.07,
+    clips: travel.riviera_maya ?? [],
   },
 ]
