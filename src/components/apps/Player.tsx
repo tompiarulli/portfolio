@@ -447,7 +447,7 @@ export function Player() {
     currentTheme,
     () => DEFAULT_THEME,
   )
-  // The channel on: Random, the first, to begin with.
+  // The channel on: All Places, the first, to begin with.
   const [index, setIndex] = useState(0)
   // The clip playing on the channel: a place in its running order, which
   // is dealt afresh each time the channel is tuned. The prerendered page

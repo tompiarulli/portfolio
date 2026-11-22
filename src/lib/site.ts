@@ -478,8 +478,8 @@ export type Channel = {
  *  The first plays every clip from the rest and is the one it opens on. */
 export const channels: Channel[] = [
   {
-    place: 'Random',
-    region: 'Everywhere',
+    place: 'All Places',
+    region: 'Earth',
     clips: Object.values(travel).flat(),
   },
   {
