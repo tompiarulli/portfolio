@@ -31,6 +31,15 @@ function deal(n: number) {
   return order
 }
 
+/** A channel to come on at, at random: any with footage, since a test card
+ *  is no way to open, unless none has any yet. */
+function anyChannel() {
+  const all = [...channels.keys()]
+  const shot = all.filter((i) => channels[i]!.clips.length)
+  const from = shot.length ? shot : all
+  return from[Math.floor(Math.random() * from.length)] ?? 0
+}
+
 /** A display's blinking lamp, scaled with its lettering: a circle drawn,
  *  not a rounded box, which snaps to whole pixels and comes out oval at
  *  most sizes. */
@@ -45,11 +54,9 @@ const MONTHS = 'JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC'.split(' ')
 const pad = (n: number) => String(n).padStart(2, '0')
 const number = (i: number) => pad(i + 1)
 
-/** "38.72°N 9.14°W"; a channel with no one place says so. */
+/** "38.72°N 9.14°W" */
 const coords = ({ lat, lon }: Channel) =>
-  lat === undefined || lon === undefined
-    ? 'ALL FEEDS'
-    : `${Math.abs(lat).toFixed(2)}°${lat < 0 ? 'S' : 'N'} ${Math.abs(lon).toFixed(2)}°${lon < 0 ? 'W' : 'E'}`
+  `${Math.abs(lat).toFixed(2)}°${lat < 0 ? 'S' : 'N'} ${Math.abs(lon).toFixed(2)}°${lon < 0 ? 'W' : 'E'}`
 
 /** The theme's day, unless Settings asks for today, at the real time. */
 function themedNow(theme: Theme, now: Date) {
@@ -447,7 +454,8 @@ export function Player() {
     currentTheme,
     () => DEFAULT_THEME,
   )
-  // The channel on: All Places, the first, to begin with.
+  // The channel on: a random one, picked once the page has loaded, so the
+  // prerendered page keeps the first.
   const [index, setIndex] = useState(0)
   // The clip playing on the channel: a place in its running order, which
   // is dealt afresh each time the channel is tuned. The prerendered page
@@ -486,13 +494,15 @@ export function Player() {
     let idle = 0
     const attach = () =>
       (idle = (window.requestIdleCallback ?? window.setTimeout)(() => {
+        const first = anyChannel()
         setReady(true)
-        setOrder(deal(channels[0]?.clips.length ?? 0))
+        setIndex(first)
+        setOrder(deal(channels[first]?.clips.length ?? 0))
         setPlaying(!matchMedia('(prefers-reduced-motion: reduce)').matches)
       }))
     if (document.readyState === 'complete') attach()
     else addEventListener('load', attach, { once: true })
-    // Called off on the way out, so the clips are only ever dealt once.
+    // Called off on the way out, so the channel is only ever picked once.
     return () => {
       removeEventListener('load', attach)
       ;(window.cancelIdleCallback ?? window.clearTimeout)(idle)

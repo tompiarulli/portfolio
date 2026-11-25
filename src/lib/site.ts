@@ -464,24 +464,17 @@ export type Channel = {
    *  panel; without it, Info is off. */
   about?: string[]
   /** Where it was shot, in degrees, for the readouts some themes put on
-   *  screen: north and east positive. Left out for a channel of no one
-   *  place. */
-  lat?: number
-  lon?: number
+   *  screen: north and east positive. */
+  lat: number
+  lon: number
   /** Its clips, dealt in a random order and round again: the ones
    *  `scripts/travel.mjs` made, from `travel` by the channel's folder
    *  name. With none, the channel shows a test card. */
   clips: Clip[]
 }
 
-/** The Player's channels, one per place, in the order they're tuned.
- *  The first plays every clip from the rest and is the one it opens on. */
+/** The Player's channels, one per place, in the order they're tuned. */
 export const channels: Channel[] = [
-  {
-    place: 'All Places',
-    region: 'Earth',
-    clips: Object.values(travel).flat(),
-  },
   {
     place: 'The Stanley Hotel',
     region: 'Estes Park, CO',
