@@ -8,17 +8,20 @@
 //   pnpm travel --watch          # again on every change, until stopped
 //   pnpm travel --force          # everything, not just what changed
 //
-// Each folder in `assets/travel/` is a channel, named by the folder.
+// Each folder in `assets/travel/` is a channel, named by the folder: the
+// masters Tom has approved, which `scripts/travel-approve.mjs` makes from
+// the footage he's reviewing in `assets/review/`, without sound or
+// metadata. Footage only gets here by being approved.
 // Videos become H.264 MP4s with a WebP poster, HDR tone-mapped to SDR;
 // photos become WebP stills. They land in `public/travel/<channel>/`,
 // which git keeps in LFS and the site serves as it is, named after the
-// file they came from, which the player shows: rename `IMG_8920.MOV` to
-// `Hedge Maze.mov` and it becomes `hedge_maze.mp4`. The list of what's
+// file they came from, which the player shows: `Hedge Maze.mov` under
+// review becomes the master `hedge_maze.mov` and the clip `hedge_maze.mp4`. The list of what's
 // there goes to `src/lib/travel.gen.ts`, which `src/lib/site.ts` reads
 // each channel's clips from.
 //
-// The source folders are the channels: add, remove, rename or re-export
-// files there and run the script again (or leave it watching), and it
+// The master folders are the channels: approve, delete or re-approve
+// files and run the script again (or leave it watching), and it
 // encodes only what's new or changed since its last run and deletes what
 // no longer has a source, so the files git sees change only when the
 // footage does. --force encodes everything again, for when the settings
@@ -46,7 +49,7 @@ import { tmpdir } from 'node:os'
 import { basename, extname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { unapproved } from './travel-approve.mjs'
+import { waiting } from './travel-approve.mjs'
 
 // The Player's screen is 446 by 251 px; over twice that, with
 // room for full screen through the theme's filters.
@@ -299,11 +302,9 @@ function list() {
   if (!existsSync(LIST) || readFileSync(LIST, 'utf8') !== text)
     writeFileSync(LIST, text)
   // Nothing goes public unwatched: see scripts/travel-approve.mjs.
-  const waiting = unapproved(named).length
-  if (waiting)
-    say(
-      `${waiting} clips to watch before they can be committed: pnpm travel:approve`,
-    )
+  const left = waiting(named).length
+  if (left)
+    say(`${left} files in assets/review/ waiting for: pnpm travel:approve`)
 }
 
 function all() {

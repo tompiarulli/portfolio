@@ -3,3 +3,5 @@
 *.png binary
 # The Travel channels' encoded clips and photos; see scripts/travel.mjs.
 public/travel/** filter=lfs diff=lfs merge=lfs -text
+# The approved masters they're made from; see scripts/travel-approve.mjs.
+assets/travel/** filter=lfs diff=lfs merge=lfs -text

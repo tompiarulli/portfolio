@@ -12,6 +12,9 @@ coverage
 test-results
 playwright-report
 
-# Source photos keep their camera metadata (GPS); only processed copies ship.
-assets/
+# Raw footage keeps its camera metadata (GPS) and hasn't been approved;
+# only the approved masters in assets/travel/, stripped, are committed.
+# See scripts/travel-approve.mjs.
+/assets/*
+!/assets/travel/
 __pycache__/
