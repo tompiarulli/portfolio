@@ -91,7 +91,7 @@ It encodes from the approved masters in `assets/travel/<channel>/` only what's n
 
 ## A new channel
 
-A channel is a folder of masters in `assets/travel/` plus an entry in `channels` in `src/lib/site.ts`: `place`, `region` (freeform: a town and state, a country), `lat` and `lon` to two decimals for the readouts, and `clips: travel.<folder> ?? []`. `about` is the Info panel's copy, which is Tom's to write; leave it out unless he gives it. Ask where in the list it goes if he hasn't said, since that's the order they're tuned in.
+A channel is a folder of masters in `assets/travel/` plus an entry in `channels` in `src/lib/site.ts`: `place`, `region` (freeform: a town and state, a country), `lat` and `lon` to two decimals for the readouts, and `clips: travel.<folder> ?? []`. `about` is the Info panel's copy, which is Tom's to write; leave it out unless he gives it. Ask where in the list it goes if he hasn't said, since that's the order they're tuned in. A channel Tom says isn't ready yet gets `disabled: true`: its footage stays committed, and it's off the player until he takes the flag out.
 
 The Player tests mock the first channel's footage and give every other channel none, so new footage doesn't break them.
 

@@ -471,10 +471,12 @@ export type Channel = {
    *  `scripts/travel.mjs` made, from `travel` by the channel's folder
    *  name. With none, the channel shows a test card. */
   clips: Clip[]
+  /** Kept off the player, footage and all, until it has enough to show. */
+  disabled?: boolean
 }
 
-/** The Player's channels, one per place, in the order they're tuned. */
-export const channels: Channel[] = [
+/** Every place, in the order they're tuned, disabled or not. */
+const places: Channel[] = [
   {
     place: 'The Stanley Hotel',
     region: 'Estes Park, CO',
@@ -522,3 +524,6 @@ export const channels: Channel[] = [
     clips: travel.riviera_maya ?? [],
   },
 ]
+
+/** The Player's channels: every place not disabled. */
+export const channels = places.filter((c) => !c.disabled)
