@@ -21,6 +21,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
+      # Only footage Tom has watched and approved goes public.
+      - run: pnpm travel:check
 
   format:
     runs-on: ubuntu-latest

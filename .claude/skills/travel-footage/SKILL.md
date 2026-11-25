@@ -94,4 +94,6 @@ The Player tests mock the first channel's footage and give every other channel n
 
 ## Committing
 
+Nothing in `public/travel/` can be committed until Tom has watched it: the pre-commit hook and CI check every file against `scripts/travel.approved.json`. After encoding, ask him to run `pnpm travel:approve <channel>` in his own terminal (it refuses to run without one) and wait for him to say it's done. Never approve for him, edit the list, or use `--no-verify`. A clip he leaves out: take its source out of `assets/travel/<channel>/` (back to `assets/inbox/` with `mv -n`), run `pnpm travel <channel>` again, and commit without it. `scripts/travel.approved.json` goes in the same commit as the clips.
+
 The encoded clips, `travel.gen.ts` and any `site.ts` change go in one commit, `feat(content): ...` for a new channel or `feat(content)`/`fix(content)` for footage changes. The sources never go in. Propose the message and wait for a yes, as for any commit.

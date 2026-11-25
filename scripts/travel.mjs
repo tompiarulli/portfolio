@@ -46,6 +46,8 @@ import { tmpdir } from 'node:os'
 import { basename, extname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { unapproved } from './travel-approve.mjs'
+
 // The Player's screen is 446 by 251 px; over twice that, with
 // room for full screen through the theme's filters.
 const WIDTH = 960
@@ -296,6 +298,12 @@ function list() {
   // Left alone when nothing changed, so the dev server doesn't reload.
   if (!existsSync(LIST) || readFileSync(LIST, 'utf8') !== text)
     writeFileSync(LIST, text)
+  // Nothing goes public unwatched: see scripts/travel-approve.mjs.
+  const waiting = unapproved(named).length
+  if (waiting)
+    say(
+      `${waiting} clips to watch before they can be committed: pnpm travel:approve`,
+    )
 }
 
 function all() {
